@@ -63,8 +63,7 @@ public class HttpService extends Service {
 						Log.i(TAG, "channle" + arg0);
 					}
 				}, errorListener);
-		jsonObjectRequest.setTag(HttpService.class.getSimpleName());// 设置tg
-																	// cancelAll的时候使用
+		jsonObjectRequest.setTag(HttpService.class.getSimpleName());// 设置tag,cancelAll的时候使用
 		mReQueue.add(jsonObjectRequest);
 	}
 
@@ -73,7 +72,6 @@ public class HttpService extends Service {
 		String myURL = "http://ott.yun.gehua.net.cn:8080/msis/getPlayURL?&version=V002&resourceCode=8061&providerID=gehua&assetID=8061&resolution=800*600&playType=2&terminalType=4&&authKey=";
 		String orig="http://ott.yun.gehua.net.cn:8080/msis/getPlayURL";
 		String realurl=myURL+MD5Encrypt.MD5EncryptExecute(orig);
-		
 		
 		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
 				Request.Method.POST, realurl, null,
@@ -86,14 +84,12 @@ public class HttpService extends Service {
 						Log.i(TAG, "getPlayURL" + arg0);
 					}
 				}, errorListener);
-		jsonObjectRequest.setTag(HttpService.class.getSimpleName());// 设置tag
-																	// cancelAll的时候使用
+		jsonObjectRequest.setTag(HttpService.class.getSimpleName());// 设置tag,cancelAll的时候使用
 		mReQueue.add(jsonObjectRequest);
 
 	}
 
 	private Response.ErrorListener errorListener = new Response.ErrorListener() {
-
 		@Override
 		public void onErrorResponse(VolleyError arg0) {
 			// TODO Auto-generated method stub
