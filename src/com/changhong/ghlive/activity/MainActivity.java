@@ -1,15 +1,7 @@
 package com.changhong.ghlive.activity;
 
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.changhong.ghlive.service.HttpService;
 import com.changhong.ghliveandreplay.R;

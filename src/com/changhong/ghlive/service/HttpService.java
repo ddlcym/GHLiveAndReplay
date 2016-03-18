@@ -3,6 +3,7 @@ package com.changhong.ghlive.service;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -52,7 +53,7 @@ public class HttpService extends Service {
 	
 	private void getChannelList(){
 		//传入URL请求链接
-		String URL="";
+		String URL="http://ott.yun.gehua.net.cn:8080/msis/getChannels?version=V001&channelVersion=0&resolution=800*600&terminalType=1&authKey=16e21faf070e6bee21b26a7cc80fb5f6";
 		
 		
 		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,URL,null,new Response.Listener<org.json.JSONObject>() {
@@ -61,20 +62,21 @@ public class HttpService extends Service {
 			public void onResponse(org.json.JSONObject arg0) {
 				// TODO Auto-generated method stub
 				//相应成功
-				
+				Log.i(TAG, "channle"+arg0);
 			}
-		},new Response.ErrorListener() {
-
-			@Override
-			public void onErrorResponse(VolleyError arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-		}); 
+		},errorListener); 
 		jsonObjectRequest.setTag(HttpService.class.getSimpleName());//设置tag cancelAll的时候使用
 		mReQueue.add(jsonObjectRequest);
 	}
 	
+	private Response.ErrorListener errorListener=new Response.ErrorListener() {
+
+		@Override
+		public void onErrorResponse(VolleyError arg0) {
+			// TODO Auto-generated method stub
+			Log.i(TAG, "error"+arg0);
+		}
+	};
 	
 	@Override
 	public void onDestroy() {
