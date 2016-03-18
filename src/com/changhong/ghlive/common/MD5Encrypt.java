@@ -8,26 +8,14 @@ import java.security.NoSuchAlgorithmException;
 /*Author:OscarChang*/
 public class MD5Encrypt {
 
-	private static String key = "";
-	private static String plainStr = "";
 
-	/* encrypt with key */
-	public MD5Encrypt(String plain, String key) {
-		plain = plainStr;
-		key = key;
-	}
 
-	/* encrypt without key */
-	public MD5Encrypt(String plain) {
-		plain = plainStr;
-	}
-
-	public String MD5EncryptExecute() {
-		return stringToMD5(plainStr + key);
+	public static String MD5EncryptExecute(String original) {
+		return stringToMD5(original + HttpParam.MD5KEY);
 	}
 
 	/* md5 func */
-	public static String stringToMD5(String string) {
+	private static  String stringToMD5(String string) {
 		byte[] hash;
 
 		try {

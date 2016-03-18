@@ -5,15 +5,15 @@ import com.android.volley.toolbox.Volley;
 
 public class VolleyTool {
 
-	private static VolleyTool httpFrame;
+	private static VolleyTool volleyTool;
 	
 	private RequestQueue requestQueue;
 	public static VolleyTool getInstance(){
 		
-		if(null==httpFrame){
-			httpFrame=new VolleyTool();
+		if(null==volleyTool){
+			volleyTool=new VolleyTool();
 		}
-		return httpFrame;
+		return volleyTool;
 	}
 	
 	public VolleyTool(){
@@ -26,7 +26,7 @@ public class VolleyTool {
 		return requestQueue;
 	}
 	
-	public void stop(){
-		requestQueue.cancelAll(this);
+	public void stop(Object tag){
+		requestQueue.cancelAll(tag);
 	}
 }
