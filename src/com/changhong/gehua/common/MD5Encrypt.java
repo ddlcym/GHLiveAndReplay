@@ -1,4 +1,4 @@
-package com.changhong.common;
+package com.changhong.gehua.common;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;

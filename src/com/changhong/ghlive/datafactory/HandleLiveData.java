@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.json.JSONObject;
 
-import com.changhong.common.ChannelInfo;
+import com.changhong.gehua.common.ChannelInfo;
 
 public class HandleLiveData {
 	private LiveJsonResolve liveJsonResolve=null;

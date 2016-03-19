@@ -1,4 +1,4 @@
-package com.changhong.common;
+package com.changhong.gehua.common;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;

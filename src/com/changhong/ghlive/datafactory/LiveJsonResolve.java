@@ -7,8 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.changhong.common.ChannelInfo;
-import com.changhong.common.PosterInfo;
+import com.changhong.gehua.common.ChannelInfo;
+import com.changhong.gehua.common.PosterInfo;
 
 public class LiveJsonResolve {
 
