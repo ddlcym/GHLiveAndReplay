@@ -9,26 +9,26 @@ public class ChannelInfo {
 	private String channelName;
 	private String channelCode;
 	private String description;
-	private String videoType;
-	private String feeType;
-	private String resourceOrder;
+	private int videoType;
+	private int feeType;
+	private int resourceOrder;
 	private String resourceCode;
 	private String channelType;
 	private String cityCode;
 	private String gradeCode;
 	private String channelSpec;
-	private String networkId;
-	private String TSID;
-	private String serviceid;
+	private int networkId;
+	private int TSID;
+	private int serviceid;
 	private String assetID;
 	private String providerID;
-	private String posterInfo;
+	private PosterInfo posterInfo;
 	private String channelTypes;
 	private String channelNumber;
 	private String frequency;
 	private String symbolRate;
 	private String modulation;
-	private String platform;
+	private int platform;
 
 	public String getChannelID() {
 		return channelID;
@@ -62,27 +62,27 @@ public class ChannelInfo {
 		this.description = description;
 	}
 
-	public String getVideoType() {
+	public int getVideoType() {
 		return videoType;
 	}
 
-	public void setVideoType(String videoType) {
+	public void setVideoType(int videoType) {
 		this.videoType = videoType;
 	}
 
-	public String getFeeType() {
+	public int getFeeType() {
 		return feeType;
 	}
 
-	public void setFeeType(String feeType) {
+	public void setFeeType(int feeType) {
 		this.feeType = feeType;
 	}
 
-	public String getResourceOrder() {
+	public int getResourceOrder() {
 		return resourceOrder;
 	}
 
-	public void setResourceOrder(String resourceOrder) {
+	public void setResourceOrder(int resourceOrder) {
 		this.resourceOrder = resourceOrder;
 	}
 
@@ -126,27 +126,27 @@ public class ChannelInfo {
 		this.channelSpec = channelSpec;
 	}
 
-	public String getNetworkId() {
+	public int getNetworkId() {
 		return networkId;
 	}
 
-	public void setNetworkId(String networkId) {
+	public void setNetworkId(int networkId) {
 		this.networkId = networkId;
 	}
 
-	public String getTSID() {
+	public int getTSID() {
 		return TSID;
 	}
 
-	public void setTSID(String tSID) {
+	public void setTSID(int tSID) {
 		TSID = tSID;
 	}
 
-	public String getServiceid() {
+	public int getServiceid() {
 		return serviceid;
 	}
 
-	public void setServiceid(String serviceid) {
+	public void setServiceid(int serviceid) {
 		this.serviceid = serviceid;
 	}
 
@@ -166,11 +166,11 @@ public class ChannelInfo {
 		this.providerID = providerID;
 	}
 
-	public String getPosterInfo() {
+	public PosterInfo getPosterInfo() {
 		return posterInfo;
 	}
 
-	public void setPosterInfo(String posterInfo) {
+	public void setPosterInfo(PosterInfo posterInfo) {
 		this.posterInfo = posterInfo;
 	}
 
@@ -214,11 +214,11 @@ public class ChannelInfo {
 		this.modulation = modulation;
 	}
 
-	public String getPlatform() {
+	public int getPlatform() {
 		return platform;
 	}
 
-	public void setPlatform(String platform) {
+	public void setPlatform(int platform) {
 		this.platform = platform;
 	}
 
