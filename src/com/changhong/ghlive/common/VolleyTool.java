@@ -1,7 +1,8 @@
-package com.changhong.ghlive.activity;
+package com.changhong.ghlive.common;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.changhong.ghlive.activity.MyApp;
 
 public class VolleyTool {
 
