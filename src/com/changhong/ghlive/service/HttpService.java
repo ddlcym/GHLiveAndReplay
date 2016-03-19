@@ -15,6 +15,7 @@ import com.changhong.gehua.common.MD5Encrypt;
 import com.changhong.gehua.common.ProcessData;
 import com.changhong.gehua.common.VolleyTool;
 import com.changhong.ghlive.datafactory.HandleLiveData;
+import com.changhong.replay.datafactory.HandleReplayData;
 
 public class HttpService extends Service {
 
@@ -116,7 +117,7 @@ public class HttpService extends Service {
 						// TODO Auto-generated method stub
 						// 相应成功
 //						Log.i(TAG, "getPointProList:" + arg0)
-//						handl
+						HandleReplayData.getInstance().dealChannelJson(arg0);
 					}
 				}, errorListener);
 		jsonObjectRequest.setTag(HttpService.class.getSimpleName());// 设置tag,cancelAll的时候使用

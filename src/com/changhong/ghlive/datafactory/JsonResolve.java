@@ -1,16 +1,21 @@
 package com.changhong.ghlive.datafactory;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.provider.ContactsContract.Contacts.Data;
 import android.util.Log;
 
 import com.changhong.gehua.common.ChannelInfo;
 import com.changhong.gehua.common.PosterInfo;
+import com.changhong.gehua.common.ProgramInfo;
 
 public class JsonResolve {
 
@@ -76,16 +81,66 @@ public class JsonResolve {
 		return list;
 	}
 	
-	private PosterInfo getJsonPoster(JSONObject json){
+	public PosterInfo getJsonPoster(JSONObject json){
 		PosterInfo posterInfo=null;
 		
 		
 		return posterInfo;
 	}
 	
-	private String getPlayURL(JSONObject json){
+	public String getPlayURL(JSONObject json){
 		String strURL=getJsonObjectString(json, "palyURL");
 		return strURL;
+	}
+	
+	public ProgramInfo jsonToProgram(JSONObject json){
+		ProgramInfo program=new ProgramInfo();
+		
+		program.setProgramId(getJsonObjInt(json, "programId"));
+		program.setChannelID(getJsonObjInt(json, "channelID"));
+		program.setEventDate(getJsonData(json, "eventDate"));
+		program.setBeginTime(getJsonData(json, "beginTime"));
+		program.setEndTime(getJsonData(json, "endTime"));
+		program.setEventName(getJsonObjectString(json, "eventName"));
+//		program.setEventDesc(getJsonObjectString(json, "eventDesc"));
+		program.setKeyWord(getJsonObjectString(json, "keyWord"));
+		program.setIsBook(getJsonObjInt(json, "isBook"));
+		program.setIsRecommend(getJsonObjInt(json, "isRecommend"));
+		program.setPlayCount(getJsonObjInt(json, "playCount"));
+		program.setAssetID(getJsonObjectString(json, "assetID"));
+//		program.setPoster(getJsonObjInt(json, "poster"));
+//		program.setPlaytime(getJsonObjInt(json, "playtime"));
+		program.setVolumeName(getJsonObjectString(json, "volumeName"));
+		program.setChannelResourceCode(getJsonObjInt(json, "channelResourceCode"));
+		program.setVideoType(getJsonObjectString(json, "videoType"));
+		program.setProviderID(getJsonObjectString(json, "providerID"));
+//		program.setChannelName(getJsonObjectString(json, "channelName"));
+		program.setStatus(getJsonObjInt(json, "status"));
+		program.setViewLevel(getJsonObjectString(json, "viewLevel"));
+		
+		
+		
+		return program;
+	}
+	
+	
+	public List<ProgramInfo> jsonToPrograms(JSONObject json){
+		List<ProgramInfo> list = new ArrayList<ProgramInfo>();
+		JSONArray programs = getJsonObjectArray(json, "program");
+		for (int i = 0; i < programs.length(); i++) {
+			ProgramInfo program=null;
+			try {
+				JSONObject object = (JSONObject) programs.get(i);
+				program = jsonToProgram(object);
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			if(program!=null)list.add(program);
+
+		}
+		
+		return list;
 	}
 	
 	//=================================base function add  try catch=====================================
@@ -115,7 +170,7 @@ public class JsonResolve {
 	}
 	
 	private int getJsonObjInt(JSONObject json,String key){
-		int i=999;
+		int i=9999;
 		try {
 			i=json.getInt(key);
 		} catch (JSONException e) {
@@ -124,5 +179,20 @@ public class JsonResolve {
 			Log.e("mmmm", "LiveJsonResolve:"+key);
 		}
 		return i;
+	}
+	
+	private Date getJsonData(JSONObject json,String key){
+		Date date=null;
+		SimpleDateFormat sdf=null;
+		String str=getJsonObjectString(json, key);
+		sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		try {
+			date = sdf.parse(str);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return date;
 	}
 }

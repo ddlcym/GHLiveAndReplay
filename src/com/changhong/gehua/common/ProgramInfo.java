@@ -1,6 +1,7 @@
 package com.changhong.gehua.common;
 
-import java.sql.Date;
+import java.util.Date;
+
 
 /**
  * @author OscarChang
@@ -18,7 +19,7 @@ public class ProgramInfo {
 	private int isBook;
 	private int isRecommend;
 	private int playCount;
-	private int assetID;
+	private String assetID;
 	private PosterInfo poster;
 	private int playtime;
 	private String volumeName;
@@ -117,11 +118,11 @@ public class ProgramInfo {
 		this.playCount = playCount;
 	}
 
-	public int getAssetID() {
+	public String getAssetID() {
 		return assetID;
 	}
 
-	public void setAssetID(int assetID) {
+	public void setAssetID(String assetID) {
 		this.assetID = assetID;
 	}
 

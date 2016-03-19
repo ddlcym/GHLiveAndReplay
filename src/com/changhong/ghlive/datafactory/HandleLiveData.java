@@ -13,7 +13,7 @@ import com.changhong.ghlive.activity.MyApp;
 import com.changhong.ghlive.service.HttpService;
 
 public class HandleLiveData {
-	private JsonResolve liveJsonResolve=null;
+	private JsonResolve JsonResolve=null;
 	private Context con;
 	
 	
@@ -27,8 +27,8 @@ public class HandleLiveData {
 	}
 
 	public HandleLiveData(){
-		if(null==liveJsonResolve){
-			liveJsonResolve=JsonResolve.getInstance();
+		if(null==JsonResolve){
+			JsonResolve=JsonResolve.getInstance();
 		}
 		
 		if(null==con){
@@ -37,7 +37,7 @@ public class HandleLiveData {
 	}
 	
 	public  void dealChannelJson(JSONObject json){
-		List<ChannelInfo> channels=	liveJsonResolve.jsonToChannels(json);
+		List<ChannelInfo> channels=	JsonResolve.jsonToChannels(json);
 		
 		Intent intent =new Intent();
 		intent.setClass(con, HttpService.class);
