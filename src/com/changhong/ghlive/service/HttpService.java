@@ -12,6 +12,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.changhong.ghlive.activity.VolleyTool;
 import com.changhong.ghlive.common.MD5Encrypt;
+import com.changhong.ghlive.datafactory.HandleLiveData;
+import com.changhong.ghlive.datafactory.LiveJsonResolve;
 
 public class HttpService extends Service {
 
@@ -44,8 +46,8 @@ public class HttpService extends Service {
 	private void initData() {
 		volleyTool = VolleyTool.getInstance();
 		mReQueue = volleyTool.getRequestQueue();
-//		getChannelList();
-		getPlayURL(1, 2);
+		getChannelList();
+//		getPlayURL(1, 2);
 	}
 
 	private void getChannelList() {
@@ -61,6 +63,7 @@ public class HttpService extends Service {
 						// TODO Auto-generated method stub
 						// 相应成功
 						Log.i(TAG, "channle" + arg0);
+						HandleLiveData.getInstance().dealChannelJson(arg0);
 					}
 				}, errorListener);
 		jsonObjectRequest.setTag(HttpService.class.getSimpleName());// 设置tag,cancelAll的时候使用
@@ -69,7 +72,7 @@ public class HttpService extends Service {
 
 	private void getPlayURL(int providerID, int assetID) {
 
-		String myURL = "http://ott.yun.gehua.net.cn:8080/msis/getPlayURL?&version=V002&resourceCode=8061&providerID=gehua&assetID=8061&resolution=800*600&playType=2&terminalType=4&&authKey=";
+		String myURL = "http://ott.yun.gehua.net.cn:8080/msis/getPlayURL?&version=V002&resourceCode=8243&providerID=gehua&assetID=8243&resolution=800*600&playType=2&terminalType=4&&authKey=";
 		String orig="http://ott.yun.gehua.net.cn:8080/msis/getPlayURL";
 		String realurl=myURL+MD5Encrypt.MD5EncryptExecute(orig);
 		

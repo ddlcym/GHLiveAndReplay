@@ -1,8 +1,10 @@
 package com.changhong.ghlive.common;
 
+import java.io.Serializable;
+
 /*Channel Infomation*/
 /*Author: OscarChang*/
-public class ChannelInfo {
+public class ChannelInfo implements Serializable{
 
 	/* information about channels */
 	private String channelID;
