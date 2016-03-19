@@ -19,7 +19,23 @@ public class ProcessData {
 	private String pdlbResolution = "800*600";
 	private String pdlbTerminalType = "1";
 
-	/* pfc:播放串 param of must */
+	/* for test */
+	private String pgSize = "&pageSize=20";
+	/*********************************************************************************/
+	/* pdjmlb:频道节目列表 param of must */
+	private String pdjmlbPendingStr = "msis/getChannelProgram?";
+	private String pdjmlbVersion = "V001";
+	private String pdjmbResolution = "800*600";
+	private String pdjmlbChannelResourceCode = "8061"; // not known
+	private String pdjmlbTerminalType = "3";
+	/*********************************************************************************/
+	/* pdjmlb:节目信息 : param of must */
+	private String jmxxPendingStr = "msis/getCurrentProgramInfo?";
+	private String jmxxVersion = "V001";
+	private String jmxxChannelId = "8061";
+
+	/*********************************************************************************/
+	/* bfc:播放串 param of must */
 	private String bfcPendingStr = "msis/getPlayURL?";
 	private String bfcVersion = "V002";
 	private String bfcResourceCode = "8414";// CCTV1
@@ -32,25 +48,46 @@ public class ProcessData {
 	/* generate channel list */
 	public String getChannelList() {
 		String rawPlainStr = serverAdress + pdlbPendingStr + "version=" + pdlbVersion + "&channelVersion="
-				+ pdlbChannelVersion + "&resolution=" + pdlbResolution + "&terminalType=" + pdlbTerminalType;
+				+ pdlbChannelVersion + (pgSize) + "&resolution=" + pdlbResolution + "&terminalType=" + pdlbTerminalType;
 
-		String encryptStr = MD5Encrypt.MD5EncryptExecute(rawPlainStr);
-		String generateStr = rawPlainStr + conStr + encryptStr;
-		return generateStr;
+		return strGETReturn(rawPlainStr);
+	}
+
+	/* generate channel's program list */
+	public String getChannelProgramList() {
+		String rawPlainStr = serverAdress + pdjmlbPendingStr + "version=" + pdjmlbVersion + "&resolution="
+				+ pdjmbResolution + "&channelResourceCode=" + pdjmlbChannelResourceCode + "&terminalType="
+				+ bfcTerminalType;
+
+		return strGETReturn(rawPlainStr);
+	}
+
+	/* generate current channel's program info */
+	public String getCurrentProgramInfo() {
+		String rawPlainStr = serverAdress + jmxxPendingStr + "&version=" + jmxxVersion + "&channelId=" + jmxxChannelId;
+
+		return strPOSTReturn(rawPlainStr, "msis/getCurrentProgramInfo");
 	}
 
 	/* generate play url string */
 	public String getPlayUrlString(ChannelInfo outterchanInfo) {
-		String rawPlainStr = serverAdress + bfcPendingStr + "version=" + bfcVersion + "&resourceCode=" + bfcResourceCode
-				+ "&providerID=" + outterchanInfo.getProviderID() + "&assetID=" + outterchanInfo.getAssetID()
-				+ "&resolution=" + bfcResolution + "&playType=" + bfcPlayType + "&terminalType=" + bfcTerminalType;
-		String encryptStr = MD5Encrypt.MD5EncryptExecute(serverAdress + "msis/getPlayURL");
+		String rawPlainStr = serverAdress + bfcPendingStr + "version=" + bfcVersion + "&resourceCode="
+				+ outterchanInfo.getResourceCode() + "&providerID=" + outterchanInfo.getProviderID() + "&assetID="
+				+ outterchanInfo.getAssetID() + "&resolution=" + bfcResolution + "&playType=" + bfcPlayType
+				+ "&terminalType=" + bfcTerminalType;
 
-		String generateStr = rawPlainStr + conStr + encryptStr;
+		return strPOSTReturn(rawPlainStr, "msis/getPlayURL");
+	}
 
-		Log.i("mmmm", "afterEncrypt:" + generateStr);
+	/* Http GET String return */
+	public String strGETReturn(String arg) {
 
-		return generateStr;
+		return (arg + conStr + MD5Encrypt.MD5EncryptExecute(arg));
+	}
+
+	public String strPOSTReturn(String arg0, String arg1) {
+
+		return (arg0 + conStr + MD5Encrypt.MD5EncryptExecute(serverAdress + arg1));
 	}
 
 }
