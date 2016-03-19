@@ -107,7 +107,7 @@ public class HttpService extends Service {
 		@Override
 		public void onErrorResponse(VolleyError arg0) {
 			// TODO Auto-generated method stub
-			Log.i(TAG, "error：" + arg0);
+			Log.i(TAG, "HttpService=error：" + arg0);
 		}
 	};
 
