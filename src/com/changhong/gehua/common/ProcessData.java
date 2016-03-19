@@ -56,15 +56,13 @@ public class ProcessData {
 	}
 
 	/* generate channel's program list */
-	// public String getChannelProgramList(ChannelInfo outterchanInfo) {
-	// String rawPlainStr = serverAdress + chPgmListPendingStr + "version=" +
-	// chPgmListVersion + "&resolution="
-	// + chPgmListResolution + "&channelResourceCode=" +
-	// outterchanInfo.getResourceCode() + "&terminalType="
-	// + chPgmListTerminalType;
-	//
-	// return strGETReturn(rawPlainStr);
-	// }
+	public String getChannelProgramList(ChannelInfo outterchanInfo) {
+		String rawPlainStr = serverAdress + chPgmListPendingStr + "version=" + chPgmListVersion + "&resolution="
+				+ chPgmListResolution + "&channelResourceCode=" + outterchanInfo.getResourceCode() + "&terminalType="
+				+ chPgmListTerminalType;
+
+		return strGETReturn(rawPlainStr);
+	}
 
 	/* generate current channel's program info 获取节目信息 */
 	public String getCurrentProgramInfo(ChannelInfo outterchanInfo) {
