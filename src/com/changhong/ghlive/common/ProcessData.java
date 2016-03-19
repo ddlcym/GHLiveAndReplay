@@ -22,7 +22,7 @@ public class ProcessData {
 	/* pfc:²¥·Å´® param of must */
 	private String bfcPendingStr = "msis/getPlayURL?";
 	private String bfcVersion = "V002";
-	private String bfcResourceCode = "8061";// CCTV1
+	private String bfcResourceCode = "8414";// CCTV1
 	// private String bfcProviderID = "gehua";
 	// private String bfcAssetID = "8061";
 	private String bfcResolution = "800*600";
@@ -40,10 +40,10 @@ public class ProcessData {
 	}
 
 	/* generate play url string */
-	public String getPlayUrlString(String outterProviderID, String outterAssetID) {
+	public String getPlayUrlString(ChannelInfo outterchanInfo) {
 		String rawPlainStr = serverAdress + bfcPendingStr + "version=" + bfcVersion + "&resourceCode=" + bfcResourceCode
-				+ "&providerID=" + outterProviderID + "&assetID=" + outterAssetID + "&resolution=" + bfcResolution
-				+ "&playType=" + bfcPlayType + "&terminalType=" + bfcTerminalType;
+				+ "&providerID=" + outterchanInfo.getProviderID() + "&assetID=" + outterchanInfo.getAssetID()
+				+ "&resolution=" + bfcResolution + "&playType=" + bfcPlayType + "&terminalType=" + bfcTerminalType;
 		String encryptStr = MD5Encrypt.MD5EncryptExecute(serverAdress + "msis/getPlayURL");
 
 		String generateStr = rawPlainStr + conStr + encryptStr;
