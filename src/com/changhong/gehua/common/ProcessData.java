@@ -1,7 +1,5 @@
 package com.changhong.gehua.common;
 
-import android.util.Log;
-
 /*return encrypt url adress*/
 /*Author:OscarChang*/
 
@@ -12,69 +10,96 @@ public class ProcessData {
 	private String MD5Key = "aidufei";
 	private String conStr = "&authKey=";
 
-	/* pdlb:Ƶ���б� param of must */
-	private String pdlbPendingStr = "msis/getChannels?";
-	private String pdlbVersion = "V001";
-	private String pdlbChannelVersion = "0";
-	private String pdlbResolution = "800*600";
-	private String pdlbTerminalType = "1";
-
+	/* chnList:频道列表 param of must */
+	private String chListPendingStr = "msis/getChannels?";
+	private String chListVersion = "V001";
+	private String chListChannelVersion = "0";
+	private String chListResolution = "800*600";
+	private String chListTerminalType = "1";
 	/* for test */
-	private String pgSize = "&pageSize=20";
-	/*********************************************************************************/
-	/* pdjmlb:Ƶ����Ŀ�б� param of must */
-	private String pdjmlbPendingStr = "msis/getChannelProgram?";
-	private String pdjmlbVersion = "V001";
-	private String pdjmbResolution = "800*600";
-	private String pdjmlbChannelResourceCode = "8061"; // not known
-	private String pdjmlbTerminalType = "3";
-	/*********************************************************************************/
-	/* pdjmlb:��Ŀ��Ϣ : param of must */
-	private String jmxxPendingStr = "msis/getCurrentProgramInfo?";
-	private String jmxxVersion = "V001";
-	private String jmxxChannelId = "8061";
+	private String chListpgSize = "&pageSize=20";
 
 	/*********************************************************************************/
-	/* bfc:���Ŵ� param of must */
-	private String bfcPendingStr = "msis/getPlayURL?";
-	private String bfcVersion = "V002";
-	private String bfcResourceCode = "8414";// CCTV1
-	// private String bfcProviderID = "gehua";
-	// private String bfcAssetID = "8061";
-	private String bfcResolution = "800*600";
-	private String bfcPlayType = "2";
-	private String bfcTerminalType = "4";
+	/* chPgmList:频道节目列表 param of must */
+	private String chPgmListPendingStr = "msis/getChannelProgram?";
+	private String chPgmListVersion = "V001";
+	private String chPgmListResolution = "800*600";
+	private String chPgmListChannelResourceCode = "8061"; // not known
+	private String chPgmListTerminalType = "3";
 
-	/* generate channel list */
+	/*********************************************************************************/
+	/* pgmInfo:节目信息 : param of must */
+	private String pgmInfoPendingStr = "msis/getCurrentProgramInfo?";
+	private String pgmInfoVersion = "V001";
+	private String pgmInfoChannelId = "8061";
+
+	/*********************************************************************************/
+	/* crntPgmList：频道的当前节目单 param of must */
+	private String crntPgmListVersion = "V001";
+	private String crntPgmListchannelResourceCode = "8061";
+	private String crntPgmListPendingStr = "msis/getChannelCurrentPrograms?";
+	/*********************************************************************************/
+	/* playUrl:播放串 param of must */
+	private String playUrlPendingStr = "msis/getPlayURL?";
+	private String playUrlVersion = "V002";
+	private String playUrlResolution = "800*600";
+	private String playUrlPlayType = "2";
+	private String playUrlTerminalType = "4";
+
+	/* generate channel list ： 获取频道列表 */
 	public String getChannelList() {
-		String rawPlainStr = serverAdress + pdlbPendingStr + "version=" + pdlbVersion + "&channelVersion="
-				+ pdlbChannelVersion + (pgSize) + "&resolution=" + pdlbResolution + "&terminalType=" + pdlbTerminalType;
+		String rawPlainStr = serverAdress + chListPendingStr + "version=" + chListVersion + "&channelVersion="
+				+ chListChannelVersion + (chListpgSize) + "&resolution=" + chListResolution + "&terminalType="
+				+ chListTerminalType;
 
 		return strGETReturn(rawPlainStr);
 	}
 
 	/* generate channel's program list */
-	public String getChannelProgramList() {
-		String rawPlainStr = serverAdress + pdjmlbPendingStr + "version=" + pdjmlbVersion + "&resolution="
-				+ pdjmbResolution + "&channelResourceCode=" + pdjmlbChannelResourceCode + "&terminalType="
-				+ bfcTerminalType;
+	// public String getChannelProgramList(ChannelInfo outterchanInfo) {
+	// String rawPlainStr = serverAdress + chPgmListPendingStr + "version=" +
+	// chPgmListVersion + "&resolution="
+	// + chPgmListResolution + "&channelResourceCode=" +
+	// outterchanInfo.getResourceCode() + "&terminalType="
+	// + chPgmListTerminalType;
+	//
+	// return strGETReturn(rawPlainStr);
+	// }
 
-		return strGETReturn(rawPlainStr);
-	}
-
-	/* generate current channel's program info */
-	public String getCurrentProgramInfo() {
-		String rawPlainStr = serverAdress + jmxxPendingStr + "&version=" + jmxxVersion + "&channelId=" + jmxxChannelId;
+	/* generate current channel's program info 获取节目信息 */
+	public String getCurrentProgramInfo(ChannelInfo outterchanInfo) {
+		String rawPlainStr = serverAdress + pgmInfoPendingStr + "&version=" + pgmInfoVersion + "&channelId="
+				+ outterchanInfo.getChannelID();
 
 		return strPOSTReturn(rawPlainStr, "msis/getCurrentProgramInfo");
 	}
 
-	/* generate play url string */
-	public String getPlayUrlString(ChannelInfo outterchanInfo) {
-		String rawPlainStr = serverAdress + bfcPendingStr + "version=" + bfcVersion + "&resourceCode="
+	/* generate current channel's program list 获取频道的当前节目单 */
+	public String getCurrentChannelProgramList(ChannelInfo outterchanInfo) {
+		String rawPlainStr = serverAdress + crntPgmListPendingStr + "&version=" + crntPgmListVersion
+				+ "&channelResourceCode=" + outterchanInfo.getResourceCode();
+
+		return strGETReturn(rawPlainStr);
+	}
+
+	/* generate live play url string 获取直播播放串 */
+	public String getLivePlayUrlString(ChannelInfo outterchanInfo) {
+		String rawPlainStr = serverAdress + playUrlPendingStr + "version=" + playUrlVersion + "&resourceCode="
 				+ outterchanInfo.getResourceCode() + "&providerID=" + outterchanInfo.getProviderID() + "&assetID="
-				+ outterchanInfo.getAssetID() + "&resolution=" + bfcResolution + "&playType=" + bfcPlayType
-				+ "&terminalType=" + bfcTerminalType;
+				+ outterchanInfo.getAssetID() + "&resolution=" + playUrlResolution + "&playType=" + playUrlPlayType
+				+ "&terminalType=" + playUrlTerminalType;
+
+		return strPOSTReturn(rawPlainStr, "msis/getPlayURL");
+	}
+	
+	/* generate replay url string 获取回看播放串 */
+	public String getReplayPlayUrlString(ChannelInfo outterchanInfo, String outtershifttime, String outterShiftEnd) {
+
+		String rawPlainStr = serverAdress + playUrlPendingStr + "version=" + playUrlVersion + "&resourceCode="
+				+ outterchanInfo.getResourceCode() + "&providerID=" + outterchanInfo.getProviderID() + "&assetID="
+				+ outterchanInfo.getAssetID() + "&resolution=" + playUrlResolution + "&playType=" + playUrlPlayType
+				+ "&terminalType=" + playUrlTerminalType + "&shifttime=" + outtershifttime + "&shiftend="
+				+ outterShiftEnd;
 
 		return strPOSTReturn(rawPlainStr, "msis/getPlayURL");
 	}
@@ -85,6 +110,7 @@ public class ProcessData {
 		return (arg + conStr + MD5Encrypt.MD5EncryptExecute(arg));
 	}
 
+	/* Http POST String return */
 	public String strPOSTReturn(String arg0, String arg1) {
 
 		return (arg0 + conStr + MD5Encrypt.MD5EncryptExecute(serverAdress + arg1));
