@@ -12,13 +12,13 @@ import android.util.Log;
 import com.changhong.gehua.common.ChannelInfo;
 import com.changhong.gehua.common.PosterInfo;
 
-public class LiveJsonResolve {
+public class JsonResolve {
 
-	private static LiveJsonResolve liveJsonResolve;
+	private static JsonResolve liveJsonResolve;
 
-	public static LiveJsonResolve getInstance() {
+	public static JsonResolve getInstance() {
 		if (null == liveJsonResolve) {
-			liveJsonResolve = new LiveJsonResolve();
+			liveJsonResolve = new JsonResolve();
 		}
 		return liveJsonResolve;
 	}

@@ -47,7 +47,7 @@ public class HttpService extends Service {
 			//play live show
 			ChannelInfo channel = (ChannelInfo) intent.getSerializableExtra("playLiveChannel");
 			if (channel != null) {
-				getPlayURL(channel);
+				getPointProList(channel);
 			}
 		}
 
@@ -83,9 +83,9 @@ public class HttpService extends Service {
 		mReQueue.add(jsonObjectRequest);
 	}
 
-	private void getPlayURL(ChannelInfo outterchanInfo) {
+	private void getLivePlayURL(ChannelInfo outterchanInfo) {
 
-		String realurl = processData.getPlayUrlString(outterchanInfo);
+		String realurl = processData.getLivePlayUrlString(outterchanInfo);
 
 		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
 				Request.Method.POST, realurl, null,
@@ -101,6 +101,26 @@ public class HttpService extends Service {
 		jsonObjectRequest.setTag(HttpService.class.getSimpleName());// 设置tag,cancelAll的时候使用
 		mReQueue.add(jsonObjectRequest);
 
+	}
+	
+	//get  programs in the channel 
+	private void getPointProList(ChannelInfo channel){
+		String realurl = processData.getChannelProgramList(channel);
+
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+				Request.Method.GET, realurl, null,
+				new Response.Listener<org.json.JSONObject>() {
+
+					@Override
+					public void onResponse(org.json.JSONObject arg0) {
+						// TODO Auto-generated method stub
+						// 相应成功
+//						Log.i(TAG, "getPointProList:" + arg0)
+//						handl
+					}
+				}, errorListener);
+		jsonObjectRequest.setTag(HttpService.class.getSimpleName());// 设置tag,cancelAll的时候使用
+		mReQueue.add(jsonObjectRequest);
 	}
 
 	private Response.ErrorListener errorListener = new Response.ErrorListener() {

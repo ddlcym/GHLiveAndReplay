@@ -13,7 +13,7 @@ import com.changhong.ghlive.activity.MyApp;
 import com.changhong.ghlive.service.HttpService;
 
 public class HandleLiveData {
-	private LiveJsonResolve liveJsonResolve=null;
+	private JsonResolve liveJsonResolve=null;
 	private Context con;
 	
 	
@@ -28,7 +28,7 @@ public class HandleLiveData {
 
 	public HandleLiveData(){
 		if(null==liveJsonResolve){
-			liveJsonResolve=LiveJsonResolve.getInstance();
+			liveJsonResolve=JsonResolve.getInstance();
 		}
 		
 		if(null==con){
@@ -39,12 +39,12 @@ public class HandleLiveData {
 	public  void dealChannelJson(JSONObject json){
 		List<ChannelInfo> channels=	liveJsonResolve.jsonToChannels(json);
 		
-//		Intent intent =new Intent();
-//		intent.setClass(con, HttpService.class);
-//		Bundle bundle = new Bundle();
-//		bundle.putSerializable("playLiveChannel", channels.get(1));
-//		intent.putExtras(bundle);
-//		con.startService(intent);
+		Intent intent =new Intent();
+		intent.setClass(con, HttpService.class);
+		Bundle bundle = new Bundle();
+		bundle.putSerializable("playLiveChannel", channels.get(1));
+		intent.putExtras(bundle);
+		con.startService(intent);
 		
 //		Log.i("mmmm", "channels"+channels.toString());
 			
