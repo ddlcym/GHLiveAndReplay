@@ -10,10 +10,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.changhong.ghlive.common.MD5Encrypt;
-import com.changhong.ghlive.common.VolleyTool;
+import com.changhong.common.MD5Encrypt;
+import com.changhong.common.VolleyTool;
 import com.changhong.ghlive.datafactory.HandleLiveData;
-import com.changhong.ghlive.datafactory.LiveJsonResolve;
 
 public class HttpService extends Service {
 

@@ -1,4 +1,4 @@
-package com.changhong.ghlive.common;
+package com.changhong.common;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;

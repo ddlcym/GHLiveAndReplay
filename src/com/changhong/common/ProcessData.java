@@ -1,4 +1,4 @@
-package com.changhong.ghlive.common;
+package com.changhong.common;
 
 import android.util.Log;
 
@@ -12,7 +12,7 @@ public class ProcessData {
 	private String MD5Key = "aidufei";
 	private String conStr = "&authKey=";
 
-	/* pdlb:ÆµµÀÁÐ±í param of must */
+	/* pdlb:Æµï¿½ï¿½ï¿½Ð±ï¿½ param of must */
 	private String pdlbPendingStr = "msis/getChannels?";
 	private String pdlbVersion = "V001";
 	private String pdlbChannelVersion = "0";
@@ -22,20 +22,20 @@ public class ProcessData {
 	/* for test */
 	private String pgSize = "&pageSize=20";
 	/*********************************************************************************/
-	/* pdjmlb:ÆµµÀ½ÚÄ¿ÁÐ±í param of must */
+	/* pdjmlb:Æµï¿½ï¿½ï¿½ï¿½Ä¿ï¿½Ð±ï¿½ param of must */
 	private String pdjmlbPendingStr = "msis/getChannelProgram?";
 	private String pdjmlbVersion = "V001";
 	private String pdjmbResolution = "800*600";
 	private String pdjmlbChannelResourceCode = "8061"; // not known
 	private String pdjmlbTerminalType = "3";
 	/*********************************************************************************/
-	/* pdjmlb:½ÚÄ¿ÐÅÏ¢ : param of must */
+	/* pdjmlb:ï¿½ï¿½Ä¿ï¿½ï¿½Ï¢ : param of must */
 	private String jmxxPendingStr = "msis/getCurrentProgramInfo?";
 	private String jmxxVersion = "V001";
 	private String jmxxChannelId = "8061";
 
 	/*********************************************************************************/
-	/* bfc:²¥·Å´® param of must */
+	/* bfc:ï¿½ï¿½ï¿½Å´ï¿½ param of must */
 	private String bfcPendingStr = "msis/getPlayURL?";
 	private String bfcVersion = "V002";
 	private String bfcResourceCode = "8414";// CCTV1

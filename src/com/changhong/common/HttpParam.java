@@ -1,4 +1,4 @@
-package com.changhong.ghlive.common;
+package com.changhong.common;
 
 
 public class HttpParam {

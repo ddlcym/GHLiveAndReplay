@@ -1,4 +1,4 @@
-package com.changhong.ghlive.common;
+package com.changhong.common;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;

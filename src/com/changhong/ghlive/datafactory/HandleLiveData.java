@@ -4,9 +4,7 @@ import java.util.List;
 
 import org.json.JSONObject;
 
-import android.util.Log;
-
-import com.changhong.ghlive.common.ChannelInfo;
+import com.changhong.common.ChannelInfo;
 
 public class HandleLiveData {
 	private LiveJsonResolve liveJsonResolve=null;
