@@ -7,6 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 import com.changhong.gehua.common.ChannelInfo;
 import com.changhong.gehua.common.PosterInfo;
 
@@ -27,17 +29,17 @@ public class LiveJsonResolve {
 
 		channel.setChannelID(getJsonObjectString(jsonObject, "channelID"));
 		channel.setChannelName(getJsonObjectString(jsonObject, "channelName"));
-		channel.setChannelCode(getJsonObjectString(jsonObject, "channelCode"));
-		channel.setDescription(getJsonObjectString(jsonObject, "description"));
+//		channel.setChannelCode(getJsonObjectString(jsonObject, "channelCode"));
+//		channel.setDescription(getJsonObjectString(jsonObject, "description"));
 		channel.setVideoType(getJsonObjInt(jsonObject, "videoType"));
 		channel.setFeeType(getJsonObjInt(jsonObject, "feeType"));
 		channel.setResourceOrder(getJsonObjInt(jsonObject, "resourceOrder"));
-		channel.setResourceCode(getJsonObjectString(jsonObject, "resourceCode"));
+		channel.setResourceCode(getJsonObjInt(jsonObject, "ResourceCode"));
 		channel.setChannelType(getJsonObjectString(jsonObject, "channelType"));
 		channel.setCityCode(getJsonObjectString(jsonObject, "cityCode"));
 		channel.setGradeCode(getJsonObjectString(jsonObject, "gradeCode"));
 		channel.setChannelSpec(getJsonObjectString(jsonObject, "channelSpec"));
-		channel.setNetworkId(getJsonObjInt(jsonObject, "networkId"));
+//		channel.setNetworkId(getJsonObjInt(jsonObject, "networkId"));
 		channel.setTSID(getJsonObjInt(jsonObject, "TSID"));
 		channel.setServiceid(getJsonObjInt(jsonObject, "serviceid"));
 		channel.setAssetID(getJsonObjectString(jsonObject, "assetID"));
@@ -90,6 +92,7 @@ public class LiveJsonResolve {
 			rValue = jsonObj.get(key).toString();
 		} catch (JSONException ex) {
 			ex.printStackTrace();
+			Log.e("mmmm", "LiveJsonResolve:"+key);
 		}
 		return rValue;
 	}
@@ -101,6 +104,7 @@ public class LiveJsonResolve {
 			rValue = jsonObj.getJSONArray(key);
 		} catch (JSONException ex) {
 			ex.printStackTrace();
+			Log.e("mmmm", "LiveJsonResolve:"+key);
 		}
 		return rValue;
 	}
@@ -112,6 +116,7 @@ public class LiveJsonResolve {
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			Log.e("mmmm", "LiveJsonResolve:"+key);
 		}
 		return i;
 	}

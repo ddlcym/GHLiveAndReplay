@@ -10,7 +10,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.changhong.gehua.common.ChannelInfo;
 import com.changhong.gehua.common.MD5Encrypt;
+import com.changhong.gehua.common.ProcessData;
 import com.changhong.gehua.common.VolleyTool;
 import com.changhong.ghlive.datafactory.HandleLiveData;
 
@@ -20,6 +22,8 @@ public class HttpService extends Service {
 
 	private VolleyTool volleyTool;
 	private RequestQueue mReQueue;
+
+	private ProcessData processData;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -39,20 +43,30 @@ public class HttpService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		// TODO Auto-generated method stub
+		if (intent != null) {
+			//play live show
+			ChannelInfo channel = (ChannelInfo) intent.getSerializableExtra("playLiveChannel");
+			if (channel != null) {
+				getPlayURL(channel);
+			}
+		}
+
 		return super.onStartCommand(intent, flags, startId);
 	}
 
 	private void initData() {
+		if (null == processData) {
+			processData = new ProcessData();
+		}
 		volleyTool = VolleyTool.getInstance();
 		mReQueue = volleyTool.getRequestQueue();
 		getChannelList();
-//		getPlayURL(1, 2);
+		// getPlayURL(1, 2);
 	}
 
 	private void getChannelList() {
 		// 传入URL请求链接
-		String URL = "http://ott.yun.gehua.net.cn:8080/msis/getChannels?version=V001&channelVersion=0&resolution=800*600&terminalType=1&authKey=16e21faf070e6bee21b26a7cc80fb5f6";
-
+		String URL = processData.getChannelList();
 		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
 				Request.Method.GET, URL, null,
 				new Response.Listener<org.json.JSONObject>() {
@@ -61,7 +75,7 @@ public class HttpService extends Service {
 					public void onResponse(org.json.JSONObject arg0) {
 						// TODO Auto-generated method stub
 						// 相应成功
-						Log.i(TAG, "channle" + arg0);
+//						Log.i(TAG, "HttpService=channle:" + arg0);
 						HandleLiveData.getInstance().dealChannelJson(arg0);
 					}
 				}, errorListener);
@@ -69,12 +83,10 @@ public class HttpService extends Service {
 		mReQueue.add(jsonObjectRequest);
 	}
 
-	private void getPlayURL(int providerID, int assetID) {
+	private void getPlayURL(ChannelInfo outterchanInfo) {
 
-		String myURL = "http://ott.yun.gehua.net.cn:8080/msis/getPlayURL?&version=V002&resourceCode=8243&providerID=gehua&assetID=8243&resolution=800*600&playType=2&terminalType=4&&authKey=";
-		String orig="http://ott.yun.gehua.net.cn:8080/msis/getPlayURL";
-		String realurl=myURL+MD5Encrypt.MD5EncryptExecute(orig);
-		
+		String realurl = processData.getPlayUrlString(outterchanInfo);
+
 		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
 				Request.Method.POST, realurl, null,
 				new Response.Listener<org.json.JSONObject>() {

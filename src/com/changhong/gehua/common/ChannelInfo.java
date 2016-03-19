@@ -14,7 +14,7 @@ public class ChannelInfo implements Serializable{
 	private int videoType;
 	private int feeType;
 	private int resourceOrder;
-	private String resourceCode;
+	private int resourceCode;
 	private String channelType;
 	private String cityCode;
 	private String gradeCode;
@@ -88,11 +88,11 @@ public class ChannelInfo implements Serializable{
 		this.resourceOrder = resourceOrder;
 	}
 
-	public String getResourceCode() {
+	public int getResourceCode() {
 		return resourceCode;
 	}
 
-	public void setResourceCode(String resourceCode) {
+	public void setResourceCode(int resourceCode) {
 		this.resourceCode = resourceCode;
 	}
 
