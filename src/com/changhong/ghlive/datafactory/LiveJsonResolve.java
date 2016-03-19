@@ -83,6 +83,11 @@ public class LiveJsonResolve {
 		return posterInfo;
 	}
 	
+	private String getPlayURL(JSONObject json){
+		String strURL=getJsonObjectString(json, "palyURL");
+		return strURL;
+	}
+	
 	//=================================base function add  try catch=====================================
 
 	private String getJsonObjectString(JSONObject jsonObj, String key) {
