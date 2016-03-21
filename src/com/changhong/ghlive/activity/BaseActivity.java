@@ -3,7 +3,7 @@ package com.changhong.ghlive.activity;
 import android.app.Activity;
 import android.os.Bundle;
 
-public class BaseActivity extends Activity{
+public abstract class BaseActivity extends Activity{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -18,9 +18,7 @@ public class BaseActivity extends Activity{
 		
 	}
 	
-	protected void initView(){
-		
-	}
+	protected abstract void initView();
 
 	@Override
 	protected void onResume() {

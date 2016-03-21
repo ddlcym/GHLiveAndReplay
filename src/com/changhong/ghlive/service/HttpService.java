@@ -11,7 +11,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.changhong.gehua.common.ChannelInfo;
-import com.changhong.gehua.common.Command;
 import com.changhong.gehua.common.ProcessData;
 import com.changhong.gehua.common.VolleyTool;
 import com.changhong.ghlive.datafactory.HandleLiveData;
@@ -66,9 +65,30 @@ public class HttpService extends Service {
 		}
 		volleyTool = VolleyTool.getInstance();
 		mReQueue = volleyTool.getRequestQueue();
+		getChannelList();
 	}
 
 
+	private void getChannelList() {
+		// 传入URL请求链接
+		String URL = processData.getChannelList();
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+				Request.Method.GET, URL, null,
+				new Response.Listener<org.json.JSONObject>() {
+
+					@Override
+					public void onResponse(org.json.JSONObject arg0) {
+						// TODO Auto-generated method stub
+						// 相应成功
+//						Log.i(TAG, "HttpService=channle:" + arg0);
+						getLivePlayURL(HandleLiveData.getInstance().dealChannelJson(arg0).get(1));
+						
+					}
+				}, errorListener);
+		jsonObjectRequest.setTag(HttpService.class.getSimpleName());// 设置tag,cancelAll的时候使用
+		mReQueue.add(jsonObjectRequest);
+	}
+	
 	private void getLivePlayURL(ChannelInfo outterchanInfo) {
 
 		String realurl = processData.getLivePlayUrlString(outterchanInfo);

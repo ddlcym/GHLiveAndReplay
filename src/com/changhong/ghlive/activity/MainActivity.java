@@ -1,7 +1,11 @@
 package com.changhong.ghlive.activity;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.ListView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -11,20 +15,10 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.changhong.gehua.common.ChannelInfo;
 import com.changhong.gehua.common.ProcessData;
 import com.changhong.gehua.common.VolleyTool;
+import com.changhong.ghlive.datafactory.ChannelListAdapter;
 import com.changhong.ghlive.datafactory.HandleLiveData;
 import com.changhong.ghlive.service.HttpService;
 import com.changhong.ghliveandreplay.R;
-
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 
 public class MainActivity extends BaseActivity {
 
@@ -108,75 +102,6 @@ public class MainActivity extends BaseActivity {
 	private void showTime() {
 	}
 
-	/* adapter for channel list */
-	public class ChannelListAdapter extends BaseAdapter {
-
-		// LayoutInflater inflater =
-		// LayoutInflater.from(getApplicationContext());
-
-		private LayoutInflater mInflater = null;
-		private List<ChannelInfo> myList = new ArrayList<ChannelInfo>();
-
-		private ChannelListAdapter(Context context) {
-			// 根据context上下文加载布局，这里的是Demo17Activity本身，即this
-			this.mInflater = LayoutInflater.from(context);
-		}
-
-		public void setData(List<ChannelInfo> list) {
-			myList = list;
-			notifyDataSetChanged();
-		}
-
-		class ViewHolder {
-			TextView channelId;
-			TextView channelIndex;
-			TextView channelName;
-			// ImageView favView;
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			ViewHolder holder;
-
-			if (convertView == null) {
-				convertView = mInflater.inflate(R.layout.channelitem, null);
-				holder = new ViewHolder();
-				holder.channelId = (TextView) convertView.findViewById(R.id.chanId);
-				holder.channelIndex = (TextView) convertView.findViewById(R.id.chanIndex);
-				holder.channelName = (TextView) convertView.findViewById(R.id.chanName);
-				// holder.favView = (ImageView)
-				// convertView.findViewById(R.id.chan_image);
-				convertView.setTag(holder);
-			} else {
-				holder = (ViewHolder) convertView.getTag();
-			}
-
-			holder.channelId.setText((String) myList.get(position).getChannelID());
-			holder.channelIndex.setText((String) myList.get(position).getChannelCode());
-			holder.channelName.setText((String) myList.get(position).getChannelName());
-
-			return convertView;
-		}
-
-		@Override
-		public long getItemId(int position) {
-			// TODO Auto-generated method stub
-			return position;
-		}
-
-		@Override
-		public Object getItem(int position) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public int getCount() {
-			// TODO Auto-generated method stub
-			return myList.size();
-		}
-
-	};
 
 	// ================================================================================
 	@Override
