@@ -55,12 +55,6 @@ public class HttpService extends Service {
 //				getPointProList(channel);
 				
 			}
-			if(command==Command.INIT_LIVE){
-				//init live view
-				
-			}
-			
-			
 		}
 
 		return super.onStartCommand(intent, flags, startId);
@@ -72,28 +66,8 @@ public class HttpService extends Service {
 		}
 		volleyTool = VolleyTool.getInstance();
 		mReQueue = volleyTool.getRequestQueue();
-		getChannelList();
-		// getPlayURL(1, 2);
 	}
 
-	private void getChannelList() {
-		// 传入URL请求链接
-		String URL = processData.getChannelList();
-		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-				Request.Method.GET, URL, null,
-				new Response.Listener<org.json.JSONObject>() {
-
-					@Override
-					public void onResponse(org.json.JSONObject arg0) {
-						// TODO Auto-generated method stub
-						// 相应成功
-//						Log.i(TAG, "HttpService=channle:" + arg0);
-						HandleLiveData.getInstance().dealChannelJson(arg0);
-					}
-				}, errorListener);
-		jsonObjectRequest.setTag(HttpService.class.getSimpleName());// 设置tag,cancelAll的时候使用
-		mReQueue.add(jsonObjectRequest);
-	}
 
 	private void getLivePlayURL(ChannelInfo outterchanInfo) {
 

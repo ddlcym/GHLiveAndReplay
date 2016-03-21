@@ -37,19 +37,11 @@ public class HandleLiveData {
 		}
 	}
 	
-	public  void dealChannelJson(JSONObject json){
+	public  List<ChannelInfo> dealChannelJson(JSONObject json){
 		List<ChannelInfo> channels=	JsonResolve.jsonToChannels(json);
 		CacheData.setAllChannelInfo(channels);
 		
-//		Intent intent =new Intent();
-//		intent.setClass(con, HttpService.class);
-//		Bundle bundle = new Bundle();
-//		bundle.putSerializable("playLiveChannel", channels.get(1));
-//		intent.putExtras(bundle);
-//		con.startService(intent);
-		
-//		Log.i("mmmm", "channels"+channels.toString());
-			
+		return channels;
 	}
 	
 
