@@ -1,5 +1,7 @@
 package com.changhong.ghlive.service;
 
+import java.util.List;
+
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
@@ -25,6 +27,7 @@ public class HttpService extends Service {
 	private RequestQueue mReQueue;
 
 	private ProcessData processData;
+	
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -32,6 +35,7 @@ public class HttpService extends Service {
 		return null;
 	}
 
+	
 	@Override
 	public void onCreate() {
 		// TODO Auto-generated method stub
@@ -45,11 +49,20 @@ public class HttpService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		// TODO Auto-generated method stub
 		if (intent != null) {
+			String command=null;
+			command=intent.getStringExtra("command");
 			//play live show
 			ChannelInfo channel = (ChannelInfo) intent.getSerializableExtra("playLiveChannel");
 			if (channel != null) {
-				getPointProList(channel);
+//				getPointProList(channel);
+				
 			}
+			if(command!=null&command.equals("init_live")){
+				//init live view
+				
+			}
+			
+			
 		}
 
 		return super.onStartCommand(intent, flags, startId);

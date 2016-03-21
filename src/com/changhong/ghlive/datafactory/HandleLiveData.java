@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.changhong.gehua.common.CacheData;
 import com.changhong.gehua.common.ChannelInfo;
 import com.changhong.ghlive.activity.MyApp;
 import com.changhong.ghlive.service.HttpService;
@@ -38,13 +39,14 @@ public class HandleLiveData {
 	
 	public  void dealChannelJson(JSONObject json){
 		List<ChannelInfo> channels=	JsonResolve.jsonToChannels(json);
+		CacheData.setAllChannelInfo(channels);
 		
-		Intent intent =new Intent();
-		intent.setClass(con, HttpService.class);
-		Bundle bundle = new Bundle();
-		bundle.putSerializable("playLiveChannel", channels.get(1));
-		intent.putExtras(bundle);
-		con.startService(intent);
+//		Intent intent =new Intent();
+//		intent.setClass(con, HttpService.class);
+//		Bundle bundle = new Bundle();
+//		bundle.putSerializable("playLiveChannel", channels.get(1));
+//		intent.putExtras(bundle);
+//		con.startService(intent);
 		
 //		Log.i("mmmm", "channels"+channels.toString());
 			
