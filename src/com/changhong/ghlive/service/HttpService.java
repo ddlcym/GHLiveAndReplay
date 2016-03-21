@@ -1,7 +1,5 @@
 package com.changhong.ghlive.service;
 
-import java.util.List;
-
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
@@ -13,7 +11,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.changhong.gehua.common.ChannelInfo;
-import com.changhong.gehua.common.MD5Encrypt;
+import com.changhong.gehua.common.Command;
 import com.changhong.gehua.common.ProcessData;
 import com.changhong.gehua.common.VolleyTool;
 import com.changhong.ghlive.datafactory.HandleLiveData;
@@ -49,15 +47,15 @@ public class HttpService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		// TODO Auto-generated method stub
 		if (intent != null) {
-			String command=null;
-			command=intent.getStringExtra("command");
+			int command=0;
+			command=intent.getIntExtra("command", 0);
 			//play live show
 			ChannelInfo channel = (ChannelInfo) intent.getSerializableExtra("playLiveChannel");
 			if (channel != null) {
 //				getPointProList(channel);
 				
 			}
-			if(command!=null&command.equals("init_live")){
+			if(command==Command.INIT_LIVE){
 				//init live view
 				
 			}
