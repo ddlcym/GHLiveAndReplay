@@ -99,7 +99,7 @@ public class LineProgressView extends View {
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
-		canvas.drawLine(0, 0, canvas.getWidth(), 0, bkgPaint);
+//		canvas.drawLine(0, 0, canvas.getWidth(), 0, bkgPaint);
 //		Log.i("yangtong","bkg"+canvas.getWidth());
 //		Log.i("yangtong","prgs  "+progress * canvas.getWidth() / PROGRESS_MAX);
 		canvas.drawLine(0, 0, progress * canvas.getWidth() / PROGRESS_MAX,

@@ -3,6 +3,8 @@ package com.changhong.ghlive.datafactory;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.TimeZone;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import com.changhong.gehua.common.ChannelInfo;
 import com.changhong.ghliveandreplay.R;
@@ -52,9 +54,10 @@ public class Banner {
 	// TextView textview_timeshift_support = null;
 	LineProgressView progress = null;
 
-	private Banner(Context context, ChannelInfo outterChannelInfo) {
+	public Banner(Context context, ChannelInfo outterChannelInfo) {
 		mContext = context.getApplicationContext();
 		channelInfo = outterChannelInfo;
+
 	}
 
 	public void show() {
@@ -77,7 +80,25 @@ public class Banner {
 		updateDateTime();
 		bannerToast.setView(bannerView);
 		bannerToast.setDuration(Toast.LENGTH_LONG);
-		bannerToast.show();
+		// bannerToast.show();
+		showMyToast(bannerToast, 16);
+	}	
+	/* 自定义显示Toast的时间 */
+	private void showMyToast(Toast toast, int cnt) {
+		if (cnt < 0)
+			return;
+		toast.show();
+		execToast(toast, cnt);
+	}
+	
+	private void execToast(final Toast toast, final int cnt) {
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				showMyToast(toast, cnt - 1);
+			}
+		}, 2000);
 	}
 
 	// private void updatePFInfo() {
