@@ -82,6 +82,7 @@ public class MainActivity extends BaseActivity {
 						channels = HandleLiveData.getInstance().dealChannelJson(arg0);
 						// setadapter
 						chLstAdapter.setData(channels);
+						 Log.i(TAG, "HttpService=channels:" + channels.size());
 						// if (channels.size() <= 0) {
 						// // focusView.setVisibility(View.INVISIBLE);
 						// }
