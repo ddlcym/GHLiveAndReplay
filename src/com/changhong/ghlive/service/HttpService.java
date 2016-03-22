@@ -81,7 +81,7 @@ public class HttpService extends Service {
 						// TODO Auto-generated method stub
 						// 相应成功
 //						Log.i(TAG, "HttpService=channle:" + arg0);
-						getLivePlayURL(HandleLiveData.getInstance().dealChannelJson(arg0).get(1));
+//						getLivePlayURL(HandleLiveData.getInstance().dealChannelJson(arg0).get(1));
 						
 					}
 				}, errorListener);

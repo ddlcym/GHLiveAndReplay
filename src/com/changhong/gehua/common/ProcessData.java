@@ -14,7 +14,7 @@ public class ProcessData {
 	private String chListPendingStr = "msis/getChannels?";
 	private String chListVersion = "V001";
 	private String chListChannelVersion = "0";
-	private String chListResolution = "800*600";
+	private String chListResolution = "1280*768";
 	private String chListTerminalType = "1";
 	/* for test */
 	private String chListpgSize = "&pageSize=20";
@@ -23,7 +23,7 @@ public class ProcessData {
 	/* chPgmList:频道节目列表 param of must */
 	private String chPgmListPendingStr = "msis/getChannelProgram?";
 	private String chPgmListVersion = "V001";
-	private String chPgmListResolution = "800*600";
+	private String chPgmListResolution = "1280*768";
 	private String chPgmListChannelResourceCode = "8061"; // not known
 	private String chPgmListTerminalType = "3";
 
@@ -42,7 +42,7 @@ public class ProcessData {
 	/* playUrl:播放串 param of must */
 	private String playUrlPendingStr = "msis/getPlayURL?";
 	private String playUrlVersion = "V002";
-	private String playUrlResolution = "800*600";
+	private String playUrlResolution = "1280*768";
 	private String playUrlPlayType = "2";
 	private String playUrlTerminalType = "4";
 

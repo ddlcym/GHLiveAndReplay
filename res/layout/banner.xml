@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="157dip"
     android:layout_marginTop="540dip"
-    android:background=""
     android:orientation="horizontal" >
 
     <com.changhong.ghlive.datafactory.LineProgressView
