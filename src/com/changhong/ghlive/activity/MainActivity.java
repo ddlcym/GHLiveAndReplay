@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -36,6 +37,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends BaseActivity {
 
@@ -47,6 +49,7 @@ public class MainActivity extends BaseActivity {
 	private String[] TVtype;// all tv type
 	private VideoView videoView;
 	private LinearLayout channelListLinear;// channellist layout
+	private ListView chListView;
 
 	// private View curView;
 	private boolean lockSwap = false;
@@ -67,7 +70,7 @@ public class MainActivity extends BaseActivity {
 	private List<ChannelInfo> otherTvList = new ArrayList<ChannelInfo>();
 	
 
-	private ListView chListView;
+	
 	private int curListIndex = 0;
 	private int new_ChanId;
 	private int old_chanId;
@@ -207,7 +210,7 @@ public class MainActivity extends BaseActivity {
 					public void onResponse(org.json.JSONObject arg0) {
 						// TODO Auto-generated method stub
 						// 相应成功
-						// Log.i(TAG, "HttpService=channle:" + arg0);
+						 Log.i(TAG, "HttpService=channle:" + arg0);
 						channelsAll = HandleLiveData.getInstance().dealChannelJson(arg0);
 						// setadapter
 						chLstAdapter.setData(channelsAll);
@@ -384,54 +387,81 @@ public class MainActivity extends BaseActivity {
 	private void showTime() {
 	}
 
-	// @Override
-	// public boolean onKeyDown(int keyCode, KeyEvent event) {
-	// // TODO Auto-generated method stub
-	// ChannelInfo channel;
-	// TextView chanView;
-	// String dialogButtonTextOk = MainActivity.this
-	// .getString(R.string.str_zhn_yes);
-	// String dialogButtonTextCancel = MainActivity.this
-	// .getString(R.string.str_zhn_no);
-	// String dialogSkipTitle = MainActivity.this
-	// .getString(R.string.str_zhn_skiptitle);
-	// String dialogSkipMess = MainActivity.this
-	// .getString(R.string.str_zhn_skipmessage);
-	// switch (keyCode) {
-	// case KeyEvent.KEYCODE_F4: {
-	// // 交换节目排序
-	// chanView = (TextView) curView.findViewById(R.id.chanId);
-	// Toast.makeText(MainActivity.this,
-	// MainActivity.this.getString(R.string.str_swap),
-	// Toast.LENGTH_LONG).show();
-	// lockSwap = true;
-	// old_chanId = Integer.parseInt(chanView.getText().toString());
-	// break;
-	// }
-	//
-	// case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
-	//
-	// if (curType == 6) {
-	// curType = 0;
-	// } else {
-	// curType++;
-	// }
-	// getAllTVtype(curType);
-	// showChannelList();
-	// break;
-	// case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
-	//
-	// if (curType == 0) {
-	// curType = 6;
-	// } else {
-	// curType--;
-	// }
-	// getAllTVtype(curType);
-	// showChannelList();
-	// break;
-	// }
-	// return super.onKeyDown(keyCode, event);
-	// }
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+		ChannelInfo channel;
+		TextView chanView;
+		String dialogButtonTextOk = MainActivity.this
+				.getString(R.string.str_zhn_yes);
+		String dialogButtonTextCancel = MainActivity.this
+				.getString(R.string.str_zhn_no);
+		String dialogSkipTitle = MainActivity.this
+				.getString(R.string.str_zhn_skiptitle);
+		String dialogSkipMess = MainActivity.this
+				.getString(R.string.str_zhn_skipmessage);
+		switch (keyCode) {
+		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
+
+			if (curType == 6) {
+				curType = 0;
+			} else {
+				curType++;
+			}
+			getAllTVtype(curType);
+			showChannelList();
+			break;
+		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
+
+			if (curType == 0) {
+				curType = 6;
+			} else {
+				curType--;
+			}
+			getAllTVtype(curType);
+			showChannelList();
+			break;
+		case Class_Constant.KEYCODE_UP_ARROW_KEY:
+		case Class_Constant.KEYCODE_PAGE_UP:
+			if (curListIndex == 0) {
+				getAllTVtype(curType);
+				showChannelList();
+				chListView.setSelection(chListView.getCount() - 1);
+			}
+			break;
+		case Class_Constant.KEYCODE_DOWN_ARROW_KEY:
+		case Class_Constant.KEYCODE_PAGE_DOWN:
+			if (curListIndex == (chListView.getCount() - 1)) {
+				getAllTVtype(curType);
+				showChannelList();
+				chListView.setSelection(0);
+			}
+			break;
+		case Class_Constant.KEYCODE_CHANNEL_UP:
+			getAllTVtype(curType);
+			showChannelList();
+			if (curListIndex == 0) {
+				chListView.setSelection(chListView.getCount() - 1);
+			}
+			else
+			{
+				chListView.setSelection(curListIndex - 1);
+			}
+			break;
+		case Class_Constant.KEYCODE_CHANNEL_DOWN:
+			getAllTVtype(curType);
+			showChannelList();
+			if (curListIndex == (chListView.getCount() - 1)) {
+				chListView.setSelection(0);
+			}
+			else
+			{
+				chListView.setSelection(curListIndex + 1);
+			}
+			break;			 
+		}
+		return super.onKeyDown(keyCode, event);
+	}
 
 	// ============play video=========================================
 	public int playChannel(int channelId, boolean isCheckPlaying) {
@@ -462,8 +492,8 @@ public class MainActivity extends BaseActivity {
 
 		CacheData.curChannelNum = channelId;
 
-		Banner ban = new Banner(this, curChannel);
-		ban.show();
+//		Banner ban = new Banner(this, curChannel);
+//		ban.show();
 		
 		return 0;
 	}
