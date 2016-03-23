@@ -7,6 +7,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.changhong.gehua.common.ChannelInfo;
+import com.changhong.gehua.common.ProgramInfo;
 import com.changhong.ghliveandreplay.R;
 
 import android.content.Context;
@@ -23,7 +24,6 @@ import android.widget.Toast;
  */
 public class Banner {
 
-	// channelInfo怎么传入?
 	private static Banner banner;
 	private static Toast bannerToast = null;
 	// private static SysApplication sysApplication;
@@ -31,17 +31,11 @@ public class Banner {
 	private View bannerView;
 
 	ChannelInfo channelInfo;
+	ProgramInfo programInfo;
 	HashMap<String, Integer> hs = null;
 	String[] sWeek;
 	String sMonth;
 	String sDay;
-
-	// String PF_channel_name = new String();
-
-	// String PF_time_P = new String();
-	// String PF_time_F = new String();
-	// String PF_enventName_P = new String();
-	// String PF_enventName_F = new String();
 
 	String PF_timeshiftsupport = new String();
 
@@ -49,22 +43,18 @@ public class Banner {
 	TextView channel_name = null;
 	TextView channel_number = null;
 	TextView PF_dtw = null;// 时间
-	// TextView PF_P = null;
-	// TextView PF_F = null;
-	// TextView textview_timeshift_support = null;
+	TextView PF_P = null;
+	TextView PF_F = null;
+	TextView textview_timeshift_support = null; // 节目名称
 	LineProgressView progress = null;
 
-	public Banner(Context context, ChannelInfo outterChannelInfo) {
+	public Banner(Context context, ChannelInfo outterChannelInfo, ProgramInfo outterProgramInfo) {
 		mContext = context.getApplicationContext();
 		channelInfo = outterChannelInfo;
-
+		programInfo = outterProgramInfo;
 	}
 
 	public void show() {
-		// if (sysApplication == null) {
-		// sysApplication = SysApplication.getInstance();
-		// sysApplication.initBookDatabase(mContext);
-		// }
 		if (bannerToast == null) {
 			bannerToast = new Toast(mContext);
 			bannerToast.setGravity(Gravity.BOTTOM, 0, 0);
@@ -72,81 +62,19 @@ public class Banner {
 		if (bannerView == null) {
 			LayoutInflater mInflater = LayoutInflater.from(mContext);
 			bannerView = mInflater.inflate(R.layout.banner, null);
+			// bannerView.setLeft(1300);
 			findView();
 		}
-		// channel = sysApplication.dvbDatabase.getChannel(chanId);
 		// updatePFInfo();
 		updateBanner();
 		updateDateTime();
 		bannerToast.setView(bannerView);
+		bannerToast.setGravity(Gravity.RIGHT | Gravity.BOTTOM, 0, 2);
+		// bannerToast.setGravity(Gravity.BOTTOM, 0, 2);
 		bannerToast.setDuration(Toast.LENGTH_LONG);
 		// bannerToast.show();
-		showMyToast(bannerToast, 16);
-	}	
-	/* 自定义显示Toast的时间 */
-	private void showMyToast(Toast toast, int cnt) {
-		if (cnt < 0)
-			return;
-		toast.show();
-		execToast(toast, cnt);
+		showMyToast(bannerToast, 16);// 测试显示toast
 	}
-	
-	private void execToast(final Toast toast, final int cnt) {
-		Timer timer = new Timer();
-		timer.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				showMyToast(toast, cnt - 1);
-			}
-		}, 2000);
-	}
-
-	// private void updatePFInfo() {
-
-	// PF_time_P = "";
-	// PF_enventName_P =
-	// mContext.getResources().getString(R.string.noprogrampfinfo);
-
-	// PF_time_F = "";
-	// PF_enventName_F =
-	// mContext.getResources().getString(R.string.noprogrampfinfo);
-	// DVB_EPG_PF pfInfo =
-	// DVB.getManager().getEpgInstance().getPfInfo(channel);
-
-	// if (pfInfo != null) {
-	// if (pfInfo.hasPresent()) {
-	// PF_time_P =
-	// format0Right(pfInfo.getPresent().getStartTime().getHour(), 2) + ":"
-	// + format0Right(pfInfo.getPresent().getStartTime().getMinute(), 2);
-	// PF_enventName_P = pfInfo.getPresent().getName();
-	// }
-	// if (pfInfo.hasFollowing()) {
-	// PF_time_F =
-	// format0Right(pfInfo.getFollowing().getStartTime().getHour(), 2) + ":"
-	// + format0Right(pfInfo.getFollowing().getStartTime().getMinute(), 2);
-	// PF_enventName_F = pfInfo.getFollowing().getName();
-	// }
-	//
-	// if (PF_time_P == null || PF_time_P.equals("")) {
-	// PF_time_P = mContext.getResources().getString(R.string.notimeinfo);
-	// }
-	// if (PF_time_F == null || PF_time_F.equals("")) {
-	// PF_time_F = mContext.getResources().getString(R.string.notimeinfo);
-	// }
-	// if (PF_enventName_P == null || PF_enventName_P.equals("")) {
-	// PF_enventName_P =
-	// mContext.getResources().getString(R.string.noprogrampfinfo);
-	// }
-	// if (PF_enventName_F == null || PF_enventName_F.equals("")) {
-	// PF_enventName_F =
-	// mContext.getResources().getString(R.string.noprogrampfinfo);
-	// }
-	//
-	// } else {
-	// Log.i("mmmm", "info is == null");
-	// return;
-	// }
-	// }
 
 	private void findView() {
 		adv_image = (ImageView) bannerView.findViewById(R.id.banner_adv_id);
@@ -154,68 +82,32 @@ public class Banner {
 		channel_number = (TextView) bannerView.findViewById(R.id.banner_service_id);
 		progress = (LineProgressView) bannerView.findViewById(R.id.banner_progress_view);
 		PF_dtw = (TextView) bannerView.findViewById(R.id.banner_DTW_id);
-
-		// PF_P = (TextView) bannerView.findViewById(R.id.banner_PF_P_id);
-		// PF_F = (TextView) bannerView.findViewById(R.id.banner_PF_F_id);
-		// textview_timeshift_support = (TextView)
-		// bannerView.findViewById(R.id.banner_tshift_support);
-
-		// param
-		// channel =
-		// sysApplication.dvbDatabase.getChannel(SysApplication.iCurChannelId);
-
+		PF_P = (TextView) bannerView.findViewById(R.id.banner_PF_P_id);
+		PF_F = (TextView) bannerView.findViewById(R.id.banner_PF_F_id);
+		textview_timeshift_support = (TextView) bannerView.findViewById(R.id.banner_tshift_support);
 	}
 
 	private void updateBanner() {
-		// String channelname = new String();
 		// TODO channelname PF_channel_name diffs?
-		// channelname = channel.name; ---zyt
 		if (hs == null) {
 			hs = new HashMap<String, Integer>();
 			// CH_TVlogo_Mapping();
 		}
 		progress.setProgress(getPlayingProgress());
 
-		// 序列号
-		// if (channel.logicNo < 10) {
-		// service_id.setText("00" + channel.logicNo);
-		// } else if (channel.logicNo <) {
-		// service_id.setText("0" + channel.logicNo);
-		// } else {
-		// service_id.setText("" + channel.logicNo);
-		// }
-
 		channel_name.setText(channelInfo.getChannelName());
 		channel_number.setText(channelInfo.getChannelNumber());
+		textview_timeshift_support.setText(programInfo.getEventName());
+		PF_P.setText(programInfo.getBeginTime().toString());
+		PF_F.setText(programInfo.getEndTime().toString());
+		// adv_image.set
 		// textview_timeshift_support.setText(getTimeShiftSupportString(channel.chanId));
-		// PF_P.setText(PF_time_P + " " + PF_enventName_P);
-		// PF_F.setText(PF_time_F + " " + PF_enventName_F);
 	}
 
 	private int getPlayingProgress() {
-		// DVB_EPG_PF pfInfo =
-		// DVB.getManager().getEpgInstance().getPfInfo(channel);
 		int startTime = 0;
-		// if (pfInfo == null) {
-		// startTime = 0;
-		// }
-		// else {
-		// int startH = pfInfo.getPresent().getStartTime().getHour();
-		// int startM = pfInfo.getPresent().getStartTime().getMinute();
-		// int startS = pfInfo.getPresent().getStartTime().getSecond();
-		// startTime = startH * 60 * 60 + startM * 60 + startS;// Start
-		// // time:second
-		// }
 
 		int endTime = 0;
-		// if (pfInfo == null) {
-		// endTime = 0;
-		// } else {
-		// int endH = pfInfo.getFollowing().getStartTime().getHour();
-		// int endM = pfInfo.getFollowing().getStartTime().getMinute();
-		// int endS = pfInfo.getFollowing().getStartTime().getSecond();
-		// endTime = endH * 60 * 60 + endM * 60 + endS;// End time:second
-		// }
 
 		Calendar c = Calendar.getInstance();
 		c.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
@@ -282,5 +174,23 @@ public class Banner {
 
 		PF_dtw.setText(mMonth + mContext.getResources().getString(R.string.moon) + mDay
 				+ mContext.getResources().getString(R.string.day) + "  " + mWeek + " " + mHour + ":" + mMinute);
+	}
+
+	/* 自定义显示Toast的时间 */
+	private void showMyToast(Toast toast, int cnt) {
+		if (cnt < 0)
+			return;
+		toast.show();
+		execToast(toast, cnt);
+	}
+
+	private void execToast(final Toast toast, final int cnt) {
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				showMyToast(toast, cnt - 1);
+			}
+		}, 2000);
 	}
 }
