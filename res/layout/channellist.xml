@@ -171,6 +171,7 @@
             android:background="#00000000"
             android:contentDescription="@null"
             android:scaleType="centerInside"
+            android:visibility="gone"
             android:src="@drawable/dtv_prolist_menu" />
 
         <ImageView
@@ -181,6 +182,7 @@
             android:background="#00000000"
             android:contentDescription="@null"
             android:scaleType="centerInside"
+            android:visibility="gone"
             android:src="@drawable/dtv_prolist_ok" />
     </LinearLayout>
 
