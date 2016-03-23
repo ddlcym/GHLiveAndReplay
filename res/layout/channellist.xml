@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" 
-    android:background="@color/black">
+    android:layout_height="fill_parent"
+    android:background="@color/black" >
 
     <com.changhong.gehua.common.VideoView
         android:id="@+id/videoview"
@@ -133,7 +133,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="280dip"
         android:clickable="true"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:visibility="invisible" >
 
         <ImageView
             android:layout_width="wrap_content"
@@ -161,7 +162,8 @@
         android:layout_marginBottom="0dp"
         android:layout_marginLeft="280dip"
         android:clickable="true"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:visibility="gone" >
 
         <ImageView
             android:layout_width="wrap_content"
@@ -171,8 +173,8 @@
             android:background="#00000000"
             android:contentDescription="@null"
             android:scaleType="centerInside"
-            android:visibility="gone"
-            android:src="@drawable/dtv_prolist_menu" />
+            android:src="@drawable/dtv_prolist_menu"
+            android:visibility="gone" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -182,8 +184,8 @@
             android:background="#00000000"
             android:contentDescription="@null"
             android:scaleType="centerInside"
-            android:visibility="gone"
-            android:src="@drawable/dtv_prolist_ok" />
+            android:src="@drawable/dtv_prolist_ok"
+            android:visibility="gone" />
     </LinearLayout>
 
 </FrameLayout>
