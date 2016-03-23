@@ -33,6 +33,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -45,6 +46,7 @@ public class MainActivity extends BaseActivity {
 	private TextView epgListTitleView;// chanellist title
 	private String[] TVtype;// all tv type
 	private VideoView videoView;
+	private LinearLayout channelListLinear;// channellist layout
 
 	// private View curView;
 	private boolean lockSwap = false;
@@ -121,6 +123,7 @@ public class MainActivity extends BaseActivity {
 		focusView = (ImageView) findViewById(R.id.set_focus_id);
 		epgListTitleView = (TextView) findViewById(R.id.id_epglist_title);
 		videoView = (VideoView) findViewById(R.id.videoview);
+		channelListLinear = (LinearLayout) findViewById(R.id.chlist_back);
 
 		// videoView.setMediaController(new MediaController(this));
 		videoView.setFocusable(false);
@@ -207,9 +210,9 @@ public class MainActivity extends BaseActivity {
 						// setadapter
 						chLstAdapter.setData(channelsAll);
 						Log.i(TAG, "HttpService=channelsAll:" + channelsAll.size());
-						// if (channelsAll.size() <= 0) {
-						// // focusView.setVisibility(View.INVISIBLE);
-						// }
+						 if (channelsAll.size() <= 0) {
+							 channelListLinear.setVisibility(View.INVISIBLE);
+						 }
 					}
 				}, errorListener);
 		jsonObjectRequest.setTag(HttpService.class.getSimpleName());// 设置tag,cancelAll的时候使用
