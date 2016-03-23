@@ -10,7 +10,7 @@ public class CacheData {
 	
 	public static int curChannelNum=-1;
 	
-	public static List<ChannelInfo> mCurChannels;
+	
 	
 	public static Map<String, Object> allChannelMap=new HashMap<String, Object>();
 	

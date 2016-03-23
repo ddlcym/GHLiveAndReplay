@@ -38,12 +38,9 @@ public class PlayVideo {
 		jsonResolve=JsonResolve.getInstance();
 	}
 	
-	public void play(Handler handler,ChannelInfo channel){
-		getLivePlayURL(handler, channel);
-	}
 	
 	
-	private void getLivePlayURL(final Handler handler,ChannelInfo outterchanInfo) {
+	public void playLiveProgram(final VideoView videoView,ChannelInfo outterchanInfo) {
 
 		String realurl = processData.getLivePlayUrlString(outterchanInfo);
 
@@ -56,10 +53,20 @@ public class PlayVideo {
 						// TODO Auto-generated method stub
 						// 相应成功
 //						Log.i(TAG, "PlayVideo-getPlayURL：" + arg0);
-						Message msg=new Message();
-						msg.what=Class_Constant.PLAY_LIVE;
-						msg.obj=jsonResolve.getHDPlayURL(arg0);
-						handler.sendMessage(msg);
+//						Message msg=new Message();
+//						msg.what=Class_Constant.PLAY_LIVE;
+//						msg.obj=jsonResolve.getHDPlayURL(arg0);
+//						handler.sendMessage(msg);
+						final String playurl=jsonResolve.getHDPlayURL(arg0);
+						videoView.post(new Runnable() {
+							
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								videoView.setVideoPath(playurl);
+								videoView.start();
+							}
+						});
 					}
 				}, errorListener);
 		jsonObjectRequest.setTag(HttpService.class.getSimpleName());// 设置tag,cancelAll的时候使用

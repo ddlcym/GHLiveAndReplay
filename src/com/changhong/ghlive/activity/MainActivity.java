@@ -57,6 +57,7 @@ public class MainActivity extends BaseActivity {
 	private ProcessData processData;
 
 	// kinds of channel list
+	private List<ChannelInfo> mCurChannels= new ArrayList<ChannelInfo>();//当前频道列表清单
 	private List<ChannelInfo> channelsAll = new ArrayList<ChannelInfo>();
 	private List<ChannelInfo> CCTVList = new ArrayList<ChannelInfo>();
 	private List<ChannelInfo> starTvList = new ArrayList<ChannelInfo>();
@@ -64,6 +65,7 @@ public class MainActivity extends BaseActivity {
 	private List<ChannelInfo> localTvList = new ArrayList<ChannelInfo>();
 	private List<ChannelInfo> HDTvList = new ArrayList<ChannelInfo>();
 	private List<ChannelInfo> otherTvList = new ArrayList<ChannelInfo>();
+	
 
 	private ListView chListView;
 	private int curListIndex = 0;
@@ -78,10 +80,10 @@ public class MainActivity extends BaseActivity {
 			String content = null;
 			switch (msg.what) {
 			case Class_Constant.PLAY_LIVE:// 直播
-				content = (String) msg.obj;
-				Log.i(TAG, "playURL:" + content);
-				videoView.setVideoPath(content);
-				videoView.start();
+//				content = (String) msg.obj;
+//				Log.i(TAG, "playURL:" + content);
+//				videoView.setVideoPath(content);
+//				videoView.start();
 				break;
 			case 2:
 
@@ -372,9 +374,9 @@ public class MainActivity extends BaseActivity {
 			curChannels = otherTvList;
 			break;
 		}
-		CacheData.mCurChannels = curChannels;
-		chLstAdapter.setData(CacheData.mCurChannels);
-		if (CacheData.mCurChannels.size() <= 0) {
+		mCurChannels = curChannels;
+		chLstAdapter.setData(mCurChannels);
+		if (mCurChannels.size() <= 0) {
 			focusView.setVisibility(View.INVISIBLE);
 		}
 	}
@@ -454,7 +456,7 @@ public class MainActivity extends BaseActivity {
 		// showAudioPlaying(false);
 		// }
 
-		PlayVideo.getInstance().play(mhandler, curChannel);
+		PlayVideo.getInstance().playLiveProgram(videoView, curChannel);
 
 		// mo_Ca.channelNotify(curChannel);
 
