@@ -213,7 +213,8 @@ public class MainActivity extends BaseActivity {
 						 Log.i(TAG, "HttpService=channle:" + arg0);
 						channelsAll = HandleLiveData.getInstance().dealChannelJson(arg0);
 						// setadapter
-						chLstAdapter.setData(channelsAll);
+						curType=0;
+						showChannelList();
 						Log.i(TAG, "HttpService=channelsAll:" + channelsAll.size());
 						 if (channelsAll.size() <= 0) {
 							 channelListLinear.setVisibility(View.INVISIBLE);
