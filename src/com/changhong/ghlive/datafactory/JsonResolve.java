@@ -4,7 +4,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -162,6 +164,21 @@ public class JsonResolve {
 		}
 		
 		return list;
+	}
+	
+	public Map<String, String> curJsonProToString(JSONObject json){
+		JSONObject jsonDatas=null;
+		Map<String, String> map=new HashMap<String, String>();
+		try {
+			jsonDatas=json.getJSONObject("datas");
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		map.put("name", getJsonObjectString(jsonDatas, "name"));
+		map.put("playTime", getJsonObjectString(jsonDatas, "playTime"));
+		
+		return map;
 	}
 	
 	//=================================base function add  try catch=====================================
