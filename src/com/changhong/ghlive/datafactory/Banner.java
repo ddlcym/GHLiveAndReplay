@@ -2,6 +2,7 @@ package com.changhong.ghlive.datafactory;
 
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -32,6 +33,7 @@ public class Banner {
 
 	ChannelInfo channelInfo;
 	ProgramInfo programInfo;
+
 	HashMap<String, Integer> hs = null;
 	String[] sWeek;
 	String sMonth;
@@ -99,7 +101,7 @@ public class Banner {
 		channel_number.setText(channelInfo.getChannelNumber());
 		textview_timeshift_support.setText(programInfo.getEventName());
 		PF_P.setText(programInfo.getBeginTime().toString());
-		PF_F.setText(programInfo.getEndTime().toString());
+		// PF_F.setText(programInfo.getEndTime().toString());
 		// adv_image.set
 		// textview_timeshift_support.setText(getTimeShiftSupportString(channel.chanId));
 	}
