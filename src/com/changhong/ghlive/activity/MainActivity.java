@@ -130,9 +130,9 @@ public class MainActivity extends BaseActivity {
 
 		// videoView.setMediaController(new MediaController(this));
 		videoView.setFocusable(false);
+		chListView.requestFocus();
 
 		chLstAdapter = new ChannelListAdapter(MainActivity.this);
-		Log.i("mmmm", "chListView" + chListView);
 		chListView.setAdapter(chLstAdapter);
 		chListView.setOnItemClickListener(myClickLis);
 		chListView.setOnItemSelectedListener(myItemSelectLis);
@@ -212,14 +212,14 @@ public class MainActivity extends BaseActivity {
 					public void onResponse(org.json.JSONObject arg0) {
 						// TODO Auto-generated method stub
 						// 相应成功
-						Log.i(TAG, "HttpService=channle:" + arg0);
+//						Log.i(TAG, "HttpService=channle:" + arg0);
 						channelsAll = HandleLiveData.getInstance()
 								.dealChannelJson(arg0);
 						// first set adapter
 						curType = 0;
 						showChannelList();
-						Log.i(TAG,
-								"HttpService=channelsAll:" + channelsAll.size());
+//						Log.i(TAG,
+//								"HttpService=channelsAll:" + channelsAll.size());
 						if (channelsAll.size() <= 0) {
 							channelListLinear.setVisibility(View.INVISIBLE);
 						}
@@ -233,7 +233,7 @@ public class MainActivity extends BaseActivity {
 		@Override
 		public void onErrorResponse(VolleyError arg0) {
 			// TODO Auto-generated method stub
-			Log.i(TAG, "HttpService=error：" + arg0);
+			Log.i(TAG, "MainActivity=error：" + arg0);
 		}
 	};
 
