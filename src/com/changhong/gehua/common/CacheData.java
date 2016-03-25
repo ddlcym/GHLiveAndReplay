@@ -1,14 +1,15 @@
 package com.changhong.gehua.common;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class CacheData {
 
-	public static List<ChannelInfo> allChannelInfo;
+	public static List<ChannelInfo> allChannelInfo=new ArrayList<ChannelInfo>();
 	
-	public static int curChannelNum=-1;
+	public static String curChannelNum="";
 	
 	
 	

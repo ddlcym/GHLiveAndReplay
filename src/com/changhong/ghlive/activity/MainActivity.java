@@ -157,7 +157,7 @@ public class MainActivity extends BaseActivity {
 
 		// videoView.setMediaController(new MediaController(this));
 		videoView.setFocusable(false);
-		chListView.requestFocus();
+		chListView.setFocusable(true);
 
 		chLstAdapter = new ChannelListAdapter(MainActivity.this);
 		chListView.setAdapter(chLstAdapter);
@@ -223,7 +223,6 @@ public class MainActivity extends BaseActivity {
 			playChannel(index, true);
 
 			curId = index;
-
 			Log.i("zyt", "play channel number is " + curId);
 			// mCurChannels.
 
@@ -577,7 +576,7 @@ public class MainActivity extends BaseActivity {
 	// ============play video=========================================
 	public int playChannel(int channelId, boolean isCheckPlaying) {
 
-		if (channelId == CacheData.curChannelNum && isCheckPlaying) {
+		if (channelId == curId && isCheckPlaying) {
 			return channelId;
 		}
 
@@ -606,7 +605,7 @@ public class MainActivity extends BaseActivity {
 		PlayVideo.getInstance().showBanner(mhandler, curChannel);
 		// mo_Ca.channelNotify(curChannel);
 
-		CacheData.curChannelNum = channelId;
+		CacheData.curChannelNum = curChannel.getChannelNumber();
 
 		// Banner ban = new Banner(this, curChannel);
 		// ban.show();
