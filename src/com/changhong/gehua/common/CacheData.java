@@ -30,7 +30,6 @@ public class CacheData {
 	public static void setAllChannelInfo(List<ChannelInfo> allChannelInfo) {
 		CacheData.allChannelInfo = allChannelInfo;
 	}
-
 	
 	
 }

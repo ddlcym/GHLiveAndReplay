@@ -291,5 +291,8 @@ public class Class_Constant {
 	public static final int TIMESHIFT_ERRORCODE_INVALID_APP = 7001;
 	public static final int TIMESHIFT_ERRORCODE_INVALID_LIVE_CHAN = 7002;
 	
+	//zyt
+	public static final int BANNER_PROGRAM_PASS = 99999; 
+	
 	
 }

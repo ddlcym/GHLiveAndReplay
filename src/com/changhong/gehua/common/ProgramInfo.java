@@ -2,7 +2,6 @@ package com.changhong.gehua.common;
 
 import java.util.Date;
 
-
 /**
  * @author OscarChang
  *
