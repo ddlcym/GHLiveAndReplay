@@ -75,8 +75,8 @@ public class Banner {
 		bannerToast.setGravity(Gravity.RIGHT | Gravity.BOTTOM, 0, 2);
 		// bannerToast.setGravity(Gravity.BOTTOM, 0, 2);
 		bannerToast.setDuration(Toast.LENGTH_LONG);
-		// bannerToast.show();
-		showMyToast(bannerToast, 16);// 测试显示toast
+		bannerToast.show();
+		// showMyToast(bannerToast, 16);// 测试显示toast
 	}
 
 	private void findView() {
