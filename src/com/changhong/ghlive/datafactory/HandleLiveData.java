@@ -12,7 +12,6 @@ import com.changhong.gehua.common.ChannelInfo;
 import com.changhong.ghlive.activity.MyApp;
 
 import android.content.Context;
-import android.util.Log;
 
 public class HandleLiveData {
 	private JsonResolve JsonResolve = null;
