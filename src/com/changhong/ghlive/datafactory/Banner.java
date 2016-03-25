@@ -12,6 +12,7 @@ import com.changhong.gehua.common.ProgramInfo;
 import com.changhong.ghliveandreplay.R;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,7 +47,7 @@ public class Banner {
 	TextView channel_number = null;
 	TextView PF_dtw = null;// 时间
 	TextView PF_P = null;
-	TextView PF_F = null;
+	// TextView PF_F = null;
 	TextView textview_timeshift_support = null; // 节目名称
 	LineProgressView progress = null;
 
@@ -84,9 +85,9 @@ public class Banner {
 		channel_number = (TextView) bannerView.findViewById(R.id.banner_service_id);
 		progress = (LineProgressView) bannerView.findViewById(R.id.banner_progress_view);
 		PF_dtw = (TextView) bannerView.findViewById(R.id.banner_DTW_id);
-		PF_P = (TextView) bannerView.findViewById(R.id.banner_PF_P_id);
-		PF_F = (TextView) bannerView.findViewById(R.id.banner_PF_F_id);
-		textview_timeshift_support = (TextView) bannerView.findViewById(R.id.banner_tshift_support);
+		PF_P = (TextView) bannerView.findViewById(R.id.banner_tshift_support);// playtime
+		// PF_F = (TextView) bannerView.findViewById(R.id.banner_PF_F_id);
+		textview_timeshift_support = (TextView) bannerView.findViewById(R.id.banner_PF_P_id);// 名称
 	}
 
 	private void updateBanner() {
@@ -100,10 +101,12 @@ public class Banner {
 		channel_name.setText(channelInfo.getChannelName());
 		channel_number.setText(channelInfo.getChannelNumber());
 		textview_timeshift_support.setText(programInfo.getEventName());
-		PF_P.setText(programInfo.getBeginTime().toString());
+		PF_P.setText(programInfo.getBeginTime().toString().substring(11, 16));
+		Log.i("zyt", "Date time is" + programInfo.getBeginTime().toString().substring(11, 16));
 		// PF_F.setText(programInfo.getEndTime().toString());
 		// adv_image.set
 		// textview_timeshift_support.setText(getTimeShiftSupportString(channel.chanId));
+
 	}
 
 	private int getPlayingProgress() {
