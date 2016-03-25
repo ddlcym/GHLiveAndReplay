@@ -1,7 +1,10 @@
 package com.changhong.ghlive.activity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -13,6 +16,7 @@ import com.changhong.gehua.common.ChannelInfo;
 import com.changhong.gehua.common.Class_Constant;
 import com.changhong.gehua.common.PlayVideo;
 import com.changhong.gehua.common.ProcessData;
+import com.changhong.gehua.common.ProgramInfo;
 import com.changhong.gehua.common.VideoView;
 import com.changhong.gehua.common.VolleyTool;
 import com.changhong.ghlive.datafactory.Banner;
@@ -49,6 +53,8 @@ public class MainActivity extends BaseActivity {
 	private String[] TVtype;// all tv type
 	private VideoView videoView;
 	private LinearLayout channelListLinear;// channellist layout
+	private LinearLayout linear_vertical_line;// straight line right of
+												// channellist layout
 	private ListView chListView;
 
 	// private View curView;
@@ -69,10 +75,14 @@ public class MainActivity extends BaseActivity {
 	private List<ChannelInfo> HDTvList = new ArrayList<ChannelInfo>();
 	private List<ChannelInfo> otherTvList = new ArrayList<ChannelInfo>();
 
+	Map<String, String> pgmContent = new HashMap<String, String>();
+
 	private int curListIndex = 0;
 	private int new_ChanId;
 	private int old_chanId;
 	private int curType = 0;
+	private int curId = 0;
+	private boolean shelterListView = false;
 
 	private ChannelListAdapter chLstAdapter;
 	private Handler mhandler = new Handler() {
@@ -86,8 +96,25 @@ public class MainActivity extends BaseActivity {
 				// videoView.setVideoPath(content);
 				// videoView.start();
 				break;
-			case 2:
+			case Class_Constant.BANNER_PROGRAM_PASS:
+				pgmContent = (Map<String, String>) msg.obj;
+				// Log.i("zyt", "pgmcontent" + pgmContent.get("name"));
+				// Log.i("zyt", "pgmcontent" + pgmContent.get("playTime"));
 
+				ProgramInfo innerPgmInfo = new ProgramInfo();
+				innerPgmInfo.setEventName(pgmContent.get("name"));
+
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+				try {
+					innerPgmInfo.setBeginTime(sdf.parse(pgmContent.get("playTime")));
+				} catch (java.text.ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				Log.i("zyt map time ", "program playTime Date:" + pgmContent.get("playTime"));
+
+				showBanner(curId, innerPgmInfo);
 				break;
 
 			}
@@ -127,6 +154,7 @@ public class MainActivity extends BaseActivity {
 		epgListTitleView = (TextView) findViewById(R.id.id_epglist_title);
 		videoView = (VideoView) findViewById(R.id.videoview);
 		channelListLinear = (LinearLayout) findViewById(R.id.chlist_back);
+		linear_vertical_line = (LinearLayout) findViewById(R.id.linear_vertical_line);
 
 		// videoView.setMediaController(new MediaController(this));
 		videoView.setFocusable(false);
@@ -197,6 +225,9 @@ public class MainActivity extends BaseActivity {
 			int index = Integer.parseInt(channelIndex.getText().toString());
 			Log.i(TAG, String.valueOf(index));
 			playChannel(index, true);
+
+			curId = index;
+
 		}
 
 	};
@@ -467,14 +498,20 @@ public class MainActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		ChannelInfo channel;
 		TextView chanView;
-		String dialogButtonTextOk = MainActivity.this
-				.getString(R.string.str_zhn_yes);
-		String dialogButtonTextCancel = MainActivity.this
-				.getString(R.string.str_zhn_no);
-		String dialogSkipTitle = MainActivity.this
-				.getString(R.string.str_zhn_skiptitle);
-		String dialogSkipMess = MainActivity.this
-				.getString(R.string.str_zhn_skipmessage);
+		String dialogButtonTextOk = MainActivity.this.getString(R.string.str_zhn_yes);
+		String dialogButtonTextCancel = MainActivity.this.getString(R.string.str_zhn_no);
+		// String dialogSkipTitle =
+		// MainActivity.this.getString(R.string.str_zhn_skiptitle);
+		// String dialogSkipMess =
+		// MainActivity.this.getString(R.string.str_zhn_skipmessage);
+
+		channelListLinear.setVisibility(View.VISIBLE);
+		focusView.setVisibility(View.VISIBLE);
+		linear_vertical_line.setVisibility(View.VISIBLE);
+		if (shelterListView) {
+			mhandler.removeCallbacks(runnable);
+		}
+		mhandler.postDelayed(runnable, 8000);
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
 
@@ -534,6 +571,16 @@ public class MainActivity extends BaseActivity {
 		return super.onKeyDown(keyCode, event);
 	}
 
+	// // ============play video=========================================
+	public void showBanner(int channelId, ProgramInfo pgmInfo) {
+		ChannelInfo curChannel = (ChannelInfo) CacheData.allChannelMap.get(String.valueOf(channelId));
+		// Log.i("zyt func", outterMap.get("name"));
+		// Log.i("zyt func", outterMap.get("playTime"));
+		Banner ban = new Banner(this, curChannel, pgmInfo);
+		// Log.i("zyt", "program playTime Date:" + pgmInfo.getPlaytime());
+		ban.show();
+	}
+
 	// ============play video=========================================
 	public int playChannel(int channelId, boolean isCheckPlaying) {
 
@@ -558,8 +605,13 @@ public class MainActivity extends BaseActivity {
 		// showAudioPlaying(false);
 		// }
 
-		PlayVideo.getInstance().playLiveProgram(videoView, curChannel);
+		Log.i("zyt", "pgmcontent" + pgmContent.get("name"));
+		Log.i("zyt", "pgmcontent" + pgmContent.get("playTime"));
 
+		PlayVideo.getInstance().playLiveProgram(videoView, curChannel);
+		// zyt
+
+		PlayVideo.getInstance().showBanner(mhandler, curChannel);
 		// mo_Ca.channelNotify(curChannel);
 
 		CacheData.curChannelNum = channelId;
@@ -570,7 +622,19 @@ public class MainActivity extends BaseActivity {
 		return 0;
 	}
 
-	// =============play video over====================================
+	// =============onKeydown timer====================================
+	Runnable runnable = new Runnable() {
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			shelterListView = true;
+
+			channelListLinear.setVisibility(View.INVISIBLE);
+			focusView.setVisibility(View.INVISIBLE);
+			linear_vertical_line.setVisibility(View.INVISIBLE);
+			mhandler.postDelayed(this, 8000);
+		}
+	};
 
 	// ================================================================================
 	@Override
