@@ -36,16 +36,20 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends BaseActivity {
 
 	private String TAG = "mmmm";
 
+	// test
+	private Button btnTest;
 	// view
 	private ImageView focusView; // foucus image
 	private TextView epgListTitleView;// chanellist title
@@ -154,6 +158,7 @@ public class MainActivity extends BaseActivity {
 		videoView = (VideoView) findViewById(R.id.videoview);
 		channelListLinear = (LinearLayout) findViewById(R.id.chlist_back);
 		linear_vertical_line = (LinearLayout) findViewById(R.id.linear_vertical_line);
+		btnTest = (Button) findViewById(R.id.testBtn);
 
 		// videoView.setMediaController(new MediaController(this));
 		videoView.setFocusable(false);
@@ -163,6 +168,18 @@ public class MainActivity extends BaseActivity {
 		chListView.setAdapter(chLstAdapter);
 		chListView.setOnItemClickListener(myClickLis);
 		chListView.setOnItemSelectedListener(myItemSelectLis);
+
+		btnTest.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent rplayAct = new Intent(MainActivity.this, ReplayPlayActivity.class);
+				startActivity(rplayAct);
+				// Toast.makeText(MainActivity.this, " test ",
+				// Toast.LENGTH_LONG).show();
+			}
+		});
+
 	}
 
 	private void startHttpSer() {
