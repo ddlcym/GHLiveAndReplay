@@ -86,6 +86,7 @@ public class MainActivity extends BaseActivity {
 	private int curType = 0;
 	private int curId = 0;
 	private boolean shelterListView = false;
+	private int replayProgramId = 0;
 
 	private ChannelListAdapter chLstAdapter;
 	private Handler mhandler = new Handler() {
@@ -116,6 +117,8 @@ public class MainActivity extends BaseActivity {
 					e.printStackTrace();
 				}
 				Log.i("zyt map time ", "program playTime Date:" + pgmContent.get("playTime"));
+				Log.i("zyt map time ", "program id is :" + pgmContent.get("id")); // 节目信息中的节目id
+				replayProgramId = Integer.parseInt(pgmContent.get("id"));
 
 				showBanner(curId, innerPgmInfo);
 				break;
@@ -127,7 +130,6 @@ public class MainActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 	}
 
 	@Override
@@ -241,7 +243,6 @@ public class MainActivity extends BaseActivity {
 
 			curId = index;
 			Log.i("zyt", "play channel number is " + curId);
-			// mCurChannels.
 
 		}
 
@@ -586,13 +587,10 @@ public class MainActivity extends BaseActivity {
 		return super.onKeyDown(keyCode, event);
 	}
 
-	// // ============play video=========================================
+	// // ============show banner=========================================
 	public void showBanner(int channelId, ProgramInfo pgmInfo) {
 		ChannelInfo curChannel = (ChannelInfo) CacheData.allChannelMap.get(String.valueOf(channelId));
-		// Log.i("zyt func", outterMap.get("name"));
-		// Log.i("zyt func", outterMap.get("playTime"));
 		Banner ban = new Banner(this, curChannel, pgmInfo);
-		// Log.i("zyt", "program playTime Date:" + pgmInfo.getPlaytime());
 		ban.show();
 	}
 
@@ -619,19 +617,16 @@ public class MainActivity extends BaseActivity {
 		// showAudioPlaying(false);
 		// }
 
-		Log.i("zyt", "pgmcontent" + pgmContent.get("name"));
-		Log.i("zyt", "pgmcontent" + pgmContent.get("playTime"));
-
 		PlayVideo.getInstance().playLiveProgram(videoView, curChannel);
-		// zyt
+		// PlayVideo.getInstance().playReplayProgram(videoView,
+		// curChannel);//获取回看播放串，进行播放
 
-		PlayVideo.getInstance().showBanner(mhandler, curChannel);
-		// mo_Ca.channelNotify(curChannel);
+		PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
+
+		PlayVideo.getInstance().getProgramInfoDetail(mhandler, replayProgramId);
 
 		CacheData.curChannelNum = curChannel.getChannelNumber();
 
-		// Banner ban = new Banner(this, curChannel);
-		// ban.show();
 		curId = channelId;
 		return 0;
 	}
