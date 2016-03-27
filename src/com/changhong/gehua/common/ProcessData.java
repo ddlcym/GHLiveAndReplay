@@ -43,10 +43,11 @@ public class ProcessData {
 	private String playUrlPendingStr = "msis/getPlayURL?";
 	private String playUrlVersion = "V002";
 	private String playUrlResolution = "1280*768";
-	private String playUrlPlayType = "2";
+	private String liveUrlPlayType = "2";
+	private String replayUrlPlayType = "4";
 	private String playUrlTerminalType = "4";
 	/*********************************************************************************/
-	/* livePgmInfo：直播节目信息 param of must */
+	/* livePgmInfo：直播节目详情 param of must */
 	private String livePgmInfoPendingStr = "msis/getPorgramInfo?";
 	private String livePgmInfoVersion = "V001";
 	private String livePgmInfoResolution = "1024*720";
@@ -85,11 +86,11 @@ public class ProcessData {
 		return strGETReturn(rawPlainStr);
 	}
 
-	/* generate live play program info 获取直播节目信息 */
-	public String getLivePlayProgramInfo(ProgramInfo outterProgramInfo) {
+	/* generate live play program info 获取直播节目详情 */
+	public String getLivePlayProgramInfo(int outterProgramId) {
+//		outterProgramId = 4892095;
 		String rawPlainStr = serverAdress + livePgmInfoPendingStr + "&version=" + livePgmInfoVersion + "&resolution="
-				+ livePgmInfoResolution + "&terminalType=" + livePgmInfoTerminalType + "&programId="
-				+ outterProgramInfo.getProgramId();
+				+ livePgmInfoResolution + "&terminalType=" + livePgmInfoTerminalType + "&programId=" + outterProgramId;
 
 		return strGETReturn(rawPlainStr);
 	}
@@ -98,20 +99,23 @@ public class ProcessData {
 	public String getLivePlayUrlString(ChannelInfo outterchanInfo) {
 		String rawPlainStr = serverAdress + playUrlPendingStr + "version=" + playUrlVersion + "&resourceCode="
 				+ outterchanInfo.getResourceCode() + "&providerID=" + outterchanInfo.getProviderID() + "&assetID="
-				+ outterchanInfo.getAssetID() + "&resolution=" + playUrlResolution + "&playType=" + playUrlPlayType
+				+ outterchanInfo.getAssetID() + "&resolution=" + playUrlResolution + "&playType=" + liveUrlPlayType
 				+ "&terminalType=" + playUrlTerminalType;
 
 		return strPOSTReturn(rawPlainStr, "msis/getPlayURL");
 	}
 
 	/* generate replay url string 获取回看播放串 */
-	public String getReplayPlayUrlString(ChannelInfo outterchanInfo, String outtershifttime, String outterShiftEnd) {
+	public String getReplayPlayUrlString(ChannelInfo outterchanInfo) {
 
+		int time = 120000;
 		String rawPlainStr = serverAdress + playUrlPendingStr + "version=" + playUrlVersion + "&resourceCode="
 				+ outterchanInfo.getResourceCode() + "&providerID=" + outterchanInfo.getProviderID() + "&assetID="
-				+ outterchanInfo.getAssetID() + "&resolution=" + playUrlResolution + "&playType=" + playUrlPlayType
-				+ "&terminalType=" + playUrlTerminalType + "&shifttime=" + outtershifttime + "&shiftend="
-				+ outterShiftEnd;
+				+ outterchanInfo.getAssetID() + "&resolution=" + playUrlResolution + "&playType=" + replayUrlPlayType
+				+ "&terminalType=" + playUrlTerminalType + "&delay=" + time;
+		// + "&shifttime=" + outtershifttime + "&shiftend="
+		// + outterShiftEnd;
+		// , String outtershifttime, String outterShiftEnd
 
 		return strPOSTReturn(rawPlainStr, "msis/getPlayURL");
 	}
