@@ -52,6 +52,12 @@ public class ProcessData {
 	private String livePgmInfoVersion = "V001";
 	private String livePgmInfoResolution = "1024*720";
 	private String livePgmInfoTerminalType = "1";
+	/*********************************************************************************/
+	/* channelInfo：频道信息 param of must */
+	private String channelInfoPendingStr = "msis/getChannelInfo?";
+	private String channelInfoVersion = "V001";
+	private String channelInfoResolution = "800*600";
+	private String channelInfoTerminalType = "1";
 
 	/* generate channel list ： 获取频道列表 */
 	public String getChannelList() {
@@ -88,7 +94,7 @@ public class ProcessData {
 
 	/* generate live play program info 获取直播节目详情 */
 	public String getLivePlayProgramInfo(int outterProgramId) {
-//		outterProgramId = 4892095;
+		// outterProgramId = 4892095;
 		String rawPlainStr = serverAdress + livePgmInfoPendingStr + "&version=" + livePgmInfoVersion + "&resolution="
 				+ livePgmInfoResolution + "&terminalType=" + livePgmInfoTerminalType + "&programId=" + outterProgramId;
 
@@ -106,18 +112,24 @@ public class ProcessData {
 	}
 
 	/* generate replay url string 获取回看播放串 */
-	public String getReplayPlayUrlString(ChannelInfo outterchanInfo) {
+	public String getReplayPlayUrlString(ChannelInfo outterchanInfo, long outtershifttime, long outterShiftEnd) {
 
-		int time = 120000;
+		int time = 200000;
 		String rawPlainStr = serverAdress + playUrlPendingStr + "version=" + playUrlVersion + "&resourceCode="
 				+ outterchanInfo.getResourceCode() + "&providerID=" + outterchanInfo.getProviderID() + "&assetID="
 				+ outterchanInfo.getAssetID() + "&resolution=" + playUrlResolution + "&playType=" + replayUrlPlayType
-				+ "&terminalType=" + playUrlTerminalType + "&delay=" + time;
-		// + "&shifttime=" + outtershifttime + "&shiftend="
-		// + outterShiftEnd;
-		// , String outtershifttime, String outterShiftEnd
+				+ "&terminalType=" + playUrlTerminalType + "&shifttime=" + outtershifttime + "&shiftend="
+				+ outterShiftEnd + "&delay=" + time;
 
 		return strPOSTReturn(rawPlainStr, "msis/getPlayURL");
+	}
+
+	/* generate channel info url string 获取频道信息 */
+	public String getChannelIfo(int channelId) {
+		String rawPlainStr = serverAdress + channelInfoPendingStr + "version=" + channelInfoVersion + "&resourceCode="
+				+ channelId + "&resolution=" + channelInfoResolution + "&terminalType=" + channelInfoTerminalType;
+
+		return strGETReturn(rawPlainStr);
 	}
 
 	/* Http GET String return */
