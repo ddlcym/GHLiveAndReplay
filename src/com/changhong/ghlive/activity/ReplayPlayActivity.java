@@ -1,5 +1,12 @@
 package com.changhong.ghlive.activity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
+import com.changhong.gehua.common.ChannelInfo;
+import com.changhong.gehua.common.Class_Constant;
+import com.changhong.gehua.common.PlayVideo;
+import com.changhong.gehua.common.ProcessData;
 import com.changhong.ghliveandreplay.R;
 import com.changhong.replay.datafactory.Player;
 
@@ -9,6 +16,7 @@ import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
@@ -25,8 +33,14 @@ public class ReplayPlayActivity extends Activity {
 
 	private Player player;
 	private VideoView vw;
+	private int replayChannelId = 0;
+	private String replayBeginTime = "";
+	private String replayEndTime = "";
 	// public MediaPlayer mediaPlayer;
-	String uriNet = "http://hls.yun.gehua.net.cn:8088/live/BTV3_1200.m3u8?a=1&provider_id=gehua&assetID=98784&ET=1458977445117&TOKEN=991b9299e887f690ca397f4c36e0bbd7";
+	String uriNet = "http://ott.yun.gehua.net.cn:8080/msis/getPlayURL?version=V002&resourceCode=8406&providerID=gehua&assetID=8406&resolution=1280*768&playType=4&terminalType=4&shifttime=14:22&shiftend=15:17&authKey=c7e278212b81aff1992ac5e0017757d7";
+	ProcessData mProcessData;
+	ChannelInfo channelDetail;
+	String replayurl = "";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +52,30 @@ public class ReplayPlayActivity extends Activity {
 		surfaceView = (SurfaceView) this.findViewById(R.id.surfaceView1);
 
 		initView();
+		initData();
+
+		Bundle bundle = getIntent().getExtras();
+		bundle.getStringArray("pgmInfo");
+
+		replayChannelId = Integer.parseInt(bundle.getStringArray("pgmInfo")[0]);
+		replayBeginTime = bundle.getStringArray("pgmInfo")[1];
+		replayEndTime = bundle.getStringArray("pgmInfo")[2];
+
+		// replayBeginTime = replayBeginTime.substring(11, 16);
+		// replayEndTime = replayEndTime.substring(11, 16);
+
+		PlayVideo.getInstance().getChannelInfoDetail(replayHandler, replayChannelId);
+		// replayurl = mProcessData.getReplayPlayUrlString(channelDetail,
+		// dateToUnixTime(replayBeginTime),
+		// dateToUnixTime(replayEndTime));
+		// Log.i("zyt", "replay activity pass is + " +
+		// bundle.getStringArray("pgmInfo")[0]);
+		// Log.i("zyt", "replay activity pass is + " +
+		// bundle.getStringArray("pgmInfo")[1]);
+		// Log.i("zyt", "replay activity pass is + " +
+		// bundle.getStringArray("pgmInfo")[2]);
+		// Intent mIntent = getIntent();
+
 	}
 
 	public void initView() {
@@ -52,6 +90,11 @@ public class ReplayPlayActivity extends Activity {
 
 		player = new Player(surfaceView, skbProgress);
 
+	}
+
+	public void initData() {
+		mProcessData = new ProcessData();
+		channelDetail = new ChannelInfo();
 	}
 
 	class ClickEvent implements OnClickListener {
@@ -72,7 +115,7 @@ public class ReplayPlayActivity extends Activity {
 			// starMoveList();
 			// break;
 			case R.id.btnNetMove:
-				playNetVideo();
+				// playNetVideo();
 				break;
 			}
 		}
@@ -80,9 +123,7 @@ public class ReplayPlayActivity extends Activity {
 
 	/* play net video */
 	private void playNetVideo() {
-		Log.i("zyt - process", " here 1");
 		if (isNetConnected()) {
-			Log.i("zyt - process", " here ");
 			// btnPause.setText("暂停");
 			newThreadPlay();
 			// loadingNetVideo();
@@ -117,10 +158,86 @@ public class ReplayPlayActivity extends Activity {
 			public void run() {
 				// TODO Auto-generated method stub
 				// loadingNetVideo();
-				Log.i("zyt - process", " here  2 ");
-				player.playUrl(uriNet);
+				player.playUrl(replayurl);
+				Log.i("zyt", "last + last" + " 频道详情 replay url is pass " + replayurl);
 				super.run();
 			}
 		}.start();
 	}
+
+	private Handler replayHandler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			switch (msg.what) {
+			case Class_Constant.REPLAY_CHANNEL_DETAIL:
+				channelDetail = (ChannelInfo) msg.obj;
+				Log.i("zyt", "last + last" + " 频道详情 id is " + channelDetail.getChannelID());
+
+				Log.i("zyt", "last + last" + " 频道详情 replayBeginTime is " + replayBeginTime);
+				Log.i("zyt", "last + last" + " 频道详情 replayEndTime is " + replayEndTime);
+				Log.i("zyt", "last + last" + " 频道详情 replay url is " + replayurl);
+				Log.i("zyt", "last + last" + " 频道详情 replay int begin time hour is " + (replayBeginTime));
+				Log.i("zyt", "last + last" + " 频道详情 replay int begin time mintue is " + (replayBeginTime));
+
+				Log.i("zyt", "last + last + last " + " 频道详情 replay int begin time mintue format is "
+						+ dateToUnixTime(replayBeginTime));
+
+				replayurl = mProcessData.getReplayPlayUrlString(channelDetail, dateToUnixTime(replayBeginTime),
+						dateToUnixTime(replayEndTime));
+
+				Log.i("zyt", "last + last + last " + " 频道详情 replay int begin time mintue format url is " + replayurl);
+
+				// PlayVideo.getInstance().playReplayProgram(replayHandler,
+				// replayurl);
+
+				// replayurl =
+				// mProcessData.getReplayPlayUrlString(channelDetail,
+				// dateToUnixTime(replayBeginTime),
+				// dateToUnixTime(replayEndTime));
+
+				// String englishDate = "Sun Mar 27 14:22:00 GMT+08:00
+				// 2016";
+
+				// SimpleDateFormat sdfNew = new SimpleDateFormat("yyyy-MM-dd
+				// HH:mm:ss");
+				// Date beginDate = sdfNew.parse(string);
+				// try {
+				// Log.i("zyt", "last + last" + " 频道详情 transfor to date is " +
+				// sdfNew.parse(replayBeginTime));
+				// } catch (ParseException e) {
+				// // TODO Auto-generated catch block
+				// e.printStackTrace();
+				// }
+				// Log.i("zyt", "last + last" + " 频道详情 replay int end time hour
+				// " + (replayEndTime));
+				// Log.i("zyt", "last + last" + " 频道详情 replay int end time
+				// minitue " + (replayEndTime));
+				// playNetVideo();
+
+				break;
+
+			default:
+				break;
+			}
+		}
+	};
+
+	public long dateToUnixTime(String outterString) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		// String time = "2016-03-27 15:00";
+		java.util.Date date = null;
+		try {
+			date = format.parse(outterString);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return date.getTime();
+	}
+	// public long getMillSecondsOfTime(String outterTime) {
+	// String hour = millSeconds.;
+	// String minute = "";
+	// long millSeconds = ((Integer.parseInt(hour) * 60 * 60) +
+	// (Integer.parseInt(minute) * 60)) * 1000;
+	// return millSeconds;
+	// }
 }
