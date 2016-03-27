@@ -101,7 +101,7 @@ public class Banner {
 		channel_name.setText(channelInfo.getChannelName());
 		channel_number.setText(channelInfo.getChannelNumber());
 		textview_timeshift_support.setText(programInfo.getEventName());
-		PF_P.setText(programInfo.getBeginTime().toString().substring(11, 16));
+		PF_P.setText(programInfo.getBeginTime().toString().substring(11, 16));//取固定格式时间
 		Log.i("zyt", "Date time is" + programInfo.getBeginTime().toString().substring(11, 16));
 		// PF_F.setText(programInfo.getEndTime().toString());
 		// adv_image.set
