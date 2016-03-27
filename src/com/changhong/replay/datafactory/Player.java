@@ -71,15 +71,12 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 	}
 
 	public void playUrl(String videoUrl) {
-		Log.i("zyt - process", " here  3 - 0");
 		if (null == mediaPlayer) {
-			Log.i("zyt - process", " here  3 - 1");
 			return;
 		}
 
 		brcastFlag = true;
 		try {
-			Log.i("zyt - process", " here  3 ");
 			mediaPlayer.reset();
 			mediaPlayer.setDataSource(videoUrl);
 			mediaPlayer.prepare();// prepare֮���Զ�����
