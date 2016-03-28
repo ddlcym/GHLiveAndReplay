@@ -1,12 +1,13 @@
 package com.changhong.gehua.common;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @author OscarChang
  *
  */
-public class ProgramInfo {
+public class ProgramInfo implements Serializable{
 	private int programId;
 	private int channelID;
 	private Date eventDate;

@@ -1,5 +1,6 @@
 package com.changhong.ghlive.datafactory;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,9 +16,11 @@ import org.json.JSONObject;
 import android.provider.ContactsContract.Contacts.Data;
 import android.util.Log;
 
+import com.changhong.gehua.common.CacheData;
 import com.changhong.gehua.common.ChannelInfo;
 import com.changhong.gehua.common.PosterInfo;
 import com.changhong.gehua.common.ProgramInfo;
+import com.changhong.gehua.common.Utils;
 
 public class JsonResolve {
 
@@ -56,7 +59,8 @@ public class JsonResolve {
 		// channel.setPosterInfo(getJsonObjectString(jsonObject,
 		// "posterInfo"));//待完成
 		channel.setChannelTypes(getJsonObjectString(jsonObject, "channelTypes"));
-		channel.setChannelNumber(getJsonObjectString(jsonObject, "channelNumber"));
+		channel.setChannelNumber(getJsonObjectString(jsonObject,
+				"channelNumber"));
 		// channel.setFrequency(getJsonObjectString(jsonObject, "frequency"));
 		// channel.setServiceid(getJsonObjectString(jsonObject, "serviceid"));
 		// channel.setSymbolRate(getJsonObjectString(jsonObject, "symbolRate"));
@@ -137,7 +141,8 @@ public class JsonResolve {
 		// program.setPoster(getJsonObjInt(json, "poster"));
 		// program.setPlaytime(getJsonObjInt(json, "playtime"));
 		program.setVolumeName(getJsonObjectString(json, "volumeName"));
-		program.setChannelResourceCode(getJsonObjInt(json, "channelResourceCode"));
+		program.setChannelResourceCode(getJsonObjInt(json,
+				"channelResourceCode"));
 		program.setVideoType(getJsonObjectString(json, "videoType"));
 		program.setProviderID(getJsonObjectString(json, "providerID"));
 		// program.setChannelName(getJsonObjectString(json, "channelName"));
@@ -147,8 +152,10 @@ public class JsonResolve {
 		return program;
 	}
 
-	public List<ProgramInfo> jsonToPrograms(JSONObject json) {
+	public Map<String, List<ProgramInfo>> jsonToPrograms(JSONObject json) {
+		Map<String, List<ProgramInfo>> proMaps = new HashMap<String, List<ProgramInfo>>();
 		List<ProgramInfo> list = new ArrayList<ProgramInfo>();
+		List<String> dayMonth = new ArrayList<String>();
 		JSONArray programs = getJsonObjectArray(json, "program");
 		for (int i = 0; i < programs.length(); i++) {
 			ProgramInfo program = null;
@@ -159,12 +166,22 @@ public class JsonResolve {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			if (program != null)
+			if (program != null) {
 				list.add(program);
+				Date dt=program.getEventDate();
+				String date = Utils.dateToString(dt);
+				if (!dayMonth.contains(date)) {
+					dayMonth.add(date);
+					proMaps.put(date, new ArrayList<ProgramInfo>());
 
+				}
+				proMaps.get(date).add(program);
+			}
 		}
-
-		return list;
+		// CacheData.curProgramsList=list;
+		CacheData.setDayMonths(dayMonth);;
+		CacheData.setAllProgramMap(proMaps);;
+		return proMaps;
 	}
 
 	public Map<String, String> curJsonProToString(JSONObject json) {
@@ -178,7 +195,6 @@ public class JsonResolve {
 		}
 		map.put("name", getJsonObjectString(jsonDatas, "name"));
 		map.put("playTime", getJsonObjectString(jsonDatas, "playTime"));
-		map.put("id", getJsonObjectString(jsonDatas, "id"));
 
 		return map;
 	}
@@ -224,9 +240,14 @@ public class JsonResolve {
 
 	private Date getJsonData(JSONObject json, String key) {
 		Date date = null;
-		SimpleDateFormat sdf = null;
+		DateFormat sdf = null;
 		String str = getJsonObjectString(json, key);
-		sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		if (key.equals("eventDate")) {
+			sdf = new SimpleDateFormat("yyyy-MM-dd");
+//			sdf= DateFormat.getDateInstance(DateFormat.MEDIUM); 
+		} else {
+			sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		}
 		try {
 			date = sdf.parse(str);
 		} catch (ParseException e) {

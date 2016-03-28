@@ -1,12 +1,14 @@
 package com.changhong.replay.datafactory;
 
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONObject;
 
 import android.content.Context;
 import android.util.Log;
 
+import com.changhong.gehua.common.CacheData;
 import com.changhong.gehua.common.ChannelInfo;
 import com.changhong.gehua.common.ProgramInfo;
 import com.changhong.ghlive.activity.MyApp;
@@ -37,9 +39,10 @@ public class HandleReplayData {
 		}
 	}
 	
-	public  void dealChannelJson(JSONObject json){
-		List<ProgramInfo> programs=	jsonResolve.jsonToPrograms(json);
+	public   Map<String, List<ProgramInfo>> dealChannelJson(JSONObject json){
+		 Map<String, List<ProgramInfo>> programs=	jsonResolve.jsonToPrograms(json);
+//		Log.i("mmmm", "programs"+programs.toString());
 		
-		Log.i("mmmm", "programs"+programs.toString());
+		return programs;
 	}
 }

@@ -39,10 +39,10 @@ public class HandleLiveData {
 	public List<ChannelInfo> dealChannelJson(JSONObject json) {
 		List<ChannelInfo> channels = JsonResolve.jsonToChannels(json);
 		List<Integer> channelNums = new ArrayList<Integer>();
-		CacheData.setAllChannelInfo(channels);
 
 		for (ChannelInfo channel : channels) {
 			CacheData.allChannelMap.put(channel.getChannelNumber(), channel);
+			CacheData.allChannelInfo.add(channel);
 		}
 
 		// 排序
