@@ -99,9 +99,11 @@
             android:layout_height="80dp"
             android:columnWidth="120dip"
             android:gravity="center"
-            android:nextFocusLeft="@+id/epg_chanlistTitle"
+            android:horizontalSpacing="5dp"
             android:nextFocusDown="@+id/EpgEventInfo"
-            android:horizontalSpacing="5dp" >
+            android:nextFocusLeft="@+id/epg_chanlistTitle"
+            android:paddingRight="20dip"
+            android:paddingTop="15dip" >
         </GridView>
 
         <!-- 设置 listSelector,避免listview自动对选中条填充纯色背景 -->
@@ -111,8 +113,8 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:divider="@drawable/eventlistdivider"
-            android:nextFocusUp="@+id/EpgWeekInfo"
             android:nextFocusLeft="@+id/ChanlIstView"
+            android:nextFocusUp="@+id/EpgWeekInfo"
             android:visibility="visible" >
         </com.changhong.replay.datafactory.EpgListview>
     </LinearLayout>
