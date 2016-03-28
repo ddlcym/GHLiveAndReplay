@@ -47,8 +47,6 @@ public class MainActivity extends BaseActivity {
 
 	private String TAG = "mmmm";
 
-	// test
-	private Button btnTest;
 	// view
 	private ImageView focusView; // foucus image
 	private TextView epgListTitleView;// chanellist title
@@ -120,8 +118,9 @@ public class MainActivity extends BaseActivity {
 				// pgmContent.get("playTime"));
 				// Log.i("zyt map time ", "program id is 当前 id:" +
 				// pgmContent.get("id")); // 节目信息中的节目id
-				replayProgramId = Integer.parseInt(pgmContent.get("id"));
-				PlayVideo.getInstance().getProgramInfoDetail(mhandler, replayProgramId);
+				// replayProgramId = Integer.parseInt(pgmContent.get("id"));
+				// PlayVideo.getInstance().getProgramInfoDetail(mhandler,
+				// replayProgramId);
 				showBanner(curId, innerPgmInfo);
 				break;
 
@@ -661,7 +660,7 @@ public class MainActivity extends BaseActivity {
 			return -1;
 		}
 
-		videoView.stopPlayback();
+		// videoView.stopPlayback();
 
 		/*--------------- If it is audio channel, blank the screen------------- */
 		// if (curChannel.sortId == 2 || curChannel.videoPid == 0x0
@@ -673,6 +672,8 @@ public class MainActivity extends BaseActivity {
 		// }
 
 		PlayVideo.getInstance().playLiveProgram(videoView, curChannel);
+		PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
+
 		// //live program
 		// String replayUrl =
 		// "http://ott.yun.gehua.net.cn:8080/msis/getPlayURL?version=V002&resourceCode=8406&providerID=gehua&assetID=8406&resolution=1280*768&playType=4&terminalType=4&shifttime=1459019"
@@ -688,10 +689,15 @@ public class MainActivity extends BaseActivity {
 		// 获取回看播放串，进行播放
 
 		// PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);//
+
 		// 显示banner信息
 		CacheData.curChannelNum = curChannel.getChannelNumber();
 
 		curId = channelId;
+		// CacheData.curChannelNum = channelId;
+
+		// Banner ban = new Banner(this, curChannel);
+		// ban.show();
 
 		return 0;
 	}
