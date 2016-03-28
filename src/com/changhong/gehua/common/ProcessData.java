@@ -122,8 +122,8 @@ public class ProcessData {
 		String rawPlainStr = serverAdress + playUrlPendingStr + "version=" + playUrlVersion + "&resourceCode="
 				+ outterchanInfo.getResourceCode() + "&providerID=" + outterchanInfo.getProviderID() + "&assetID="
 				+ outterchanInfo.getAssetID() + "&resolution=" + playUrlResolution + "&playType=" + replayUrlPlayType
-				+ "&terminalType=" + playUrlTerminalType + "&shifttime=" + outterProgramInfo.getBeginTime().getTime()
-				+ "&shiftend=" + outterProgramInfo.getEndTime().getTime() + "&delay=" + outterDelay;
+				+ "&terminalType=" + playUrlTerminalType + "&shifttime=" + outterProgramInfo.getBeginTime().getTime()/1000
+				+ "&shiftend=" + outterProgramInfo.getEndTime().getTime()/1000 + "&delay=" + outterDelay;
 
 		return strPOSTReturn(rawPlainStr, "msis/getPlayURL");
 	}
@@ -151,7 +151,7 @@ public class ProcessData {
 	public long dateToSecend(String str){
 		Date beginDate=null;
 		long seconds=0;
-		 SimpleDateFormat sdfNew = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		 SimpleDateFormat sdfNew = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		 try {
 			beginDate = sdfNew.parse(str);
 		} catch (ParseException e) {

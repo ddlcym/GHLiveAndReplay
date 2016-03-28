@@ -90,9 +90,9 @@ public class PlayVideo {
 
 					@Override
 					public void onResponse(org.json.JSONObject arg0) {
-						 Log.i("mmmm", " PlayVideo-arg0:"+ arg0);
+						 Log.i("TAG", " PlayVideo-arg0:"+ arg0);
 
-						String playurl = jsonResolve.getHDPlayURL(arg0);
+						String playurl = jsonResolve.getSDPlayURL(arg0);
 						Message msg=new Message();
 						msg.what=Class_Constant.REPLAY_URL;
 						msg.obj=playurl;
@@ -153,7 +153,7 @@ public class PlayVideo {
 						msg.obj = jsonResolve.curJsonProToString(arg0);
 						handler.sendMessage(msg);
 
-						Log.i("zyt", " 节目信息 + 返回内容 " + arg0);
+//						Log.i("zyt", " 节目信息 + 返回内容 " + arg0);
 
 						Log.i("zyt", " 节目信息 + 返回内容 " + jsonResolve.curJsonProToString(arg0));
 						rPgmInfo.setEventName(jsonResolve.curJsonProToString(arg0).get("name"));

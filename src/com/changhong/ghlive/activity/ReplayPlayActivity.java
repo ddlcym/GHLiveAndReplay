@@ -100,11 +100,6 @@ public class ReplayPlayActivity extends Activity {
 		}.start();
 	}
 
-	private String getRequestURL(ChannelInfo channel, ProgramInfo program) {
-		String reqURL = null;
-
-		return reqURL;
-	}
 
 	/* Date transfer to unix time */
 	public long dateToUnixTime(String outterString) {
@@ -179,6 +174,7 @@ public class ReplayPlayActivity extends Activity {
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
+		player.stop();
 	}
 
 	// public long getMillSecondsOfTime(String outterTime) {

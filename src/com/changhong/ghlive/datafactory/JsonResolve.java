@@ -115,13 +115,34 @@ public class JsonResolve {
 				Log.e("mmmm", "bitUrlList:" + bitUrlList);
 			}
 			String type = getJsonObjectString(bitUrl, "bitrate");
-			if (type.equals("标清")) {
+			if (type.equals("高清")) {
 				sdURL = getJsonObjectString(bitUrl, "url");
 				return sdURL;
 			}
 		}
 		return sdURL;
 	}
+	
+	public String getSDPlayURL(JSONObject json) {
+		String sdURL = null;
+		JSONArray bitUrlList = getJsonObjectArray(json, "bitPlayUrlList");
+		for (int i = 0; i < bitUrlList.length(); i++) {
+			JSONObject bitUrl = null;
+			try {
+				bitUrl = bitUrlList.getJSONObject(i);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				Log.e("mmmm", "bitUrlList:" + bitUrlList);
+			}
+			String type = getJsonObjectString(bitUrl, "bitrate");
+			if (type.equals("标清")) {
+				sdURL = getJsonObjectString(bitUrl, "url");
+				return sdURL;
+			}
+		}
+		return sdURL;
+	} 
 
 	public ProgramInfo jsonToProgram(JSONObject json) {
 		ProgramInfo program = new ProgramInfo();

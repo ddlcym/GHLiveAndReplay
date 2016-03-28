@@ -483,6 +483,7 @@ public class MainActivity extends BaseActivity {
 		}
 		mCurChannels = curChannels;
 		chLstAdapter.setData(mCurChannels);
+		chListView.setSelection(0);
 		if (mCurChannels.size() <= 0) {
 			focusView.setVisibility(View.INVISIBLE);
 		}
