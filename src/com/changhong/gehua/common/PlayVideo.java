@@ -163,7 +163,7 @@ public class PlayVideo {
 							// Log.i("zyt", "解析详情得到的program id " +
 							// curProgramId);
 							rPgmInfo.setBeginTime(sdf.parse(jsonResolve.curJsonProToString(arg0).get("playTime")));
-							rPgmInfo.setProgramId(Integer.parseInt(jsonResolve.curJsonProToString(arg0).get("id")));
+//							rPgmInfo.setProgramId(Integer.parseInt(jsonResolve.curJsonProToString(arg0).get("id")));
 							Log.i("zyt", " 节目信息 + 返回内容 + 直播节目ID " + rPgmInfo.getProgramId());
 
 						} catch (java.text.ParseException e) {
