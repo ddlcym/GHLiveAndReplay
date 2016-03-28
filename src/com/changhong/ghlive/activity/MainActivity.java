@@ -125,48 +125,57 @@ public class MainActivity extends BaseActivity {
 				showBanner(curId, innerPgmInfo);
 				break;
 
-			case Class_Constant.REPLAY_TIME_LENGTH:
-				ProgramInfo pgmInfoDetail = (ProgramInfo) msg.obj;
-
-				// Log.i("zyt", "传递handler之后的节目详情 + name " +
-				// pgmInfoDetail.getChannelName());
-				// Log.i("zyt", "传递handler之后的节目详情 + pgmId " +
-				// pgmInfoDetail.getProgramId());
-
-				Log.i("zyt", "传递handler之后的节目详情 + beginTime " + pgmInfoDetail.getBeginTime());
-				Log.i("zyt", "传递handler之后的节目详情 + endTime " + pgmInfoDetail.getEndTime());
-				Log.i("zyt", "传递handler之后的节目详情 + endTime " + pgmInfoDetail.getChannelID());
-
-				SimpleDateFormat sdfNew = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-				// ProgramInfo passPgmInfo = new ProgramInfo();
-				// passPgmInfo.setBeginTime((sdfNew.parse());
-				// Intent mIntent = new Intent(this, ObjectTranDemo1.class);
-
-				java.text.DateFormat format1 = new java.text.SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-				String formatBeginTime = format1.format(pgmInfoDetail.getBeginTime());
-				String formatEndTime = format1.format(pgmInfoDetail.getEndTime());
-
-				Bundle mBundle = new Bundle();
-				String[] value = { String.valueOf(pgmInfoDetail.getChannelID()), formatBeginTime, formatEndTime };
-				mBundle.putStringArray("pgmInfo", value);
-				Intent rplayAct = new Intent(MainActivity.this, ReplayPlayActivity.class);
-
-				// Log.i("zyt", "传递handler之后的节目详情 + endTime this is fourth " +
-				// s);
-				// rplayAct.put
-				// mBundle.putStringArray("pgmInfo", value);
-				// mBundle.putSerializable("pgmInfo", pgmInfoDetail);
-				rplayAct.putExtras(mBundle);
-				// PlayVideo.getInstance().getProgramInfoDetail(mhandler,
-				// replayProgramId);
-
-				// Intent rplayAct = new Intent(MainActivity.this,
-				// ReplayPlayActivity.class);
-
-				startActivity(rplayAct);
-
-				break;
+			// case Class_Constant.REPLAY_TIME_LENGTH:
+			// ProgramInfo pgmInfoDetail = (ProgramInfo) msg.obj;
+			//
+			// // Log.i("zyt", "传递handler之后的节目详情 + name " +
+			// // pgmInfoDetail.getChannelName());
+			// // Log.i("zyt", "传递handler之后的节目详情 + pgmId " +
+			// // pgmInfoDetail.getProgramId());
+			//
+			// Log.i("zyt", "传递handler之后的节目详情 + beginTime " +
+			// pgmInfoDetail.getBeginTime());
+			// Log.i("zyt", "传递handler之后的节目详情 + endTime " +
+			// pgmInfoDetail.getEndTime());
+			// Log.i("zyt", "传递handler之后的节目详情 + endTime " +
+			// pgmInfoDetail.getChannelID());
+			//
+			// SimpleDateFormat sdfNew = new SimpleDateFormat("yyyy-MM-dd
+			// HH:mm:ss");
+			//
+			// // ProgramInfo passPgmInfo = new ProgramInfo();
+			// // passPgmInfo.setBeginTime((sdfNew.parse());
+			// // Intent mIntent = new Intent(this, ObjectTranDemo1.class);
+			//
+			// java.text.DateFormat format1 = new
+			// java.text.SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+			// String formatBeginTime =
+			// format1.format(pgmInfoDetail.getBeginTime());
+			// String formatEndTime =
+			// format1.format(pgmInfoDetail.getEndTime());
+			//
+			// Bundle mBundle = new Bundle();
+			// String[] value = { String.valueOf(pgmInfoDetail.getChannelID()),
+			// formatBeginTime, formatEndTime };
+			// mBundle.putStringArray("pgmInfo", value);
+			// Intent rplayAct = new Intent(MainActivity.this,
+			// ReplayPlayActivity.class);
+			//
+			// // Log.i("zyt", "传递handler之后的节目详情 + endTime this is fourth " +
+			// // s);
+			// // rplayAct.put
+			// // mBundle.putStringArray("pgmInfo", value);
+			// // mBundle.putSerializable("pgmInfo", pgmInfoDetail);
+			// rplayAct.putExtras(mBundle);
+			// // PlayVideo.getInstance().getProgramInfoDetail(mhandler,
+			// // replayProgramId);
+			//
+			// // Intent rplayAct = new Intent(MainActivity.this,
+			// // ReplayPlayActivity.class);
+			//
+			// // startActivity(rplayAct);
+			//
+			// break;
 
 			}
 		}
@@ -205,7 +214,7 @@ public class MainActivity extends BaseActivity {
 		videoView = (VideoView) findViewById(R.id.videoview);
 		channelListLinear = (LinearLayout) findViewById(R.id.chlist_back);
 		linear_vertical_line = (LinearLayout) findViewById(R.id.linear_vertical_line);
-//		btnTest = (Button) findViewById(R.id.testBtn);
+		// btnTest = (Button) findViewById(R.id.testBtn);
 
 		// videoView.setMediaController(new MediaController(this));
 		videoView.setFocusable(false);
@@ -216,16 +225,17 @@ public class MainActivity extends BaseActivity {
 		chListView.setOnItemClickListener(myClickLis);
 		chListView.setOnItemSelectedListener(myItemSelectLis);
 
-//		btnTest.setOnClickListener(new View.OnClickListener() {
+		// btnTest.setOnClickListener(new View.OnClickListener() {
 
-//			@Override
-//			public void onClick(View v) {
-//				Intent rplayAct = new Intent(MainActivity.this, ReplayPlayActivity.class);
-//				startActivity(rplayAct);
-				// Toast.makeText(MainActivity.this, " test ",
-				// Toast.LENGTH_LONG).show();
-//			}
-//		});
+		// @Override
+		// public void onClick(View v) {
+		// Intent rplayAct = new Intent(MainActivity.this,
+		// ReplayPlayActivity.class);
+		// startActivity(rplayAct);
+		// Toast.makeText(MainActivity.this, " test ",
+		// Toast.LENGTH_LONG).show();
+		// }
+		// });
 
 	}
 
@@ -662,19 +672,23 @@ public class MainActivity extends BaseActivity {
 		// showAudioPlaying(false);
 		// }
 
-		// PlayVideo.getInstance().playLiveProgram(videoView, curChannel);
+		PlayVideo.getInstance().playLiveProgram(videoView, curChannel);
 		// //live program
 		// String replayUrl =
 		// "http://ott.yun.gehua.net.cn:8080/msis/getPlayURL?version=V002&resourceCode=8406&providerID=gehua&assetID=8406&resolution=1280*768&playType=4&terminalType=4&shifttime=1459019"
 		// +
 		// "820000&shiftend=1459023000000&authKey=c7e278212b81aff1992ac5e0017757d7";
 
-		String replayUrl = "http://ott.yun.gehua.net.cn:8080/msis/getPlayURL?version=V002&resourceCode=8406&providerID=gehua&assetID=8406&resolution=1280*768&playType=4&terminalType=4&shifttime=1459038060000&shiftend=1459040640000&delay=200000&authKey=c7e278212b81aff1992ac5e0017757d7";
-		String replayUrl1 = "http://ott.yun.gehua.net.cn:8080/msis/getPlayURL?version=V002&resourceCode=8245&providerID=gehua&assetID=8245&resolution=1280*768&playType=4&terminalType=4&shifttime=1459037700000&shiftend=1459043340000&delay=200000&authKey=c7e278212b81aff1992ac5e0017757d7";
+		// String replayUrl =
+		// "http://ott.yun.gehua.net.cn:8080/msis/getPlayURL?version=V002&resourceCode=8406&providerID=gehua&assetID=8406&resolution=1280*768&playType=4&terminalType=4&shifttime=1459038060000&shiftend=1459040640000&delay=200000&authKey=c7e278212b81aff1992ac5e0017757d7";
+		// String replayUrl1 =
+		// "http://ott.yun.gehua.net.cn:8080/msis/getPlayURL?version=V002&resourceCode=8245&providerID=gehua&assetID=8245&resolution=1280*768&playType=4&terminalType=4&shifttime=1459037700000&shiftend=1459043340000&delay=200000&authKey=c7e278212b81aff1992ac5e0017757d7";
 
 		// PlayVideo.getInstance().playReplayProgram(videoView, replayUrl1);
 		// 获取回看播放串，进行播放
-		PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);// 显示banner信息
+
+		// PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);//
+		// 显示banner信息
 		CacheData.curChannelNum = curChannel.getChannelNumber();
 
 		curId = channelId;
