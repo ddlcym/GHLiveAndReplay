@@ -2,6 +2,7 @@ package com.changhong.gehua.common;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /*return encrypt url adress*/
 /*Author:OscarChang*/
@@ -47,7 +48,7 @@ public class ProcessData {
 	private String playUrlVersion = "V002";
 	private String playUrlResolution = "1280*768";
 	private String liveUrlPlayType = "2";
-	private String replayUrlPlayType = "4";
+	private String replayUrlPlayType = "3";
 	private String playUrlTerminalType = "4";
 	/*********************************************************************************/
 	/* livePgmInfo：直播节目详情 param of must */
@@ -121,14 +122,14 @@ public class ProcessData {
 		String rawPlainStr = serverAdress + playUrlPendingStr + "version=" + playUrlVersion + "&resourceCode="
 				+ outterchanInfo.getResourceCode() + "&providerID=" + outterchanInfo.getProviderID() + "&assetID="
 				+ outterchanInfo.getAssetID() + "&resolution=" + playUrlResolution + "&playType=" + replayUrlPlayType
-				+ "&terminalType=" + playUrlTerminalType + "&shifttime=" + outterProgramInfo.getBeginTime()
-				+ "&shiftend=" + outterProgramInfo.getEndTime() + "&delay=" + outterDelay;
+				+ "&terminalType=" + playUrlTerminalType + "&shifttime=" + outterProgramInfo.getBeginTime().getTime()
+				+ "&shiftend=" + outterProgramInfo.getEndTime().getTime() + "&delay=" + outterDelay;
 
 		return strPOSTReturn(rawPlainStr, "msis/getPlayURL");
 	}
 
 	/* generate channel info url string 获取频道信息 */
-	public String getChannelIfo(int channelId) {
+	public String getChannelIfo(String channelId) {
 		String rawPlainStr = serverAdress + channelInfoPendingStr + "version=" + channelInfoVersion + "&resourceCode="
 				+ channelId + "&resolution=" + channelInfoResolution + "&terminalType=" + channelInfoTerminalType;
 
@@ -146,5 +147,21 @@ public class ProcessData {
 
 		return (arg0 + conStr + MD5Encrypt.MD5EncryptExecute(serverAdress + arg1));
 	}
+	
+	public long dateToSecend(String str){
+		Date beginDate=null;
+		long seconds=0;
+		 SimpleDateFormat sdfNew = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		 try {
+			beginDate = sdfNew.parse(str);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 seconds=beginDate.getTime();
+		 
+		 return seconds;
+	}
+	
 
 }

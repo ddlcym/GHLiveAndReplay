@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.WRITE_OWNER_DATA" />
     <uses-permission android:name="android.permission.READ_OWNER_DATA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name="com.changhong.ghlive.activity.MyApp"
@@ -42,6 +43,7 @@
         <activity android:name="com.changhong.ghlive.activity.ReplayPlayActivity" >
         </activity>
 
+        <activity android:name="com.changhong.ghlive.activity.ReplayPlayActivity"></activity>
         <service android:name="com.changhong.ghlive.service.HttpService" >
         </service>
     </application>

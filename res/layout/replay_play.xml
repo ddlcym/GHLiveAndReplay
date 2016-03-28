@@ -15,56 +15,16 @@
         android:layout_gravity="bottom"
         android:orientation="vertical" >
 
-        <LinearLayout
+        <SeekBar
+            android:id="@+id/skbProgress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="4.0dip"
-            android:orientation="horizontal" >
-
-            <Button
-                android:id="@+id/btnList"
-                android:layout_width="80dip"
-                android:layout_height="wrap_content"
-                android:ems="2"
-                android:lines="2"
-                android:text="本地视频" >
-            </Button>
-
-            <Button
-                android:id="@+id/btnNetMove"
-                android:layout_width="80dip"
-                android:layout_height="wrap_content"
-                android:ems="2"
-                android:lines="2"
-                android:text="网络视频" >
-            </Button>
-
-            <Button
-                android:id="@+id/btnPause"
-                android:layout_width="80dip"
-                android:layout_height="wrap_content"
-                android:text="暂停" >
-            </Button>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dip"
-            android:orientation="horizontal" >
-
-            <SeekBar
-                android:id="@+id/skbProgress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1.0"
-                android:max="100"
-                android:paddingLeft="10dip"
-                android:paddingRight="10dip" >
-            </SeekBar>
-        </LinearLayout>
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1.0"
+            android:max="100"
+            android:paddingLeft="10dip"
+            android:paddingRight="10dip" >
+        </SeekBar>
     </LinearLayout>
 
 </FrameLayout>

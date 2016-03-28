@@ -115,7 +115,7 @@ public class JsonResolve {
 				Log.e("mmmm", "bitUrlList:" + bitUrlList);
 			}
 			String type = getJsonObjectString(bitUrl, "bitrate");
-			if (type.equals("高清")) {
+			if (type.equals("标清")) {
 				sdURL = getJsonObjectString(bitUrl, "url");
 				return sdURL;
 			}

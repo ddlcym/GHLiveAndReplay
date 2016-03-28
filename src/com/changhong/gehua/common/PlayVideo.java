@@ -83,27 +83,20 @@ public class PlayVideo {
 
 	/*******************************************************************************************/
 	/* replay test */
-	public void playReplayProgram(final VideoView videoView, String outterPlayUrl) {
+	public void playReplayProgram(final Handler handler, String outterPlayUrl) {
 
 		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, outterPlayUrl, null,
 				new Response.Listener<org.json.JSONObject>() {
 
 					@Override
 					public void onResponse(org.json.JSONObject arg0) {
-						// Log.i("zyt", " this is last replay url is + 0326 --"
-						// + arg0);
+						 Log.i("mmmm", " PlayVideo-arg0:"+ arg0);
 
-						final String playurl = jsonResolve.getHDPlayURL(arg0);
-						videoView.post(new Runnable() {
-
-							@Override
-							public void run() {
-								// TODO Auto-generated method stub
-								Log.i("zyt", " this is last replay url is + 0326 --" + playurl);
-								videoView.setVideoPath(playurl);
-								videoView.start();
-							}
-						});
+						String playurl = jsonResolve.getHDPlayURL(arg0);
+						Message msg=new Message();
+						msg.what=Class_Constant.REPLAY_URL;
+						msg.obj=playurl;
+						handler.sendMessage(msg);
 					}
 				}, errorListener);
 		jsonObjectRequest.setTag(HttpService.class.getSimpleName());//
@@ -223,35 +216,35 @@ public class PlayVideo {
 	}
 
 	/* 获取节目信息 */
-	public void getChannelInfoDetail(final Handler handler, int outterChannelId) {
-		// Log.i("zyt", "传进来的id " + outterPgramId);
-		String channelInfoDetailURL = processData.getChannelIfo(outterChannelId);
-		// Log.i("zyt", "获取直播节目详情的加密后链接" + pgmInfoDetailURL);
-		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, channelInfoDetailURL, null,
-				new Response.Listener<org.json.JSONObject>() {
+//	public void getChannelInfoDetail(final Handler handler, String outterChannelId) {
+//		// Log.i("zyt", "传进来的id " + outterPgramId);
+//		String channelInfoDetailURL = processData.getChannelIfo(outterChannelId);
+//		// Log.i("zyt", "获取直播节目详情的加密后链接" + pgmInfoDetailURL);
+//		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, channelInfoDetailURL, null,
+//				new Response.Listener<org.json.JSONObject>() {
+//
+//					@Override
+//					public void onResponse(org.json.JSONObject arg0) {
+//						JSONObject json = null;
+//						ChannelInfo channelInfoDetail = new ChannelInfo();
+//						try {
+//							json = arg0.getJSONObject("channelInfo");
+//						} catch (JSONException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						}
 
-					@Override
-					public void onResponse(org.json.JSONObject arg0) {
-						JSONObject json = null;
-						ChannelInfo channelInfoDetail = new ChannelInfo();
-						try {
-							json = arg0.getJSONObject("channelInfo");
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-
-						Log.i("zyt", "last" + " 频道详情 " + arg0);
-
-						ChannelInfo channelInfoD = new ChannelInfo();
-						// Log.i("zyt", " json解析类之后的封装直播节目详情 " + arg0);
-						channelInfoDetail = jsonResolve.jsonToChannel(json);
-						Log.i("zyt", "last" + " 频道详情 id " + channelInfoDetail.getChannelID());
-						Message msg = new Message();
-						msg.what = Class_Constant.REPLAY_CHANNEL_DETAIL;
-						msg.obj = channelInfoDetail;
-
-						handler.sendMessage(msg);
+//						Log.i("zyt", "last" + " 频道详情 " + arg0);
+//
+//						ChannelInfo channelInfoD = new ChannelInfo();
+//						// Log.i("zyt", " json解析类之后的封装直播节目详情 " + arg0);
+//						channelInfoDetail = jsonResolve.jsonToChannel(json);
+//						Log.i("zyt", "last" + " 频道详情 id " + channelInfoDetail.getChannelID());
+//						Message msg = new Message();
+//						msg.what = Class_Constant.REPLAY_CHANNEL_DETAIL;
+//						msg.obj = channelInfoDetail;
+//
+//						handler.sendMessage(msg);
 
 						//
 						// Log.i("zyt", " 直播节目详情 -- beginTime " +
@@ -266,17 +259,17 @@ public class PlayVideo {
 						// msg.obj = entilePgm;
 
 						// handler.sendMessage(msg);
-					}
-				}, errorListener);
-		jsonObjectRequest.setTag(HttpService.class.getSimpleName());// 设置tag,cancelAll的时候使用
-		mReQueue.add(jsonObjectRequest);
-	}
+//					}
+//				}, errorListener);
+//		jsonObjectRequest.setTag(HttpService.class.getSimpleName());// 设置tag,cancelAll的时候使用
+//		mReQueue.add(jsonObjectRequest);
+//	}
 
 	private Response.ErrorListener errorListener = new Response.ErrorListener() {
 		@Override
 		public void onErrorResponse(VolleyError arg0) {
 			// TODO Auto-generated method stub
-			Log.i(TAG, "HttpService=error：" + arg0);
+			Log.i(TAG, "PlayVideo=error：" + arg0);
 		}
 	};
 

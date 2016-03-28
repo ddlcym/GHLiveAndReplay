@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.changhong.gehua.common.Class_Constant;
 import com.changhong.ghlive.activity.MyApp;
 import com.changhong.ghliveandreplay.R;
 
@@ -24,9 +25,9 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 		SurfaceHolder.Callback {
 	private int videoWidth;
 	private int videoHeight;
-	public MediaPlayer mediaPlayer;
+	public static MediaPlayer mediaPlayer;
 	private SurfaceHolder surfaceHolder;
-	private SeekBar skbProgress;
+	private static SeekBar skbProgress;
 	private SurfaceView surfaceView;
 	private Timer mTimer = new Timer();
 	private boolean brcastFlag = true;
@@ -51,16 +52,22 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 		}
 	};
 
-	Handler handleProgress = new Handler() {
+	public static Handler handleProgress = new Handler() {
 		public void handleMessage(Message msg) {
+			int curPos=0;
+			switch (msg.what){
+			case Class_Constant.REPLAY_SEEK_TO:
+				curPos=msg.arg1;
+				int duration = mediaPlayer.getDuration();
 
-			int position = mediaPlayer.getCurrentPosition();
-			int duration = mediaPlayer.getDuration();
-
-			if (duration > 0) {
-				long pos = skbProgress.getMax() * position / duration;
-				skbProgress.setProgress((int) pos);
+				if (duration > 0) {
+					long pos = skbProgress.getMax() * curPos / duration;
+					skbProgress.setProgress((int) pos);
+				}
+				break;
+			
 			}
+			
 		};
 	};
 
@@ -68,6 +75,11 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 
 	public void play() {
 		mediaPlayer.start();
+	}
+	
+	public Handler getHandler(){
+		
+		return handleProgress;
 	}
 
 	public void playUrl(String videoUrl) {
