@@ -85,6 +85,7 @@ public class EPGActivity extends BaseActivity {
 	// WeekInfo 控制
 	// List<Map<String, Object>> SimpleAdapterWeekdata = null;
 	private static String curDay = null;
+	private static ChannelInfo curChannel;
 
 	// all type channel
 	List<ChannelInfo> allTvList = new ArrayList<ChannelInfo>();
@@ -312,10 +313,10 @@ public class EPGActivity extends BaseActivity {
 			TextView channelIdText = (TextView) arg1
 					.findViewById(R.id.channelId);
 			curChannelNum = channelIdText.getText().toString();
-			ChannelInfo channel = (ChannelInfo) CacheData.getAllChannelMap()
+			curChannel = (ChannelInfo) CacheData.getAllChannelMap()
 					.get(curChannelNum);
 
-			getPointProList(channel);
+			getPointProList(curChannel);
 
 			channelCurSelect = (LinearLayout) arg1
 					.findViewById(R.id.epg_chan_itemlayout);
@@ -731,6 +732,7 @@ public class EPGActivity extends BaseActivity {
 		Intent mIntent = new Intent(EPGActivity.this, ReplayPlayActivity.class);
 		Bundle mBundle = new Bundle();
 		mBundle.putSerializable("program", program);
+		mBundle.putSerializable("channel", curChannel);
 		mIntent.putExtras(mBundle);
 
 		startActivity(mIntent);
@@ -755,6 +757,7 @@ public class EPGActivity extends BaseActivity {
 
 						// first set adapter
 						curType = 0;
+						curChannel=CacheData.getAllChannelInfo().get(0);
 						getAllTVtype();
 						showChannelList();
 						uiHandler.removeMessages(MSG_CHANNEL_CHANGE);
