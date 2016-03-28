@@ -34,15 +34,6 @@
                 android:background="@drawable/tvepg_main_chanclassify_selector"
                 android:orientation="horizontal" >
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dip"
-                    android:layout_marginTop="20dip"
-                    android:contentDescription="@null"
-                    android:focusable="false"
-                    android:src="@drawable/leftlift" />
-
                 <Button
                     android:id="@+id/epg_chanlistTitle"
                     android:layout_width="140dip"
@@ -53,20 +44,12 @@
                     android:nextFocusLeft="@+id/epg_chanlistTitle"
                     android:nextFocusRight="@+id/EpgWeekInfo"
                     android:nextFocusUp="@+id/epg_chanlistTitle"
+                    android:text="电视"
                     android:textColor="@color/white"
-                    android:textSize="24sp" >
+                    android:textSize="30sp" >
 
                     <requestFocus />
                 </Button>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="20dip"
-                    android:layout_marginTop="20dip"
-                    android:contentDescription="@null"
-                    android:focusable="false"
-                    android:src="@drawable/rightlift" />
             </LinearLayout>
 
             <!-- 设置 listSelector,避免listview自动对选中条填充纯色背景 -->
@@ -75,6 +58,7 @@
                 android:id="@+id/ChanlIstView"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
+                android:background="@layout/boder"
                 android:divider="@drawable/chanlistdivider"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
@@ -83,15 +67,6 @@
                 android:scrollbars="none" >
             </com.changhong.replay.datafactory.EpgListview>
         </LinearLayout>
-        
-        <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="0dip"
-                android:background="#00000000"
-                android:contentDescription="@null"
-                android:scaleType="centerInside"
-                android:src="@drawable/listright" />
     </LinearLayout>
 
     <LinearLayout
@@ -105,6 +80,7 @@
             android:id="@+id/EpgWeekInfo"
             android:layout_width="fill_parent"
             android:layout_height="80dp"
+            android:background="@layout/boder"
             android:columnWidth="120dip"
             android:gravity="center"
             android:horizontalSpacing="5dp"
@@ -120,6 +96,7 @@
             android:id="@+id/EpgEventInfo"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:background="@layout/boder"
             android:divider="@drawable/eventlistdivider"
             android:nextFocusLeft="@+id/ChanlIstView"
             android:nextFocusUp="@+id/EpgWeekInfo"
