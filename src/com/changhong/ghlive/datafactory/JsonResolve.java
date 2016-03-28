@@ -184,9 +184,6 @@ public class JsonResolve {
 		return proMaps;
 	}
 
-	/* truncate DayMonth length */
-	// public
-
 	public Map<String, String> curJsonProToString(JSONObject json) {
 		JSONObject jsonDatas = null;
 		Map<String, String> map = new HashMap<String, String>();
