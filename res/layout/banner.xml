@@ -72,7 +72,7 @@
                 android:layout_gravity="center"
                 android:gravity="left|center"
                 android:singleLine="true"
-                android:textColor="#ff00ff00"
+                android:textColor="@color/white"
                 android:textSize="@dimen/FONT_SIZE_NORMAL" />
         </LinearLayout>
 
