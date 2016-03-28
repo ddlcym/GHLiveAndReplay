@@ -469,14 +469,14 @@ public class EPGActivity extends BaseActivity {
 		curProgramList = (List<ProgramInfo>) CacheData.getAllProgramMap().get(
 				curday);
 		programsAdapter.setData(curProgramList);
-		epgEventListview.setSelection(EventlitItemindex);
+		
 
 	}
 
 	public void showWeekDay() {
 		epgWeekInfoView.setNumColumns(CacheData.getDayMonths().size());
 		dayMonthAdapter.setData(CacheData.getDayMonths());
-
+		epgWeekInfoView.setSelection(EventlitItemindex);
 	}
 
 	public void showChannelList(int channelType) {
@@ -789,7 +789,8 @@ public class EPGActivity extends BaseActivity {
 						// Log.i(TAG, "getPointProList:" + arg0)
 						HandleReplayData.getInstance().dealChannelJson(arg0);
 						// SimpleAdapterWeekdata = GetWeekDate();
-						curDay = CacheData.getDayMonths().get(0);
+						curDay = CacheData.getDayMonths().get(6);
+						EventlitItemindex=7;
 						uiHandler.sendEmptyMessage(MSG_SHOW_WEEKDAY);// 获取节目信息
 
 					}
