@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.changhong.gehua.common.ChannelInfo;
 import com.changhong.ghliveandreplay.R;
 
-public class ChannelRepListAdapter extends BaseAdapter{
+public class ChannelRepListAdapter extends BaseAdapter {
 	private Context context;
 	private List<ChannelInfo> repChannels = new ArrayList<ChannelInfo>();
 	private LayoutInflater inflater;
@@ -47,16 +47,12 @@ public class ChannelRepListAdapter extends BaseAdapter{
 	public View getView(int position, View convertView, ViewGroup viewGroup) {
 		ViewHolder viewHolder = null;
 		if (convertView == null) {
-			convertView = inflater
-					.inflate(R.layout.epg_main_chanitem, null);
+			convertView = inflater.inflate(R.layout.epg_main_chanitem, null);
 			viewHolder = new ViewHolder();
 
-			viewHolder.channelIndex = (TextView) convertView
-					.findViewById(R.id.epg_chan_Tview_chanindex);
-			viewHolder.channelName = (TextView) convertView
-					.findViewById(R.id.epg_chan_Tview_channame);
-			viewHolder.channelIDView = (TextView) convertView
-					.findViewById(R.id.channelId);
+			viewHolder.channelIndex = (TextView) convertView.findViewById(R.id.epg_chan_Tview_chanindex);
+			viewHolder.channelName = (TextView) convertView.findViewById(R.id.epg_chan_Tview_channame);
+			viewHolder.channelIDView = (TextView) convertView.findViewById(R.id.channelId);
 			convertView.setTag(viewHolder);
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
@@ -66,11 +62,11 @@ public class ChannelRepListAdapter extends BaseAdapter{
 
 		viewHolder.channelIDView.setText(channel.getChannelNumber());
 
-		viewHolder.channelIDView.setTextColor(0xffffff00);
+		viewHolder.channelIDView.setTextColor(0xffffffff);
 
 		viewHolder.channelIndex.setText(channel.getChannelNumber());
 
-		viewHolder.channelIndex.setTextColor(0xffffff00);
+		viewHolder.channelIndex.setTextColor(0xffffffff);
 
 		viewHolder.channelName.setText(channel.getChannelName());
 		return convertView;
