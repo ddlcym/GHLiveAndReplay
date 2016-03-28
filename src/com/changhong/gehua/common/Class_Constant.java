@@ -291,5 +291,6 @@ public class Class_Constant {
 	public static final int BANNER_PROGRAM_PASS = 99999;
 	public static final int REPLAY_TIME_LENGTH = 88888;
 	public static final int REPLAY_CHANNEL_DETAIL = 77777;
+	public static final int PLAY_URL_PASS = 66666;
 
 }
