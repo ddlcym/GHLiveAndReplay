@@ -59,8 +59,7 @@ public class JsonResolve {
 		// channel.setPosterInfo(getJsonObjectString(jsonObject,
 		// "posterInfo"));//待完成
 		channel.setChannelTypes(getJsonObjectString(jsonObject, "channelTypes"));
-		channel.setChannelNumber(getJsonObjectString(jsonObject,
-				"channelNumber"));
+		channel.setChannelNumber(getJsonObjectString(jsonObject, "channelNumber"));
 		// channel.setFrequency(getJsonObjectString(jsonObject, "frequency"));
 		// channel.setServiceid(getJsonObjectString(jsonObject, "serviceid"));
 		// channel.setSymbolRate(getJsonObjectString(jsonObject, "symbolRate"));
@@ -141,8 +140,7 @@ public class JsonResolve {
 		// program.setPoster(getJsonObjInt(json, "poster"));
 		// program.setPlaytime(getJsonObjInt(json, "playtime"));
 		program.setVolumeName(getJsonObjectString(json, "volumeName"));
-		program.setChannelResourceCode(getJsonObjInt(json,
-				"channelResourceCode"));
+		program.setChannelResourceCode(getJsonObjInt(json, "channelResourceCode"));
 		program.setVideoType(getJsonObjectString(json, "videoType"));
 		program.setProviderID(getJsonObjectString(json, "providerID"));
 		// program.setChannelName(getJsonObjectString(json, "channelName"));
@@ -168,8 +166,9 @@ public class JsonResolve {
 			}
 			if (program != null) {
 				list.add(program);
-				Date dt=program.getEventDate();
+				Date dt = program.getEventDate();
 				String date = Utils.dateToString(dt);
+				date = truncateDaateString(date, 5, date.length());
 				if (!dayMonth.contains(date)) {
 					dayMonth.add(date);
 					proMaps.put(date, new ArrayList<ProgramInfo>());
@@ -178,11 +177,15 @@ public class JsonResolve {
 				proMaps.get(date).add(program);
 			}
 		}
+
 		// CacheData.curProgramsList=list;
-		CacheData.setDayMonths(dayMonth);;
-		CacheData.setAllProgramMap(proMaps);;
+		CacheData.setDayMonths(dayMonth);
+		CacheData.setAllProgramMap(proMaps);
 		return proMaps;
 	}
+
+	/* truncate DayMonth length */
+	// public
 
 	public Map<String, String> curJsonProToString(JSONObject json) {
 		JSONObject jsonDatas = null;
@@ -244,7 +247,7 @@ public class JsonResolve {
 		String str = getJsonObjectString(json, key);
 		if (key.equals("eventDate")) {
 			sdf = new SimpleDateFormat("yyyy-MM-dd");
-//			sdf= DateFormat.getDateInstance(DateFormat.MEDIUM); 
+			// sdf= DateFormat.getDateInstance(DateFormat.MEDIUM);
 		} else {
 			sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		}
@@ -256,5 +259,11 @@ public class JsonResolve {
 		}
 
 		return date;
+	}
+
+	/* truncate date string length */
+	public String truncateDaateString(String dateStr, int start, int end) {
+
+		return dateStr.substring(start, end);
 	}
 }
