@@ -1,5 +1,8 @@
 package com.changhong.gehua.common;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 /*return encrypt url adress*/
 /*Author:OscarChang*/
 
@@ -112,14 +115,14 @@ public class ProcessData {
 	}
 
 	/* generate replay url string 获取回看播放串 */
-	public String getReplayPlayUrlString(ChannelInfo outterchanInfo, long outtershifttime, long outterShiftEnd) {
+	public String getReplayPlayUrlString(ChannelInfo outterchanInfo, ProgramInfo outterProgramInfo, int outterDelay) {
 
-		int time = 200000;
+		// int time = 100000;
 		String rawPlainStr = serverAdress + playUrlPendingStr + "version=" + playUrlVersion + "&resourceCode="
 				+ outterchanInfo.getResourceCode() + "&providerID=" + outterchanInfo.getProviderID() + "&assetID="
 				+ outterchanInfo.getAssetID() + "&resolution=" + playUrlResolution + "&playType=" + replayUrlPlayType
-				+ "&terminalType=" + playUrlTerminalType + "&shifttime=" + outtershifttime + "&shiftend="
-				+ outterShiftEnd + "&delay=" + time;
+				+ "&terminalType=" + playUrlTerminalType + "&shifttime=" + outterProgramInfo.getBeginTime()
+				+ "&shiftend=" + outterProgramInfo.getEndTime() + "&delay=" + outterDelay;
 
 		return strPOSTReturn(rawPlainStr, "msis/getPlayURL");
 	}
