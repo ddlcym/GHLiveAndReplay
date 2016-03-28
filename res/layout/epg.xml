@@ -25,7 +25,6 @@
             android:layout_width="221dip"
             android:layout_height="fill_parent"
             android:layout_marginLeft="0dip"
-            android:background="@drawable/chanlistback"
             android:orientation="vertical" >
 
             <LinearLayout
