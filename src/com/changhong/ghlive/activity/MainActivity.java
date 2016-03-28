@@ -614,7 +614,6 @@ public class MainActivity extends BaseActivity {
 			ChannelInfo chanPlus = (ChannelInfo) CacheData.allChannelMap.get(String.valueOf(curId));
 			int iPlus = mCurChannels.indexOf(chanPlus);
 			playChannel(Integer.parseInt(mCurChannels.get(iPlus + 1).getChannelNumber()), true);
-			// Log.i("zyt", "location is + " + i);
 
 			break;
 		case Class_Constant.KEYCODE_CHANNEL_DOWN:
@@ -627,15 +626,10 @@ public class MainActivity extends BaseActivity {
 				chListView.setSelection(curListIndex - 1);
 				focusLocation = curListIndex - 1;
 			}
-			// playIndex =
-			// Integer.parseInt(mCurChannels.get(focusLocation).getChannelNumber());
-			// curId = focusLocation;
-			// playChannel(focusLocation, true);
 
 			ChannelInfo chanMinu = (ChannelInfo) CacheData.allChannelMap.get(String.valueOf(curId));
 			int iMinu = mCurChannels.indexOf(chanMinu);
 			playChannel(Integer.parseInt(mCurChannels.get(iMinu - 1).getChannelNumber()), true);
-
 			break;
 		}
 		return super.onKeyDown(keyCode, event);
