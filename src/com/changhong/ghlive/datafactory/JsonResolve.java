@@ -4,6 +4,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -13,14 +15,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.provider.ContactsContract.Contacts.Data;
-import android.util.Log;
-
 import com.changhong.gehua.common.CacheData;
 import com.changhong.gehua.common.ChannelInfo;
 import com.changhong.gehua.common.PosterInfo;
 import com.changhong.gehua.common.ProgramInfo;
 import com.changhong.gehua.common.Utils;
+
+import android.util.Log;
 
 public class JsonResolve {
 
@@ -87,7 +88,7 @@ public class JsonResolve {
 
 		}
 
-		return list;
+		return sortChannels(list);
 	}
 
 	public PosterInfo getJsonPoster(JSONObject json) {
@@ -262,5 +263,22 @@ public class JsonResolve {
 	public String truncateDaateString(String dateStr, int start, int end) {
 
 		return dateStr.substring(start, end);
+	}
+
+	/* sort channels info num */
+	public List<ChannelInfo> sortChannels(List<ChannelInfo> outterList) {
+
+		Collections.sort(outterList, new Comparator<ChannelInfo>() {
+
+			public int compare(ChannelInfo o1, ChannelInfo o2) {
+				int result = Integer.parseInt(o1.getChannelNumber()) - Integer.parseInt(o2.getChannelNumber());
+				if (result == 0) {
+					result = o1.getChannelName().compareTo(o2.getChannelName());
+				}
+				return result;
+			}
+		});
+
+		return outterList;
 	}
 }
