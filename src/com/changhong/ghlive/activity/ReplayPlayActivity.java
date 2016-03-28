@@ -97,6 +97,11 @@ public class ReplayPlayActivity extends Activity {
 		channelDetail = new ChannelInfo();
 	}
 
+	public String getReplayUrl() {
+			
+		return null;
+	}
+
 	class ClickEvent implements OnClickListener {
 
 		@Override
@@ -233,6 +238,7 @@ public class ReplayPlayActivity extends Activity {
 		}
 		return date.getTime();
 	}
+
 	// public long getMillSecondsOfTime(String outterTime) {
 	// String hour = millSeconds.;
 	// String minute = "";
