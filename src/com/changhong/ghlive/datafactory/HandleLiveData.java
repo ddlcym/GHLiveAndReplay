@@ -38,32 +38,23 @@ public class HandleLiveData {
 
 	public List<ChannelInfo> dealChannelJson(JSONObject json) {
 		List<ChannelInfo> channels = JsonResolve.jsonToChannels(json);
-		List<Integer> channelNums = new ArrayList<Integer>();
 
 		for (ChannelInfo channel : channels) {
 			CacheData.allChannelMap.put(channel.getChannelNumber(), channel);
 			CacheData.allChannelInfo.add(channel);
 		}
 
-		// 排序
-		Collections.sort(channels, new Comparator<ChannelInfo>() {
-
-			public int compare(ChannelInfo o1, ChannelInfo o2) {
-				int result = Integer.parseInt(o1.getChannelNumber()) - Integer.parseInt(o2.getChannelNumber());
-				if (result == 0) {
-					result = o1.getChannelName().compareTo(o2.getChannelName());
-				}
-				return result;
-			}
-		});
-
-		// for (ChannelInfo channel : channels) {
-		// channelNums.add(Integer.parseInt(channel.getChannelNumber()));
-		// }
-		//
-		// for (int i = 0; i < channelNums.size(); i++) {
-		// Log.i("zyt-channenum", channelNums.get(i) + "");
-		// }
+		// sort
+//		Collections.sort(channels, new Comparator<ChannelInfo>() {
+//
+//			public int compare(ChannelInfo o1, ChannelInfo o2) {
+//				int result = Integer.parseInt(o1.getChannelNumber()) - Integer.parseInt(o2.getChannelNumber());
+//				if (result == 0) {
+//					result = o1.getChannelName().compareTo(o2.getChannelName());
+//				}
+//				return result;
+//			}
+//		});
 
 		return channels;
 	}
