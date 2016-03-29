@@ -552,10 +552,6 @@ public class MainActivity extends BaseActivity {
 		TextView chanView;
 		String dialogButtonTextOk = MainActivity.this.getString(R.string.str_zhn_yes);
 		String dialogButtonTextCancel = MainActivity.this.getString(R.string.str_zhn_no);
-		// String dialogSkipTitle =
-		// MainActivity.this.getString(R.string.str_zhn_skiptitle);
-		// String dialogSkipMess =
-		// MainActivity.this.getString(R.string.str_zhn_skipmessage);
 
 		channelListLinear.setVisibility(View.VISIBLE);
 		focusView.setVisibility(View.VISIBLE);
@@ -563,7 +559,7 @@ public class MainActivity extends BaseActivity {
 		if (shelterListView) {
 			mhandler.removeCallbacks(runnable);
 		}
-		mhandler.postDelayed(runnable, 8000);
+		mhandler.postDelayed(runnable, 9000);
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
 
@@ -611,11 +607,10 @@ public class MainActivity extends BaseActivity {
 				chListView.setSelection(curListIndex + 1);
 				focusLocation = curListIndex + 1;
 			}
-
 			ChannelInfo chanPlus = (ChannelInfo) CacheData.allChannelMap.get(String.valueOf(curId));
 			int iPlus = mCurChannels.indexOf(chanPlus);
-			playChannel(Integer.parseInt(mCurChannels.get(iPlus + 1).getChannelNumber()), true);
-
+			int nextPlusChannel = ((iPlus + 1) == chListView.getCount()) ? 0 : (iPlus + 1);
+			playChannel(Integer.parseInt(mCurChannels.get(nextPlusChannel).getChannelNumber()), true);
 			break;
 		case Class_Constant.KEYCODE_CHANNEL_DOWN:
 			getAllTVtype(curType);
@@ -627,10 +622,10 @@ public class MainActivity extends BaseActivity {
 				chListView.setSelection(curListIndex - 1);
 				focusLocation = curListIndex - 1;
 			}
-
 			ChannelInfo chanMinu = (ChannelInfo) CacheData.allChannelMap.get(String.valueOf(curId));
 			int iMinu = mCurChannels.indexOf(chanMinu);
-			playChannel(Integer.parseInt(mCurChannels.get(iMinu - 1).getChannelNumber()), true);
+			int nextMinusChannel = (iMinu == 0) ? (chListView.getCount() - 1) : (iMinu - 1);
+			playChannel(Integer.parseInt(mCurChannels.get(nextMinusChannel).getChannelNumber()), true);
 			break;
 		}
 		return super.onKeyDown(keyCode, event);
@@ -707,7 +702,7 @@ public class MainActivity extends BaseActivity {
 			channelListLinear.setVisibility(View.INVISIBLE);
 			focusView.setVisibility(View.INVISIBLE);
 			linear_vertical_line.setVisibility(View.INVISIBLE);
-			mhandler.postDelayed(this, 8000);
+			mhandler.postDelayed(this, 9000);
 		}
 	};
 
