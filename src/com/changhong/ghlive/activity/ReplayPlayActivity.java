@@ -157,8 +157,6 @@ public class ReplayPlayActivity extends Activity {
 		msg.what=Class_Constant.REPLAY_SEEK_TO;
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
-			
-			
 			msg.obj=curPos;
 			player.getHandler().sendMessage(msg);
 			break;

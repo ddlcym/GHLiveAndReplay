@@ -3,6 +3,8 @@ package com.changhong.ghlive.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
+
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -41,6 +43,7 @@ import com.changhong.replay.datafactory.DayMonthAdapter;
 import com.changhong.replay.datafactory.EpgListview;
 import com.changhong.replay.datafactory.HandleReplayData;
 import com.changhong.replay.datafactory.ProgramsAdapter;
+import com.changhong.replay.datafactory.ResolveEPGInfoThread;
 
 public class EPGActivity extends BaseActivity {
 
@@ -51,7 +54,7 @@ public class EPGActivity extends BaseActivity {
 	private static EpgListview epgEventListview;
 	private static LinearLayout channelListLinear;
 	private static GridView epgWeekInfoView;
-	private static Button chanListTitleButton;
+	private static TextView chanListTitleButton;
 	private ImageView focusView;
 
 	private LinearLayout EventLastSelect = null;
@@ -88,6 +91,7 @@ public class EPGActivity extends BaseActivity {
 	// List<Map<String, Object>> SimpleAdapterWeekdata = null;
 	private static String curDay = null;
 	private static ChannelInfo curChannel;
+	private ResolveEPGInfoThread resolveProJsonThread=null;
 
 	// all type channel
 	List<ChannelInfo> allTvList = new ArrayList<ChannelInfo>();
@@ -133,6 +137,9 @@ public class EPGActivity extends BaseActivity {
 				EpgEventListRefresh(curDay);
 				break;
 			case MSG_SHOW_WEEKDAY:
+				
+				curDay = CacheData.getDayMonths().get(0);
+				EventlitItemindex=0;
 				showWeekDay();
 				// epg.getEpgEventData(curChannelNum, curDayIndex);
 				EpgEventListRefresh(curDay);
@@ -162,7 +169,7 @@ public class EPGActivity extends BaseActivity {
 		channelListLinear = (LinearLayout) findViewById(R.id.epg_chan_classifylayout);
 		focusView = (ImageView) findViewById(R.id.set_repfocus_id);
 
-		chanListTitleButton = (Button) findViewById(R.id.epg_chanlistTitle);
+		chanListTitleButton = (TextView) findViewById(R.id.epg_chanlistTitle);
 		// chanListTitleButton.setOnKeyListener(epg_Listener_Classify_OnKey);
 		chanListTitleButton
 				.setOnFocusChangeListener(epg_Listener_Classify_OnfocusChange);
@@ -748,7 +755,7 @@ public class EPGActivity extends BaseActivity {
 				new Response.Listener<org.json.JSONObject>() {
 
 					@Override
-					public void onResponse(org.json.JSONObject arg0) {
+					public void onResponse(JSONObject arg0) {
 						// TODO Auto-generated method stub
 						// 相应成功
 						// Log.i(TAG, "HttpService=channle:" + arg0);
@@ -770,12 +777,13 @@ public class EPGActivity extends BaseActivity {
 						// }
 					}
 				}, null);
-		jsonObjectRequest.setTag(HttpService.class.getSimpleName());// 设置tag,cancelAll的时候使用
+		jsonObjectRequest.setTag(EPGActivity.class.getSimpleName());// 设置tag,cancelAll的时候使用
 		mReQueue.add(jsonObjectRequest);
 	}
 
 	// get programs in the channel
 	private void getPointProList(ChannelInfo channel) {
+		mReQueue.cancelAll("program");
 		String realurl = processData.getChannelProgramList(channel);
 
 		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
@@ -786,19 +794,15 @@ public class EPGActivity extends BaseActivity {
 					public void onResponse(org.json.JSONObject arg0) {
 						// TODO Auto-generated method stub
 						// 相应成功
-						 Log.i(TAG, "getPointProList:" + arg0);
-						HandleReplayData.getInstance().dealChannelJson(arg0);
-						// SimpleAdapterWeekdata = GetWeekDate();
-						curDay = CacheData.getDayMonths().get(0);
-						EventlitItemindex=0;
+//						 Log.i(TAG, "getPointProList:" + arg0);
+						resolveProJsonThread=ResolveEPGInfoThread.getInstance();
+						resolveProJsonThread.addData(uiHandler, arg0);
+						resolveProJsonThread.startRes();
 						
-						uiHandler.removeMessages(MSG_SHOW_WEEKDAY);
-						uiHandler.sendEmptyMessageDelayed(MSG_SHOW_WEEKDAY,
-								3000);
 
 					}
 				}, null);
-		jsonObjectRequest.setTag(HttpService.class.getSimpleName());// 设置tag,cancelAll的时候使用
+		jsonObjectRequest.setTag("program");// 设置tag,cancelAll的时候使用
 		mReQueue.add(jsonObjectRequest);
 	}
 
@@ -874,6 +878,7 @@ public class EPGActivity extends BaseActivity {
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
+		mReQueue.cancelAll(EPGActivity.class.getSimpleName());
 	}
 
 }

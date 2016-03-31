@@ -122,7 +122,7 @@ public class HttpService extends Service {
 						// TODO Auto-generated method stub
 						// 相应成功
 //						Log.i(TAG, "getPointProList:" + arg0)
-						HandleReplayData.getInstance().dealChannelJson(arg0);
+//						HandleReplayData.getInstance().dealChannelJson(arg0,false);
 					}
 				}, errorListener);
 		jsonObjectRequest.setTag(HttpService.class.getSimpleName());// 设置tag,cancelAll的时候使用

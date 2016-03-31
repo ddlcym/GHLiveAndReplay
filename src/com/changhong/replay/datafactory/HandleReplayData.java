@@ -16,33 +16,33 @@ import com.changhong.ghlive.datafactory.HandleLiveData;
 import com.changhong.ghlive.datafactory.JsonResolve;
 
 public class HandleReplayData {
-	private JsonResolve jsonResolve=null;
+	private JsonResolve jsonResolve = null;
 	private Context con;
-	
-	
+
 	private static HandleReplayData handleReplayData;
-	
-	public static HandleReplayData getInstance(){
-		if(null==handleReplayData){
-			handleReplayData=new HandleReplayData();
+
+	public static HandleReplayData getInstance() {
+		if (null == handleReplayData) {
+			handleReplayData = new HandleReplayData();
 		}
 		return handleReplayData;
 	}
 
-	public HandleReplayData(){
-		if(null==jsonResolve){
-			jsonResolve=JsonResolve.getInstance();
+	public HandleReplayData() {
+		if (null == jsonResolve) {
+			jsonResolve = JsonResolve.getInstance();
 		}
-		
-		if(null==con){
-			con=MyApp.getContext();
+
+		if (null == con) {
+			con = MyApp.getContext();
 		}
 	}
-	
-	public   Map<String, List<ProgramInfo>> dealChannelJson(JSONObject json){
-		 Map<String, List<ProgramInfo>> programs=	jsonResolve.jsonToPrograms(json);
-//		Log.i("mmmm", "programs"+programs.toString());
-		
+
+	public Map<String, List<ProgramInfo>> dealChannelJson(JSONObject json) {
+		Map<String, List<ProgramInfo>> programs = jsonResolve
+				.jsonToPrograms(json);
+		// Log.i("mmmm", "programs"+programs.toString());
+			CacheData.setAllProgramMap(programs);
 		return programs;
 	}
 }

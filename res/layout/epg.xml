@@ -34,7 +34,7 @@
                 android:background="@drawable/tvepg_main_chanclassify_selector"
                 android:orientation="horizontal" >
 
-                <Button
+                <TextView
                     android:id="@+id/epg_chanlistTitle"
                     android:layout_width="140dip"
                     android:layout_height="fill_parent"
@@ -47,9 +47,7 @@
                     android:nextFocusUp="@+id/epg_chanlistTitle"
                     android:textColor="@color/white"
                     android:textSize="30sp" >
-
-                    <requestFocus />
-                </Button>
+                </TextView>
             </LinearLayout>
 
             <!-- 设置 listSelector,避免listview自动对选中条填充纯色背景 -->

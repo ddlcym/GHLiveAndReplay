@@ -202,7 +202,7 @@ public class JsonResolve {
 
 		// CacheData.curProgramsList=list;
 		CacheData.setDayMonths(dayMonth);
-		CacheData.setAllProgramMap(proMaps);
+		
 		return proMaps;
 	}
 
