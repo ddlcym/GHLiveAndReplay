@@ -18,3 +18,13 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+
+#jar package
+-libraryjars libs/android-support-v4.jar
+-libraryjars libs/volly-1.0.11.jar
+#projecet package
+-keep class com.android.** {*;}
+-dontwarn com.android.**
+-keep class android.** {*;}
+-dontwarn android.**
