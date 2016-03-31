@@ -72,6 +72,8 @@ public class EPGActivity extends BaseActivity {
 	public static final int MSG_WEEKDAY_CHANGE = 0x202;
 	public static final int MSG_SHOW_WEEKDAY = 0x201;
 	public static final int MSG_BOOK_NEW = 0x301;
+	private static final String TAG="mmmm";
+	
 
 	private static String curChannelNum;
 	private int channelCount;
@@ -760,9 +762,7 @@ public class EPGActivity extends BaseActivity {
 						curChannel=CacheData.getAllChannelInfo().get(0);
 						getAllTVtype();
 						showChannelList();
-						uiHandler.removeMessages(MSG_CHANNEL_CHANGE);
-						uiHandler.sendEmptyMessageDelayed(MSG_CHANNEL_CHANGE,
-								3000);
+						uiHandler.sendEmptyMessage(MSG_CHANNEL_CHANGE);
 						// Log.i(TAG,
 						// "HttpService=channelsAll:" + channelsAll.size());
 						// if (allTvList.size() <= 0) {
@@ -786,12 +786,15 @@ public class EPGActivity extends BaseActivity {
 					public void onResponse(org.json.JSONObject arg0) {
 						// TODO Auto-generated method stub
 						// 相应成功
-						// Log.i(TAG, "getPointProList:" + arg0)
+						 Log.i(TAG, "getPointProList:" + arg0);
 						HandleReplayData.getInstance().dealChannelJson(arg0);
 						// SimpleAdapterWeekdata = GetWeekDate();
-						curDay = CacheData.getDayMonths().get(6);
-						EventlitItemindex=7;
-						uiHandler.sendEmptyMessage(MSG_SHOW_WEEKDAY);// 获取节目信息
+						curDay = CacheData.getDayMonths().get(0);
+						EventlitItemindex=0;
+						
+						uiHandler.removeMessages(MSG_SHOW_WEEKDAY);
+						uiHandler.sendEmptyMessageDelayed(MSG_SHOW_WEEKDAY,
+								3000);
 
 					}
 				}, null);
