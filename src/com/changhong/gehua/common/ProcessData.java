@@ -1,8 +1,10 @@
 package com.changhong.gehua.common;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /*return encrypt url adress*/
 /*Author:OscarChang*/
@@ -74,8 +76,8 @@ public class ProcessData {
 	/* generate channel's program list ：频道下的节目列表 */
 	public String getChannelProgramList(ChannelInfo outterchanInfo) {
 		String rawPlainStr = serverAdress + chPgmListPendingStr + "version=" + chPgmListVersion + "&resolution="
-				+ chPgmListResolution + "&channelResourceCode=" + outterchanInfo.getResourceCode() + "&terminalType="
-				+ chPgmListTerminalType;
+				+ chPgmListResolution + "&channelResourceCode=" + outterchanInfo.getResourceCode() + "&beginTime="
+				+ getSevenDayAgo()[1] + "&endTime=" + getSevenDayAgo()[0] + "&terminalType=" + chPgmListTerminalType;
 
 		return strGETReturn(rawPlainStr);
 	}
@@ -122,8 +124,9 @@ public class ProcessData {
 		String rawPlainStr = serverAdress + playUrlPendingStr + "version=" + playUrlVersion + "&resourceCode="
 				+ outterchanInfo.getResourceCode() + "&providerID=" + outterchanInfo.getProviderID() + "&assetID="
 				+ outterchanInfo.getAssetID() + "&resolution=" + playUrlResolution + "&playType=" + replayUrlPlayType
-				+ "&terminalType=" + playUrlTerminalType + "&shifttime=" + outterProgramInfo.getBeginTime().getTime()/1000
-				+ "&shiftend=" + outterProgramInfo.getEndTime().getTime()/1000 + "&delay=" + outterDelay;
+				+ "&terminalType=" + playUrlTerminalType + "&shifttime="
+				+ outterProgramInfo.getBeginTime().getTime() / 1000 + "&shiftend="
+				+ outterProgramInfo.getEndTime().getTime() / 1000 + "&delay=" + outterDelay;
 
 		return strPOSTReturn(rawPlainStr, "msis/getPlayURL");
 	}
@@ -147,21 +150,42 @@ public class ProcessData {
 
 		return (arg0 + conStr + MD5Encrypt.MD5EncryptExecute(serverAdress + arg1));
 	}
-	
-	public long dateToSecend(String str){
-		Date beginDate=null;
-		long seconds=0;
-		 SimpleDateFormat sdfNew = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		 try {
+
+	public long dateToSecend(String str) {
+		Date beginDate = null;
+		long seconds = 0;
+		SimpleDateFormat sdfNew = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		try {
 			beginDate = sdfNew.parse(str);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		 seconds=beginDate.getTime();
-		 
-		 return seconds;
-	}
-	
+		seconds = beginDate.getTime();
 
+		return seconds;
+	}
+
+	/* get Date seven days ago */
+	public static String[] getSevenDayAgo() {
+		String twoDates[] = { "", "" };
+		SimpleDateFormat sdfNew = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date curDate = new Date(System.currentTimeMillis());
+		GregorianCalendar gc = new GregorianCalendar();
+		gc.setTime(curDate);
+		gc.add(5, -6);
+		Date backSevenDate = gc.getTime();
+		curDate.setHours(23);
+		curDate.setMinutes(59);
+		curDate.setSeconds(59);
+		backSevenDate.setHours(0);
+		backSevenDate.setMinutes(0);
+		backSevenDate.setSeconds(0);
+
+		twoDates[0] = sdfNew.format(curDate);
+		twoDates[1] = sdfNew.format(backSevenDate);
+		twoDates[0] = twoDates[0].replace(" ", "+").replace(":", "%3A");
+		twoDates[1] = twoDates[1].replace(" ", "+").replace(":", "%3A");
+		return twoDates;
+	}
 }
