@@ -420,7 +420,7 @@
     <string name="jinjiang">锦江</string>
     <string name="chengdu">成都</string>
     <string name="sichuan">四川</string>
-    
+    <string name="beijing_h">北京</string>
     <string name="jiangsu">江苏</string>
     <string name="tianjin">天津</string>
     <string name="shenzhen">深圳</string>
@@ -881,7 +881,8 @@
     <string name="zhonghuazhisheng">中华之声</string>
     <string name="zhongshigouwu">中视购物</string>
     <string name="zhongxuesheng">中学生</string>
-    
+    <string name="str_clear">Confirm clear</string>
+    <string name="notimeinfo">00:00</string>
     
     
     

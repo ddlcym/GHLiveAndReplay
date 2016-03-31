@@ -136,6 +136,8 @@
     <string name="str_zhn_listscan_with_t">| List Search</string>
     <string name="str_zhn_usrset_with_t">| Setting</string>
     <string name="str_zhn_count_0">0</string>
+    <string name="str_zhn_skiptitle">跳过节目</string>
+    <string name="str_zhn_skipmessage">跳过显示节目后节目列表将不再显示该节目</string>
     
         <string name="str_zhn_ca_with_t">| CA</string>
     <string name="str_zhn_ca_card_number">Card Number</string>
@@ -383,7 +385,8 @@
 	<string name="epgsearch_number_8">8</string>
 	<string name="epgsearch_number_9">9</string>
 	<string name="epgsearch_number_0">0</string>
-	
+	<string name="title_activity_tvca">TVca</string>
+  	<string name="title_activity_cainfo">CAInfo</string>
 	
 	
     <string name="hello">Hello World, SNSTV!</string>
@@ -393,6 +396,8 @@
     <string name="ScheduleNotice_name">Appointment tips</string>
     <string name="attention">Notice</string>
     <string name="delete_all">Do you want to delete this blog？</string>
+     <string name="timeshift_vodnotfound">请安装VOD模块应用</string>
+     <string name="timeshift_fail">进入时移失败。错误码:</string>
     <!--
     <string name="ok">是</string>
     <string name="cancel">否</string>
@@ -966,5 +971,23 @@
     <string name="str_remove_content2">Do you want to delete this channel?</string>
     
     <string name="str_audio_playing">Now playing radio</string>
+        <string name="MESSAGE_RATING_TOO_LOW">收看级别不够</string>
+    <string name="MESSAGE_NOT_IN_WATCH_TIME">不在收看时段内</string>
+    <string name="MESSAGE_NOT_PAIRED">没有机卡对应</string>
+    <string name="MESSAGE_PLEASE_INSERT_CARD">请插卡</string>
+    <string name="MESSAGE_NO_ENTITLE">没有购买此节目</string>
+    <string name="MESSAGE_PRODUCT_RESTRICT">运营商限制观看该节目</string>
+    <string name="MESSAGE_AREA_RESTRICT">运营商限制区域观看</string>
+    <string name="MESSAGE_MOTHER_RESTRICT">此卡为子卡，已经被限制收看，请与母卡配对</string>
+    <string name="MESSAGE_NO_MONEY">余额不足，不能观看此节目，请及时充值</string>
+    <string name="MESSAGE_IPPV_NO_CONFIRM">此节目为IPPV节目，请到IPPV节目确认/取消购买菜单下确认购买此节目</string>
+    <string name="MESSAGE_IPPV_NO_BOOK">此节目为IPPV节目，您没有预订和确认购买，不能观看此节目</string>
+    <string name="MESSAGE_IPPT_NO_CONFIRM">此节目为IPPT节目，请到IPPT节目确认/取消购买菜单下确认购买此节目</string>
+    <string name="MESSAGE_IPPT_NO_BOOK">此节目为IPPT节目，您没有预订和确认购买，不能观看此节目</string>
+    <string name="MESSAGE_DATA_INVALID">数据无效，STB不做任何提示。卡密钥问题</string>
+    <string name="MESSAGE_SC_NOT_SERVER">IC卡被禁止服务</string>
+    <string name="MESSAGE_KEY_NOT_FOUND">此卡未被激活，请联系运营商</string>
+    <string name="MESSAGE_IPPNEED_CALLBACK">请联系运营商回传IPP节目信息</string>
+    <string name="MESSAGE_FREE_PREVIEWING">用户您好，此节目您尚未购买，正在免费预览中</string>
     
 </resources>

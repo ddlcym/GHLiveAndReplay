@@ -43,7 +43,6 @@
         <activity android:name="com.changhong.ghlive.activity.ReplayPlayActivity" >
         </activity>
 
-        <activity android:name="com.changhong.ghlive.activity.ReplayPlayActivity"></activity>
         <service android:name="com.changhong.ghlive.service.HttpService" >
         </service>
     </application>
