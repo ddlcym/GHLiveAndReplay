@@ -951,5 +951,7 @@
     <string name="str_remove_content2">是否需要删除此频道？</string>
     
     <string name="str_audio_playing">正在播放广播节目</string>
+     <string name="notify_information">信息提示</string>
+    <string name="return_button">返    回</string>
 
 </resources>
