@@ -1,13 +1,14 @@
 package com.changhong.replay.datafactory;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import com.changhong.gehua.common.Class_Constant;
 import com.changhong.ghlive.activity.MyApp;
 
-import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnBufferingUpdateListener;
@@ -18,11 +19,12 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.SeekBar;
-import android.widget.Toast;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
+import android.widget.Toast;
 
-public class Player implements OnBufferingUpdateListener, OnCompletionListener,
-		MediaPlayer.OnPreparedListener, SurfaceHolder.Callback {
+public class Player implements OnBufferingUpdateListener, OnCompletionListener, MediaPlayer.OnPreparedListener,
+		SurfaceHolder.Callback {
 	private int videoWidth;
 	private int videoHeight;
 	public static MediaPlayer mediaPlayer;
@@ -32,9 +34,15 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 	private Timer mTimer = new Timer();
 	private boolean playingFlag = false;
 
-	public Player(SurfaceView mySurfaceView, SeekBar skbProgress) {
+	// private static TextView videoTimeLength;
+	private static TextView videoCurrentTime;
+	private static int i = 0;
+
+	public Player(SurfaceView mySurfaceView, SeekBar skbProgress, TextView txvCurrent) {
 		this.skbProgress = skbProgress;
 		this.surfaceView = mySurfaceView;
+		this.videoCurrentTime = txvCurrent;
+
 		surfaceHolder = surfaceView.getHolder();
 		surfaceHolder.addCallback(this);
 		// 防止音频出不来
@@ -56,13 +64,14 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 			}
 		}
 	};
-	
-	OnSeekBarChangeListener mySeekChangeLis=new OnSeekBarChangeListener() {
-		int myprogress=0;
+
+	OnSeekBarChangeListener mySeekChangeLis = new OnSeekBarChangeListener() {
+		int myprogress = 0;
+
 		@Override
 		public void onStopTrackingTouch(SeekBar seekBar) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
@@ -72,24 +81,22 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 		}
 
 		@Override
-		public void onProgressChanged(SeekBar seekBar, int progress,
-				boolean fromUser) {
+		public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 			// TODO Auto-generated method stub
-			playingFlag=false;
-			myprogress = progress * mediaPlayer.getDuration()
-					/ seekBar.getMax();
+			playingFlag = false;
+			myprogress = progress * mediaPlayer.getDuration() / seekBar.getMax();
 			mediaPlayer.seekTo(myprogress);
 		}
 	};
 
 	public static Handler handleProgress = new Handler() {
 		public void handleMessage(Message msg) {
-			int curPos=0;
-			int fastPos=0;
-			int duration=0;
-			switch (msg.what){
+			int curPos = 0;
+			int fastPos = 0;
+			int duration = 0;
+			switch (msg.what) {
 			case Class_Constant.REPLAY_SEEK_TO:
-				curPos=msg.arg1;
+				curPos = msg.arg1;
 				duration = mediaPlayer.getDuration();
 
 				if (duration > 0) {
@@ -98,34 +105,36 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 				}
 				break;
 			case Class_Constant.RE_FAST_FORWARD:
-				curPos=skbProgress.getProgress();
-				
-				skbProgress.setProgress(curPos+5);
+				curPos = skbProgress.getProgress();
+
+				skbProgress.setProgress(curPos + 5);
 				break;
 			case Class_Constant.RE_FAST_REVERSE:
-				curPos=skbProgress.getProgress();
-				fastPos=curPos-5;
+				curPos = skbProgress.getProgress();
+				fastPos = curPos - 5;
 				skbProgress.setProgress(fastPos);
 				break;
 			case Class_Constant.RE_PLAY:
-				
+
 				break;
 			case Class_Constant.RE_PAUSE:
-				
+
 				break;
-				
+
 			case Class_Constant.RE_UPDATE_PROGRESS:
 				int position = mediaPlayer.getCurrentPosition();
 				duration = mediaPlayer.getDuration();
-
 				if (duration > 0) {
 					long pos = skbProgress.getMax() * position / duration;
 					skbProgress.setProgress((int) pos);
 				}
+				SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+				formatter.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
+				videoCurrentTime.setText(formatter.format(i * 1000));
+				i++;
 				break;
-				
 			}
-			
+
 		};
 	};
 
@@ -215,8 +224,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 		if (videoHeight != 0 && videoWidth != 0) {
 			arg0.start();
 		} else {
-			Toast.makeText(MyApp.getContext(), "视频无效", Toast.LENGTH_SHORT)
-					.show();
+			Toast.makeText(MyApp.getContext(), "视频无效", Toast.LENGTH_SHORT).show();
 			Log.i("mm", "videoWidth or videoHeight =0");
 		}
 		Log.e("mediaPlayer", "onPrepared");
@@ -228,18 +236,21 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 
 	}
 
-	//播放视频准备好播放后调用此方法
+	// 播放视频准备好播放后调用此方法
 	@Override
 	public void onBufferingUpdate(MediaPlayer arg0, int bufferingProgress) {
 		skbProgress.setSecondaryProgress(bufferingProgress);
-		playingFlag=true;
-		int currentProgress = skbProgress.getMax()
-				* mediaPlayer.getCurrentPosition() / mediaPlayer.getDuration();
+		playingFlag = true;
+		int currentProgress = skbProgress.getMax() * mediaPlayer.getCurrentPosition() / mediaPlayer.getDuration();
 		if (bufferingProgress != 0) {
 		}
 		Log.i("mmmm", bufferingProgress + "% buffer");
 
 	}
 
-
+	/* 播放过程中时间进行更新显示 */
+	// public void refreshVideoTime(TextView txvLen, TextView txvCur) {
+	// txvLen.setText("");
+	// txvCur.setText("");
+	// }
 }
