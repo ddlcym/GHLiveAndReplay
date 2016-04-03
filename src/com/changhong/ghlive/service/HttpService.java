@@ -1,10 +1,5 @@
 package com.changhong.ghlive.service;
 
-import android.app.Service;
-import android.content.Intent;
-import android.os.IBinder;
-import android.util.Log;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -13,18 +8,24 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.changhong.gehua.common.ChannelInfo;
 import com.changhong.gehua.common.ProcessData;
 import com.changhong.gehua.common.VolleyTool;
-import com.changhong.ghlive.datafactory.HandleLiveData;
-import com.changhong.replay.datafactory.HandleReplayData;
+import com.changhong.gehua.update.UpdateReceiver;
+import com.changhong.gehua.update.UpdateThread;
+import com.changhong.ghlive.activity.MyApp;
+
+import android.app.Service;
+import android.content.Intent;
+import android.os.IBinder;
+import android.util.Log;
 
 public class HttpService extends Service {
 
-	private String TAG = "mmmm";
+	private String TAG = "zyt";
 
 	private VolleyTool volleyTool;
 	private RequestQueue mReQueue;
 
 	private ProcessData processData;
-	
+	private UpdateReceiver mUpdateReceiver;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -32,12 +33,13 @@ public class HttpService extends Service {
 		return null;
 	}
 
-	
 	@Override
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		super.onCreate();
-
+//		Log.i(TAG, "process is here 0-0");
+		// start updateThread
+		checkUpdate();
 		initData();
 
 	}
@@ -46,13 +48,13 @@ public class HttpService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		// TODO Auto-generated method stub
 		if (intent != null) {
-			int command=0;
-			command=intent.getIntExtra("command", 0);
-			//play live show
+			int command = 0;
+			command = intent.getIntExtra("command", 0);
+			// play live show
 			ChannelInfo channel = (ChannelInfo) intent.getSerializableExtra("playLiveChannel");
 			if (channel != null) {
-//				getPointProList(channel);
-				
+				// getPointProList(channel);
+
 			}
 		}
 
@@ -63,38 +65,37 @@ public class HttpService extends Service {
 		if (null == processData) {
 			processData = new ProcessData();
 		}
+		// update thread needed broadcastreceiver
+
 		volleyTool = VolleyTool.getInstance();
 		mReQueue = volleyTool.getRequestQueue();
 		getChannelList();
 	}
 
-
 	private void getChannelList() {
 		// 传入URL请求链接
 		String URL = processData.getChannelList();
-		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-				Request.Method.GET, URL, null,
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null,
 				new Response.Listener<org.json.JSONObject>() {
 
 					@Override
 					public void onResponse(org.json.JSONObject arg0) {
 						// TODO Auto-generated method stub
 						// 相应成功
-//						Log.i(TAG, "HttpService=channle:" + arg0);
-//						getLivePlayURL(HandleLiveData.getInstance().dealChannelJson(arg0).get(1));
-						
+						// Log.i(TAG, "HttpService=channle:" + arg0);
+						// getLivePlayURL(HandleLiveData.getInstance().dealChannelJson(arg0).get(1));
+
 					}
 				}, errorListener);
 		jsonObjectRequest.setTag(HttpService.class.getSimpleName());// 设置tag,cancelAll的时候使用
 		mReQueue.add(jsonObjectRequest);
 	}
-	
+
 	private void getLivePlayURL(ChannelInfo outterchanInfo) {
 
 		String realurl = processData.getLivePlayUrlString(outterchanInfo);
 
-		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-				Request.Method.POST, realurl, null,
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, realurl, null,
 				new Response.Listener<org.json.JSONObject>() {
 
 					@Override
@@ -108,21 +109,20 @@ public class HttpService extends Service {
 		mReQueue.add(jsonObjectRequest);
 
 	}
-	
-	//get  programs in the channel 
-	private void getPointProList(ChannelInfo channel){
+
+	// get programs in the channel
+	private void getPointProList(ChannelInfo channel) {
 		String realurl = processData.getChannelProgramList(channel);
 
-		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-				Request.Method.GET, realurl, null,
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, realurl, null,
 				new Response.Listener<org.json.JSONObject>() {
 
 					@Override
 					public void onResponse(org.json.JSONObject arg0) {
 						// TODO Auto-generated method stub
 						// 相应成功
-//						Log.i(TAG, "getPointProList:" + arg0)
-//						HandleReplayData.getInstance().dealChannelJson(arg0,false);
+						// Log.i("mmmm", "getPointProList:" + arg0);
+						// HandleReplayData.getInstance().dealChannelJson(arg0,false);
 					}
 				}, errorListener);
 		jsonObjectRequest.setTag(HttpService.class.getSimpleName());// 设置tag,cancelAll的时候使用
@@ -144,4 +144,10 @@ public class HttpService extends Service {
 		mReQueue.cancelAll(HttpService.class.getSimpleName());
 	}
 
+	/* init the process of apk update */
+	public void checkUpdate() {
+//		Log.i(TAG, "process is in the checkupdate");
+		mUpdateReceiver = new UpdateReceiver(MyApp.getContext());
+		new Thread(new UpdateThread(MyApp.getContext(), mUpdateReceiver)).start();
+	}
 }
