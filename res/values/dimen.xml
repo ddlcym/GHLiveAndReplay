@@ -15,4 +15,6 @@
 	<dimen name="dialog_title_logo_left_margin">5dp</dimen>
 	<dimen name="pop_titletextsize">24sp</dimen>
 	<dimen name="dialog_title_height">30dp</dimen>	
+	
+	 <dimen name="dialog_title_margintop">20dp</dimen>
 </resources>

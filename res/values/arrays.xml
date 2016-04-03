@@ -690,4 +690,36 @@
         <item >"Friday"</item>
         <item >"Saturday"</item>
     </string-array>
+    
+        <string-array name="settype">
+        <item>1.显示设置</item>
+        <item>2.系统信息</item>
+        <item>3.系统升级</item>
+        <item>4.数字电视搜索</item>
+        <item>5.CA设置</item>
+        <item>6.应用管理</item>
+        <item>7.恢复出厂设置</item>
+    </string-array>
+    <string-array name="ca_settype">
+        <item>CA信息</item>
+        <item>观看级别设置</item>
+        <item>工作时段设置</item>
+        <item>PIN码设置</item>
+    </string-array>
+    
+     <string-array name="tvtype_tianj">
+        <item>"全部节目"</item>
+        <item>"电视节目"</item>
+        <item>"广播节目"</item>
+        <item>"高清节目"</item>
+        <item>"高清尊享"</item>
+        
+        <item>"喜爱"</item>
+    </string-array>
+    <string-array name="tvtype_tianj_epg">
+        <item>"全部节目"</item>
+        <item>"电视节目"</item>
+        <item>"高清节目"</item>
+        <item>"高清尊享"</item>
+    </string-array>
 </resources>

@@ -1,11 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="str_booked">booked</string>
     <string name="str_book_dialog">This time has already booked another epg</string>
     <string name="time_out">time out</string>
-<string  name="str_join_tiaoshi">Enter Debug mode</string>
+    <string name="str_join_tiaoshi">Enter Debug mode</string>
     <string name="str_factory_clear_data">Cleared play data!</string>
-<string name="str_factory_clear_channelist">Cleared channel data!</string>
+    <string name="str_factory_clear_channelist">Cleared channel data!</string>
     <string name="str_zhn_favset_toast_full">Quick-launch list is full.</string>
     <string name="str_zhn_DTVtitle">Digital TV</string>
     <string name="str_zhn_app_name">Digital TV</string>
@@ -138,11 +139,10 @@
     <string name="str_zhn_count_0">0</string>
     <string name="str_zhn_skiptitle">跳过节目</string>
     <string name="str_zhn_skipmessage">跳过显示节目后节目列表将不再显示该节目</string>
-    
-        <string name="str_zhn_ca_with_t">| CA</string>
+    <string name="str_zhn_ca_with_t">| CA</string>
     <string name="str_zhn_ca_card_number">Card Number</string>
     <string name="str_zhn_ca_card_version">Card Version</string>
-     <string name="str_zhn_ca_info">CAInfo</string>
+    <string name="str_zhn_ca_info">CAInfo</string>
     <string name="str_zhn_ca_work_time">Work Time</string>
     <string name="str_zhn_ca_rate">Card Rate</string>
     <string name="str_zhn_ca_pincode_change">PinCode</string>
@@ -199,53 +199,32 @@
     <string name="total">Total：</string>
     <string name="sucess">Successful：</string>
     <string name="zeropercent">0%</string>
-    
-      <string name="str_zhn_vo_mute">Mute</string> 
-	<string	name="pft_program_update">Program updates, please search again</string>
-	    <string name="fav_boot">Desktop startup settings</string>
-		<string	name="fav_add_pro">Click it to add program</string>	
-	<string	name="fav_del_pro">Click it to delete program</string>	
-		<string	name="fav_save_pro">save </string>
-	
-	<string
-		name="str_zhn_ca_input_rate_err">Input Err !</string>
-	<string
-		name="str_zhn_ca_input_set_err">UnKnown Err !</string>
-	<string
-		name="str_zhn_ca_inpunt_pincode">Input Passwd</string>
-	<string
-		name="str_zhn_ca_pincode_err">Passwd Err !</string>
-	<string
-		name="str_zhn_ca_pincode_input_notsame">Two input new password is not consistent.</string>
-
-	<string
-		name="str_zhn_ca_mail_id">Mail ID</string>
-	<string
-		name="str_zhn_ca_mail_author">Addresser</string>
-	<string
-		name="str_zhn_ca_mail_attribute">Attribute</string>
-	<string
-		name="str_zhn_ca_mail_creattime">Time</string>
-	<string
-		name="str_zhn_ca_mail_title">Title</string>
-	<string
-		name="str_zhn_ca_pincode_change_success">Sucess</string>
-	<string
-		name="str_zhn_ca_mail_new_mail">New Email</string>
-	<string
-		name="str_zhn_ca_mail_check_mail">Check</string>
-	<string
-		name="str_zhn_ca_mail_delete_mail">Delete</string>
-	<string
-		name="str_zhn_ca_mail_delete_all_mail">Delete All</string>
-    
+    <string name="str_zhn_vo_mute">Mute</string>
+    <string name="pft_program_update">Program updates, please search again</string>
+    <string name="fav_boot">Desktop startup settings</string>
+    <string name="fav_add_pro">Click it to add program</string>
+    <string name="fav_del_pro">Click it to delete program</string>
+    <string name="fav_save_pro">save </string>
+    <string name="str_zhn_ca_input_rate_err">Input Err !</string>
+    <string name="str_zhn_ca_input_set_err">UnKnown Err !</string>
+    <string name="str_zhn_ca_inpunt_pincode">Input Passwd</string>
+    <string name="str_zhn_ca_pincode_err">Passwd Err !</string>
+    <string name="str_zhn_ca_pincode_input_notsame">Two input new password is not consistent.</string>
+    <string name="str_zhn_ca_mail_id">Mail ID</string>
+    <string name="str_zhn_ca_mail_author">Addresser</string>
+    <string name="str_zhn_ca_mail_attribute">Attribute</string>
+    <string name="str_zhn_ca_mail_creattime">Time</string>
+    <string name="str_zhn_ca_mail_title">Title</string>
+    <string name="str_zhn_ca_pincode_change_success">Sucess</string>
+    <string name="str_zhn_ca_mail_new_mail">New Email</string>
+    <string name="str_zhn_ca_mail_check_mail">Check</string>
+    <string name="str_zhn_ca_mail_delete_mail">Delete</string>
+    <string name="str_zhn_ca_mail_delete_all_mail">Delete All</string>
     <string name="dtv">Com.DTV</string>
     <string name="mshare">changhong.appstore</string>
     <string name="mplay">com.changhong.stb.player.media</string>
     <string name="netvideo">com.explorer</string>
-    <!--  
-    <string name="internet">com.android.browser</string>
-    -->
+<!--     <string name="internet">com.android.browser</string> -->
     <string name="internet">com.changhong.stb.web.browser</string>
     <string name="cvbs">Com.DavCvbsin</string>
     <string name="app">com.changhong.stb.management.application</string>
@@ -255,10 +234,8 @@
     <string name="videolist">ch.video</string>
     <string name="weather">edu.hrbeu.WeatherTool</string>
     <string name="changhong_huannet">changhong.cworld.shellapp</string>
-    
-    <!--
-    <string name="history">com.android.setting</string>
-    -->
+
+<!--     <string name="history">com.android.setting</string> -->
     <string name="text_app">Application management</string>
     <string name="text_dtv">High definition digital TV</string>
     <string name="text_mshare">App store</string>
@@ -276,119 +253,101 @@
     <string name="history_dialog_message">Confirm modify the custom program？</string>
     <string name="history_dialog_button_ok">Confirm</string>
     <string name="history_dialog_button_cannecl">Cancle</string>
-   	<string name="history_title">Please select a custom application</string>
-   	
-   	<string name="newscenter">News center</string>
-   	<string name="weather_stormrain">Possible storms</string>
-   	<string name="weather_rain">Isolated showers</string>
-   	<string name="weather_temp">℃</string>
-   	<string name="weather_condition">Today:cloudy 18℃</string>
-   	<string name="weather_tomorrow">Tomorrow:Sunny 20℃</string>
-   	<string name="weather_city">Mianyang</string>
-   	<string name="weather_flag">Temperature：</string>
-   	<string name="today">Today:</string>
-   	<string name="tomorrow">Tomorrow:</string>
-   	<string name="dtvprepare">Digital TV power on initialization, starting ...</string>
-   	
-   	
-   	
-   	
-   	
-   	<string name="dtv_start">Start</string>
-   	<string name="dtv_scan">Search</string>
-   	<string name="dtv_get">Get list</string>
-   	<string name="dtv_stop">Stop service</string>
-   	
-   	
-   
-	
-     <string name="str_zhn_count_107000">107000</string>    
-     <string name="str_zhn_count_858000">858000</string> 
-     
-        
-
-       
-      
-  <string name="str_zhn_3d_leftright">3D(left and right screen)Startup</string>         
-  <string name="str_zhn_3d_updown">3D(up and down)Startup</string>             
-  <string name="str_zhn_3d_exit">3D screen exit</string>    
-  <string name="str_zhn_track_auto">auto</string>
-  <string name="str_zhn_track_left">Left channel</string>
-  <string name="str_zhn_track_right">Right channel</string>
-  <string name="str_zhn_track_stereo">Stereo</string>
-  <string name="str_zhn_track_single">Mono</string> 
-  	<string name="str_zhn_pvr_unsupport">Encryption programs, does not support recording</string>   
-   	<string name="str_zhn_root_toast_dtv">Digital TV, wonderful us</string> 
-	<string name="str_edit_fave">love</string> 
-   	<string name="str_edit_lock">locked</string>
-   	<string name="str_edit_del">delete</string>
-   	<string name="str_edit_mov">move</string> 
-    
-   	<string name="str_prog_list">Channel List</string> 
-   <string name="str_fav_add">Mark this program success!</string>	
-   <string name="str_fav_del">Unmark this program success!</string>		
-   <string name="str_epg_playing_info">Playing information</string>	
-   <string name="str_epg_playing_channelname">Playing channel current</string>	
-   <string name="str_epg_playing_enventname">Playing program current</string>
-	<string name="epg_year">Year</string>
-	<string name="epg_month">-</string>
-	<string name="epg_day"></string>
-	<string name="book_sortOn">Auto sorting on,booked programs playing by time</string>
-	<string name="book_sortOff">Auto sorting off</string>
-	<string name="epg_playing_text">Playing</string>
-	<string name="epg_booked_text">Booked</string>	
-	<string name="epg_book_text">Press OK booking this program</string>
-	<string name="epg_no_book">No booked program,go to EPG and book program!</string>
-	<string name="epg_no_searchactivity">EPG search function to achieve,please look!</string>
-	<string name="epg_no_program">No Channel,Please search!</string>
-	<string name="epg_del_programbook">Press OK key,delete the program:</string>
-	<string name="epgbook_del_help">Press OK key,delete the program</string>
-	<string name="epg_updata_bpinfo_1">Press OK,booking the program:</string>
-	<string name="epg_updata_bpinfo_2">updata:</string>	
-	<string name="epgbook_pagenum_text">Total number of booked programs:</string>
-	<string name="epg_search_default">Input first spell of searching content</string>	
+    <string name="history_title">Please select a custom application</string>
+    <string name="newscenter">News center</string>
+    <string name="weather_stormrain">Possible storms</string>
+    <string name="weather_rain">Isolated showers</string>
+    <string name="weather_temp">℃</string>
+    <string name="weather_condition">Today:cloudy 18℃</string>
+    <string name="weather_tomorrow">Tomorrow:Sunny 20℃</string>
+    <string name="weather_city">Mianyang</string>
+    <string name="weather_flag">Temperature：</string>
+    <string name="today">Today:</string>
+    <string name="tomorrow">Tomorrow:</string>
+    <string name="dtvprepare">Digital TV power on initialization, starting ...</string>
+    <string name="dtv_start">Start</string>
+    <string name="dtv_scan">Search</string>
+    <string name="dtv_get">Get list</string>
+    <string name="dtv_stop">Stop service</string>
+    <string name="str_zhn_count_107000">107000</string>
+    <string name="str_zhn_count_858000">858000</string>
+    <string name="str_zhn_3d_leftright">3D(left and right screen)Startup</string>
+    <string name="str_zhn_3d_updown">3D(up and down)Startup</string>
+    <string name="str_zhn_3d_exit">3D screen exit</string>
+    <string name="str_zhn_track_auto">auto</string>
+    <string name="str_zhn_track_left">Left channel</string>
+    <string name="str_zhn_track_right">Right channel</string>
+    <string name="str_zhn_track_stereo">Stereo</string>
+    <string name="str_zhn_track_single">Mono</string>
+    <string name="str_zhn_pvr_unsupport">Encryption programs, does not support recording</string>
+    <string name="str_zhn_root_toast_dtv">Digital TV, wonderful us</string>
+    <string name="str_edit_fave">love</string>
+    <string name="str_edit_lock">locked</string>
+    <string name="str_edit_del">delete</string>
+    <string name="str_edit_mov">move</string>
+    <string name="str_prog_list">Channel List</string>
+    <string name="str_fav_add">Mark this program success!</string>
+    <string name="str_fav_del">Unmark this program success!</string>
+    <string name="str_epg_playing_info">Playing information</string>
+    <string name="str_epg_playing_channelname">Playing channel current</string>
+    <string name="str_epg_playing_enventname">Playing program current</string>
+    <string name="epg_year">Year</string>
+    <string name="epg_month">-</string>
+    <string name="epg_day"></string>
+    <string name="book_sortOn">Auto sorting on,booked programs playing by time</string>
+    <string name="book_sortOff">Auto sorting off</string>
+    <string name="epg_playing_text">Playing</string>
+    <string name="epg_booked_text">Booked</string>
+    <string name="epg_book_text">Press OK booking this program</string>
+    <string name="epg_no_book">No booked program,go to EPG and book program!</string>
+    <string name="epg_no_searchactivity">EPG search function to achieve,please look!</string>
+    <string name="epg_no_program">No Channel,Please search!</string>
+    <string name="epg_del_programbook">Press OK key,delete the program:</string>
+    <string name="epgbook_del_help">Press OK key,delete the program</string>
+    <string name="epg_updata_bpinfo_1">Press OK,booking the program:</string>
+    <string name="epg_updata_bpinfo_2">updata:</string>
+    <string name="epgbook_pagenum_text">Total number of booked programs:</string>
+    <string name="epg_search_default">Input first spell of searching content</string>
     <string name="epgsearch_null_text">Support channel / program name the first letter of searching.</string>
     <string name="epgsearch_example_text">Example《舌尖上的中国》，Input “SJSDZG” and searching.</string>
-	<string name="epgsearch_letter_a">A</string>
-	<string name="epgsearch_letter_b">B</string>
-	<string name="epgsearch_letter_c">C</string>
-	<string name="epgsearch_letter_d">D</string>
-	<string name="epgsearch_letter_e">E</string>
-	<string name="epgsearch_letter_f">F</string>
-	<string name="epgsearch_letter_g">G</string>
-	<string name="epgsearch_letter_h">H</string>
-	<string name="epgsearch_letter_i">I</string>
-	<string name="epgsearch_letter_j">J</string>
-	<string name="epgsearch_letter_k">K</string>
-	<string name="epgsearch_letter_l">L</string>
-	<string name="epgsearch_letter_m">M</string>
-	<string name="epgsearch_letter_n">N</string>
-	<string name="epgsearch_letter_o">O</string>
-	<string name="epgsearch_letter_p">P</string>
-	<string name="epgsearch_letter_q">Q</string>
-	<string name="epgsearch_letter_r">R</string>
-	<string name="epgsearch_letter_s">S</string>
-	<string name="epgsearch_letter_t">T</string>
-	<string name="epgsearch_letter_u">U</string>
-	<string name="epgsearch_letter_v">V</string>
-	<string name="epgsearch_letter_w">W</string>
-	<string name="epgsearch_letter_x">X</string>
-	<string name="epgsearch_letter_y">Y</string>
-	<string name="epgsearch_letter_z">Z</string>
-	<string name="epgsearch_number_1">1</string>
-	<string name="epgsearch_number_2">2</string>
-	<string name="epgsearch_number_3">3</string>
-	<string name="epgsearch_number_4">4</string>
-	<string name="epgsearch_number_5">5</string>
-	<string name="epgsearch_number_6">6</string>
-	<string name="epgsearch_number_7">7</string>
-	<string name="epgsearch_number_8">8</string>
-	<string name="epgsearch_number_9">9</string>
-	<string name="epgsearch_number_0">0</string>
-	<string name="title_activity_tvca">TVca</string>
-  	<string name="title_activity_cainfo">CAInfo</string>
-	
-	
+    <string name="epgsearch_letter_a">A</string>
+    <string name="epgsearch_letter_b">B</string>
+    <string name="epgsearch_letter_c">C</string>
+    <string name="epgsearch_letter_d">D</string>
+    <string name="epgsearch_letter_e">E</string>
+    <string name="epgsearch_letter_f">F</string>
+    <string name="epgsearch_letter_g">G</string>
+    <string name="epgsearch_letter_h">H</string>
+    <string name="epgsearch_letter_i">I</string>
+    <string name="epgsearch_letter_j">J</string>
+    <string name="epgsearch_letter_k">K</string>
+    <string name="epgsearch_letter_l">L</string>
+    <string name="epgsearch_letter_m">M</string>
+    <string name="epgsearch_letter_n">N</string>
+    <string name="epgsearch_letter_o">O</string>
+    <string name="epgsearch_letter_p">P</string>
+    <string name="epgsearch_letter_q">Q</string>
+    <string name="epgsearch_letter_r">R</string>
+    <string name="epgsearch_letter_s">S</string>
+    <string name="epgsearch_letter_t">T</string>
+    <string name="epgsearch_letter_u">U</string>
+    <string name="epgsearch_letter_v">V</string>
+    <string name="epgsearch_letter_w">W</string>
+    <string name="epgsearch_letter_x">X</string>
+    <string name="epgsearch_letter_y">Y</string>
+    <string name="epgsearch_letter_z">Z</string>
+    <string name="epgsearch_number_1">1</string>
+    <string name="epgsearch_number_2">2</string>
+    <string name="epgsearch_number_3">3</string>
+    <string name="epgsearch_number_4">4</string>
+    <string name="epgsearch_number_5">5</string>
+    <string name="epgsearch_number_6">6</string>
+    <string name="epgsearch_number_7">7</string>
+    <string name="epgsearch_number_8">8</string>
+    <string name="epgsearch_number_9">9</string>
+    <string name="epgsearch_number_0">0</string>
+    <string name="title_activity_tvca">TVca</string>
+    <string name="title_activity_cainfo">CAInfo</string>
     <string name="hello">Hello World, SNSTV!</string>
     <string name="app_name">Digital TV</string>
     <string name="help_info">help</string>
@@ -396,11 +355,11 @@
     <string name="ScheduleNotice_name">Appointment tips</string>
     <string name="attention">Notice</string>
     <string name="delete_all">Do you want to delete this blog？</string>
-     <string name="timeshift_vodnotfound">请安装VOD模块应用</string>
-     <string name="timeshift_fail">进入时移失败。错误码:</string>
+    <string name="timeshift_vodnotfound">请安装VOD模块应用</string>
+    <string name="timeshift_fail">进入时移失败。错误码:</string>
     <!--
     <string name="ok">是</string>
-    <string name="cancel">否</string>
+    <string name="cancel">否</string>
     -->
     <string name="send">send</string>
     <string name="close">close</string>
@@ -453,7 +412,7 @@
     <string name="comment_empty">Please enter a comment</string>
     <string name="comment_long">Comment too long！</string>
     <string name="moon">-</string>
-    <string name="day"> </string>
+    <string name="day"></string>
     <string name="kandian_load">Watching information download……</string>
     <string name="kandian_empty">Watch channel info is null</string>
     <string name="channel_empty">No channel information</string>
@@ -505,7 +464,6 @@
     <string name="function_4">4.Read published and displayed</string>
     <string name="function_4_content">On SINA weibo authorization interface, enter the correct user name and password, click Authorize button, watch watch display area to view and publish information. Support local video sends screenshots to see. In the app store--in the user management, you can unlock the Sina microblog account bound.</string>
     <string name="sysbusy">The system is busy, take a break..</string>
-    
     <string name="z_jiemusoucang">Mark</string>
     <string name="z_delsoucang">Unmark</string>
     <string name="z_jiemuxiaoxi">Message</string>
@@ -516,7 +474,7 @@
     <string name="str_programsearch_signaltype">Connection type :  Cable</string>
     <string name="str_programsearch_optips">After setting,Click \"Go\" to start search...</string>
     <string name="str_programsearch_auto_optips">Click \"Go\" to start search...</string>
-   <string name="weishi">卫视</string>
+    <string name="weishi">卫视</string>
     <string name="rongcheng">蓉城</string>
     <string name="jingniu">金牛</string>
     <string name="qingyang">青羊</string>
@@ -525,8 +483,7 @@
     <string name="jinjiang">锦江</string>
     <string name="chengdu">成都</string>
     <string name="sichuan">四川</string>
-
-     <string name="jiangsu">江苏</string>
+    <string name="jiangsu">江苏</string>
     <string name="tianjin">天津</string>
     <string name="shenzhen">深圳</string>
     <string name="shanghai">上海</string>
@@ -553,34 +510,28 @@
     <string name="title_worktime_start">start time:</string>
     <string name="title_worktime_end">end time:</string>
     <string name="notice_inputrate">Input a number between 4 and 18</string>
-    
     <string name="ca_NoCard">No Card Inserted</string>
-    
     <string name="dtv_signal_fre">Freq:</string>
-	<string name="dtv_signal_strength">Strength:</string>
-	<string name="dtv_signal_quality">Quality:</string>
-	<string name="dtv_signal_rate">BER:</string>
-	
-     <string name="hd_dtv">高清</string>
-        <string name="xinyuan_hdtv1">星元映画</string>
-     <string name="xinyuan_hdtv2">星元剧场</string>
-     <string name="xinyuan_hdtv3">星元新知</string>
-     <string name="xinyuan_hdtv4">星元新艺</string>
-     
-     <string name="timeshift_support">TimeShift Support</string>
-     <string name="timeshift_dissupport">Not support timeshift</string>
-     <string name="dtv_menu">Add Fav</string>
-     <string name="dtv_select">Select</string>
-     <string name="dtv_fenlei">Sort</string>
-      <string name="dtv_ok">OK</string>
-      <string name="dtv_back">Back</string>
-    
-      <string name="str_search_signal_strong">strong</string>
-      <string name="str_search_signal_weak">weak</string>
-      <string name="str_preparing">Preparing...</string>
-      <string name="str_epgsearch_result">Search programs number:</string>
-      
-      <string name="cctv1_1">CCTV-1</string>
+    <string name="dtv_signal_strength">Strength:</string>
+    <string name="dtv_signal_quality">Quality:</string>
+    <string name="dtv_signal_rate">BER:</string>
+    <string name="hd_dtv">高清</string>
+    <string name="xinyuan_hdtv1">星元映画</string>
+    <string name="xinyuan_hdtv2">星元剧场</string>
+    <string name="xinyuan_hdtv3">星元新知</string>
+    <string name="xinyuan_hdtv4">星元新艺</string>
+    <string name="timeshift_support">TimeShift Support</string>
+    <string name="timeshift_dissupport">Not support timeshift</string>
+    <string name="dtv_menu">Add Fav</string>
+    <string name="dtv_select">Select</string>
+    <string name="dtv_fenlei">Sort</string>
+    <string name="dtv_ok">OK</string>
+    <string name="dtv_back">Back</string>
+    <string name="str_search_signal_strong">strong</string>
+    <string name="str_search_signal_weak">weak</string>
+    <string name="str_preparing">Preparing...</string>
+    <string name="str_epgsearch_result">Search programs number:</string>
+    <string name="cctv1_1">CCTV-1</string>
     <string name="cctv1_2">CCTV_1</string>
     <string name="cctv1_3">CCTV-1综合</string>
     <string name="cctv1_4">ＣＣＴＶ－１</string>
@@ -921,8 +872,7 @@
     <string name="zhonghuazhisheng">中华之声</string>
     <string name="zhongshigouwu">中视购物</string>
     <string name="zhongxuesheng">中学生</string>
-        <string name="SCTVgaoqing">四川高清</string>
-    
+    <string name="SCTVgaoqing">四川高清</string>
     <string name="str_cleardata">Clear the play record</string>
     <string name="str_clearchannels">Clear all channels</string>
     <string name="str_clear">Confirm clear</string>
@@ -933,11 +883,7 @@
     <string name="title_activity_pin_set">PinSet</string>
     <string name="title_activity_class_set">ClassSet</string>
     <string name="title_activity_work_time">WorkTime</string>
-        
-    
-    
-    
-        <string name="MESSAGE_BADCARD_TYPE">Unrecognized card</string>
+    <string name="MESSAGE_BADCARD_TYPE">Unrecognized card</string>
     <string name="MESSAGE_EXPICARD_TYPE">Card expired, replace card</string>
     <string name="MESSAGE_INSERTCARD_TYPE">Scrambling program,insert card</string>
     <string name="MESSAGE_NOOPER_TYPE">card program does not exist</string>
@@ -964,14 +910,12 @@
     <string name="MESSAGE_NOCALIBOPER_TYPE">Card not transplants custom operators</string>
     <string name="MESSAGE_STBLOCKED_TYPE">reboot box</string>
     <string name="MESSAGE_STBFREEZE_TYPE">box frozen</string>
-    
-    <string name="str_swap">Select other channel to swap.</string> 
-    <string name="str_remove_title">Delete channel</string> 
+    <string name="str_swap">Select other channel to swap.</string>
+    <string name="str_remove_title">Delete channel</string>
     <string name="str_remove_content1">Hello, you have selected </string>
     <string name="str_remove_content2">Do you want to delete this channel?</string>
-    
     <string name="str_audio_playing">Now playing radio</string>
-        <string name="MESSAGE_RATING_TOO_LOW">收看级别不够</string>
+    <string name="MESSAGE_RATING_TOO_LOW">收看级别不够</string>
     <string name="MESSAGE_NOT_IN_WATCH_TIME">不在收看时段内</string>
     <string name="MESSAGE_NOT_PAIRED">没有机卡对应</string>
     <string name="MESSAGE_PLEASE_INSERT_CARD">请插卡</string>
@@ -989,5 +933,7 @@
     <string name="MESSAGE_KEY_NOT_FOUND">此卡未被激活，请联系运营商</string>
     <string name="MESSAGE_IPPNEED_CALLBACK">请联系运营商回传IPP节目信息</string>
     <string name="MESSAGE_FREE_PREVIEWING">用户您好，此节目您尚未购买，正在免费预览中</string>
-    
+    <string name="notify_information">信息提示</string>
+    <string name="return_button">返    回</string>
+
 </resources>
