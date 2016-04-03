@@ -2,7 +2,9 @@ package com.changhong.ghlive.activity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 
+import android.R.integer;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
@@ -15,6 +17,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.SurfaceView;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Toast;
 
@@ -29,7 +32,7 @@ import com.changhong.replay.datafactory.Player;
 public class ReplayPlayActivity extends Activity {
 	private SurfaceView surfaceView;
 	private SeekBar skbProgress;
-
+	private TextView videoTimeLength, videoCurrentTime;
 	private Player player;
 	private String replayChannelId = null;
 
@@ -69,14 +72,16 @@ public class ReplayPlayActivity extends Activity {
 	public void initView() {
 		skbProgress = (SeekBar) this.findViewById(R.id.skbProgress);
 		surfaceView = (SurfaceView) this.findViewById(R.id.surfaceView1);
-
+		videoTimeLength = (TextView) this.findViewById(R.id.video_timelength);
+		videoCurrentTime = (TextView) this.findViewById(R.id.video_currenttime);
 	}
 
 	public void initData() {
 		mProcessData = new ProcessData();
-		player = new Player(surfaceView, skbProgress);
+		player = new Player(surfaceView, skbProgress, videoCurrentTime);
 
 	}
+
 	/* play net video */
 	private void playNetVideo() {
 		if (isNetConnected()) {
@@ -141,12 +146,12 @@ public class ReplayPlayActivity extends Activity {
 		channel = (ChannelInfo) bundle.getSerializable("channel");
 		mprogram = (ProgramInfo) bundle.getSerializable("program");
 		replayChannelId = channel.getChannelID();
-		maxTimes = (int) (mprogram.getEndTime().getTime() - mprogram
-				.getBeginTime().getTime());
+		maxTimes = (int) (mprogram.getEndTime().getTime() - mprogram.getBeginTime().getTime());
 		// skbProgress.setMax(maxTimes);
-
-		String requestURL = mProcessData.getReplayPlayUrlString(channel,
-				mprogram, 0);
+		SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+		formatter.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
+		videoTimeLength.setText("/" + formatter.format(maxTimes));
+		String requestURL = mProcessData.getReplayPlayUrlString(channel, mprogram, 0);
 		// Log.i("mmmm", "ReplayPlayActivity-requestURL:" + requestURL);
 		PlayVideo.getInstance().playReplayProgram(replayHandler, requestURL);
 	}
@@ -156,12 +161,10 @@ public class ReplayPlayActivity extends Activity {
 		// TODO Auto-generated method stub
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
-			Player.handleProgress
-					.sendEmptyMessage(Class_Constant.RE_FAST_FORWARD);
+			Player.handleProgress.sendEmptyMessage(Class_Constant.RE_FAST_FORWARD);
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
-			Player.handleProgress
-					.sendEmptyMessage(Class_Constant.RE_FAST_REVERSE);
+			Player.handleProgress.sendEmptyMessage(Class_Constant.RE_FAST_REVERSE);
 			break;
 		}
 
