@@ -39,7 +39,7 @@ public class HttpService extends Service {
 		super.onCreate();
 //		Log.i(TAG, "process is here 0-0");
 		// start updateThread
-		checkUpdate();
+//		checkUpdate();
 		initData();
 
 	}
