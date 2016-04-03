@@ -5,6 +5,24 @@ import java.util.List;
 
 import org.json.JSONObject;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.changhong.gehua.common.CacheData;
+import com.changhong.gehua.common.ChannelInfo;
+import com.changhong.gehua.common.ProcessData;
+import com.changhong.gehua.common.ProgramInfo;
+import com.changhong.gehua.common.VolleyTool;
+import com.changhong.ghlive.datafactory.HandleLiveData;
+import com.changhong.ghlive.service.HttpService;
+import com.changhong.ghliveandreplay.R;
+import com.changhong.replay.datafactory.ChannelRepListAdapter;
+import com.changhong.replay.datafactory.DayMonthAdapter;
+import com.changhong.replay.datafactory.EpgListview;
+import com.changhong.replay.datafactory.ProgramsAdapter;
+import com.changhong.replay.datafactory.ResolveEPGInfoThread;
+
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -17,33 +35,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.changhong.gehua.common.CacheData;
-import com.changhong.gehua.common.ChannelInfo;
-import com.changhong.gehua.common.PlayVideo;
-import com.changhong.gehua.common.ProcessData;
-import com.changhong.gehua.common.ProgramInfo;
-import com.changhong.gehua.common.VideoView;
-import com.changhong.gehua.common.VolleyTool;
-import com.changhong.ghlive.datafactory.HandleLiveData;
-import com.changhong.ghlive.service.HttpService;
-import com.changhong.ghliveandreplay.R;
-import com.changhong.replay.datafactory.ChannelRepListAdapter;
-import com.changhong.replay.datafactory.DayMonthAdapter;
-import com.changhong.replay.datafactory.EpgListview;
-import com.changhong.replay.datafactory.HandleReplayData;
-import com.changhong.replay.datafactory.ProgramsAdapter;
-import com.changhong.replay.datafactory.ResolveEPGInfoThread;
 
 public class EPGActivity extends BaseActivity {
 
@@ -75,8 +71,7 @@ public class EPGActivity extends BaseActivity {
 	public static final int MSG_WEEKDAY_CHANGE = 0x202;
 	public static final int MSG_SHOW_WEEKDAY = 0x201;
 	public static final int MSG_BOOK_NEW = 0x301;
-	private static final String TAG="mmmm";
-	
+	private static final String TAG = "mmmm";
 
 	private static String curChannelNum;
 	private int channelCount;
@@ -85,13 +80,13 @@ public class EPGActivity extends BaseActivity {
 	private ProgramsAdapter programsAdapter;
 	// EpgEvent 控制
 	private static int EventlitItemindex = 0;
-
+	
 	private static String[] tvType;
 	// WeekInfo 控制
 	// List<Map<String, Object>> SimpleAdapterWeekdata = null;
 	private static String curDay = null;
 	private static ChannelInfo curChannel;
-	private ResolveEPGInfoThread resolveProJsonThread=null;
+	private ResolveEPGInfoThread resolveProJsonThread = null;
 
 	// all type channel
 	List<ChannelInfo> allTvList = new ArrayList<ChannelInfo>();
@@ -125,8 +120,7 @@ public class EPGActivity extends BaseActivity {
 				showChannelList(curType);
 				if (firsIn) {
 					// epg.ChannelClassifyScale(channelListLinear, true);
-					channelListview.setSelection(getIndexInList(curChannelNum,
-							curChannelList));
+					channelListview.setSelection(getIndexInList(curChannelNum, curChannelList));
 					// epg.channelListview.setSelection(curChannelNum-1);
 					// this.sendEmptyMessageDelayed(MSG_TITLE_FOCUSABLE, 200);
 					firsIn = false;
@@ -137,9 +131,9 @@ public class EPGActivity extends BaseActivity {
 				EpgEventListRefresh(curDay);
 				break;
 			case MSG_SHOW_WEEKDAY:
-				
+
 				curDay = CacheData.getDayMonths().get(0);
-				EventlitItemindex=0;
+				EventlitItemindex = 0;
 				showWeekDay();
 				// epg.getEpgEventData(curChannelNum, curDayIndex);
 				EpgEventListRefresh(curDay);
@@ -158,7 +152,13 @@ public class EPGActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
+		startHttpSer();
 		super.onCreate(savedInstanceState);
+	}
+
+	private void startHttpSer() {
+		Intent intent = new Intent(this, HttpService.class);
+		startService(intent);
 	}
 
 	@Override
@@ -171,8 +171,7 @@ public class EPGActivity extends BaseActivity {
 
 		chanListTitleButton = (TextView) findViewById(R.id.epg_chanlistTitle);
 		// chanListTitleButton.setOnKeyListener(epg_Listener_Classify_OnKey);
-		chanListTitleButton
-				.setOnFocusChangeListener(epg_Listener_Classify_OnfocusChange);
+		chanListTitleButton.setOnFocusChangeListener(epg_Listener_Classify_OnfocusChange);
 		chanListTitleButton.requestFocus();
 
 		channelListview = (EpgListview) findViewById(R.id.ChanlIstView);
@@ -267,8 +266,7 @@ public class EPGActivity extends BaseActivity {
 	private OnItemSelectedListener WeekInfoItemSelected = new OnItemSelectedListener() {
 
 		@Override
-		public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
-				long arg3) {
+		public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 			if (CacheData.dayMonths.isEmpty())
 				return;
 			curDay = CacheData.dayMonths.get(arg2);
@@ -294,8 +292,7 @@ public class EPGActivity extends BaseActivity {
 
 	private OnItemClickListener ChanListOnItemClick = new OnItemClickListener() {
 		@Override
-		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-				long arg3) {
+		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 			switch (arg0.getId()) {
 			case R.id.ChanlIstView:
 				// Point point = new Point();
@@ -314,21 +311,17 @@ public class EPGActivity extends BaseActivity {
 	private OnItemSelectedListener ChanListOnItemSelected = new OnItemSelectedListener() {
 
 		@Override
-		public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
-				long arg3) {
+		public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 			if (arg1 == null) {
 				return;
 			}
-			TextView channelIdText = (TextView) arg1
-					.findViewById(R.id.channelId);
+			TextView channelIdText = (TextView) arg1.findViewById(R.id.channelId);
 			curChannelNum = channelIdText.getText().toString();
-			curChannel = (ChannelInfo) CacheData.getAllChannelMap()
-					.get(curChannelNum);
+			curChannel = (ChannelInfo) CacheData.getAllChannelMap().get(curChannelNum);
 
 			getPointProList(curChannel);
 
-			channelCurSelect = (LinearLayout) arg1
-					.findViewById(R.id.epg_chan_itemlayout);
+			channelCurSelect = (LinearLayout) arg1.findViewById(R.id.epg_chan_itemlayout);
 			if (channelListFoucus == false) {
 				return;
 			}
@@ -395,15 +388,13 @@ public class EPGActivity extends BaseActivity {
 	private OnItemSelectedListener epgEventSelectedListener = new OnItemSelectedListener() {
 
 		@Override
-		public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
-				long arg3) {
+		public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 
 			if (arg1 == null) {
 				return;
 			}
 
-			EventCurSelect = (LinearLayout) arg1
-					.findViewById(R.id.eventitem_Linearlayout);
+			EventCurSelect = (LinearLayout) arg1.findViewById(R.id.eventitem_Linearlayout);
 			if (bEventFocus == false) {
 				return;
 			}
@@ -429,8 +420,7 @@ public class EPGActivity extends BaseActivity {
 	private OnItemClickListener epgEventClickListener = new OnItemClickListener() {
 
 		@Override
-		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-				long arg3) {
+		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 
 			// ChannelInfo mChannel = (ChannelInfo) CacheData.getAllChannelMap()
 			// .get(curChannelNum);
@@ -475,10 +465,8 @@ public class EPGActivity extends BaseActivity {
 
 	public void EpgEventListRefresh(String curday) {
 		// 根据当前保存的数据刷新EventList
-		curProgramList = (List<ProgramInfo>) CacheData.getAllProgramMap().get(
-				curday);
+		curProgramList = (List<ProgramInfo>) CacheData.getAllProgramMap().get(curday);
 		programsAdapter.setData(curProgramList);
-		
 
 	}
 
@@ -550,37 +538,27 @@ public class EPGActivity extends BaseActivity {
 			// }
 			String regExCCTV;
 			regExCCTV = getResources().getString(R.string.zhongyang);
-			java.util.regex.Pattern pattern = java.util.regex.Pattern
-					.compile("CCTV|" + regExCCTV);
-			java.util.regex.Matcher matcher = pattern.matcher(dvbChannel
-					.getChannelName());
+			java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("CCTV|" + regExCCTV);
+			java.util.regex.Matcher matcher = pattern.matcher(dvbChannel.getChannelName());
 			boolean classBytype = matcher.find();
 			if (classBytype) {
 				CCTVList.add(dvbChannel);
 			}
 			String regExStar;
 			regExStar = getResources().getString(R.string.weishi);
-			java.util.regex.Pattern patternStar = java.util.regex.Pattern
-					.compile(".*" + regExStar + "$");
-			java.util.regex.Matcher matcherStar = patternStar
-					.matcher(dvbChannel.getChannelName());
+			java.util.regex.Pattern patternStar = java.util.regex.Pattern.compile(".*" + regExStar + "$");
+			java.util.regex.Matcher matcherStar = patternStar.matcher(dvbChannel.getChannelName());
 			boolean classBytypeStar = matcherStar.matches();
 			if (classBytypeStar) {
 				starTvList.add(dvbChannel);
 			}
-			String regExLocal = "CDTV|SCTV|"
-					+ getResources().getString(R.string.rongcheng) + "|"
-					+ getResources().getString(R.string.jingniu) + "|"
-					+ getResources().getString(R.string.qingyang) + "|"
-					+ getResources().getString(R.string.wuhou) + "|"
-					+ getResources().getString(R.string.chenghua) + "|"
-					+ getResources().getString(R.string.jinjiang) + "|"
-					+ getResources().getString(R.string.chengdu) + "|"
-					+ getResources().getString(R.string.sichuan);
-			java.util.regex.Pattern patternLocal = java.util.regex.Pattern
-					.compile(regExLocal);
-			java.util.regex.Matcher matcherLocal = patternLocal
-					.matcher(dvbChannel.getChannelName());
+			String regExLocal = "CDTV|SCTV|" + getResources().getString(R.string.rongcheng) + "|"
+					+ getResources().getString(R.string.jingniu) + "|" + getResources().getString(R.string.qingyang)
+					+ "|" + getResources().getString(R.string.wuhou) + "|" + getResources().getString(R.string.chenghua)
+					+ "|" + getResources().getString(R.string.jinjiang) + "|"
+					+ getResources().getString(R.string.chengdu) + "|" + getResources().getString(R.string.sichuan);
+			java.util.regex.Pattern patternLocal = java.util.regex.Pattern.compile(regExLocal);
+			java.util.regex.Matcher matcherLocal = patternLocal.matcher(dvbChannel.getChannelName());
 			boolean classBytypeLocal = matcherLocal.find();
 			if (classBytypeLocal) {
 				localTvList.add(dvbChannel);
@@ -590,29 +568,21 @@ public class EPGActivity extends BaseActivity {
 					+ getResources().getString(R.string.xinyuan_hdtv2) + "|"
 					+ getResources().getString(R.string.xinyuan_hdtv3) + "|"
 					+ getResources().getString(R.string.xinyuan_hdtv4);
-			java.util.regex.Pattern patternHD = java.util.regex.Pattern
-					.compile("3D|" + regExHD + "|.*HD$");
+			java.util.regex.Pattern patternHD = java.util.regex.Pattern.compile("3D|" + regExHD + "|.*HD$");
 
-			java.util.regex.Matcher matcherHD = patternHD.matcher(dvbChannel
-					.getChannelName());
+			java.util.regex.Matcher matcherHD = patternHD.matcher(dvbChannel.getChannelName());
 			boolean classBytypeHD = matcherHD.find();
 			if (classBytypeHD) {
 				HDTvList.add(dvbChannel);
 			}
-			String regExOther = "CDTV|SCTV|CCTV|"
-					+ getResources().getString(R.string.weishi) + "|"
-					+ getResources().getString(R.string.rongcheng) + "|"
-					+ getResources().getString(R.string.jingniu) + "|"
-					+ getResources().getString(R.string.qingyang) + "|"
-					+ getResources().getString(R.string.wuhou) + "|"
-					+ getResources().getString(R.string.chenghua) + "|"
-					+ getResources().getString(R.string.jinjiang) + "|"
-					+ getResources().getString(R.string.chengdu) + "|"
-					+ getResources().getString(R.string.sichuan);
-			java.util.regex.Pattern patternOther = java.util.regex.Pattern
-					.compile(regExOther);
-			java.util.regex.Matcher matcherOther = patternOther
-					.matcher(dvbChannel.getChannelName());
+			String regExOther = "CDTV|SCTV|CCTV|" + getResources().getString(R.string.weishi) + "|"
+					+ getResources().getString(R.string.rongcheng) + "|" + getResources().getString(R.string.jingniu)
+					+ "|" + getResources().getString(R.string.qingyang) + "|" + getResources().getString(R.string.wuhou)
+					+ "|" + getResources().getString(R.string.chenghua) + "|"
+					+ getResources().getString(R.string.jinjiang) + "|" + getResources().getString(R.string.chengdu)
+					+ "|" + getResources().getString(R.string.sichuan);
+			java.util.regex.Pattern patternOther = java.util.regex.Pattern.compile(regExOther);
+			java.util.regex.Matcher matcherOther = patternOther.matcher(dvbChannel.getChannelName());
 			boolean classBytypeOther = matcherOther.find();
 			if (!classBytypeOther) {
 				otherTvList.add(dvbChannel);
@@ -633,7 +603,8 @@ public class EPGActivity extends BaseActivity {
 	// Rect imgRect = new Rect();
 	// if (ItemLayout == null) {
 	// System.out
-	// .println("epg_method_Event_itemScale invalid param(ItemLayout is null)!");
+	// .println("epg_method_Event_itemScale invalid param(ItemLayout is
+	// null)!");
 	// return;
 	// }
 	//
@@ -661,8 +632,7 @@ public class EPGActivity extends BaseActivity {
 	// }
 	// }
 
-	private String getStartEndTime(int startHour, int startMinute, int endHour,
-			int endMinute) {
+	private String getStartEndTime(int startHour, int startMinute, int endHour, int endMinute) {
 		String formatString = "  :   ~   :  ";
 		String startTimeString = timeFormat(startHour, startMinute);
 		String endTimeString = timeFormat(endHour, endMinute);
@@ -750,8 +720,7 @@ public class EPGActivity extends BaseActivity {
 	private void getChannelList() {
 		// 传入URL请求链接
 		String URL = processData.getChannelList();
-		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-				Request.Method.GET, URL, null,
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null,
 				new Response.Listener<org.json.JSONObject>() {
 
 					@Override
@@ -759,14 +728,13 @@ public class EPGActivity extends BaseActivity {
 						// TODO Auto-generated method stub
 						// 相应成功
 						// Log.i(TAG, "HttpService=channle:" + arg0);
-						for (ChannelInfo channel : HandleLiveData.getInstance()
-								.dealChannelJson(arg0)) {
+						for (ChannelInfo channel : HandleLiveData.getInstance().dealChannelJson(arg0)) {
 							allTvList.add(channel);
 						}
 
 						// first set adapter
 						curType = 0;
-						curChannel=CacheData.getAllChannelInfo().get(0);
+						curChannel = CacheData.getAllChannelInfo().get(0);
 						getAllTVtype();
 						showChannelList();
 						uiHandler.sendEmptyMessage(MSG_CHANNEL_CHANGE);
@@ -786,19 +754,17 @@ public class EPGActivity extends BaseActivity {
 		mReQueue.cancelAll("program");
 		String realurl = processData.getChannelProgramList(channel);
 
-		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-				Request.Method.GET, realurl, null,
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, realurl, null,
 				new Response.Listener<org.json.JSONObject>() {
 
 					@Override
 					public void onResponse(org.json.JSONObject arg0) {
 						// TODO Auto-generated method stub
 						// 相应成功
-//						 Log.i(TAG, "getPointProList:" + arg0);
-						resolveProJsonThread=ResolveEPGInfoThread.getInstance();
+						// Log.i(TAG, "getPointProList:" + arg0);
+						resolveProJsonThread = ResolveEPGInfoThread.getInstance();
 						resolveProJsonThread.addData(uiHandler, arg0);
 						resolveProJsonThread.startRes();
-						
 
 					}
 				}, null);
@@ -848,8 +814,7 @@ public class EPGActivity extends BaseActivity {
 
 	private void dislistfocus(ViewGroup selected) {
 		Rect imgRect = new Rect();
-		FrameLayout.LayoutParams focusItemParams = new FrameLayout.LayoutParams(
-				10, 10);
+		FrameLayout.LayoutParams focusItemParams = new FrameLayout.LayoutParams(10, 10);
 		selected.getGlobalVisibleRect(imgRect);
 		focusItemParams.leftMargin = imgRect.left - 8;
 		focusItemParams.topMargin = imgRect.top - 8;
