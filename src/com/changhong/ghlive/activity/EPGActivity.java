@@ -152,7 +152,7 @@ public class EPGActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		startHttpSer();
+//		startHttpSer();
 		super.onCreate(savedInstanceState);
 	}
 

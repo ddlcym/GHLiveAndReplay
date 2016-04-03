@@ -2,6 +2,7 @@ package com.changhong.gehua.common;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,7 @@ public class CacheData {
 	
 
 	public static String curChannelNum="";
-	public static List<String> dayMonths=new ArrayList<String>();
+	public static List<String> dayMonths=new LinkedList<String>();
 	
 	
 

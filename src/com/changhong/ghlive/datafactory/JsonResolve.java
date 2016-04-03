@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
@@ -176,7 +177,7 @@ public class JsonResolve {
 	public Map<String, List<ProgramInfo>> jsonToPrograms(JSONObject json) {
 		Map<String, List<ProgramInfo>> proMaps = new HashMap<String, List<ProgramInfo>>();
 		List<ProgramInfo> list = new ArrayList<ProgramInfo>();
-		List<String> dayMonth = new ArrayList<String>();
+		LinkedList<String> dayMonth = new LinkedList<String>();
 		JSONArray programs = getJsonObjectArray(json, "program");
 		for (int i = 0; i < programs.length(); i++) {
 			ProgramInfo program = null;
@@ -193,7 +194,7 @@ public class JsonResolve {
 				String date = Utils.dateToString(dt);
 				date = truncateDaateString(date, 5, date.length());
 				if (!dayMonth.contains(date)) {
-					dayMonth.add(date);
+					dayMonth.addFirst(date);
 					proMaps.put(date, new ArrayList<ProgramInfo>());
 
 				}
