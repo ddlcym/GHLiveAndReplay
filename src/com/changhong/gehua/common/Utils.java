@@ -3,6 +3,7 @@ package com.changhong.gehua.common;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class Utils {
 
@@ -11,6 +12,7 @@ public class Utils {
 	    {  
 	        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");  
 	        df = DateFormat.getDateInstance(DateFormat.MEDIUM); 
+//	        df.setTimeZone(TimeZone.getTimeZone("GMT+8"));
 	          String str=df.format(date);
 	        return str;  
 	    }  
@@ -18,6 +20,7 @@ public class Utils {
 	    public static Date strToDate(String strDate) throws Exception  
 	    {  
 	        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");  
+//	        df.setTimeZone(TimeZone.getTimeZone("GMT+8"));
 	        return df.parse(strDate);  
 	    }  
 }

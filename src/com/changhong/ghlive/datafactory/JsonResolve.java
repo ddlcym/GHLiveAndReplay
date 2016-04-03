@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -266,10 +267,12 @@ public class JsonResolve {
 		String str = getJsonObjectString(json, key);
 		if (key.equals("eventDate")) {
 			sdf = new SimpleDateFormat("yyyy-MM-dd");
+			
 			// sdf= DateFormat.getDateInstance(DateFormat.MEDIUM);
 		} else {
 			sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		}
+//		sdf.setTimeZone(TimeZone.getTimeZone("GMT+8"));
 		try {
 			date = sdf.parse(str);
 		} catch (ParseException e) {

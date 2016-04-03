@@ -10,6 +10,11 @@ public class Class_Constant {
 	public static final int REPLAY_TIME_LENGTH = 3004;
 	public static final int REPLAY_CHANNEL_DETAIL = 3005;
 	public static final int REPLAY_SEEK_TO = 3006;
+	public static final int RE_FAST_FORWARD = 3007;
+	public static final int RE_FAST_REVERSE = 3008;
+	public static final int RE_PLAY = 3009;
+	public static final int RE_PAUSE = 3010;
+	public static final int RE_UPDATE_PROGRESS = 3011;
 
 	public final static int MAX_NO_OF_PROGRAMS = 500; // ����Ŀ��
 	public final static int MAX_NO_OF_CARRIERS = 40; // ���Ƶ����

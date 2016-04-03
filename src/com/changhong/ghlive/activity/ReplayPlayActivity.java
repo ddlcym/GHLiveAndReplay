@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.SurfaceView;
 import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Toast;
 
 import com.changhong.gehua.common.ChannelInfo;
@@ -32,6 +33,7 @@ public class ReplayPlayActivity extends Activity {
 	private Player player;
 	private String replayChannelId = null;
 
+	private int maxTimes = 0;
 	ProcessData mProcessData;
 	ChannelInfo channel;
 	ProgramInfo mprogram;
@@ -75,13 +77,12 @@ public class ReplayPlayActivity extends Activity {
 		player = new Player(surfaceView, skbProgress);
 
 	}
-
 	/* play net video */
 	private void playNetVideo() {
 		if (isNetConnected()) {
 			newThreadPlay();
 		} else {
-			Toast.makeText(this, "播放出错", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "请检查网络", Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -93,13 +94,11 @@ public class ReplayPlayActivity extends Activity {
 				// TODO Auto-generated method stub
 				// loadingNetVideo();
 				player.playUrl(replayurl);
-				// Log.i("zyt", "last + last" + " 频道详情 replay url is pass " +
-				// replayurl);
+				// Log.i("mmmm", "ReplayPlayActivity-replayurl"+replayurl);
 				super.run();
 			}
 		}.start();
 	}
-
 
 	/* Date transfer to unix time */
 	public long dateToUnixTime(String outterString) {
@@ -142,26 +141,27 @@ public class ReplayPlayActivity extends Activity {
 		channel = (ChannelInfo) bundle.getSerializable("channel");
 		mprogram = (ProgramInfo) bundle.getSerializable("program");
 		replayChannelId = channel.getChannelID();
+		maxTimes = (int) (mprogram.getEndTime().getTime() - mprogram
+				.getBeginTime().getTime());
+		// skbProgress.setMax(maxTimes);
 
 		String requestURL = mProcessData.getReplayPlayUrlString(channel,
 				mprogram, 0);
-		Log.i("mmmm", "ReplayPlayActivity-requestURL:" + requestURL);
+		// Log.i("mmmm", "ReplayPlayActivity-requestURL:" + requestURL);
 		PlayVideo.getInstance().playReplayProgram(replayHandler, requestURL);
 	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
-		Message msg=new Message();
-		int curPos=0;
-		msg.what=Class_Constant.REPLAY_SEEK_TO;
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
-			msg.obj=curPos;
-			player.getHandler().sendMessage(msg);
+			Player.handleProgress
+					.sendEmptyMessage(Class_Constant.RE_FAST_FORWARD);
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
-
+			Player.handleProgress
+					.sendEmptyMessage(Class_Constant.RE_FAST_REVERSE);
 			break;
 		}
 

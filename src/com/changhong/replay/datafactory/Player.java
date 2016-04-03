@@ -6,7 +6,6 @@ import java.util.TimerTask;
 
 import com.changhong.gehua.common.Class_Constant;
 import com.changhong.ghlive.activity.MyApp;
-import com.changhong.ghliveandreplay.R;
 
 import android.content.Intent;
 import android.media.AudioManager;
@@ -20,9 +19,10 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.SeekBar;
 import android.widget.Toast;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 
-public class Player implements OnBufferingUpdateListener, OnCompletionListener, MediaPlayer.OnPreparedListener,
-		SurfaceHolder.Callback {
+public class Player implements OnBufferingUpdateListener, OnCompletionListener,
+		MediaPlayer.OnPreparedListener, SurfaceHolder.Callback {
 	private int videoWidth;
 	private int videoHeight;
 	public static MediaPlayer mediaPlayer;
@@ -30,42 +30,100 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 	private static SeekBar skbProgress;
 	private SurfaceView surfaceView;
 	private Timer mTimer = new Timer();
-	private boolean brcastFlag = true;
+	private boolean playingFlag = false;
 
 	public Player(SurfaceView mySurfaceView, SeekBar skbProgress) {
 		this.skbProgress = skbProgress;
 		this.surfaceView = mySurfaceView;
 		surfaceHolder = surfaceView.getHolder();
 		surfaceHolder.addCallback(this);
+		// 防止音频出不来
 		surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 		mTimer.schedule(mTimerTask, 0, 1000);
+		this.skbProgress.setOnSeekBarChangeListener(mySeekChangeLis);
 	}
 
+	/*******************************************************
+	 * 通过handler更新seekbar
+	 ******************************************************/
 	TimerTask mTimerTask = new TimerTask() {
 		@Override
 		public void run() {
 			if (mediaPlayer == null)
 				return;
-			if (mediaPlayer.isPlaying() && skbProgress.isPressed() == false) {
-				handleProgress.sendEmptyMessage(0);
+			if (mediaPlayer.isPlaying() && playingFlag) {
+				handleProgress.sendEmptyMessage(Class_Constant.RE_UPDATE_PROGRESS);
 			}
+		}
+	};
+	
+	OnSeekBarChangeListener mySeekChangeLis=new OnSeekBarChangeListener() {
+		int myprogress=0;
+		@Override
+		public void onStopTrackingTouch(SeekBar seekBar) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onStartTrackingTouch(SeekBar seekBar) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void onProgressChanged(SeekBar seekBar, int progress,
+				boolean fromUser) {
+			// TODO Auto-generated method stub
+			playingFlag=false;
+			myprogress = progress * mediaPlayer.getDuration()
+					/ seekBar.getMax();
+			mediaPlayer.seekTo(myprogress);
 		}
 	};
 
 	public static Handler handleProgress = new Handler() {
 		public void handleMessage(Message msg) {
 			int curPos=0;
+			int fastPos=0;
+			int duration=0;
 			switch (msg.what){
 			case Class_Constant.REPLAY_SEEK_TO:
 				curPos=msg.arg1;
-				int duration = mediaPlayer.getDuration();
+				duration = mediaPlayer.getDuration();
 
 				if (duration > 0) {
 					long pos = skbProgress.getMax() * curPos / duration;
 					skbProgress.setProgress((int) pos);
 				}
 				break;
-			
+			case Class_Constant.RE_FAST_FORWARD:
+				curPos=skbProgress.getProgress();
+				
+				skbProgress.setProgress(curPos+5);
+				break;
+			case Class_Constant.RE_FAST_REVERSE:
+				curPos=skbProgress.getProgress();
+				fastPos=curPos-5;
+				skbProgress.setProgress(fastPos);
+				break;
+			case Class_Constant.RE_PLAY:
+				
+				break;
+			case Class_Constant.RE_PAUSE:
+				
+				break;
+				
+			case Class_Constant.RE_UPDATE_PROGRESS:
+				int position = mediaPlayer.getCurrentPosition();
+				duration = mediaPlayer.getDuration();
+
+				if (duration > 0) {
+					long pos = skbProgress.getMax() * position / duration;
+					skbProgress.setProgress((int) pos);
+				}
+				break;
+				
 			}
 			
 		};
@@ -76,18 +134,10 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 	public void play() {
 		mediaPlayer.start();
 	}
-	
-	public Handler getHandler(){
-		
-		return handleProgress;
-	}
 
 	public void playUrl(String videoUrl) {
-		if (null == mediaPlayer) {
+		if (null == mediaPlayer)
 			return;
-		}
-
-		brcastFlag = true;
 		try {
 			mediaPlayer.reset();
 			mediaPlayer.setDataSource(videoUrl);
@@ -156,13 +206,17 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 	}
 
 	@Override
+	/**
+	 * ͨ��onPrepared����
+	 */
 	public void onPrepared(MediaPlayer arg0) {
 		videoWidth = mediaPlayer.getVideoWidth();
 		videoHeight = mediaPlayer.getVideoHeight();
 		if (videoHeight != 0 && videoWidth != 0) {
 			arg0.start();
 		} else {
-			Toast.makeText(MyApp.getContext(), "��Ƶ��������", Toast.LENGTH_SHORT).show();
+			Toast.makeText(MyApp.getContext(), "视频无效", Toast.LENGTH_SHORT)
+					.show();
 			Log.i("mm", "videoWidth or videoHeight =0");
 		}
 		Log.e("mediaPlayer", "onPrepared");
@@ -174,24 +228,18 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 
 	}
 
+	//播放视频准备好播放后调用此方法
 	@Override
 	public void onBufferingUpdate(MediaPlayer arg0, int bufferingProgress) {
 		skbProgress.setSecondaryProgress(bufferingProgress);
-		int currentProgress = skbProgress.getMax() * mediaPlayer.getCurrentPosition() / mediaPlayer.getDuration();
+		playingFlag=true;
+		int currentProgress = skbProgress.getMax()
+				* mediaPlayer.getCurrentPosition() / mediaPlayer.getDuration();
 		if (bufferingProgress != 0) {
-			// sendBroadcast();
 		}
-		Log.i(currentProgress + "% play", bufferingProgress + "% buffer");
+		Log.i("mmmm", bufferingProgress + "% buffer");
 
 	}
 
-	// private void sendBroadcast() {
-	// if (brcastFlag) {
-	// MyApp ma = MyApp.getContext();
-	// Intent intent = new Intent();
-	// intent.setAction(ma.getString(R.string.COM_EXAMPLE_M_BUFFERED));
-	// ma.sendBroadcast(intent);
-	// brcastFlag = false;
-	// }
-	// }
+
 }
