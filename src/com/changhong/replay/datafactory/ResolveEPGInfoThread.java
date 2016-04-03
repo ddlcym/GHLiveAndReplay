@@ -5,8 +5,6 @@ import java.util.concurrent.Executors;
 
 import org.json.JSONObject;
 
-import com.changhong.ghlive.datafactory.JsonResolve;
-
 import android.os.Handler;
 
 public class ResolveEPGInfoThread  {
