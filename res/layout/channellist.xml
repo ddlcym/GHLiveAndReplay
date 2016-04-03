@@ -3,7 +3,17 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/black" >
-
+    <SeekBar 
+        android:id="@+id/liveskbProgress"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:paddingLeft="10dip"
+            android:max="100"
+            android:paddingRight="10dip" 
+            android:paddingBottom="10dp"
+        />
+    
     <com.changhong.gehua.common.VideoView
         android:id="@+id/videoview"
         android:layout_width="fill_parent"
@@ -185,5 +195,6 @@
             android:src="@drawable/dtv_prolist_ok"
             android:visibility="gone" />
     </LinearLayout>
+    
 
 </FrameLayout>

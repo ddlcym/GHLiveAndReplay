@@ -17,12 +17,12 @@
 
         <SeekBar
             android:id="@+id/skbProgress"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1.0"
-            android:max="100"
             android:paddingLeft="10dip"
+            android:max="100"
             android:paddingRight="10dip" >
         </SeekBar>
     </LinearLayout>
