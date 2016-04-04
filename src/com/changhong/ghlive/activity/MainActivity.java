@@ -625,6 +625,16 @@ public class MainActivity extends BaseActivity {
 		case Class_Constant.KEYCODE_OK_KEY:
 			liveSeekBar.setVisibility(View.VISIBLE);
 			break;
+		case Class_Constant.KEYCODE_UP_ARROW_KEY:
+			chListView.setFocusable(true);
+			chListView.requestFocus();
+			break;
+			
+		case Class_Constant.KEYCODE_DOWN_ARROW_KEY:
+			chListView.setFocusable(true);
+			chListView.requestFocus();
+			
+			break;
 		}
 		return super.onKeyDown(keyCode, event);
 	}
