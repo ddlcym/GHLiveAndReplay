@@ -76,9 +76,14 @@ public class Banner {
 		// bannerToast.setGravity(Gravity.BOTTOM, 0, 2);
 		bannerToast.setDuration(Toast.LENGTH_LONG);
 		bannerToast.show();
+//		bannerToast.cancel();
 		// showMyToast(bannerToast, 16);// 测试显示toast
 	}
-
+	
+	public void cancelBanner(){
+		bannerToast.cancel();
+	}
+	
 	private void findView() {
 		adv_image = (ImageView) bannerView.findViewById(R.id.banner_adv_id);
 		channel_name = (TextView) bannerView.findViewById(R.id.banner_channel_name_id);
@@ -101,7 +106,7 @@ public class Banner {
 		channel_name.setText(channelInfo.getChannelName());
 		channel_number.setText(channelInfo.getChannelNumber());
 		textview_timeshift_support.setText(programInfo.getEventName());
-		PF_P.setText(programInfo.getBeginTime().toString().substring(11, 16));//取固定格式时间
+		PF_P.setText(programInfo.getBeginTime().toString().substring(11, 16));// 取固定格式时间
 		Log.i("zyt", "Date time is" + programInfo.getBeginTime().toString().substring(11, 16));
 		// PF_F.setText(programInfo.getEndTime().toString());
 		// adv_image.set
