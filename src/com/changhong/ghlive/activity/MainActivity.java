@@ -21,6 +21,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -36,6 +37,7 @@ import com.changhong.gehua.common.ProcessData;
 import com.changhong.gehua.common.ProgramInfo;
 import com.changhong.gehua.common.VideoView;
 import com.changhong.gehua.common.VolleyTool;
+import com.changhong.gehua.update.StringUtils;
 import com.changhong.ghlive.datafactory.Banner;
 import com.changhong.ghlive.datafactory.ChannelListAdapter;
 import com.changhong.ghlive.datafactory.HandleLiveData;
@@ -55,6 +57,7 @@ public class MainActivity extends BaseActivity {
 	private LinearLayout linear_vertical_line;// straight line right of
 												// channellist layout
 	private ListView chListView;
+	private SeekBar liveSeekBar;
 
 	// private View curView;
 	private boolean lockSwap = false;
@@ -76,11 +79,11 @@ public class MainActivity extends BaseActivity {
 
 	Map<String, String> pgmContent = new HashMap<String, String>();
 
-	private int curListIndex = 0;
+	private int curListIndex = 0;// 当前list下正在播放的当前节目的index
 	private int new_ChanId;
 	private int old_chanId;
 	private int curType = 0;
-	private int curId = 0;
+	private String curChannelNO = null; // 当前播放的节目的channelno
 	private int replayProgramId = 0;
 
 	private ChannelListAdapter chLstAdapter;
@@ -121,7 +124,7 @@ public class MainActivity extends BaseActivity {
 				// replayProgramId = Integer.parseInt(pgmContent.get("id"));
 				// PlayVideo.getInstance().getProgramInfoDetail(mhandler,
 				// replayProgramId);
-				showBanner(curId, innerPgmInfo);
+				showBanner(curChannelNO, innerPgmInfo);
 				break;
 
 			// case Class_Constant.REPLAY_TIME_LENGTH:
@@ -193,7 +196,7 @@ public class MainActivity extends BaseActivity {
 		if (null == processData) {
 			processData = new ProcessData();
 		}
-		startHttpSer();
+		// startHttpSer();
 		getChannelList();
 		// Log.i("mmmm", "c"+date.getHours()+"-"+date.getMonth());
 
@@ -213,8 +216,7 @@ public class MainActivity extends BaseActivity {
 		videoView = (VideoView) findViewById(R.id.videoview);
 		channelListLinear = (LinearLayout) findViewById(R.id.chlist_back);
 		linear_vertical_line = (LinearLayout) findViewById(R.id.linear_vertical_line);
-		// btnTest = (Button) findViewById(R.id.testBtn);
-
+		 liveSeekBar = (SeekBar) findViewById(R.id.liveskbProgress);
 		// videoView.setMediaController(new MediaController(this));
 		videoView.setFocusable(false);
 		chListView.setFocusable(true);
@@ -258,8 +260,9 @@ public class MainActivity extends BaseActivity {
 				mhandler.postDelayed(runnable, 5000);
 				TextView channelIndex = (TextView) view
 						.findViewById(R.id.chanId);
-				int index = Integer.parseInt(channelIndex.getText().toString());
-				// curView = view;
+				curChannelNO = channelIndex.getText().toString();
+				curListIndex=position;
+				playChannel(curChannelNO, false);
 			}
 		}
 
@@ -296,12 +299,13 @@ public class MainActivity extends BaseActivity {
 			//
 			// }
 			curListIndex = position;
-			int index = Integer.parseInt(channelIndex.getText().toString());
-			Log.i(TAG, String.valueOf(index));
+			String index = channelIndex.getText().toString();
+			Log.i(TAG, index);
 			playChannel(index, true);
 
-			curId = index;
-			Log.i("zyt", "play channel number is " + curId);
+			curChannelNO = index;
+			mhandler.post(runnable);
+			Log.i("zyt", "play channel number is " + curChannelNO);
 
 		}
 
@@ -323,6 +327,7 @@ public class MainActivity extends BaseActivity {
 								.dealChannelJson(arg0);
 						// first set adapter
 						curType = 0;
+						getAllTVtype();
 						showChannelList();
 						// Log.i(TAG,
 						// "HttpService=channelsAll:" + channelsAll.size());
@@ -358,48 +363,45 @@ public class MainActivity extends BaseActivity {
 		focusView.bringToFront();
 	}
 
-	private void getAllTVtype(int index) {
+	private void getAllTVtype() {
 		// fill all type tv
-		// Channel[] Channels =
-		// objApplication.dvbDatabase.getChannelsAllSC();//Only get channels
-		// type=1(TV)
-		// clear all tv type;
-		switch (index) {
-		case 0:
-			break;
 
-		case 1:
-			CCTVList.clear();
+		// clear all tv type;
+		channelsAll.clear();
+		CCTVList.clear();
+		starTvList.clear();
+		favTvList.clear();
+		localTvList.clear();
+		HDTvList.clear();
+		otherTvList.clear();
+		List<ChannelInfo> channels = CacheData.allChannelInfo;
+		for (ChannelInfo dvbChannel : channels) {
+			channelsAll.add(dvbChannel);
+
+			// 喜爱频道列表---------------待完成---------------
+			// if (dvbChannel.favorite == 1) {
+			// favTvList.add(dvbChannel);
+			// }
 			String regExCCTV;
 			regExCCTV = getResources().getString(R.string.zhongyang);
 			java.util.regex.Pattern pattern = java.util.regex.Pattern
 					.compile("CCTV|" + regExCCTV);
-			for (ChannelInfo Channel : channelsAll) {
-				java.util.regex.Matcher matcher = pattern.matcher(Channel
-						.getChannelName());
-				boolean classBytype = matcher.find();
-				if (classBytype) {
-					CCTVList.add(Channel);
-				}
+			java.util.regex.Matcher matcher = pattern.matcher(dvbChannel
+					.getChannelName());
+			boolean classBytype = matcher.find();
+			if (classBytype) {
+				CCTVList.add(dvbChannel);
 			}
-			break;
-		case 2:
-			starTvList.clear();
 			String regExStar;
 			regExStar = getResources().getString(R.string.weishi);
 			java.util.regex.Pattern patternStar = java.util.regex.Pattern
 					.compile(".*" + regExStar + "$");
-			for (ChannelInfo Channel : channelsAll) {
-				java.util.regex.Matcher matcherStar = patternStar
-						.matcher(Channel.getChannelName());
-				boolean classBytypeStar = matcherStar.matches();
-				if (classBytypeStar) {
-					starTvList.add(Channel);
-				}
+			java.util.regex.Matcher matcherStar = patternStar
+					.matcher(dvbChannel.getChannelName());
+			boolean classBytypeStar = matcherStar.matches();
+			if (classBytypeStar) {
+				starTvList.add(dvbChannel);
 			}
-			break;
-		case 3:
-			localTvList.clear();
 			String regExLocal = "CDTV|SCTV|"
 					+ getResources().getString(R.string.rongcheng) + "|"
 					+ getResources().getString(R.string.jingniu) + "|"
@@ -411,17 +413,12 @@ public class MainActivity extends BaseActivity {
 					+ getResources().getString(R.string.sichuan);
 			java.util.regex.Pattern patternLocal = java.util.regex.Pattern
 					.compile(regExLocal);
-			for (ChannelInfo Channel : channelsAll) {
-				java.util.regex.Matcher matcherLocal = patternLocal
-						.matcher(Channel.getChannelName());
-				boolean classBytypeLocal = matcherLocal.find();
-				if (classBytypeLocal) {
-					localTvList.add(Channel);
-				}
+			java.util.regex.Matcher matcherLocal = patternLocal
+					.matcher(dvbChannel.getChannelName());
+			boolean classBytypeLocal = matcherLocal.find();
+			if (classBytypeLocal) {
+				localTvList.add(dvbChannel);
 			}
-			break;
-		case 4:
-			HDTvList.clear();
 			String regExHD = getResources().getString(R.string.hd_dtv) + "|"
 					+ getResources().getString(R.string.xinyuan_hdtv1) + "|"
 					+ getResources().getString(R.string.xinyuan_hdtv2) + "|"
@@ -429,26 +426,13 @@ public class MainActivity extends BaseActivity {
 					+ getResources().getString(R.string.xinyuan_hdtv4);
 			java.util.regex.Pattern patternHD = java.util.regex.Pattern
 					.compile("3D|" + regExHD + "|.*HD$");
-			for (ChannelInfo Channel : channelsAll) {
-				java.util.regex.Matcher matcherHD = patternHD.matcher(Channel
-						.getChannelName());
-				boolean classBytypeHD = matcherHD.find();
-				if (classBytypeHD) {
-					HDTvList.add(Channel);
-				}
+
+			java.util.regex.Matcher matcherHD = patternHD.matcher(dvbChannel
+					.getChannelName());
+			boolean classBytypeHD = matcherHD.find();
+			if (classBytypeHD) {
+				HDTvList.add(dvbChannel);
 			}
-			break;
-		case 5:
-			// favTvList.clear();
-			// for (ChannelInfo Channel : Channels) {
-			// if (Channel.favorite == 1) {
-			// favTvList.add(Channel);
-			// }
-			//
-			// }
-			break;
-		case 6:
-			otherTvList.clear();
 			String regExOther = "CDTV|SCTV|CCTV|"
 					+ getResources().getString(R.string.weishi) + "|"
 					+ getResources().getString(R.string.rongcheng) + "|"
@@ -461,18 +445,130 @@ public class MainActivity extends BaseActivity {
 					+ getResources().getString(R.string.sichuan);
 			java.util.regex.Pattern patternOther = java.util.regex.Pattern
 					.compile(regExOther);
-			for (ChannelInfo Channel : channelsAll) {
-				java.util.regex.Matcher matcherOther = patternOther
-						.matcher(Channel.getChannelName());
-				boolean classBytypeOther = matcherOther.find();
-				if (!classBytypeOther) {
-					otherTvList.add(Channel);
-				}
+			java.util.regex.Matcher matcherOther = patternOther
+					.matcher(dvbChannel.getChannelName());
+			boolean classBytypeOther = matcherOther.find();
+			if (!classBytypeOther) {
+				otherTvList.add(dvbChannel);
 			}
-			break;
 		}
-
 	}
+
+	// private void getAllTVtype(int index) {
+	// // fill all type tv
+	// // Channel[] Channels =
+	// // objApplication.dvbDatabase.getChannelsAllSC();//Only get channels
+	// // type=1(TV)
+	// // clear all tv type;
+	// switch (index) {
+	// case 0:
+	// break;
+	//
+	// case 1:
+	// CCTVList.clear();
+	// String regExCCTV;
+	// regExCCTV = getResources().getString(R.string.zhongyang);
+	// java.util.regex.Pattern pattern = java.util.regex.Pattern
+	// .compile("CCTV|" + regExCCTV);
+	// for (ChannelInfo Channel : channelsAll) {
+	// java.util.regex.Matcher matcher = pattern.matcher(Channel
+	// .getChannelName());
+	// boolean classBytype = matcher.find();
+	// if (classBytype) {
+	// CCTVList.add(Channel);
+	// }
+	// }
+	// break;
+	// case 2:
+	// starTvList.clear();
+	// String regExStar;
+	// regExStar = getResources().getString(R.string.weishi);
+	// java.util.regex.Pattern patternStar = java.util.regex.Pattern
+	// .compile(".*" + regExStar + "$");
+	// for (ChannelInfo Channel : channelsAll) {
+	// java.util.regex.Matcher matcherStar = patternStar
+	// .matcher(Channel.getChannelName());
+	// boolean classBytypeStar = matcherStar.matches();
+	// if (classBytypeStar) {
+	// starTvList.add(Channel);
+	// }
+	// }
+	// break;
+	// case 3:
+	// localTvList.clear();
+	// String regExLocal = "CDTV|SCTV|"
+	// + getResources().getString(R.string.rongcheng) + "|"
+	// + getResources().getString(R.string.jingniu) + "|"
+	// + getResources().getString(R.string.qingyang) + "|"
+	// + getResources().getString(R.string.wuhou) + "|"
+	// + getResources().getString(R.string.chenghua) + "|"
+	// + getResources().getString(R.string.jinjiang) + "|"
+	// + getResources().getString(R.string.chengdu) + "|"
+	// + getResources().getString(R.string.sichuan);
+	// java.util.regex.Pattern patternLocal = java.util.regex.Pattern
+	// .compile(regExLocal);
+	// for (ChannelInfo Channel : channelsAll) {
+	// java.util.regex.Matcher matcherLocal = patternLocal
+	// .matcher(Channel.getChannelName());
+	// boolean classBytypeLocal = matcherLocal.find();
+	// if (classBytypeLocal) {
+	// localTvList.add(Channel);
+	// }
+	// }
+	// break;
+	// case 4:
+	// HDTvList.clear();
+	// String regExHD = getResources().getString(R.string.hd_dtv) + "|"
+	// + getResources().getString(R.string.xinyuan_hdtv1) + "|"
+	// + getResources().getString(R.string.xinyuan_hdtv2) + "|"
+	// + getResources().getString(R.string.xinyuan_hdtv3) + "|"
+	// + getResources().getString(R.string.xinyuan_hdtv4);
+	// java.util.regex.Pattern patternHD = java.util.regex.Pattern
+	// .compile("3D|" + regExHD + "|.*HD$");
+	// for (ChannelInfo Channel : channelsAll) {
+	// java.util.regex.Matcher matcherHD = patternHD.matcher(Channel
+	// .getChannelName());
+	// boolean classBytypeHD = matcherHD.find();
+	// if (classBytypeHD) {
+	// HDTvList.add(Channel);
+	// }
+	// }
+	// break;
+	// case 5:
+	// // favTvList.clear();
+	// // for (ChannelInfo Channel : Channels) {
+	// // if (Channel.favorite == 1) {
+	// // favTvList.add(Channel);
+	// // }
+	// //
+	// // }
+	// break;
+	// case 6:
+	// otherTvList.clear();
+	// String regExOther = "CDTV|SCTV|CCTV|"
+	// + getResources().getString(R.string.weishi) + "|"
+	// + getResources().getString(R.string.rongcheng) + "|"
+	// + getResources().getString(R.string.jingniu) + "|"
+	// + getResources().getString(R.string.qingyang) + "|"
+	// + getResources().getString(R.string.wuhou) + "|"
+	// + getResources().getString(R.string.chenghua) + "|"
+	// + getResources().getString(R.string.jinjiang) + "|"
+	// + getResources().getString(R.string.chengdu) + "|"
+	// + getResources().getString(R.string.sichuan);
+	// java.util.regex.Pattern patternOther = java.util.regex.Pattern
+	// .compile(regExOther);
+	// for (ChannelInfo Channel : channelsAll) {
+	// java.util.regex.Matcher matcherOther = patternOther
+	// .matcher(Channel.getChannelName());
+	// boolean classBytypeOther = matcherOther.find();
+	// if (!classBytypeOther) {
+	// otherTvList.add(Channel);
+	// }
+	// }
+	// break;
+	// }
+	//
+	// }
 
 	private void showChannelList() {
 		// TODO show channellist
@@ -567,16 +663,9 @@ public class MainActivity extends BaseActivity {
 		return curChannel;
 	}
 
-	private void showTime() {
-	}
-
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
-		int focusLocation = 0;// 频道加减时选中的频道
-		int playIndex = 0;
-		ChannelInfo channel;
-		TextView chanView;
 		String dialogButtonTextOk = MainActivity.this
 				.getString(R.string.str_zhn_yes);
 		String dialogButtonTextCancel = MainActivity.this
@@ -590,96 +679,113 @@ public class MainActivity extends BaseActivity {
 		mhandler.postDelayed(runnable, 5000);
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
-
-			if (curType == 6) {
-				curType = 0;
-			} else {
-				curType++;
-			}
-			getAllTVtype(curType);
-			showChannelList();
+			//切换频道类型，更新频道列表的数据
+//			if (curType == 6) {
+//				curType = 0;
+//			} else {
+//				curType++;
+//			}
+//			showChannelList();
+//			chListView.setFocusable(true);
+//			chListView.requestFocus();
+//			chListView.setSelection(curListIndex);
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
+			//切换频道类型，更新频道列表的数据
+//			if (curType == 0) {
+//				curType = 6;
+//			} else {
+//				curType--;
+//			}
+//			showChannelList();
+			
+			
+			break;
 
-			if (curType == 0) {
-				curType = 6;
-			} else {
-				curType--;
-			}
-			getAllTVtype(curType);
-			showChannelList();
-			break;
-		case Class_Constant.KEYCODE_UP_ARROW_KEY:
 		case Class_Constant.KEYCODE_PAGE_UP:
-			if (curListIndex == 0) {
-				getAllTVtype(curType);
-				showChannelList();
-				chListView.setSelection(chListView.getCount() - 1);
-			}
+//			if (curListIndex == 0) {
+//				showChannelList();
+//				chListView.setSelection(chListView.getCount() - 1);
+//			}
 			break;
-		case Class_Constant.KEYCODE_DOWN_ARROW_KEY:
 		case Class_Constant.KEYCODE_PAGE_DOWN:
-			if (curListIndex == (chListView.getCount() - 1)) {
-				getAllTVtype(curType);
-				showChannelList();
-				chListView.setSelection(0);
-			}
+//			if (curListIndex == (chListView.getCount() - 1)) {
+//				showChannelList();
+//				chListView.setSelection(0);
+//			}
 			break;
 		case Class_Constant.KEYCODE_CHANNEL_UP:
-			getAllTVtype(curType);
-			showChannelList();
 			if (curListIndex == (chListView.getCount() - 1)) {
 				chListView.setSelection(0);
-				focusLocation = 0;
+				curListIndex = 0;
 			} else {
 				chListView.setSelection(curListIndex + 1);
-				focusLocation = curListIndex + 1;
+				curListIndex = curListIndex + 1;
 			}
-			ChannelInfo chanPlus = (ChannelInfo) CacheData.allChannelMap
-					.get(String.valueOf(curId));
-			int iPlus = mCurChannels.indexOf(chanPlus);
-			int nextPlusChannel = ((iPlus + 1) == chListView.getCount()) ? 0 : (iPlus + 1);
-			playChannel(Integer.parseInt(mCurChannels.get(nextPlusChannel).getChannelNumber()), true);
+			if (!StringUtils.hasLength(curChannelNO)) {
+				//第一次进入时
+				chListView.setSelection(0);
+				curChannelNO=mCurChannels.get(0).getChannelNumber();
+				if (mCurChannels != null && mCurChannels.size() != 0) {
+					playChannel(curChannelNO, true);
+				}
+			} else {
+				chListView.setFocusable(true);
+				chListView.requestFocus();
+				chListView.setSelection(curListIndex);
+				if (mCurChannels != null && mCurChannels.size() != 0) {
+					playChannel(mCurChannels.get(curListIndex)
+							.getChannelNumber(), true);
+				}
+			}
 			break;
 		case Class_Constant.KEYCODE_CHANNEL_DOWN:
-			getAllTVtype(curType);
-			showChannelList();
+			chListView.requestFocus();
 			if (curListIndex == 0) {
 				chListView.setSelection(chListView.getCount() - 1);
-				focusLocation = chListView.getCount() - 1;
+				curListIndex = chListView.getCount() - 1;
 			} else {
 				chListView.setSelection(curListIndex - 1);
-				focusLocation = curListIndex - 1;
+				curListIndex = curListIndex - 1;
 			}
-			ChannelInfo chanMinu = (ChannelInfo) CacheData.allChannelMap
-					.get(String.valueOf(curId));
-			int iMinu = mCurChannels.indexOf(chanMinu);
-			int nextMinusChannel = (iMinu == 0) ? (chListView.getCount() - 1) : (iMinu - 1);
-			playChannel(Integer.parseInt(mCurChannels.get(nextMinusChannel).getChannelNumber()), true);
+			if (!StringUtils.hasLength(curChannelNO)) {
+				curChannelNO = mCurChannels.get(0).getChannelNumber();
+			}
+			chListView.setFocusable(true);
+			chListView.requestFocus();
+			chListView.setSelection(curListIndex);
+			if (mCurChannels != null && mCurChannels.size() != 0) {
+				playChannel(mCurChannels.get(curListIndex)
+						.getChannelNumber(), true);
+			}
+			break;
+			
+		case Class_Constant.KEYCODE_OK_KEY:
+			liveSeekBar.setVisibility(View.VISIBLE);
 			break;
 		}
 		return super.onKeyDown(keyCode, event);
 	}
 
 	// // ============show banner=========================================
-	public void showBanner(int channelId, ProgramInfo pgmInfo) {
+	public void showBanner(String channelno, ProgramInfo pgmInfo) {
 		ChannelInfo curChannel = (ChannelInfo) CacheData.allChannelMap
-				.get(String.valueOf(channelId));
+				.get(channelno);
 		Banner ban = new Banner(this, curChannel, pgmInfo);
 		ban.show();
 	}
 
 	// ============play video=========================================
-	public int playChannel(int channelId, boolean isCheckPlaying) {
+	public String playChannel(String channelno, boolean isCheckPlaying) {
 
-		if (channelId == curId && isCheckPlaying) {
-			return channelId;
+		if (channelno.equals(curChannelNO) && isCheckPlaying) {
+			return channelno;
 		}
 
 		ChannelInfo curChannel = (ChannelInfo) CacheData.allChannelMap
-				.get(String.valueOf(channelId));
+				.get(channelno);
 		if (curChannel == null) {
-			return -1;
+			return null;
 		}
 
 		/*--------------- If it is audio channel, blank the screen------------- */
@@ -712,14 +818,13 @@ public class MainActivity extends BaseActivity {
 
 		// 显示banner信息
 		CacheData.curChannelNum = curChannel.getChannelNumber();
-
-		curId = channelId;
+		curChannelNO = channelno;
 		// CacheData.curChannelNum = channelId;
 
 		// Banner ban = new Banner(this, curChannel);
 		// ban.show();
 
-		return 0;
+		return curChannelNO;
 	}
 
 	// =============onKeydown timer====================================
@@ -731,7 +836,6 @@ public class MainActivity extends BaseActivity {
 			channelListLinear.setVisibility(View.INVISIBLE);
 			focusView.setVisibility(View.INVISIBLE);
 			linear_vertical_line.setVisibility(View.INVISIBLE);
-			mhandler.postDelayed(this, 9000);
 		}
 	};
 

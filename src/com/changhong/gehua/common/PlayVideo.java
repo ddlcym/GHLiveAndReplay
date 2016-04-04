@@ -48,7 +48,7 @@ public class PlayVideo {
 	}
 
 	public void playLiveProgram(final VideoView videoView, ChannelInfo outterchanInfo) {
-
+		mReQueue.cancelAll("program");
 		String realurl = processData.getLivePlayUrlString(outterchanInfo);
 
 		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, realurl, null,
@@ -78,7 +78,7 @@ public class PlayVideo {
 						});
 					}
 				}, errorListener);
-		jsonObjectRequest.setTag(HttpService.class.getSimpleName());// 设置tag,cancelAll的时候使用
+		jsonObjectRequest.setTag("program");// 设置tag,cancelAll的时候使用
 		mReQueue.add(jsonObjectRequest);
 	}
 
