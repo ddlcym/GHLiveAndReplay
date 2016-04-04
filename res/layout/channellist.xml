@@ -26,10 +26,9 @@
         android:layout_width="280dip"
         android:layout_height="match_parent"
         android:layout_marginLeft="0dip"
-        android:visibility="invisible"
         android:background="@drawable/dtv_prolist_back"
-        android:clickable="true" >
-
+        android:clickable="true"
+        android:visibility="invisible" >
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -68,7 +67,7 @@
                     android:gravity="center"
                     android:textSize="@dimen/FONT_SIZE_BIG" >
                 </TextView>
-
+				
                 <ImageView
                     android:layout_width="40dip"
                     android:layout_height="wrap_content"
@@ -126,17 +125,6 @@
         android:layout_marginLeft="280dip"
         android:clickable="true"
         android:orientation="horizontal" >
-
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="-7dip"
-            android:layout_marginTop="640dip"
-            android:background="#00000000"
-            android:contentDescription="@null"
-            android:scaleType="centerInside"
-            android:src="@drawable/dtv_prolist_back2" />
     </LinearLayout>
 
     <LinearLayout
@@ -176,9 +164,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:max="100"
-        android:visibility="invisible"
         android:paddingBottom="10dp"
         android:paddingLeft="10dip"
-        android:paddingRight="10dip" />
+        android:paddingRight="10dip"
+        android:visibility="invisible" />
 
 </FrameLayout>

@@ -93,7 +93,7 @@
         <com.changhong.replay.datafactory.EpgListview
             android:id="@+id/EpgEventInfo"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:background="@drawable/boder"
             android:divider="@drawable/eventlistdivider"
             android:nextFocusLeft="@+id/ChanlIstView"
