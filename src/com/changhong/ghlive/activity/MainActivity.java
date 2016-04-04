@@ -59,8 +59,6 @@ public class MainActivity extends BaseActivity {
 	private ListView chListView;
 	private SeekBar liveSeekBar;
 
-	// private View curView;
-	private boolean lockSwap = false;
 
 	private VolleyTool volleyTool;
 	private RequestQueue mReQueue;
@@ -80,19 +78,15 @@ public class MainActivity extends BaseActivity {
 	Map<String, String> pgmContent = new HashMap<String, String>();
 
 	private int curListIndex = 0;// 当前list下正在播放的当前节目的index
-	private int new_ChanId;
-	private int old_chanId;
 	private int curType = 0;
 	private String curChannelNO = null; // 当前播放的节目的channelno
-	private int replayProgramId = 0;
 
 	private ChannelListAdapter chLstAdapter;
 	private Handler mhandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
-			String content = null;
 			switch (msg.what) {
-			case Class_Constant.PLAY_LIVE:// 直播
+			case Class_Constant.PLAY_URL:// 直播
 				// content = (String) msg.obj;
 				// Log.i(TAG, "playURL:" + content);
 				// videoView.setVideoPath(content);
@@ -117,67 +111,9 @@ public class MainActivity extends BaseActivity {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				// Log.i("zyt map time ", "program playTime Date:" +
-				// pgmContent.get("playTime"));
-				// Log.i("zyt map time ", "program id is 当前 id:" +
-				// pgmContent.get("id")); // 节目信息中的节目id
-				// replayProgramId = Integer.parseInt(pgmContent.get("id"));
-				// PlayVideo.getInstance().getProgramInfoDetail(mhandler,
-				// replayProgramId);
 				showBanner(curChannelNO, innerPgmInfo);
 				break;
 
-			// case Class_Constant.REPLAY_TIME_LENGTH:
-			// ProgramInfo pgmInfoDetail = (ProgramInfo) msg.obj;
-			//
-			// // Log.i("zyt", "传递handler之后的节目详情 + name " +
-			// // pgmInfoDetail.getChannelName());
-			// // Log.i("zyt", "传递handler之后的节目详情 + pgmId " +
-			// // pgmInfoDetail.getProgramId());
-			//
-			// Log.i("zyt", "传递handler之后的节目详情 + beginTime " +
-			// pgmInfoDetail.getBeginTime());
-			// Log.i("zyt", "传递handler之后的节目详情 + endTime " +
-			// pgmInfoDetail.getEndTime());
-			// Log.i("zyt", "传递handler之后的节目详情 + endTime " +
-			// pgmInfoDetail.getChannelID());
-			//
-			// SimpleDateFormat sdfNew = new SimpleDateFormat("yyyy-MM-dd
-			// HH:mm:ss");
-			//
-			// // ProgramInfo passPgmInfo = new ProgramInfo();
-			// // passPgmInfo.setBeginTime((sdfNew.parse());
-			// // Intent mIntent = new Intent(this, ObjectTranDemo1.class);
-			//
-			// java.text.DateFormat format1 = new
-			// java.text.SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-			// String formatBeginTime =
-			// format1.format(pgmInfoDetail.getBeginTime());
-			// String formatEndTime =
-			// format1.format(pgmInfoDetail.getEndTime());
-			//
-			// Bundle mBundle = new Bundle();
-			// String[] value = { String.valueOf(pgmInfoDetail.getChannelID()),
-			// formatBeginTime, formatEndTime };
-			// mBundle.putStringArray("pgmInfo", value);
-			// Intent rplayAct = new Intent(MainActivity.this,
-			// ReplayPlayActivity.class);
-			//
-			// // Log.i("zyt", "传递handler之后的节目详情 + endTime this is fourth " +
-			// // s);
-			// // rplayAct.put
-			// // mBundle.putStringArray("pgmInfo", value);
-			// // mBundle.putSerializable("pgmInfo", pgmInfoDetail);
-			// rplayAct.putExtras(mBundle);
-			// // PlayVideo.getInstance().getProgramInfoDetail(mhandler,
-			// // replayProgramId);
-			//
-			// // Intent rplayAct = new Intent(MainActivity.this,
-			// // ReplayPlayActivity.class);
-			//
-			// // startActivity(rplayAct);
-			//
-			// break;
 
 			}
 		}
@@ -226,17 +162,6 @@ public class MainActivity extends BaseActivity {
 		chListView.setOnItemClickListener(myClickLis);
 		chListView.setOnItemSelectedListener(myItemSelectLis);
 
-		// btnTest.setOnClickListener(new View.OnClickListener() {
-
-		// @Override
-		// public void onClick(View v) {
-		// Intent rplayAct = new Intent(MainActivity.this,
-		// ReplayPlayActivity.class);
-		// startActivity(rplayAct);
-		// Toast.makeText(MainActivity.this, " test ",
-		// Toast.LENGTH_LONG).show();
-		// }
-		// });
 
 	}
 
@@ -611,57 +536,6 @@ public class MainActivity extends BaseActivity {
 		}
 	}
 
-	// 获取下一个频道的频道信息
-	private ChannelInfo toNextChannel(int curType, ChannelInfo preChannel) {
-		List<ChannelInfo> channels = null;
-		switch (curType) {
-		case 0:
-			channels = channelsAll;
-			break;
-
-		case 1:
-			channels = CCTVList;
-			break;
-		case 2:
-			channels = starTvList;
-			break;
-		case 3:
-			channels = localTvList;
-			break;
-		case 4:
-			channels = HDTvList;
-			break;
-		case 5:
-			channels = favTvList;
-			break;
-		case 6:
-			channels = otherTvList;
-			break;
-		default:
-			break;
-		}
-		ChannelInfo curChannel = null;
-		if (channels != null && channels.size() > 0) {
-			if (channels.size() == 1) {
-				return curChannel;
-			}
-			for (int i = 0; i < channels.size(); i++) {
-
-				if (channels.get(i).getChannelNumber() == preChannel
-						.getChannelNumber()) {
-
-					if (i == channels.size() - 1) {
-						curChannel = channels.get(i - 1);
-					} else {
-						curChannel = channels.get(i + 1);
-					}
-					break;
-
-				}
-			}
-		}
-		return curChannel;
-	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -699,7 +573,6 @@ public class MainActivity extends BaseActivity {
 //			}
 //			showChannelList();
 			
-			
 			break;
 
 		case Class_Constant.KEYCODE_PAGE_UP:
@@ -733,14 +606,13 @@ public class MainActivity extends BaseActivity {
 				chListView.setFocusable(true);
 				chListView.requestFocus();
 				chListView.setSelection(curListIndex);
-				if (mCurChannels != null && mCurChannels.size() != 0) {
-					playChannel(mCurChannels.get(curListIndex)
-							.getChannelNumber(), true);
-				}
+//				if (mCurChannels != null && mCurChannels.size() != 0) {
+//					playChannel(mCurChannels.get(curListIndex)
+//							.getChannelNumber(), true);
+//				}
 			}
 			break;
 		case Class_Constant.KEYCODE_CHANNEL_DOWN:
-			chListView.requestFocus();
 			if (curListIndex == 0) {
 				chListView.setSelection(chListView.getCount() - 1);
 				curListIndex = chListView.getCount() - 1;
@@ -754,10 +626,10 @@ public class MainActivity extends BaseActivity {
 			chListView.setFocusable(true);
 			chListView.requestFocus();
 			chListView.setSelection(curListIndex);
-			if (mCurChannels != null && mCurChannels.size() != 0) {
-				playChannel(mCurChannels.get(curListIndex)
-						.getChannelNumber(), true);
-			}
+//			if (mCurChannels != null && mCurChannels.size() != 0) {
+//				playChannel(mCurChannels.get(curListIndex)
+//						.getChannelNumber(), true);
+//			}
 			break;
 			
 		case Class_Constant.KEYCODE_OK_KEY:
@@ -765,6 +637,14 @@ public class MainActivity extends BaseActivity {
 			break;
 		}
 		return super.onKeyDown(keyCode, event);
+	}
+	
+	private void leftReverse(){
+		
+	} 
+	
+	private void rightForward(){
+		
 	}
 
 	// // ============show banner=========================================
@@ -800,21 +680,6 @@ public class MainActivity extends BaseActivity {
 		PlayVideo.getInstance().playLiveProgram(videoView, curChannel);
 		PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
 
-		// //live program
-		// String replayUrl =
-		// "http://ott.yun.gehua.net.cn:8080/msis/getPlayURL?version=V002&resourceCode=8406&providerID=gehua&assetID=8406&resolution=1280*768&playType=4&terminalType=4&shifttime=1459019"
-		// +
-		// "820000&shiftend=1459023000000&authKey=c7e278212b81aff1992ac5e0017757d7";
-
-		// String replayUrl =
-		// "http://ott.yun.gehua.net.cn:8080/msis/getPlayURL?version=V002&resourceCode=8406&providerID=gehua&assetID=8406&resolution=1280*768&playType=4&terminalType=4&shifttime=1459038060000&shiftend=1459040640000&delay=200000&authKey=c7e278212b81aff1992ac5e0017757d7";
-		// String replayUrl1 =
-		// "http://ott.yun.gehua.net.cn:8080/msis/getPlayURL?version=V002&resourceCode=8245&providerID=gehua&assetID=8245&resolution=1280*768&playType=4&terminalType=4&shifttime=1459037700000&shiftend=1459043340000&delay=200000&authKey=c7e278212b81aff1992ac5e0017757d7";
-
-		// PlayVideo.getInstance().playReplayProgram(videoView, replayUrl1);
-		// 获取回看播放串，进行播放
-
-		// PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);//
 
 		// 显示banner信息
 		CacheData.curChannelNum = curChannel.getChannelNumber();
@@ -836,6 +701,7 @@ public class MainActivity extends BaseActivity {
 			channelListLinear.setVisibility(View.INVISIBLE);
 			focusView.setVisibility(View.INVISIBLE);
 			linear_vertical_line.setVisibility(View.INVISIBLE);
+			liveSeekBar.setVisibility(View.INVISIBLE);
 		}
 	};
 

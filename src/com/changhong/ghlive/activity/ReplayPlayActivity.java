@@ -47,7 +47,7 @@ public class ReplayPlayActivity extends Activity {
 			case Class_Constant.REPLAY_CHANNEL_DETAIL:
 				break;
 
-			case Class_Constant.REPLAY_URL:
+			case Class_Constant.PLAY_URL:
 				replayurl = (String) msg.obj;
 				Log.i("mmmm", "ReplayPlayActivity-replayurl:" + replayurl);
 				playNetVideo();

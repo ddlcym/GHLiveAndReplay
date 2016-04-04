@@ -58,13 +58,13 @@ public class PlayVideo {
 					public void onResponse(org.json.JSONObject arg0) {
 						// TODO Auto-generated method stub
 						// 相应成功
-						// Log.i(TAG, "PlayVideo-getPlayURL：" + arg0);
+//						 Log.i(TAG, "PlayVideo-getPlayURL_arg0：" + arg0);
 						// Message msg=new Message();
 						// msg.what=Class_Constant.PLAY_LIVE;
 						// msg.obj=jsonResolve.getHDPlayURL(arg0);
 						// handler.sendMessage(msg);
 						final String playurl = jsonResolve.getHDPlayURL(arg0);
-						 Log.i("mmmm", "play url is + 0326" + playurl);
+//						 Log.i("mmmm", "play url is " + playurl);
 
 						videoView.post(new Runnable() {
 
@@ -95,7 +95,7 @@ public class PlayVideo {
 
 						String playurl = jsonResolve.getHDPlayURL(arg0);
 						Message msg=new Message();
-						msg.what=Class_Constant.REPLAY_URL;
+						msg.what=Class_Constant.PLAY_URL;
 						msg.obj=playurl;
 						handler.sendMessage(msg);
 					}

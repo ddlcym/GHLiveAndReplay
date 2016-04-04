@@ -5,7 +5,7 @@ public class Class_Constant {
 	// mainactivity handler type
 
 	public final static int PLAY_LIVE = 3001;
-	public static final int REPLAY_URL = 3002;
+	public static final int PLAY_URL = 3002;
 	public static final int BANNER_PROGRAM_PASS = 3003;
 	public static final int REPLAY_TIME_LENGTH = 3004;
 	public static final int REPLAY_CHANNEL_DETAIL = 3005;
