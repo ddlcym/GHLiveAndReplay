@@ -45,6 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/skbProgress"
+            android:text="00:00:00"
             android:paddingRight="90dip" />
         <!-- </LinearLayout> -->
     </RelativeLayout>
