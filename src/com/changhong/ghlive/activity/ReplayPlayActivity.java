@@ -149,7 +149,7 @@ public class ReplayPlayActivity extends Activity {
 		maxTimes = (int) (mprogram.getEndTime().getTime() - mprogram.getBeginTime().getTime());
 		// skbProgress.setMax(maxTimes);
 		SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
-		formatter.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
+		formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
 		videoTimeLength.setText("/" + formatter.format(maxTimes));
 		String requestURL = mProcessData.getReplayPlayUrlString(channel, mprogram, 0);
 		// Log.i("mmmm", "ReplayPlayActivity-requestURL:" + requestURL);
