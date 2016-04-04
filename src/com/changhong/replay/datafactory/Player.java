@@ -34,9 +34,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 	private Timer mTimer = new Timer();
 	private boolean playingFlag = false;
 
-	// private static TextView videoTimeLength;
 	private static TextView videoCurrentTime;
-	private static int i = 0;
 
 	public Player(SurfaceView mySurfaceView, SeekBar skbProgress, TextView txvCurrent) {
 		this.skbProgress = skbProgress;
@@ -130,8 +128,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 				}
 				SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
 				formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
-				videoCurrentTime.setText(formatter.format(i * 1000));
-				i++;
+				videoCurrentTime.setText(formatter.format(position));
 				break;
 			}
 
