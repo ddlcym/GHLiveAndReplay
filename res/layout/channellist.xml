@@ -3,17 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/black" >
-    <SeekBar 
-        android:id="@+id/liveskbProgress"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:paddingLeft="10dip"
-            android:max="100"
-            android:paddingRight="10dip" 
-            android:paddingBottom="10dp"
-        />
-    
+
     <com.changhong.gehua.common.VideoView
         android:id="@+id/videoview"
         android:layout_width="fill_parent"
@@ -36,17 +26,10 @@
         android:layout_width="280dip"
         android:layout_height="match_parent"
         android:layout_marginLeft="0dip"
+        android:visibility="invisible"
         android:background="@drawable/dtv_prolist_back"
         android:clickable="true" >
 
-        <ImageView
-            android:layout_width="1dip"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="0dip"
-            android:background="#00000000"
-            android:contentDescription="@null"
-            android:scaleType="centerInside"
-            android:src="@drawable/listright" />
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -63,7 +46,6 @@
                 android:layout_gravity="top|left"
                 android:layout_marginLeft="0dip"
                 android:layout_marginTop="1dip"
-                android:addStatesFromChildren="true"
                 android:orientation="horizontal" >
 
                 <ImageView
@@ -145,14 +127,6 @@
         android:clickable="true"
         android:orientation="horizontal" >
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="0dip"
-            android:background="#00000000"
-            android:contentDescription="@null"
-            android:scaleType="centerInside"
-            android:src="@drawable/listright" />
 
         <ImageView
             android:layout_width="match_parent"
@@ -195,6 +169,16 @@
             android:src="@drawable/dtv_prolist_ok"
             android:visibility="gone" />
     </LinearLayout>
-    
+
+    <SeekBar
+        android:id="@+id/liveskbProgress"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:max="100"
+        android:visibility="invisible"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dip"
+        android:paddingRight="10dip" />
 
 </FrameLayout>
