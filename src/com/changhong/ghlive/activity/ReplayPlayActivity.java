@@ -153,7 +153,7 @@ public class ReplayPlayActivity extends Activity {
 		videoTimeLength.setText("/" + formatter.format(maxTimes));
 		String requestURL = mProcessData.getReplayPlayUrlString(channel, mprogram, 0);
 		// Log.i("mmmm", "ReplayPlayActivity-requestURL:" + requestURL);
-		PlayVideo.getInstance().playReplayProgram(replayHandler, requestURL);
+		PlayVideo.getInstance().getProgramPlayURL(replayHandler, requestURL);
 	}
 
 	@Override

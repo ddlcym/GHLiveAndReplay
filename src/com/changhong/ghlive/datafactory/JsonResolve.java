@@ -208,19 +208,35 @@ public class JsonResolve {
 		return proMaps;
 	}
 
-	public Map<String, String> curJsonProToString(JSONObject json) {
+	public List<ProgramInfo> curJsonProToString(JSONObject json) {
 		JSONObject jsonDatas = null;
-		Map<String, String> map = new HashMap<String, String>();
+		List<ProgramInfo> list = new ArrayList<ProgramInfo>();
+		
 		try {
-			jsonDatas = json.getJSONObject("datas");
+			jsonDatas = json.getJSONObject("lastProgram");
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		map.put("name", getJsonObjectString(jsonDatas, "name"));
-		map.put("playTime", getJsonObjectString(jsonDatas, "playTime"));
-
-		return map;
+		list.add(0, jsonToProgram(jsonDatas));
+		
+		try {
+			jsonDatas = json.getJSONObject("currentProgram");
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		list.add(1, jsonToProgram(jsonDatas));
+		
+		try {
+			jsonDatas = json.getJSONObject("nextProgram");
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		list.add(2, jsonToProgram(jsonDatas));
+		
+		return list;
 	}
 
 	// =================================base function add try

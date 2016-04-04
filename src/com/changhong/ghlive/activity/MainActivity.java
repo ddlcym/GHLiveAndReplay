@@ -75,11 +75,12 @@ public class MainActivity extends BaseActivity {
 	private List<ChannelInfo> HDTvList = new ArrayList<ChannelInfo>();
 	private List<ChannelInfo> otherTvList = new ArrayList<ChannelInfo>();
 
-	Map<String, String> pgmContent = new HashMap<String, String>();
+	private List<ProgramInfo> curChannelPrograms = new ArrayList<ProgramInfo>();//当前频道下的上一个节目，当前节目，下一个节目信息
 
 	private int curListIndex = 0;// 当前list下正在播放的当前节目的index
 	private int curType = 0;
 	private String curChannelNO = null; // 当前播放的节目的channelno
+	private ProgramInfo curProgram=null;
 
 	private ChannelListAdapter chLstAdapter;
 	private Handler mhandler = new Handler() {
@@ -93,25 +94,14 @@ public class MainActivity extends BaseActivity {
 				// videoView.start();
 				break;
 			case Class_Constant.BANNER_PROGRAM_PASS:
-				pgmContent = (Map<String, String>) msg.obj;
+				curChannelPrograms =  (List<ProgramInfo>) msg.obj;
 				// Log.i("zyt", "pgmcontent" + pgmContent.get("name"));
 				// Log.i("zyt", "pgmcontent" + pgmContent.get("playTime"));
 
-				ProgramInfo innerPgmInfo = new ProgramInfo();
-				innerPgmInfo.setEventName(pgmContent.get("name"));
-
-				SimpleDateFormat sdf = new SimpleDateFormat(
-						"yyyy-MM-dd HH:mm:ss");
-
-				try {
-					innerPgmInfo.setBeginTime(sdf.parse(pgmContent
-							.get("playTime")));
-
-				} catch (java.text.ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				showBanner(curChannelNO, innerPgmInfo);
+				if(null==curProgram){
+				curProgram = new ProgramInfo();}
+				curProgram=curChannelPrograms.get(1);
+				showBanner(curChannelNO, curProgram);
 				break;
 
 
@@ -644,6 +634,15 @@ public class MainActivity extends BaseActivity {
 	} 
 	
 	private void rightForward(){
+		
+	}
+	
+	//第一次快退的时候获取播放串
+	private void requestPlayURL(){
+		ChannelInfo channel=(ChannelInfo) CacheData.getAllChannelMap().get(curChannelNO);
+		
+		String url=processData.getReplayPlayUrlString(channel, curProgram, 0);
+		PlayVideo.getInstance().getProgramPlayURL(mhandler, url);
 		
 	}
 

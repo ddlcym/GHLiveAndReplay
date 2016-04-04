@@ -84,7 +84,7 @@ public class PlayVideo {
 
 	/*******************************************************************************************/
 	/* replay test */
-	public void playReplayProgram(final Handler handler, String outterPlayUrl) {
+	public void getProgramPlayURL(final Handler handler, String outterPlayUrl) {
 
 		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, outterPlayUrl, null,
 				new Response.Listener<org.json.JSONObject>() {
@@ -154,23 +154,6 @@ public class PlayVideo {
 						msg.obj = jsonResolve.curJsonProToString(arg0);
 						handler.sendMessage(msg);
 
-//						Log.i("zyt", " 节目信息 + 返回内容 " + arg0);
-
-						Log.i("zyt", " 节目信息 + 返回内容 " + jsonResolve.curJsonProToString(arg0));
-						rPgmInfo.setEventName(jsonResolve.curJsonProToString(arg0).get("name"));
-						try {
-							// curProgramId =
-							// Integer.parseInt(jsonResolve.curJsonProToString(arg0).get("id"));
-							// Log.i("zyt", "解析详情得到的program id " +
-							// curProgramId);
-							rPgmInfo.setBeginTime(sdf.parse(jsonResolve.curJsonProToString(arg0).get("playTime")));
-//							rPgmInfo.setProgramId(Integer.parseInt(jsonResolve.curJsonProToString(arg0).get("id")));
-							Log.i("zyt", " 节目信息 + 返回内容 + 直播节目ID " + rPgmInfo.getProgramId());
-
-						} catch (java.text.ParseException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
 					}
 				}, errorListener);
 		jsonObjectRequest.setTag(HttpService.class.getSimpleName());// 设置tag,cancelAll的时候使用
