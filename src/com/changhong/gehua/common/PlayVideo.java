@@ -137,10 +137,10 @@ public class PlayVideo {
 
 	/* 获取当前节目信息 */
 	public void getProgramInfo(final Handler handler, ChannelInfo outterChannelInfo) {
-		String pgmRequestURL = processData.getCurrentProgramInfo(outterChannelInfo);
+		String pgmRequestURL = processData.getCurrentChannelProgramList(outterChannelInfo);
 		Log.i("zyt", pgmRequestURL);
 		// final ProgramInfo rPgmInfo = new ProgramInfo();
-		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, pgmRequestURL, null,
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, pgmRequestURL, null,
 				new Response.Listener<org.json.JSONObject>() {
 
 					@Override
