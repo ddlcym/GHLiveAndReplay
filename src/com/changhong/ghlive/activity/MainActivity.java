@@ -58,7 +58,7 @@ public class MainActivity extends BaseActivity {
 												// channellist layout
 	private ListView chListView;
 	private SeekBar liveSeekBar;
-
+	private Banner programBan;
 
 	private VolleyTool volleyTool;
 	private RequestQueue mReQueue;
@@ -660,8 +660,8 @@ public class MainActivity extends BaseActivity {
 	public void showBanner(String channelno, ProgramInfo pgmInfo) {
 		ChannelInfo curChannel = (ChannelInfo) CacheData.allChannelMap
 				.get(channelno);
-		Banner ban = new Banner(this, curChannel, pgmInfo);
-		ban.show();
+		programBan = new Banner(this, curChannel, pgmInfo);
+		programBan.show();
 	}
 
 	// ============play video=========================================
@@ -741,6 +741,7 @@ public class MainActivity extends BaseActivity {
 	@Override
 	protected void onPause() {
 		// TODO Auto-generated method stub
+		programBan.cancelBanner();
 		super.onPause();
 	}
 
