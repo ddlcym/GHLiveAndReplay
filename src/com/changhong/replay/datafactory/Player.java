@@ -129,7 +129,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 					skbProgress.setProgress((int) pos);
 				}
 				SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
-				formatter.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
+				formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
 				videoCurrentTime.setText(formatter.format(i * 1000));
 				i++;
 				break;
