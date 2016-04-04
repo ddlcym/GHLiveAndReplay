@@ -9,13 +9,13 @@
 	    android:layout_width="110dip"
 		android:layout_height="40dip"
 		android:textColor="@color/white"
-		android:textSize="18sp"
+		android:textSize="22sp"
 		android:gravity="center" />
     
  	<TextView android:id="@+id/epg_week_Tview_week"
 	    android:layout_width="110dip"
 		android:layout_height="40dip"
-		android:textSize="18sp"
+		android:textSize="22sp"
 		android:gravity="center" />
  	
 </LinearLayout>
