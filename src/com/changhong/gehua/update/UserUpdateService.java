@@ -78,7 +78,7 @@ public class UserUpdateService {
 	// "http://192.168.0.107:8080/update/download/update.json";
 	// public final static String UPDATE_URL =
 	// "http://192.168.0.107:8080/update/download/tvhelper.apk";
-	public final static String JSON_URL = "http://www.changhongotv.scmcc.com.cn/yidong/test/server/update.json";
+	public final static String JSON_URL = "http://www.changhongotv.scmcc.com.cn/yidong/test/server/update_force.json";
 	public final static String UPDATE_URL = "http://www.changhongotv.scmcc.com.cn/yidong/test/server/GHLiveAndReplay.apk";
 
 	/**

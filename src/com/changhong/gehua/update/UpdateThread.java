@@ -40,9 +40,19 @@ public class UpdateThread implements Runnable {
 	private String updateVersion;
 
 	/**
+	 * 更新方式，是否强制
+	 */
+	private String updateWay;
+
+	/**
 	 * 更新信息
 	 */
 	private String updateMsgContent;
+
+	/**
+	 * 更新APK，服务器地址
+	 */
+	private String serverApkAddress;
 
 	public UpdateThread(Context outterContext, UpdateReceiver outterUpdateReceiver) {
 		this.mUpdateReceiver = outterUpdateReceiver;
@@ -58,7 +68,7 @@ public class UpdateThread implements Runnable {
 
 	public void initUpdateThread() {
 
-//		Log.i(TAG, "process is inner updatethread");
+		// Log.i(TAG, "process is inner updatethread");
 		/**
 		 * 注册广播
 		 */
@@ -73,13 +83,13 @@ public class UpdateThread implements Runnable {
 		UpdateLogService preferenceService = new UpdateLogService(mContext);
 		// String updateDate = preferenceService.getUpdateDate();
 
-		/* zyt 手动更改上次更新的时间 ，测试代码，需要删除*/
+		/* zyt 手动更改上次更新的时间 ，测试代码，需要删除 */
 		GregorianCalendar gc = new GregorianCalendar();
 		gc.setTime(new Date());
 		gc.add(5, -6);
 		Date backSevenDate = gc.getTime();
 		String updateDate = (DateUtils.to10String(backSevenDate));
-			
+
 		if (!updateDate.equals("") && updateDate.compareTo(DateUtils.to10String(new Date())) >= 0) {
 			Log.i(TAG, updateDate);
 			Log.i(TAG, "process is return and  null turn out 无需更新");
@@ -88,7 +98,7 @@ public class UpdateThread implements Runnable {
 			preferenceService.saveUpdateDate();
 			Log.i("zyt", "this time the update date is  " + DateUtils.to10String(new Date()));
 		}
-		
+
 		if (UserUpdateService.updateFile.exists()) {
 			/**
 			 * 本地APK已存在
@@ -125,8 +135,12 @@ public class UpdateThread implements Runnable {
 								String name = reader.nextName();
 								if (name.equals("version")) {
 									updateVersion = reader.nextString();
+								} else if (name.equals("force")) {
+									updateWay = reader.nextString();
 								} else if (name.equals("updatecontent")) {
 									updateMsgContent = reader.nextString();
+								} else if (name.equals("url")) {
+									serverApkAddress = reader.nextString();
 								} else {
 									reader.skipValue();
 								}
@@ -173,6 +187,7 @@ public class UpdateThread implements Runnable {
 							} else {
 								// 弹框提示安装
 								Intent intent = new Intent("MAIN_UPDATE_INSTALL");
+								intent.putExtra("UPDATE_WAY", updateWay);// 升级的安装方式
 								mContext.sendBroadcast(intent);
 							}
 						}
@@ -201,9 +216,13 @@ public class UpdateThread implements Runnable {
 							if (name.equals("version")) {
 								updateVersion = reader.nextString();
 								Log.i(TAG, "updateVersion " + updateVersion);
+							} else if (name.equals("force")) {
+								updateWay = reader.nextString();
 							} else if (name.equals("updatecontent")) {
 								updateMsgContent = reader.nextString();
 								Log.i(TAG, "updateMsgContent " + updateMsgContent);
+							} else if (name.equals("url")) {
+								serverApkAddress = reader.nextString();
 							} else {
 								reader.skipValue();
 							}
@@ -212,7 +231,7 @@ public class UpdateThread implements Runnable {
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-					
+
 					// 比较本地的版本和服务器端的版本
 					try {
 						PackageManager pm = mContext.getPackageManager();
@@ -227,6 +246,8 @@ public class UpdateThread implements Runnable {
 									// 本地版本小于等于服务器版本有更新弹框提示下载更新
 									Log.i(TAG, "本地版本小于等于服务器版本有更新弹框提示下载更新");
 									Intent intent = new Intent("MAIN_UPDATE_DOWNLOAD");
+									intent.putExtra("SERVER_APK_ADDRESS", serverApkAddress);
+									intent.putExtra("UPDATE_WAY", updateWay);
 									mContext.sendBroadcast(intent);
 								}
 							}
