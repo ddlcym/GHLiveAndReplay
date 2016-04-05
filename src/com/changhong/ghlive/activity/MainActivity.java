@@ -39,6 +39,7 @@ import com.changhong.gehua.common.VideoView;
 import com.changhong.gehua.common.VolleyTool;
 import com.changhong.gehua.update.StringUtils;
 import com.changhong.ghlive.datafactory.Banner;
+import com.changhong.ghlive.datafactory.BannerDialog;
 import com.changhong.ghlive.datafactory.ChannelListAdapter;
 import com.changhong.ghlive.datafactory.HandleLiveData;
 import com.changhong.ghlive.service.HttpService;
@@ -58,7 +59,8 @@ public class MainActivity extends BaseActivity {
 												// channellist layout
 	private ListView chListView;
 	private SeekBar liveSeekBar;
-	private Banner programBan;
+	// private Banner programBan;
+	private BannerDialog programBannerDialog;
 
 	private VolleyTool volleyTool;
 	private RequestQueue mReQueue;
@@ -75,12 +77,12 @@ public class MainActivity extends BaseActivity {
 	private List<ChannelInfo> HDTvList = new ArrayList<ChannelInfo>();
 	private List<ChannelInfo> otherTvList = new ArrayList<ChannelInfo>();
 
-	private List<ProgramInfo> curChannelPrograms = new ArrayList<ProgramInfo>();//当前频道下的上一个节目，当前节目，下一个节目信息
+	private List<ProgramInfo> curChannelPrograms = new ArrayList<ProgramInfo>();// 当前频道下的上一个节目，当前节目，下一个节目信息
 
 	private int curListIndex = 0;// 当前list下正在播放的当前节目的index
 	private int curType = 0;
 	private String curChannelNO = null; // 当前播放的节目的channelno
-	private ProgramInfo curProgram=null;
+	private ProgramInfo curProgram = null;
 
 	private ChannelListAdapter chLstAdapter;
 	private Handler mhandler = new Handler() {
@@ -94,16 +96,16 @@ public class MainActivity extends BaseActivity {
 				// videoView.start();
 				break;
 			case Class_Constant.BANNER_PROGRAM_PASS:
-				curChannelPrograms =  (List<ProgramInfo>) msg.obj;
+				curChannelPrograms = (List<ProgramInfo>) msg.obj;
 				// Log.i("zyt", "pgmcontent" + pgmContent.get("name"));
 				// Log.i("zyt", "pgmcontent" + pgmContent.get("playTime"));
 
-				if(null==curProgram){
-				curProgram = new ProgramInfo();}
-				curProgram=curChannelPrograms.get(1);
+				if (null == curProgram) {
+					curProgram = new ProgramInfo();
+				}
+				curProgram = curChannelPrograms.get(1);
 				showBanner(curChannelNO, curProgram);
 				break;
-
 
 			}
 		}
@@ -142,7 +144,7 @@ public class MainActivity extends BaseActivity {
 		videoView = (VideoView) findViewById(R.id.videoview);
 		channelListLinear = (LinearLayout) findViewById(R.id.chlist_back);
 		linear_vertical_line = (LinearLayout) findViewById(R.id.linear_vertical_line);
-		 liveSeekBar = (SeekBar) findViewById(R.id.liveskbProgress);
+		liveSeekBar = (SeekBar) findViewById(R.id.liveskbProgress);
 		// videoView.setMediaController(new MediaController(this));
 		videoView.setFocusable(false);
 		chListView.setFocusable(true);
@@ -151,7 +153,6 @@ public class MainActivity extends BaseActivity {
 		chListView.setAdapter(chLstAdapter);
 		chListView.setOnItemClickListener(myClickLis);
 		chListView.setOnItemSelectedListener(myItemSelectLis);
-
 
 	}
 
@@ -163,8 +164,7 @@ public class MainActivity extends BaseActivity {
 	private OnItemSelectedListener myItemSelectLis = new OnItemSelectedListener() {
 
 		@Override
-		public void onItemSelected(AdapterView<?> parent, View view,
-				int position, long id) {
+		public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 			// TODO show the select channel
 
 			// int[] pos = { -1, -1 };
@@ -173,10 +173,9 @@ public class MainActivity extends BaseActivity {
 				// dislistfocus((FrameLayout) view);
 				mhandler.removeCallbacks(runnable);
 				mhandler.postDelayed(runnable, 5000);
-				TextView channelIndex = (TextView) view
-						.findViewById(R.id.chanId);
+				TextView channelIndex = (TextView) view.findViewById(R.id.chanId);
 				curChannelNO = channelIndex.getText().toString();
-				curListIndex=position;
+				curListIndex = position;
 				playChannel(curChannelNO, false);
 			}
 		}
@@ -190,8 +189,7 @@ public class MainActivity extends BaseActivity {
 
 	private OnItemClickListener myClickLis = new OnItemClickListener() {
 		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position,
-				long id) {
+		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			// TODO Auto-generated method stub
 			TextView channelIndex = (TextView) view.findViewById(R.id.chanId);
 			// if (lockSwap) {
@@ -229,8 +227,7 @@ public class MainActivity extends BaseActivity {
 	private void getChannelList() {
 		// 传入URL请求链接
 		String URL = processData.getChannelList();
-		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-				Request.Method.GET, URL, null,
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null,
 				new Response.Listener<org.json.JSONObject>() {
 
 					@Override
@@ -238,8 +235,7 @@ public class MainActivity extends BaseActivity {
 						// TODO Auto-generated method stub
 						// 相应成功
 						// Log.i(TAG, "HttpService=channle:" + arg0);
-						channelsAll = HandleLiveData.getInstance()
-								.dealChannelJson(arg0);
+						channelsAll = HandleLiveData.getInstance().dealChannelJson(arg0);
 						// first set adapter
 						curType = 0;
 						getAllTVtype();
@@ -265,8 +261,7 @@ public class MainActivity extends BaseActivity {
 
 	private void dislistfocus(FrameLayout selected) {
 		Rect imgRect = new Rect();
-		FrameLayout.LayoutParams focusItemParams = new FrameLayout.LayoutParams(
-				10, 10);
+		FrameLayout.LayoutParams focusItemParams = new FrameLayout.LayoutParams(10, 10);
 		selected.getGlobalVisibleRect(imgRect);
 		focusItemParams.leftMargin = imgRect.left - 8;
 		focusItemParams.topMargin = imgRect.top - 8;
@@ -299,37 +294,27 @@ public class MainActivity extends BaseActivity {
 			// }
 			String regExCCTV;
 			regExCCTV = getResources().getString(R.string.zhongyang);
-			java.util.regex.Pattern pattern = java.util.regex.Pattern
-					.compile("CCTV|" + regExCCTV);
-			java.util.regex.Matcher matcher = pattern.matcher(dvbChannel
-					.getChannelName());
+			java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("CCTV|" + regExCCTV);
+			java.util.regex.Matcher matcher = pattern.matcher(dvbChannel.getChannelName());
 			boolean classBytype = matcher.find();
 			if (classBytype) {
 				CCTVList.add(dvbChannel);
 			}
 			String regExStar;
 			regExStar = getResources().getString(R.string.weishi);
-			java.util.regex.Pattern patternStar = java.util.regex.Pattern
-					.compile(".*" + regExStar + "$");
-			java.util.regex.Matcher matcherStar = patternStar
-					.matcher(dvbChannel.getChannelName());
+			java.util.regex.Pattern patternStar = java.util.regex.Pattern.compile(".*" + regExStar + "$");
+			java.util.regex.Matcher matcherStar = patternStar.matcher(dvbChannel.getChannelName());
 			boolean classBytypeStar = matcherStar.matches();
 			if (classBytypeStar) {
 				starTvList.add(dvbChannel);
 			}
-			String regExLocal = "CDTV|SCTV|"
-					+ getResources().getString(R.string.rongcheng) + "|"
-					+ getResources().getString(R.string.jingniu) + "|"
-					+ getResources().getString(R.string.qingyang) + "|"
-					+ getResources().getString(R.string.wuhou) + "|"
-					+ getResources().getString(R.string.chenghua) + "|"
-					+ getResources().getString(R.string.jinjiang) + "|"
-					+ getResources().getString(R.string.chengdu) + "|"
-					+ getResources().getString(R.string.sichuan);
-			java.util.regex.Pattern patternLocal = java.util.regex.Pattern
-					.compile(regExLocal);
-			java.util.regex.Matcher matcherLocal = patternLocal
-					.matcher(dvbChannel.getChannelName());
+			String regExLocal = "CDTV|SCTV|" + getResources().getString(R.string.rongcheng) + "|"
+					+ getResources().getString(R.string.jingniu) + "|" + getResources().getString(R.string.qingyang)
+					+ "|" + getResources().getString(R.string.wuhou) + "|" + getResources().getString(R.string.chenghua)
+					+ "|" + getResources().getString(R.string.jinjiang) + "|"
+					+ getResources().getString(R.string.chengdu) + "|" + getResources().getString(R.string.sichuan);
+			java.util.regex.Pattern patternLocal = java.util.regex.Pattern.compile(regExLocal);
+			java.util.regex.Matcher matcherLocal = patternLocal.matcher(dvbChannel.getChannelName());
 			boolean classBytypeLocal = matcherLocal.find();
 			if (classBytypeLocal) {
 				localTvList.add(dvbChannel);
@@ -339,29 +324,21 @@ public class MainActivity extends BaseActivity {
 					+ getResources().getString(R.string.xinyuan_hdtv2) + "|"
 					+ getResources().getString(R.string.xinyuan_hdtv3) + "|"
 					+ getResources().getString(R.string.xinyuan_hdtv4);
-			java.util.regex.Pattern patternHD = java.util.regex.Pattern
-					.compile("3D|" + regExHD + "|.*HD$");
+			java.util.regex.Pattern patternHD = java.util.regex.Pattern.compile("3D|" + regExHD + "|.*HD$");
 
-			java.util.regex.Matcher matcherHD = patternHD.matcher(dvbChannel
-					.getChannelName());
+			java.util.regex.Matcher matcherHD = patternHD.matcher(dvbChannel.getChannelName());
 			boolean classBytypeHD = matcherHD.find();
 			if (classBytypeHD) {
 				HDTvList.add(dvbChannel);
 			}
-			String regExOther = "CDTV|SCTV|CCTV|"
-					+ getResources().getString(R.string.weishi) + "|"
-					+ getResources().getString(R.string.rongcheng) + "|"
-					+ getResources().getString(R.string.jingniu) + "|"
-					+ getResources().getString(R.string.qingyang) + "|"
-					+ getResources().getString(R.string.wuhou) + "|"
-					+ getResources().getString(R.string.chenghua) + "|"
-					+ getResources().getString(R.string.jinjiang) + "|"
-					+ getResources().getString(R.string.chengdu) + "|"
-					+ getResources().getString(R.string.sichuan);
-			java.util.regex.Pattern patternOther = java.util.regex.Pattern
-					.compile(regExOther);
-			java.util.regex.Matcher matcherOther = patternOther
-					.matcher(dvbChannel.getChannelName());
+			String regExOther = "CDTV|SCTV|CCTV|" + getResources().getString(R.string.weishi) + "|"
+					+ getResources().getString(R.string.rongcheng) + "|" + getResources().getString(R.string.jingniu)
+					+ "|" + getResources().getString(R.string.qingyang) + "|" + getResources().getString(R.string.wuhou)
+					+ "|" + getResources().getString(R.string.chenghua) + "|"
+					+ getResources().getString(R.string.jinjiang) + "|" + getResources().getString(R.string.chengdu)
+					+ "|" + getResources().getString(R.string.sichuan);
+			java.util.regex.Pattern patternOther = java.util.regex.Pattern.compile(regExOther);
+			java.util.regex.Matcher matcherOther = patternOther.matcher(dvbChannel.getChannelName());
 			boolean classBytypeOther = matcherOther.find();
 			if (!classBytypeOther) {
 				otherTvList.add(dvbChannel);
@@ -526,14 +503,11 @@ public class MainActivity extends BaseActivity {
 		}
 	}
 
-
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
-		String dialogButtonTextOk = MainActivity.this
-				.getString(R.string.str_zhn_yes);
-		String dialogButtonTextCancel = MainActivity.this
-				.getString(R.string.str_zhn_no);
+		String dialogButtonTextOk = MainActivity.this.getString(R.string.str_zhn_yes);
+		String dialogButtonTextCancel = MainActivity.this.getString(R.string.str_zhn_no);
 
 		channelListLinear.setVisibility(View.VISIBLE);
 		focusView.setVisibility(View.VISIBLE);
@@ -543,39 +517,39 @@ public class MainActivity extends BaseActivity {
 		mhandler.postDelayed(runnable, 5000);
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
-			//切换频道类型，更新频道列表的数据
-//			if (curType == 6) {
-//				curType = 0;
-//			} else {
-//				curType++;
-//			}
-//			showChannelList();
-//			chListView.setFocusable(true);
-//			chListView.requestFocus();
-//			chListView.setSelection(curListIndex);
+			// 切换频道类型，更新频道列表的数据
+			// if (curType == 6) {
+			// curType = 0;
+			// } else {
+			// curType++;
+			// }
+			// showChannelList();
+			// chListView.setFocusable(true);
+			// chListView.requestFocus();
+			// chListView.setSelection(curListIndex);
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
-			//切换频道类型，更新频道列表的数据
-//			if (curType == 0) {
-//				curType = 6;
-//			} else {
-//				curType--;
-//			}
-//			showChannelList();
-			
+			// 切换频道类型，更新频道列表的数据
+			// if (curType == 0) {
+			// curType = 6;
+			// } else {
+			// curType--;
+			// }
+			// showChannelList();
+
 			break;
 
 		case Class_Constant.KEYCODE_PAGE_UP:
-//			if (curListIndex == 0) {
-//				showChannelList();
-//				chListView.setSelection(chListView.getCount() - 1);
-//			}
+			// if (curListIndex == 0) {
+			// showChannelList();
+			// chListView.setSelection(chListView.getCount() - 1);
+			// }
 			break;
 		case Class_Constant.KEYCODE_PAGE_DOWN:
-//			if (curListIndex == (chListView.getCount() - 1)) {
-//				showChannelList();
-//				chListView.setSelection(0);
-//			}
+			// if (curListIndex == (chListView.getCount() - 1)) {
+			// showChannelList();
+			// chListView.setSelection(0);
+			// }
 			break;
 		case Class_Constant.KEYCODE_CHANNEL_UP:
 			if (curListIndex == (chListView.getCount() - 1)) {
@@ -586,9 +560,9 @@ public class MainActivity extends BaseActivity {
 				curListIndex = curListIndex + 1;
 			}
 			if (!StringUtils.hasLength(curChannelNO)) {
-				//第一次进入时
+				// 第一次进入时
 				chListView.setSelection(0);
-				curChannelNO=mCurChannels.get(0).getChannelNumber();
+				curChannelNO = mCurChannels.get(0).getChannelNumber();
 				if (mCurChannels != null && mCurChannels.size() != 0) {
 					playChannel(curChannelNO, true);
 				}
@@ -596,10 +570,10 @@ public class MainActivity extends BaseActivity {
 				chListView.setFocusable(true);
 				chListView.requestFocus();
 				chListView.setSelection(curListIndex);
-//				if (mCurChannels != null && mCurChannels.size() != 0) {
-//					playChannel(mCurChannels.get(curListIndex)
-//							.getChannelNumber(), true);
-//				}
+				// if (mCurChannels != null && mCurChannels.size() != 0) {
+				// playChannel(mCurChannels.get(curListIndex)
+				// .getChannelNumber(), true);
+				// }
 			}
 			break;
 		case Class_Constant.KEYCODE_CHANNEL_DOWN:
@@ -616,12 +590,12 @@ public class MainActivity extends BaseActivity {
 			chListView.setFocusable(true);
 			chListView.requestFocus();
 			chListView.setSelection(curListIndex);
-//			if (mCurChannels != null && mCurChannels.size() != 0) {
-//				playChannel(mCurChannels.get(curListIndex)
-//						.getChannelNumber(), true);
-//			}
+			// if (mCurChannels != null && mCurChannels.size() != 0) {
+			// playChannel(mCurChannels.get(curListIndex)
+			// .getChannelNumber(), true);
+			// }
 			break;
-			
+
 		case Class_Constant.KEYCODE_OK_KEY:
 			liveSeekBar.setVisibility(View.VISIBLE);
 			break;
@@ -629,39 +603,38 @@ public class MainActivity extends BaseActivity {
 			chListView.setFocusable(true);
 			chListView.requestFocus();
 			break;
-			
+
 		case Class_Constant.KEYCODE_DOWN_ARROW_KEY:
+			Log.i("zyt", "activity down key is pressed");
 			chListView.setFocusable(true);
 			chListView.requestFocus();
-			
 			break;
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-	
-	private void leftReverse(){
-		
-	} 
-	
-	private void rightForward(){
-		
+
+	private void leftReverse() {
+
 	}
-	
-	//第一次快退的时候获取播放串
-	private void requestPlayURL(){
-		ChannelInfo channel=(ChannelInfo) CacheData.getAllChannelMap().get(curChannelNO);
-		
-		String url=processData.getReplayPlayUrlString(channel, curProgram, 0);
+
+	private void rightForward() {
+
+	}
+
+	// 第一次快退的时候获取播放串
+	private void requestPlayURL() {
+		ChannelInfo channel = (ChannelInfo) CacheData.getAllChannelMap().get(curChannelNO);
+
+		String url = processData.getReplayPlayUrlString(channel, curProgram, 0);
 		PlayVideo.getInstance().getProgramPlayURL(mhandler, url);
-		
+
 	}
 
 	// // ============show banner=========================================
 	public void showBanner(String channelno, ProgramInfo pgmInfo) {
-		ChannelInfo curChannel = (ChannelInfo) CacheData.allChannelMap
-				.get(channelno);
-		programBan = new Banner(this, curChannel, pgmInfo);
-		programBan.show();
+		ChannelInfo curChannel = (ChannelInfo) CacheData.allChannelMap.get(channelno);
+		programBannerDialog = new BannerDialog(this, curChannel, curChannelPrograms, mhandler);
+		programBannerDialog.show();
 	}
 
 	// ============play video=========================================
@@ -671,8 +644,7 @@ public class MainActivity extends BaseActivity {
 			return channelno;
 		}
 
-		ChannelInfo curChannel = (ChannelInfo) CacheData.allChannelMap
-				.get(channelno);
+		ChannelInfo curChannel = (ChannelInfo) CacheData.allChannelMap.get(channelno);
 		if (curChannel == null) {
 			return null;
 		}
@@ -687,8 +659,13 @@ public class MainActivity extends BaseActivity {
 		// }
 
 		PlayVideo.getInstance().playLiveProgram(videoView, curChannel);
-		PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
+		if (programBannerDialog == null) {
 
+		} else {
+			programBannerDialog.dismiss();
+		}
+		/* 获取节目信息，并进行banner显示 */
+		PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
 
 		// 显示banner信息
 		CacheData.curChannelNum = curChannel.getChannelNumber();
@@ -741,7 +718,7 @@ public class MainActivity extends BaseActivity {
 	@Override
 	protected void onPause() {
 		// TODO Auto-generated method stub
-		programBan.cancelBanner();
+		// programBan.cancelBanner();
 		super.onPause();
 	}
 
