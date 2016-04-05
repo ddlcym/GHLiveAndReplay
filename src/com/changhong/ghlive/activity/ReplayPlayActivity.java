@@ -43,6 +43,7 @@ public class ReplayPlayActivity extends Activity {
 	String replayurl = "";
 	private Handler replayHandler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
+			ProgramInfo program=null;
 			switch (msg.what) {
 			case Class_Constant.REPLAY_CHANNEL_DETAIL:
 				break;
@@ -52,7 +53,15 @@ public class ReplayPlayActivity extends Activity {
 				Log.i("mmmm", "ReplayPlayActivity-replayurl:" + replayurl);
 				playNetVideo();
 				break;
-			default:
+				
+			case Class_Constant.RE_NEXT_PROGRAM:
+				
+				Log.i("mmmm", "ReplayPlayActivity-RE_NEXT_PROGRAM:");
+				
+				
+				break;
+			case Class_Constant.RE_LAST_PROGRAM:
+				Log.i("mmmm", "ReplayPlayActivity-RE_NEXT_PROGRAM:");
 				break;
 			}
 		}
@@ -78,7 +87,7 @@ public class ReplayPlayActivity extends Activity {
 
 	public void initData() {
 		mProcessData = new ProcessData();
-		player = new Player(surfaceView, skbProgress, videoCurrentTime);
+		player = new Player(replayHandler,surfaceView, skbProgress, videoCurrentTime);
 
 	}
 
@@ -145,6 +154,10 @@ public class ReplayPlayActivity extends Activity {
 		Bundle bundle = getIntent().getExtras();
 		channel = (ChannelInfo) bundle.getSerializable("channel");
 		mprogram = (ProgramInfo) bundle.getSerializable("program");
+		playVideo(channel, mprogram);
+	}
+	
+	private void playVideo(ChannelInfo channel,ProgramInfo program){
 		replayChannelId = channel.getChannelID();
 		maxTimes = (int) (mprogram.getEndTime().getTime() - mprogram.getBeginTime().getTime());
 		// skbProgress.setMax(maxTimes);

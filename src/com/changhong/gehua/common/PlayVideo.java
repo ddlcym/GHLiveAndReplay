@@ -58,7 +58,7 @@ public class PlayVideo {
 					public void onResponse(org.json.JSONObject arg0) {
 						// TODO Auto-generated method stub
 						// 相应成功
-//						 Log.i(TAG, "PlayVideo-getPlayURL_arg0：" + arg0);
+						 Log.i(TAG, "PlayVideo-getPlayURL_arg0：" + arg0);
 						// Message msg=new Message();
 						// msg.what=Class_Constant.PLAY_LIVE;
 						// msg.obj=jsonResolve.getHDPlayURL(arg0);

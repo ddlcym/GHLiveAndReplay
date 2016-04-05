@@ -33,13 +33,15 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 	private SurfaceView surfaceView;
 	private Timer mTimer = new Timer();
 	private boolean playingFlag = false;
+	private static  Handler parentHandler;
 
 	private static TextView videoCurrentTime;
 
-	public Player(SurfaceView mySurfaceView, SeekBar skbProgress, TextView txvCurrent) {
+	public Player(Handler parentHandler,SurfaceView mySurfaceView, SeekBar skbProgress, TextView txvCurrent) {
 		this.skbProgress = skbProgress;
 		this.surfaceView = mySurfaceView;
 		this.videoCurrentTime = txvCurrent;
+		this.parentHandler=parentHandler;
 
 		surfaceHolder = surfaceView.getHolder();
 		surfaceHolder.addCallback(this);
@@ -91,6 +93,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 		public void handleMessage(Message msg) {
 			int curPos = 0;
 			int fastPos = 0;
+			int forPos=0;
 			int duration = 0;
 			switch (msg.what) {
 			case Class_Constant.REPLAY_SEEK_TO:
@@ -104,12 +107,24 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 				break;
 			case Class_Constant.RE_FAST_FORWARD:
 				curPos = skbProgress.getProgress();
-
-				skbProgress.setProgress(curPos + 5);
+				forPos=curPos + 5;
+				if(forPos<skbProgress.getMax()){
+					skbProgress.setProgress(forPos);
+				}else{
+					parentHandler.sendEmptyMessage(Class_Constant.RE_NEXT_PROGRAM);
+				}
+				
 				break;
 			case Class_Constant.RE_FAST_REVERSE:
 				curPos = skbProgress.getProgress();
 				fastPos = curPos - 5;
+				if(fastPos<0){
+					parentHandler.sendEmptyMessage(Class_Constant.RE_LAST_PROGRAM);
+					
+				}else{
+					skbProgress.setProgress(forPos);
+				}
+				
 				skbProgress.setProgress(fastPos);
 				break;
 			case Class_Constant.RE_PLAY:
@@ -191,6 +206,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 	public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {
 		Log.e("mediaPlayer", "surface changed");
 	}
+	
 
 	@Override
 	public void surfaceCreated(SurfaceHolder arg0) {
@@ -241,7 +257,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 		int currentProgress = skbProgress.getMax() * mediaPlayer.getCurrentPosition() / mediaPlayer.getDuration();
 		if (bufferingProgress != 0) {
 		}
-		Log.i("mmmm", bufferingProgress + "% buffer");
+//		Log.i("mmmm", bufferingProgress + "% buffer");
 
 	}
 
