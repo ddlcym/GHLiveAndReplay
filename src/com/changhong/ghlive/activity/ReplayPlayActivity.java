@@ -2,6 +2,8 @@ package com.changhong.ghlive.activity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.TimeZone;
 
 import android.R.integer;
@@ -21,6 +23,7 @@ import android.widget.TextView;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Toast;
 
+import com.changhong.gehua.common.CacheData;
 import com.changhong.gehua.common.ChannelInfo;
 import com.changhong.gehua.common.Class_Constant;
 import com.changhong.gehua.common.PlayVideo;
@@ -41,27 +44,33 @@ public class ReplayPlayActivity extends Activity {
 	ChannelInfo channel;
 	ProgramInfo mprogram;
 	String replayurl = "";
+	private List<ProgramInfo> curProgramList = new ArrayList<ProgramInfo>();
+
 	private Handler replayHandler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
-			ProgramInfo program=null;
+
 			switch (msg.what) {
 			case Class_Constant.REPLAY_CHANNEL_DETAIL:
 				break;
 
 			case Class_Constant.PLAY_URL:
 				replayurl = (String) msg.obj;
-				Log.i("mmmm", "ReplayPlayActivity-replayurl:" + replayurl);
+				// Log.i("mmmm", "ReplayPlayActivity-replayurl:" + replayurl);
 				playNetVideo();
 				break;
-				
+
 			case Class_Constant.RE_NEXT_PROGRAM:
-				
-				Log.i("mmmm", "ReplayPlayActivity-RE_NEXT_PROGRAM:");
-				
-				
+				playNextProgram();
+				Log.i("mmmm",
+						"ReplayPlayActivity-RE_NEXT_PROGRAM:"
+								+ mprogram.getProgramId());
+
 				break;
 			case Class_Constant.RE_LAST_PROGRAM:
-				Log.i("mmmm", "ReplayPlayActivity-RE_NEXT_PROGRAM:");
+				playLastProgram();
+				Log.i("mmmm",
+						"ReplayPlayActivity-RE_NEXT_PROGRAM:"
+								+ mprogram.getProgramId());
 				break;
 			}
 		}
@@ -87,7 +96,8 @@ public class ReplayPlayActivity extends Activity {
 
 	public void initData() {
 		mProcessData = new ProcessData();
-		player = new Player(replayHandler,surfaceView, skbProgress, videoCurrentTime);
+		player = new Player(replayHandler, surfaceView, skbProgress,
+				videoCurrentTime);
 
 	}
 
@@ -102,16 +112,9 @@ public class ReplayPlayActivity extends Activity {
 
 	/* thread to play video */
 	private void newThreadPlay() {
-		new Thread() {
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				// loadingNetVideo();
-				player.playUrl(replayurl);
-				// Log.i("mmmm", "ReplayPlayActivity-replayurl"+replayurl);
-				super.run();
-			}
-		}.start();
+		skbProgress.setProgress(0);
+		player.playUrl(replayurl);
+		// Log.i("mmmm", "ReplayPlayActivity-replayurl"+replayurl);
 	}
 
 	/* Date transfer to unix time */
@@ -156,17 +159,84 @@ public class ReplayPlayActivity extends Activity {
 		mprogram = (ProgramInfo) bundle.getSerializable("program");
 		playVideo(channel, mprogram);
 	}
-	
-	private void playVideo(ChannelInfo channel,ProgramInfo program){
+
+	private void playVideo(ChannelInfo channel, ProgramInfo program) {
 		replayChannelId = channel.getChannelID();
-		maxTimes = (int) (mprogram.getEndTime().getTime() - mprogram.getBeginTime().getTime());
+		maxTimes = (int) (mprogram.getEndTime().getTime() - mprogram
+				.getBeginTime().getTime());
 		// skbProgress.setMax(maxTimes);
 		SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
 		formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
 		videoTimeLength.setText("/" + formatter.format(maxTimes));
-		String requestURL = mProcessData.getReplayPlayUrlString(channel, mprogram, 0);
+		String requestURL = mProcessData.getReplayPlayUrlString(channel,
+				mprogram, 0);
 		// Log.i("mmmm", "ReplayPlayActivity-requestURL:" + requestURL);
 		PlayVideo.getInstance().getProgramPlayURL(replayHandler, requestURL);
+	}
+
+	private void playNextProgram() {
+		String curDay = "";
+		int indexPro = 0;
+		int curIndexDay = 0;
+		player = new Player(replayHandler, surfaceView, skbProgress,
+				videoCurrentTime);
+		curDay = CacheData.getReplayCurDay();
+		curProgramList = (List<ProgramInfo>) CacheData.getAllProgramMap().get(
+				curDay);
+		indexPro = curProgramList.indexOf(mprogram);
+		if (indexPro == (curProgramList.size() - 1)) {
+			curIndexDay = CacheData.getDayMonths().indexOf(curDay);
+			if (curIndexDay == (CacheData.getDayMonths().size() - 1)) {
+				Toast.makeText(ReplayPlayActivity.this, "已经是最后一个节目",
+						Toast.LENGTH_SHORT).show();
+				return;
+			} else {
+				curDay = CacheData.getDayMonths().get(curIndexDay + 1);
+				CacheData.setReplayCurDay(curDay);
+				curProgramList = CacheData.getAllProgramMap().get(curDay);
+				mprogram = curProgramList.get(0);
+			}
+		} else {
+			mprogram = curProgramList.get(curProgramList.indexOf(mprogram) + 1);
+		}
+		playVideo(channel, mprogram);
+	}
+
+	private void playLastProgram() {
+		String curDay = "";
+		int indexPro = 0;
+		int curIndexDay = 0;
+		ProgramInfo program = null;
+
+		player = new Player(replayHandler, surfaceView, skbProgress,
+				videoCurrentTime);
+		curDay = CacheData.getReplayCurDay();
+		curProgramList = (List<ProgramInfo>) CacheData.getAllProgramMap().get(
+				curDay);
+		for (int i = 0; i < curProgramList.size(); i++) {
+			program = curProgramList.get(i);
+			if (mprogram.getProgramId() == program.getProgramId()) {
+				mprogram = program;
+			}
+		}
+
+		indexPro = curProgramList.indexOf(mprogram);
+		if (0 == indexPro) {
+			curIndexDay = CacheData.getDayMonths().indexOf(curDay);
+			if (0 == curIndexDay) {
+				Toast.makeText(ReplayPlayActivity.this, "已经是第一个节目",
+						Toast.LENGTH_SHORT).show();
+				return;
+			} else {
+				curDay = CacheData.getDayMonths().get(curIndexDay - 1);
+				CacheData.setReplayCurDay(curDay);
+				curProgramList = CacheData.getAllProgramMap().get(curDay);
+				mprogram = curProgramList.get(curProgramList.size() - 1);
+			}
+		} else {
+			mprogram = curProgramList.get(curProgramList.indexOf(mprogram) - 1);
+		}
+		playVideo(channel, mprogram);
 	}
 
 	@Override
@@ -174,10 +244,12 @@ public class ReplayPlayActivity extends Activity {
 		// TODO Auto-generated method stub
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
-			Player.handleProgress.sendEmptyMessage(Class_Constant.RE_FAST_FORWARD);
+			Player.handleProgress
+					.sendEmptyMessage(Class_Constant.RE_FAST_FORWARD);
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
-			Player.handleProgress.sendEmptyMessage(Class_Constant.RE_FAST_REVERSE);
+			Player.handleProgress
+					.sendEmptyMessage(Class_Constant.RE_FAST_REVERSE);
 			break;
 		}
 

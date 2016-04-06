@@ -133,6 +133,7 @@ public class EPGActivity extends BaseActivity {
 			case MSG_SHOW_WEEKDAY:
 
 				curDay = CacheData.getDayMonths().get(0);
+				CacheData.setReplayCurDay(curDay);
 				EventlitItemindex = 0;
 				showWeekDay();
 				// epg.getEpgEventData(curChannelNum, curDayIndex);
@@ -270,6 +271,7 @@ public class EPGActivity extends BaseActivity {
 			if (CacheData.dayMonths.isEmpty())
 				return;
 			curDay = CacheData.dayMonths.get(arg2);
+			CacheData.setReplayCurDay(curDay);
 			uiHandler.sendEmptyMessage(MSG_WEEKDAY_CHANGE); // 更新下面的列表
 		}
 

@@ -14,11 +14,20 @@ public class CacheData {
 	public static Map<String, List<ProgramInfo>> allProgramMap=new HashMap<String, List<ProgramInfo>>();
 //	public static List<ProgramInfo> curProgramsList=new ArrayList<ProgramInfo>();
 	
+	public static String replayCurDay="";
 
 	public static String curChannelNum="";
 	public static List<String> dayMonths=new LinkedList<String>();
 	
 	
+
+	public static String getReplayCurDay() {
+		return replayCurDay;
+	}
+
+	public static void setReplayCurDay(String replayCurDay) {
+		CacheData.replayCurDay = replayCurDay;
+	}
 
 	public static Map<String, Object> getAllChannelMap() {
 		return allChannelMap;

@@ -32,8 +32,9 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 	private static SeekBar skbProgress;
 	private SurfaceView surfaceView;
 	private Timer mTimer = new Timer();
-	private boolean playingFlag = false;
+	private static boolean playingFlag = false;
 	private static  Handler parentHandler;
+	public static boolean handlerFlag=true;
 
 	private static TextView videoCurrentTime;
 
@@ -106,21 +107,34 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 				}
 				break;
 			case Class_Constant.RE_FAST_FORWARD:
+				if(!playingFlag){
+					return;
+				}
 				curPos = skbProgress.getProgress();
 				forPos=curPos + 5;
 				if(forPos<skbProgress.getMax()){
 					skbProgress.setProgress(forPos);
+					
 				}else{
+					if(handlerFlag){
 					parentHandler.sendEmptyMessage(Class_Constant.RE_NEXT_PROGRAM);
+					handlerFlag=false;
+					}
 				}
 				
 				break;
 			case Class_Constant.RE_FAST_REVERSE:
 				curPos = skbProgress.getProgress();
 				fastPos = curPos - 5;
+				
+				if(!playingFlag){
+					return;
+				}
 				if(fastPos<0){
+					if(handlerFlag){
 					parentHandler.sendEmptyMessage(Class_Constant.RE_LAST_PROGRAM);
-					
+					handlerFlag=false;
+					}
 				}else{
 					skbProgress.setProgress(forPos);
 				}
@@ -157,8 +171,10 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 	}
 
 	public void playUrl(String videoUrl) {
+		handlerFlag=true;
 		if (null == mediaPlayer)
 			return;
+		
 		try {
 			mediaPlayer.reset();
 			mediaPlayer.setDataSource(videoUrl);
@@ -194,7 +210,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 		return flag;
 	}
 
-	public void stop() {
+	public static void stop() {
 		if (mediaPlayer != null) {
 			mediaPlayer.stop();
 			mediaPlayer.release();
