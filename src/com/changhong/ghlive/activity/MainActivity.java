@@ -630,7 +630,7 @@ public class MainActivity extends BaseActivity {
 
 	}
 
-	// // ============show banner=========================================
+	/* show banner toast */
 	public void showBanner(String channelno, ProgramInfo pgmInfo) {
 		ChannelInfo curChannel = (ChannelInfo) CacheData.allChannelMap.get(channelno);
 		programBannerDialog = new BannerDialog(this, curChannel, curChannelPrograms, mhandler);
@@ -678,7 +678,7 @@ public class MainActivity extends BaseActivity {
 		return curChannelNO;
 	}
 
-	// =============onKeydown timer====================================
+	/* timer for channel listview hide */
 	Runnable runnable = new Runnable() {
 		@Override
 		public void run() {
@@ -708,7 +708,6 @@ public class MainActivity extends BaseActivity {
 
 	}
 
-	// ================================================================================
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
