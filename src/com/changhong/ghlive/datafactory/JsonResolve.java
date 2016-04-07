@@ -316,7 +316,7 @@ public class JsonResolve {
 		} else {
 			sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		}
-//		sdf.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+		sdf.setTimeZone(TimeZone.getTimeZone("GMT+8"));
 		try {
 			date = sdf.parse(str);
 		} catch (ParseException e) {

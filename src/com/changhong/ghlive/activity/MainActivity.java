@@ -219,11 +219,11 @@ public class MainActivity extends BaseActivity {
 			//
 			// }
 			curListIndex = position;
-			String index = channelIndex.getText().toString();
+			String channelNO = channelIndex.getText().toString();
 //			Log.i(TAG, index);
-			playChannel(index, true);
+			playChannel(channelNO, true);
 
-			curChannelNO = index;
+			curChannelNO = channelNO;
 			mhandler.post(runnable);
 			Log.i("zyt", "play channel number is " + curChannelNO);
 
@@ -575,10 +575,10 @@ public class MainActivity extends BaseActivity {
 				chListView.setFocusable(true);
 				chListView.requestFocus();
 				chListView.setSelection(curListIndex);
-				// if (mCurChannels != null && mCurChannels.size() != 0) {
-				// playChannel(mCurChannels.get(curListIndex)
-				// .getChannelNumber(), true);
-				// }
+				 if (mCurChannels != null && mCurChannels.size() != 0) {
+				 playChannel(mCurChannels.get(curListIndex)
+				 .getChannelNumber(), true);
+				 }
 			}
 			break;
 		case Class_Constant.KEYCODE_CHANNEL_DOWN:
@@ -595,10 +595,10 @@ public class MainActivity extends BaseActivity {
 			chListView.setFocusable(true);
 			chListView.requestFocus();
 			chListView.setSelection(curListIndex);
-			// if (mCurChannels != null && mCurChannels.size() != 0) {
-			// playChannel(mCurChannels.get(curListIndex)
-			// .getChannelNumber(), true);
-			// }
+			 if (mCurChannels != null && mCurChannels.size() != 0) {
+			 playChannel(mCurChannels.get(curListIndex)
+			 .getChannelNumber(), true);
+			 }
 			break;
 
 		case Class_Constant.KEYCODE_OK_KEY:

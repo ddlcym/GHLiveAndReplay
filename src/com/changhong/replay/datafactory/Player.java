@@ -132,8 +132,9 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 				}
 				if(fastPos<0){
 					if(handlerFlag){
+						handlerFlag=false;
 					parentHandler.sendEmptyMessage(Class_Constant.RE_LAST_PROGRAM);
-					handlerFlag=false;
+					
 					}
 				}else{
 					skbProgress.setProgress(forPos);
@@ -177,6 +178,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 		
 		try {
 			mediaPlayer.reset();
+//			mediaPlayer.stop();
 			mediaPlayer.setDataSource(videoUrl);
 			mediaPlayer.prepare();// prepare֮���Զ�����
 			// mediaPlayer.start();
