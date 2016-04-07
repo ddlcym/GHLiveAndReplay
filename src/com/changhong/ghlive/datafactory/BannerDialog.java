@@ -99,10 +99,18 @@ public class BannerDialog extends Dialog {
 	}
 
 	public void initData() {
+		// + programListInfo.get(1).getBeginTime()
+		String currentProgramBginTime = Utils.hourAndMinute(programListInfo.get(1).getBeginTime());
+		String currentProgramEndTime = Utils.hourAndMinute(programListInfo.get(1).getEndTime());
+		String nextProgramBeginTime = Utils.hourAndMinute(programListInfo.get(2).getBeginTime());
+		String nextProgramEndTime = Utils.hourAndMinute(programListInfo.get(2).getEndTime());
+
 		channel_name.setText(channelInfo.getChannelName());
 		channel_number.setText(channelInfo.getChannelNumber());
-		currentProgramName.setText(programListInfo.get(1).getEventName());
-		nextProgramName.setText(programListInfo.get(2).getEventName());
+		currentProgramName.setText(
+				"正在播放：" + currentProgramBginTime + "-" + currentProgramEndTime + "  " + programListInfo.get(1).getEventName());
+		nextProgramName
+				.setText("即将播放：" + nextProgramBeginTime + "-" + nextProgramEndTime + "  " + programListInfo.get(2).getEventName());
 		processData=new ProcessData();
 		mReQueue=VolleyTool.getInstance().getRequestQueue();
 		dvbBack();
@@ -153,7 +161,7 @@ public class BannerDialog extends Dialog {
 			dismiss();
 			break;
 		case Class_Constant.KEYCODE_DOWN_ARROW_KEY:
-			Log.i("zyt","dialog down key is pressed");
+			Log.i("zyt", "dialog down key is pressed");
 			break;
 			
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
