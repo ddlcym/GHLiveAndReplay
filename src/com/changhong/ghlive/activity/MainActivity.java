@@ -1,18 +1,19 @@
 package com.changhong.ghlive.activity;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -23,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -38,12 +40,12 @@ import com.changhong.gehua.common.ProgramInfo;
 import com.changhong.gehua.common.VideoView;
 import com.changhong.gehua.common.VolleyTool;
 import com.changhong.gehua.update.StringUtils;
-import com.changhong.ghlive.datafactory.Banner;
 import com.changhong.ghlive.datafactory.BannerDialog;
 import com.changhong.ghlive.datafactory.ChannelListAdapter;
 import com.changhong.ghlive.datafactory.HandleLiveData;
 import com.changhong.ghlive.service.HttpService;
 import com.changhong.ghliveandreplay.R;
+import com.changhong.replay.datafactory.Player;
 
 public class MainActivity extends BaseActivity {
 
@@ -53,7 +55,7 @@ public class MainActivity extends BaseActivity {
 	private ImageView focusView; // foucus image
 	private TextView epgListTitleView;// chanellist title
 	private String[] TVtype;// all tv type
-	private VideoView videoView;
+	private SurfaceView surfaceView;
 	private LinearLayout channelListLinear;// channellist layout
 	private LinearLayout linear_vertical_line;// straight line right of
 												// channellist layout
@@ -81,24 +83,26 @@ public class MainActivity extends BaseActivity {
 
 	private int curListIndex = 0;// 当前list下正在播放的当前节目的index
 	private int curType = 0;
-	private String curChannelNO = null; // 当前播放的节目的channelno
+	private String curChannelNO = "1"; // 当前播放的节目的channelno
 	private ProgramInfo curProgram = null;
+	private String curPlayURL=null;
 
 	private ChannelListAdapter chLstAdapter;
+	private Player player;
+	
+	
+	
 	private Handler mhandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
-			case Class_Constant.PLAY_URL:// 直播
-				// content = (String) msg.obj;
-				// Log.i(TAG, "playURL:" + content);
-				// videoView.setVideoPath(content);
-				// videoView.start();
+			case Class_Constant.PLAY_LIVE:// 直播
+				curPlayURL=(String) msg.obj;
+//				player.playUrl(curPlayURL);
+				playNetVideo();
 				break;
 			case Class_Constant.BANNER_PROGRAM_PASS:
 				curChannelPrograms = (List<ProgramInfo>) msg.obj;
-				// Log.i("zyt", "pgmcontent" + pgmContent.get("name"));
-				// Log.i("zyt", "pgmcontent" + pgmContent.get("playTime"));
 
 				if (null == curProgram) {
 					curProgram = new ProgramInfo();
@@ -127,9 +131,12 @@ public class MainActivity extends BaseActivity {
 		// startHttpSer();
 		getChannelList();
 		// Log.i("mmmm", "c"+date.getHours()+"-"+date.getMonth());
-
+		player = new Player(mhandler, surfaceView, liveSeekBar,
+				null);
 		chListView.setOnItemSelectedListener(myItemSelectLis);
 		chListView.setOnItemClickListener(myClickLis);
+//		registerUser();
+//		getUserChannel();
 	}
 
 	@Override
@@ -141,12 +148,12 @@ public class MainActivity extends BaseActivity {
 		chListView = (ListView) findViewById(R.id.id_epg_chlist);
 		focusView = (ImageView) findViewById(R.id.set_focus_id);
 		epgListTitleView = (TextView) findViewById(R.id.id_epglist_title);
-		videoView = (VideoView) findViewById(R.id.videoview);
+		surfaceView = (SurfaceView) findViewById(R.id.surfaceview_live);
 		channelListLinear = (LinearLayout) findViewById(R.id.chlist_back);
 		linear_vertical_line = (LinearLayout) findViewById(R.id.linear_vertical_line);
 		liveSeekBar = (SeekBar) findViewById(R.id.liveskbProgress);
 		// videoView.setMediaController(new MediaController(this));
-		videoView.setFocusable(false);
+		surfaceView.setFocusable(false);
 		chListView.setFocusable(true);
 
 		chLstAdapter = new ChannelListAdapter(MainActivity.this);
@@ -173,10 +180,10 @@ public class MainActivity extends BaseActivity {
 				// dislistfocus((FrameLayout) view);
 				mhandler.removeCallbacks(runnable);
 				mhandler.postDelayed(runnable, 5000);
-				TextView channelIndex = (TextView) view.findViewById(R.id.chanId);
-				curChannelNO = channelIndex.getText().toString();
-				curListIndex = position;
-				playChannel(curChannelNO, false);
+//				TextView channelIndex = (TextView) view.findViewById(R.id.chanId);
+//				curChannelNO = channelIndex.getText().toString();
+//				curListIndex = position;
+//				playChannel(curChannelNO, true);
 			}
 		}
 
@@ -213,7 +220,7 @@ public class MainActivity extends BaseActivity {
 			// }
 			curListIndex = position;
 			String index = channelIndex.getText().toString();
-			Log.i(TAG, index);
+//			Log.i(TAG, index);
 			playChannel(index, true);
 
 			curChannelNO = index;
@@ -240,6 +247,7 @@ public class MainActivity extends BaseActivity {
 						curType = 0;
 						getAllTVtype();
 						showChannelList();
+						playChannel(curChannelNO, false);
 						// Log.i(TAG,
 						// "HttpService=channelsAll:" + channelsAll.size());
 						if (channelsAll.size() <= 0) {
@@ -497,7 +505,7 @@ public class MainActivity extends BaseActivity {
 		}
 		mCurChannels = curChannels;
 		chLstAdapter.setData(mCurChannels);
-		chListView.setSelection(0);
+		chListView.setVisibility(View.VISIBLE);
 		if (mCurChannels.size() <= 0) {
 			focusView.setVisibility(View.INVISIBLE);
 		}
@@ -509,14 +517,10 @@ public class MainActivity extends BaseActivity {
 		String dialogButtonTextOk = MainActivity.this.getString(R.string.str_zhn_yes);
 		String dialogButtonTextCancel = MainActivity.this.getString(R.string.str_zhn_no);
 
-		channelListLinear.setVisibility(View.VISIBLE);
-		focusView.setVisibility(View.VISIBLE);
-		linear_vertical_line.setVisibility(View.VISIBLE);
-		chListView.setSelection(curListIndex);
-		mhandler.removeCallbacks(runnable);
-		mhandler.postDelayed(runnable, 5000);
+		
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
+			showChannelListView();
 			// 切换频道类型，更新频道列表的数据
 			// if (curType == 6) {
 			// curType = 0;
@@ -536,6 +540,7 @@ public class MainActivity extends BaseActivity {
 			// curType--;
 			// }
 			// showChannelList();
+//			chListView.setSelection(0);
 
 			break;
 
@@ -597,7 +602,10 @@ public class MainActivity extends BaseActivity {
 			break;
 
 		case Class_Constant.KEYCODE_OK_KEY:
-			liveSeekBar.setVisibility(View.VISIBLE);
+			
+			/* 获取节目信息，并进行banner显示 */
+			ChannelInfo curChannel=CacheData.getAllChannelMap().get(curChannelNO);  
+			PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
 			break;
 		case Class_Constant.KEYCODE_UP_ARROW_KEY:
 			chListView.setFocusable(true);
@@ -612,13 +620,50 @@ public class MainActivity extends BaseActivity {
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-
-	private void leftReverse() {
-
+	
+	private void showChannelListView(){
+		channelListLinear.setVisibility(View.VISIBLE);
+		focusView.setVisibility(View.VISIBLE);
+		linear_vertical_line.setVisibility(View.VISIBLE);
+		chListView.setSelection(curListIndex);
+		mhandler.removeCallbacks(runnable);
+		mhandler.postDelayed(runnable, 5000);
 	}
 
-	private void rightForward() {
+	
 
+	//用户注册
+	private void registerUser(){
+		String URL = processData.sendRegValidCode();
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null,
+				new Response.Listener<org.json.JSONObject>() {
+
+					@Override
+					public void onResponse(org.json.JSONObject arg0) {
+						// TODO Auto-generated method stub
+						 Log.i(TAG, "MainActivity=registerUser:" + arg0);
+					}
+				}, errorListener);
+		jsonObjectRequest.setTag(MainActivity.class.getSimpleName());// 设置tag,cancelAll的时候使用
+		mReQueue.add(jsonObjectRequest);
+	}
+	
+	//获取频道是否支持时移和频道logoURL
+	private void getUserChannel() {
+		String URL = processData.getChannelsInfo();
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null,
+				new Response.Listener<org.json.JSONObject>() {
+
+					@Override
+					public void onResponse(org.json.JSONObject arg0) {
+						// TODO Auto-generated method stub
+						 Log.i(TAG, "MainActivity=getUserChannel:" + arg0);
+						 
+						 HandleLiveData.getInstance().dealChannelExtra(arg0);
+					}
+				}, errorListener);
+		jsonObjectRequest.setTag(MainActivity.class.getSimpleName());// 设置tag,cancelAll的时候使用
+		mReQueue.add(jsonObjectRequest);
 	}
 
 	// 第一次快退的时候获取播放串
@@ -633,7 +678,9 @@ public class MainActivity extends BaseActivity {
 	/* show banner toast */
 	public void showBanner(String channelno, ProgramInfo pgmInfo) {
 		ChannelInfo curChannel = (ChannelInfo) CacheData.allChannelMap.get(channelno);
-		programBannerDialog = new BannerDialog(this, curChannel, curChannelPrograms, mhandler);
+		if(programBannerDialog!=null){
+		programBannerDialog.cancel();}
+		programBannerDialog = new BannerDialog(this, curChannel, curChannelPrograms, mhandler,player);
 		programBannerDialog.show();
 	}
 
@@ -658,22 +705,12 @@ public class MainActivity extends BaseActivity {
 		// showAudioPlaying(false);
 		// }
 
-		PlayVideo.getInstance().playLiveProgram(videoView, curChannel);
-		if (programBannerDialog == null) {
+		Log.i(TAG, "1");
+		PlayVideo.getInstance().playLiveProgram(mhandler, curChannel);
+		
 
-		} else {
-			programBannerDialog.dismiss();
-		}
-		/* 获取节目信息，并进行banner显示 */
-		PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
-
-		// 显示banner信息
 		CacheData.curChannelNum = curChannel.getChannelNumber();
 		curChannelNO = channelno;
-		// CacheData.curChannelNum = channelId;
-
-		// Banner ban = new Banner(this, curChannel);
-		// ban.show();
 
 		return curChannelNO;
 	}
@@ -688,6 +725,7 @@ public class MainActivity extends BaseActivity {
 			focusView.setVisibility(View.INVISIBLE);
 			linear_vertical_line.setVisibility(View.INVISIBLE);
 			liveSeekBar.setVisibility(View.INVISIBLE);
+			chListView.setVisibility(View.VISIBLE);
 		}
 	};
 
@@ -707,6 +745,46 @@ public class MainActivity extends BaseActivity {
 		return comp;
 
 	}
+	
+	private void playNetVideo() {
+		if (isNetConnected()) {
+			newThreadPlay();
+		} else {
+			Toast.makeText(this, "请检查网络", Toast.LENGTH_SHORT).show();
+		}
+	}
+	
+	/* thread to play video */
+	private void newThreadPlay() {
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				player.playUrl(curPlayURL);
+			}
+		}).start();
+		
+	}
+	
+	/* whether net is connected */
+	private boolean isNetConnected() {
+		ConnectivityManager ccM = (ConnectivityManager) getApplicationContext()
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		if (null == ccM) {
+			return false;
+		} else {
+			NetworkInfo[] nwInfo = ccM.getAllNetworkInfo();
+			if (null != nwInfo) {
+				for (int i = 0; i < nwInfo.length; i++) {
+					if (nwInfo[i].getState() == NetworkInfo.State.CONNECTED) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
 
 	@Override
 	protected void onResume() {
@@ -725,6 +803,7 @@ public class MainActivity extends BaseActivity {
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
+		player.stop();
 	}
 
 }

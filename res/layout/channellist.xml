@@ -4,13 +4,13 @@
     android:layout_height="fill_parent"
     android:background="@color/black" >
 
-    <com.changhong.gehua.common.VideoView
-        android:id="@+id/videoview"
+    <SurfaceView
+        android:id="@+id/surfaceview_live"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_marginRight="0dp"
         android:focusable="false" >
-    </com.changhong.gehua.common.VideoView>
+    </SurfaceView>
 
     <ImageView
         android:id="@+id/set_focus_id"
@@ -111,6 +111,7 @@
                     android:cacheColorHint="#00000000"
                     android:clipChildren="true"
                     android:divider="@drawable/smart_list_divider"
+                    android:visibility="gone"
                     android:drawSelectorOnTop="false"
                     android:fadingEdge="none"
                     android:scrollbars="none" />

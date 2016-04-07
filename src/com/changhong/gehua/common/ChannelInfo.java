@@ -31,6 +31,35 @@ public class ChannelInfo implements Serializable{
 	private String symbolRate;
 	private String modulation;
 	private int platform;
+	
+	//频道其他信息
+	private String channelLogo;
+	private String isTTV;
+	private String isBTV;
+
+	public String getChannelLogo() {
+		return channelLogo;
+	}
+
+	public void setChannelLogo(String channelLogo) {
+		this.channelLogo = channelLogo;
+	}
+
+	public String getIsTTV() {
+		return isTTV;
+	}
+
+	public void setIsTTV(String isTTV) {
+		this.isTTV = isTTV;
+	}
+
+	public String getIsBTV() {
+		return isBTV;
+	}
+
+	public void setIsBTV(String isBTV) {
+		this.isBTV = isBTV;
+	}
 
 	public String getChannelID() {
 		return channelID;

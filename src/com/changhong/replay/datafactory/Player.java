@@ -60,7 +60,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 		public void run() {
 			if (mediaPlayer == null)
 				return;
-			if (mediaPlayer.isPlaying() && playingFlag) {
+			if (mediaPlayer.isPlaying() && playingFlag&&videoCurrentTime!=null) {
 				handleProgress.sendEmptyMessage(Class_Constant.RE_UPDATE_PROGRESS);
 			}
 		}

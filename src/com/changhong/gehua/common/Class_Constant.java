@@ -17,6 +17,8 @@ public class Class_Constant {
 	public static final int RE_UPDATE_PROGRESS = 3011;
 	public static final int RE_NEXT_PROGRAM = 3012;
 	public static final int RE_LAST_PROGRAM = 3013;
+	public static final int LIVE_FAST_FORWARD = 3014;
+	public static final int LIVE_FAST_REVERSE = 3015;
 
 	public final static int MAX_NO_OF_PROGRAMS = 500; // ����Ŀ��
 	public final static int MAX_NO_OF_CARRIERS = 40; // ���Ƶ����

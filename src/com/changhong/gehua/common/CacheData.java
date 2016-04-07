@@ -9,7 +9,7 @@ import java.util.Map;
 public class CacheData {
 
 	public static List<ChannelInfo> allChannelInfo=new ArrayList<ChannelInfo>();
-	public static Map<String, Object> allChannelMap=new HashMap<String, Object>();
+	public static Map<String, ChannelInfo> allChannelMap=new HashMap<String, ChannelInfo>();
 	
 	public static Map<String, List<ProgramInfo>> allProgramMap=new HashMap<String, List<ProgramInfo>>();
 //	public static List<ProgramInfo> curProgramsList=new ArrayList<ProgramInfo>();
@@ -19,7 +19,17 @@ public class CacheData {
 	public static String curChannelNum="";
 	public static List<String> dayMonths=new LinkedList<String>();
 	
+	public static List<ChannelInfo> allChannelExtraInfo=new ArrayList<ChannelInfo>();
+
 	
+	
+	public static List<ChannelInfo> getAllChannelExtraInfo() {
+		return allChannelExtraInfo;
+	}
+
+	public static void setAllChannelExtraInfo(List<ChannelInfo> allChannelExtraInfo) {
+		CacheData.allChannelExtraInfo = allChannelExtraInfo;
+	}
 
 	public static String getReplayCurDay() {
 		return replayCurDay;
@@ -29,11 +39,11 @@ public class CacheData {
 		CacheData.replayCurDay = replayCurDay;
 	}
 
-	public static Map<String, Object> getAllChannelMap() {
+	public static Map<String, ChannelInfo> getAllChannelMap() {
 		return allChannelMap;
 	}
 
-	public static void setAllChannelMap(Map<String, Object> allChannelMap) {
+	public static void setAllChannelMap(Map<String, ChannelInfo> allChannelMap) {
 		CacheData.allChannelMap = allChannelMap;
 	}
 

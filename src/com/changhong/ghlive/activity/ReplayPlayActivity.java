@@ -113,7 +113,14 @@ public class ReplayPlayActivity extends Activity {
 	/* thread to play video */
 	private void newThreadPlay() {
 		skbProgress.setProgress(0);
-		player.playUrl(replayurl);
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				player.playUrl(replayurl);
+			}
+		}).start();
 		// Log.i("mmmm", "ReplayPlayActivity-replayurl"+replayurl);
 	}
 
@@ -178,8 +185,10 @@ public class ReplayPlayActivity extends Activity {
 		String curDay = "";
 		int indexPro = 0;
 		int curIndexDay = 0;
-		player = new Player(replayHandler, surfaceView, skbProgress,
-				videoCurrentTime);
+		if (null == player) {
+			player = new Player(replayHandler, surfaceView, skbProgress,
+					videoCurrentTime);
+		}
 		curDay = CacheData.getReplayCurDay();
 		curProgramList = (List<ProgramInfo>) CacheData.getAllProgramMap().get(
 				curDay);
@@ -207,9 +216,10 @@ public class ReplayPlayActivity extends Activity {
 		int indexPro = 0;
 		int curIndexDay = 0;
 		ProgramInfo program = null;
-
-		player = new Player(replayHandler, surfaceView, skbProgress,
-				videoCurrentTime);
+		if (null == player) {
+			player = new Player(replayHandler, surfaceView, skbProgress,
+					videoCurrentTime);
+		}
 		curDay = CacheData.getReplayCurDay();
 		curProgramList = (List<ProgramInfo>) CacheData.getAllProgramMap().get(
 				curDay);

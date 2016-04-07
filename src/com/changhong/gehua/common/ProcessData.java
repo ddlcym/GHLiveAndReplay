@@ -65,6 +65,15 @@ public class ProcessData {
 	private String channelInfoVersion = "V001";
 	private String channelInfoResolution = "800*600";
 	private String channelInfoTerminalType = "1";
+	
+	/* getChannelsInfo 获取用户频道信息 */
+	private String getChannelsInfo="msis/getChannelsInfo?";
+	private String version1="V001";
+//	private String userCode="18140110177";
+	private String userCode="15914018212";
+	/*   获取用户注册信息 */
+	private String sendRegValidCode="msis/sendRegValidCode?";
+	
 
 	/* generate channel list ： 获取频道列表 */
 	public String getChannelList() {
@@ -117,6 +126,12 @@ public class ProcessData {
 
 		return strPOSTReturn(rawPlainStr, "msis/getPlayURL");
 	}
+	
+	public String getLiveBackPlayUrl(ChannelInfo channel){
+		String rawPlainStr="http://ott.yun.gehua.net.cn:8080/msis/getPlayURL?version=V001&userCode=15914018212&userName=15914018212&resourceCode="+channel.getResourceCode()+"&resolution=1280*720&terminalType=4&playType=4&delay=360";
+				
+		return strPOSTReturn(rawPlainStr, "msis/getPlayURL");
+	}
 
 	/* generate replay url string 获取回看播放串 */
 	public String getReplayPlayUrlString(ChannelInfo outterchanInfo, ProgramInfo outterProgramInfo, int outterDelay) {
@@ -139,6 +154,27 @@ public class ProcessData {
 
 		return strGETReturn(rawPlainStr);
 	}
+	
+	//发送用户注册证码
+	public String sendRegValidCode(){
+		String requestURL=null;
+		requestURL=serverAdress+sendRegValidCode+"version="+version1+"&mobile="+userCode+"&codeType="+0;
+		
+		return strGETReturn(requestURL);
+	}
+	
+	
+	
+	
+	//获取用户频道信息
+	public String getChannelsInfo(){
+		String requestURL=null;
+		requestURL=serverAdress+getChannelsInfo+"version="+version1+"&userCode="+userCode+"&terminalType="+3;
+		
+		return strGETReturn(requestURL);
+	}
+	
+	
 
 	/* Http GET String return */
 	public String strGETReturn(String arg) {

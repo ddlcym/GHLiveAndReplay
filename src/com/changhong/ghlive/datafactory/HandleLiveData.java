@@ -3,7 +3,9 @@ package com.changhong.ghlive.datafactory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONObject;
 
@@ -38,7 +40,6 @@ public class HandleLiveData {
 
 	public List<ChannelInfo> dealChannelJson(JSONObject json) {
 		List<ChannelInfo> channels = JsonResolve.jsonToChannels(json);
-
 		for (ChannelInfo channel : channels) {
 			CacheData.allChannelMap.put(channel.getChannelNumber(), channel);
 			CacheData.allChannelInfo.add(channel);
@@ -57,6 +58,10 @@ public class HandleLiveData {
 //		});
 
 		return channels;
+	}
+	
+	public void dealChannelExtra(JSONObject json){
+		CacheData.setAllChannelExtraInfo(JsonResolve.jsonToChannelExtra(json));
 	}
 
 }

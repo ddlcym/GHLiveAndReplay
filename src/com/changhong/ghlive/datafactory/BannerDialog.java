@@ -2,14 +2,25 @@ package com.changhong.ghlive.datafactory;
 
 import java.util.List;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.changhong.gehua.common.CacheData;
 import com.changhong.gehua.common.ChannelInfo;
 import com.changhong.gehua.common.Class_Constant;
+import com.changhong.gehua.common.ProcessData;
 import com.changhong.gehua.common.ProgramInfo;
+import com.changhong.gehua.common.VolleyTool;
+import com.changhong.ghlive.activity.MainActivity;
 import com.changhong.ghliveandreplay.R;
+import com.changhong.replay.datafactory.Player;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -17,6 +28,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 public class BannerDialog extends Dialog {
@@ -25,15 +37,21 @@ public class BannerDialog extends Dialog {
 	private ChannelInfo channelInfo;
 	private List<ProgramInfo> programListInfo;
 	private Handler mHandler;
-
+	private Player player;
+	private String TAG = "mmmm";
+	
+	
 	private SeekBar programPlayBar;
 	TextView channel_name = null;// 频道名称
 	TextView channel_number = null;// 频道ID
 	TextView currentProgramName = null;
 	TextView nextProgramName = null;
-
+	private ProcessData processData=null;
+	private RequestQueue mReQueue;
+	
+	
 	public BannerDialog(Context context, ChannelInfo outterChannelInfo, List<ProgramInfo> outterListProgramInfo,
-			Handler outterHandler) {
+			Handler outterHandler,Player play) {
 		super(context, R.style.Translucent_NoTitle);
 		setContentView(R.layout.bannernew);
 
@@ -41,6 +59,7 @@ public class BannerDialog extends Dialog {
 		channelInfo = outterChannelInfo;
 		programListInfo = outterListProgramInfo;
 		mHandler = outterHandler;
+		this.player=play;
 
 		initView();
 		// initData();
@@ -76,6 +95,7 @@ public class BannerDialog extends Dialog {
 		programPlayBar = (SeekBar) findViewById(R.id.program_progress);
 		// View bannerView = findViewById(R.id.id_dtv_banner);
 		// bannerView.getBackground().setAlpha(255);
+		programPlayBar.setOnSeekBarChangeListener(myOnSeekChange);
 	}
 
 	public void initData() {
@@ -83,8 +103,35 @@ public class BannerDialog extends Dialog {
 		channel_number.setText(channelInfo.getChannelNumber());
 		currentProgramName.setText(programListInfo.get(1).getEventName());
 		nextProgramName.setText(programListInfo.get(2).getEventName());
+		processData=new ProcessData();
+		mReQueue=VolleyTool.getInstance().getRequestQueue();
+		dvbBack();
 	}
 
+	OnSeekBarChangeListener myOnSeekChange=new OnSeekBarChangeListener() {
+		int myprogress = 0;
+		@Override
+		public void onStopTrackingTouch(SeekBar seekBar) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void onStartTrackingTouch(SeekBar seekBar) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void onProgressChanged(SeekBar seekBar, int progress,
+				boolean fromUser) {
+			// TODO Auto-generated method stub
+			
+			myprogress = progress * player.mediaPlayer.getDuration() / seekBar.getMax();
+			player.mediaPlayer.seekTo(myprogress);
+		}
+	};
+	
 	@Override
 	public void show() {
 		super.show();
@@ -108,6 +155,13 @@ public class BannerDialog extends Dialog {
 		case Class_Constant.KEYCODE_DOWN_ARROW_KEY:
 			Log.i("zyt","dialog down key is pressed");
 			break;
+			
+		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
+//			mHandler.sendEmptyMessage(Class_Constant.LIVE_FAST_FORWARD);
+			break;
+		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
+//			mHandler.sendEmptyMessage(Class_Constant.LIVE_FAST_REVERSE);
+			break;
 		default:
 			mHandler.removeCallbacks(bannerRunnable);
 			mHandler.postDelayed(bannerRunnable, 5000);
@@ -116,6 +170,47 @@ public class BannerDialog extends Dialog {
 		return super.onKeyDown(keyCode, event);
 	}
 
+	private void dvbBack(){
+		ChannelInfo channel=CacheData.getAllChannelMap().get(CacheData.getCurChannelNum());
+		
+		String equestURL=processData.getReplayPlayUrlString(channel, programListInfo.get(1), 0);
+		
+//		String equestURL=processData.getLiveBackPlayUrl(channel);
+		
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, equestURL, null,
+				new Response.Listener<org.json.JSONObject>() {
+
+					@Override
+					public void onResponse(org.json.JSONObject arg0) {
+						// TODO Auto-generated method stub
+//						 Log.i(TAG, "MainActivity=dvbBack:" + arg0);
+						final String url=JsonResolve.getInstance().getHDPlayURL(arg0);
+						new Thread(new Runnable() {
+							
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								player.playUrl(url);
+							}
+						}).start();
+						
+					}
+				}, errorListener);
+		jsonObjectRequest.setTag(MainActivity.class.getSimpleName());// 设置tag,cancelAll的时候使用
+		mReQueue.add(jsonObjectRequest);
+		
+		
+		
+	}
+	
+	private Response.ErrorListener errorListener = new Response.ErrorListener() {
+		@Override
+		public void onErrorResponse(VolleyError arg0) {
+			// TODO Auto-generated method stub
+			Log.i(TAG, "MainActivity=error：" + arg0);
+		}
+	};
+	
 	Runnable bannerRunnable = new Runnable() {
 		@Override
 		public void run() {

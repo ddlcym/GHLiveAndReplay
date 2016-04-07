@@ -238,9 +238,36 @@ public class JsonResolve {
 		
 		return list;
 	}
+	
+	public List<ChannelInfo> jsonToChannelExtra(JSONObject json){
+		ChannelInfo channel;
+		List<ChannelInfo> listExtra=new ArrayList<ChannelInfo>();
+		Map<String, ChannelInfo> map=CacheData.getAllChannelMap();
+		
+		
+		JSONArray jsonArray=getJsonObjectArray(json, "datas");
+		for(int i=0;i<jsonArray.length();i++){
+			JSONObject extraJson;
+			try {
+				extraJson = (JSONObject) jsonArray.get(i);
+				channel=new ChannelInfo();
+				channel.setChannelNumber(getJsonObjectString(extraJson, "channelNO"));
+				channel.setIsBTV(getJsonObjectString(extraJson, "isBTV"));
+				channel.setIsTTV(getJsonObjectString(extraJson, "isTTV"));
+				channel.setChannelLogo(getJsonObjectString(extraJson, "channelLogo"));
+				listExtra.add(channel);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		
+		
+		return sortChannels(listExtra);
+	}
 
-	// =================================base function add try
-	// catch=====================================
+	// =================================base function add try catch=====================================
 
 	private String getJsonObjectString(JSONObject jsonObj, String key) {
 
