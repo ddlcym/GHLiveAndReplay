@@ -1,120 +1,109 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/id_dtv_banner"
-    android:layout_height="157dip"
-    android:layout_marginTop="540dip"
-    android:background="@drawable/banner_new"
-    android:orientation="horizontal" >
-
-    <com.changhong.ghlive.datafactory.LineProgressView
-        android:id="@+id/banner_progress_view"
-        android:layout_width="match_parent"
-        android:layout_height="3dp" >
-    </com.changhong.ghlive.datafactory.LineProgressView>
-
-    <FrameLayout
-        android:id="@+id/linout_channelnameimage_id"
-        android:layout_width="156dip"
-        android:layout_height="150dip"
-        android:layout_marginTop="7dip" >
-
-        <TextView
-            android:id="@+id/banner_service_id"
-            android:layout_width="156dip"
-            android:layout_height="80dip"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="65sp" />
-
-        <TextView
-            android:id="@+id/banner_channel_name_id"
-            android:layout_width="156dip"
-            android:layout_height="70dip"
-            android:layout_gravity="top|left"
-            android:layout_marginTop="80dip"
-            android:ellipsize="marquee"
-            android:focusable="true"
-            android:gravity="center|fill_vertical"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:maxWidth="150dip"
-            android:scrollHorizontally="true"
-            android:singleLine="true"
-            android:textColor="@color/white"
-            android:textSize="@dimen/FONT_SIZE_BIG" />
-    </FrameLayout>
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/transparent"
+    android:orientation="vertical" >
 
     <LinearLayout
-        android:layout_width="520dip"
-        android:layout_height="157dip"
-        android:layout_marginLeft="156dip"
-        android:orientation="vertical" >
+        android:id="@+id/id_dtv_banner"
+        android:layout_width="match_parent"
+        android:layout_height="200dip"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="25dip"
+        android:background="#88323232"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="200dip"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="30dip"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/banner_service_id"
+                android:layout_width="156dip"
+                android:layout_height="80dip"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="15dip"
+                android:gravity="center|fill_vertical"
+                android:textSize="65sp" />
+
+            <TextView
+                android:id="@+id/banner_channel_name_id"
+                android:layout_width="156dip"
+                android:layout_height="70dip"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="5dip"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:gravity="center|fill_vertical"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:maxWidth="150dip"
+                android:scrollHorizontally="true"
+                android:textSize="@dimen/FONT_SIZE_BIG"
+                android:singleLine="true" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="30dip"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/current_program_info"
+                android:layout_width="600dip"
+                android:layout_height="50dip"
+                android:layout_marginTop="25dip"
+                android:singleLine="true"
+                android:textSize="28sp" />
+
+            <SeekBar
+                android:id="@+id/program_progress"
+                android:layout_width="600dip"
+                android:layout_height="20dip"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="20dip"
+                android:max="100" />
+
+            <TextView
+                android:id="@+id/next_program_info"
+                android:layout_width="600dip"
+                android:layout_height="50dip"
+                android:layout_marginTop="40dip"
+                android:singleLine="true"
+                android:textSize="28sp" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dip"
+            android:layout_marginLeft="25dip"
             android:orientation="horizontal" >
 
-            <TextView
-                android:id="@+id/banner_DTW_id"
-                android:layout_width="380dip"
-                android:layout_height="58dip"
-                android:layout_gravity="center"
-                android:gravity="left|center"
-                android:singleLine="true"
-                android:textColor="@color/white"
-                android:textSize="@dimen/FONT_SIZE_NORMAL" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/banner_tshift_support"
-                android:layout_width="120dip"
-                android:layout_height="58dip"
-                android:layout_gravity="center"
-                android:gravity="left|center"
-                android:singleLine="true"
-                android:textColor="@color/white"
-                android:textSize="@dimen/FONT_SIZE_NORMAL" />
+                <TextView
+                    android:layout_width="400dip"
+                    android:layout_height="50dip"
+                    android:layout_marginTop="25dip"
+                    android:singleLine="true"
+                    android:text="信息：红键/进入增强电视"
+                    android:textSize="28sp" />
+
+                <TextView
+                    android:layout_width="400dip"
+                    android:layout_height="50dip"
+                    android:layout_marginTop="62dip"
+                    android:singleLine="true"
+                    android:text="右键：显示节目列表"
+                    android:textSize="28sp" />
+            </LinearLayout>
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/banner_PF_P_id"
-            android:layout_width="490dip"
-            android:layout_height="49dip"
-            android:layout_gravity="center"
-            android:layout_marginLeft="20dip"
-            android:ellipsize="marquee"
-            android:focusable="true"
-            android:gravity="left|center"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:scrollHorizontally="true"
-            android:singleLine="true"
-            android:textColor="@color/white"
-            android:textSize="@dimen/FONT_SIZE_NORMAL" />
-
-        <TextView
-            android:id="@+id/banner_PF_F_id"
-            android:layout_width="490dip"
-            android:layout_height="49dip"
-            android:layout_gravity="center"
-            android:layout_marginLeft="20dip"
-            android:ellipsize="marquee"
-            android:focusable="true"
-            android:gravity="left|center"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:scrollHorizontally="true"
-            android:singleLine="true"
-            android:textColor="@color/white"
-            android:textSize="@dimen/FONT_SIZE_NORMAL" />
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/banner_adv_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="2dip"
-        android:layout_marginLeft="720dip"
-        android:layout_marginTop="6dip"
-        android:contentDescription="@null"
-        android:gravity="center" />
-
-</FrameLayout>
+</LinearLayout>
