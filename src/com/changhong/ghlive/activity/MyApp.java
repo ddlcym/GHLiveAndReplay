@@ -2,9 +2,11 @@ package com.changhong.ghlive.activity;
 
 import java.io.File;
 
-import com.changhong.gehua.sqlite.PathGenerateUtils;
-
 import android.app.Application;
+import android.content.Context;
+
+import com.changhong.gehua.sqlite.DatabaseContainer;
+import com.changhong.gehua.sqlite.PathGenerateUtils;
 
 public class MyApp extends Application {
 	 private static MyApp instance;  
@@ -20,4 +22,9 @@ public class MyApp extends Application {
 	        instance=this;  
 	        epgDBCachePath = PathGenerateUtils.getEPGDirectory(this);
 	    }  
+	    
+	    
+	    public static DatabaseContainer getDatabaseContainer() {
+	        return DatabaseContainer.getInstance(instance);
+	    }
 }

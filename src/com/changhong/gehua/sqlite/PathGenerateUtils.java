@@ -11,7 +11,7 @@ import android.os.Environment;
 import android.util.Log;
 
 /**
- * Created by Jack Wang
+ * Created by cym
  */
 public class PathGenerateUtils {
 	private String TAG="mmmm";
