@@ -163,7 +163,7 @@ public class MainActivity extends BaseActivity {
 		liveSeekBar = (SeekBar) findViewById(R.id.liveskbProgress);
 		// videoView.setMediaController(new MediaController(this));
 		surfaceView.setFocusable(false);
-		chListView.setFocusable(true);
+		chListView.setFocusable(false);
 
 		chLstAdapter = new ChannelListAdapter(MainActivity.this);
 		chListView.setAdapter(chLstAdapter);
@@ -753,7 +753,7 @@ public class MainActivity extends BaseActivity {
 			focusView.setVisibility(View.INVISIBLE);
 			linear_vertical_line.setVisibility(View.INVISIBLE);
 			liveSeekBar.setVisibility(View.INVISIBLE);
-			chListView.setVisibility(View.VISIBLE);
+			chListView.setVisibility(View.INVISIBLE);
 		}
 	};
 
