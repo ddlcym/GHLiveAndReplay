@@ -4,6 +4,8 @@ public class Class_Constant {
 
 	// mainactivity handler type
 
+	
+	
 	public final static int TOAST_BANNER_PROGRAM_PASS = 3000;
 	public final static int PLAY_LIVE = 3001;
 	public static final int PLAY_URL = 3002;
