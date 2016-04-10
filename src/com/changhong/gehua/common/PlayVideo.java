@@ -15,6 +15,7 @@ import com.changhong.ghlive.datafactory.JsonResolve;
 import com.changhong.ghlive.service.HttpService;
 import com.changhong.replay.datafactory.Player;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -51,16 +52,15 @@ public class PlayVideo {
 	public void playLiveProgram(final Handler mhandler, ChannelInfo outterchanInfo) {
 		mReQueue.cancelAll("program");
 		String realurl = processData.getLivePlayUrlString(outterchanInfo);
-
-		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-				Request.Method.POST, realurl, null,
+		String pgmRequestURL = processData.getCurrentChannelProgramList(outterchanInfo);//获取节目列表List
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, realurl, null,
 				new Response.Listener<org.json.JSONObject>() {
 
 					@Override
 					public void onResponse(org.json.JSONObject arg0) {
 						// TODO Auto-generated method stub
 						// 相应成功
-//						Log.i(TAG, "PlayVideo-getPlayURL_arg0：" + arg0);
+						// Log.i(TAG, "PlayVideo-getPlayURL_arg0：" + arg0);
 						// Message msg=new Message();
 						// msg.what=Class_Constant.PLAY_LIVE;
 						// msg.obj=jsonResolve.getHDPlayURL(arg0);
@@ -68,9 +68,12 @@ public class PlayVideo {
 						final String playurl = jsonResolve.getHDPlayURL(arg0);
 						// Log.i("mmmm", "play url is " + playurl);
 
-						Message msg=new Message();
-						msg.obj=playurl;
-						msg.what=Class_Constant.PLAY_LIVE;
+						Message msg = new Message();
+						msg.what = Class_Constant.PLAY_LIVE;
+						Bundle bundle = new Bundle();
+						bundle.putString("PLAY_URL", playurl);
+						// msg.obj=playurl;
+						msg.setData(bundle);
 						mhandler.sendMessage(msg);
 					}
 				}, errorListener);
@@ -82,8 +85,7 @@ public class PlayVideo {
 	/* replay test */
 	public void getProgramPlayURL(final Handler handler, String outterPlayUrl) {
 
-		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-				Request.Method.POST, outterPlayUrl, null,
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, outterPlayUrl, null,
 				new Response.Listener<org.json.JSONObject>() {
 
 					@Override
@@ -102,13 +104,11 @@ public class PlayVideo {
 		mReQueue.add(jsonObjectRequest);
 	}
 
-	public void playReplayProgramTest(final VideoView videoView,
-			String outterPlayUrl) {
+	public void playReplayProgramTest(final VideoView videoView, String outterPlayUrl) {
 		// String pgmRequestURL =
 		// processData.getCurrentProgramInfo(outterChannelInfo);
 
-		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-				Request.Method.POST, outterPlayUrl, null,
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, outterPlayUrl, null,
 				new Response.Listener<org.json.JSONObject>() {
 
 					@Override
@@ -135,25 +135,21 @@ public class PlayVideo {
 	/*******************************************************************************************/
 
 	/* 获取当前节目信息 */
-	public void getProgramInfo(final Handler handler,
-			ChannelInfo outterChannelInfo) {
-		String pgmRequestURL = processData
-				.getCurrentChannelProgramList(outterChannelInfo);
+	public void getProgramInfo(final Handler handler, ChannelInfo outterChannelInfo) {
+		String pgmRequestURL = processData.getCurrentChannelProgramList(outterChannelInfo);
 		Log.i("zyt", pgmRequestURL);
 		// final ProgramInfo rPgmInfo = new ProgramInfo();
-		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-				Request.Method.GET, pgmRequestURL, null,
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, pgmRequestURL, null,
 				new Response.Listener<org.json.JSONObject>() {
 
 					@Override
 					public void onResponse(org.json.JSONObject arg0) {
 
-						ProgramInfo rPgmInfo = new ProgramInfo();
-						SimpleDateFormat sdf = new SimpleDateFormat(
-								"yyyy-MM-dd HH:mm:ss");
+//						ProgramInfo rPgmInfo = new ProgramInfo();
+//						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 						Message msg = new Message();
-						msg.what = Class_Constant.BANNER_PROGRAM_PASS;
+						msg.what = Class_Constant.TOAST_BANNER_PROGRAM_PASS;
 						msg.obj = jsonResolve.curJsonProToString(arg0);
 						handler.sendMessage(msg);
 
@@ -166,11 +162,9 @@ public class PlayVideo {
 	/* 从当前节目信息获取节目详情 */
 	public void getProgramInfoDetail(final Handler handler, int outterPgramId) {
 		Log.i("zyt", "传进来的id " + outterPgramId);
-		String pgmInfoDetailURL = processData
-				.getLivePlayProgramInfo(outterPgramId);
+		String pgmInfoDetailURL = processData.getLivePlayProgramInfo(outterPgramId);
 		// Log.i("zyt", "获取直播节目详情的加密后链接" + pgmInfoDetailURL);
-		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-				Request.Method.GET, pgmInfoDetailURL, null,
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, pgmInfoDetailURL, null,
 				new Response.Listener<org.json.JSONObject>() {
 
 					@Override
@@ -189,14 +183,9 @@ public class PlayVideo {
 						Log.i("zyt", " json解析类之后的封装直播节目详情 " + arg0);
 						entilePgm = jsonResolve.jsonToProgram(json);
 
-						Log.i("zyt",
-								" 直播节目详情 -- beginTime "
-										+ entilePgm.getBeginTime());
-						Log.i("zyt",
-								" 直播节目详情 -- endTime " + entilePgm.getEndTime());
-						Log.i("zyt",
-								" 直播节目详情 -- channelId "
-										+ entilePgm.getChannelID());
+						Log.i("zyt", " 直播节目详情 -- beginTime " + entilePgm.getBeginTime());
+						Log.i("zyt", " 直播节目详情 -- endTime " + entilePgm.getEndTime());
+						Log.i("zyt", " 直播节目详情 -- channelId " + entilePgm.getChannelID());
 
 						Message msg = new Message();
 						msg.what = Class_Constant.REPLAY_TIME_LENGTH;
