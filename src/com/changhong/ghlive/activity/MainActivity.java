@@ -63,7 +63,7 @@ public class MainActivity extends BaseActivity {
 	private SeekBar liveSeekBar;
 	// private Banner programBan;
 	private BannerDialog programBannerDialog;
-	
+
 	private Banner ban;
 
 	private VolleyTool volleyTool;
@@ -154,7 +154,7 @@ public class MainActivity extends BaseActivity {
 	protected void initView() {
 		// TODO Auto-generated method stub
 		setContentView(R.layout.channellist);
-		
+
 		TVtype = getResources().getStringArray(R.array.tvtype);
 		chListView = (ListView) findViewById(R.id.id_epg_chlist);
 		focusView = (ImageView) findViewById(R.id.set_focus_id);
@@ -616,23 +616,51 @@ public class MainActivity extends BaseActivity {
 			// ChannelInfo curChannel =
 			// CacheData.getAllChannelMap().get(curChannelNO);
 			// PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
-			Log.i("zyt","beign to show to toast banner");
+			Log.i("zyt", "beign to show to toast banner");
 			showDialogBanner(curChannelNO);
 			break;
 		case Class_Constant.KEYCODE_UP_ARROW_KEY:
-			chListView.setFocusable(true);
-			chListView.requestFocus();
+			if (channelListLinear.isShown()) {
+				chListView.setFocusable(true);
+				chListView.requestFocus();
+			} else {
+				// 播放之后的一个频道
+				if (curListIndex == (chListView.getCount() - 1)) {
+					chListView.setSelection(0);
+					curListIndex = 0;
+				} else {
+					chListView.setSelection(curListIndex + 1);
+					curListIndex = curListIndex + 1;
+				}
+				if (mCurChannels != null && mCurChannels.size() != 0) {
+					playChannel(mCurChannels.get(curListIndex).getChannelNumber(), true);
+				}
+			}
 			break;
-			
+
 		case Class_Constant.KEYCODE_DOWN_ARROW_KEY:
-			Log.i("zyt", "activity down key is pressed");
-			chListView.setFocusable(true);
-			chListView.requestFocus();
+			// Log.i("zyt", "activity down key is pressed");
+			if (channelListLinear.isShown()) {
+				chListView.setFocusable(true);
+				chListView.requestFocus();
+			} else {
+				// 播放之前一个频道
+				if (curListIndex == 0) {
+					chListView.setSelection(chListView.getCount() - 1);
+					curListIndex = chListView.getCount() - 1;
+				} else {
+					chListView.setSelection(curListIndex - 1);
+					curListIndex = curListIndex - 1;
+				}
+				if (mCurChannels != null && mCurChannels.size() != 0) {
+					playChannel(mCurChannels.get(curListIndex).getChannelNumber(), true);
+				}
+			}
 			break;
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-	
+
 	private void showChannelListView() {
 		channelListLinear.setVisibility(View.VISIBLE);
 		focusView.setVisibility(View.VISIBLE);
@@ -688,7 +716,7 @@ public class MainActivity extends BaseActivity {
 
 	/* show banner dialog */
 	public void showDialogBanner(String channelno) {
-		if(ban!=null){
+		if (ban != null) {
 			ban.cancelBanner();
 		}
 		ChannelInfo curChannel = (ChannelInfo) CacheData.allChannelMap.get(channelno);
@@ -703,9 +731,9 @@ public class MainActivity extends BaseActivity {
 	public void showToastBanner(String channelno) {
 
 		ChannelInfo curChannel = (ChannelInfo) CacheData.allChannelMap.get(channelno);
-//		if(ban!=null){
-//			ban.cancelBanner();
-//		}
+		// if(ban!=null){
+		// ban.cancelBanner();
+		// }
 		ban = new Banner(this, curChannel, curChannelPrograms);
 		ban.show();
 
