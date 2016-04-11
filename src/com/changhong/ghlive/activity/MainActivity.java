@@ -531,6 +531,9 @@ public class MainActivity extends BaseActivity {
 
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
+			if(ban.isToastShow()){
+				ban.cancelBanner();
+			}
 			showChannelListView();
 			// 切换频道类型，更新频道列表的数据
 			// if (curType == 6) {
@@ -736,7 +739,7 @@ public class MainActivity extends BaseActivity {
 		// }
 		ban = new Banner(this, curChannel, curChannelPrograms);
 		ban.show();
-
+		
 		// ChannelInfo curChannel = (ChannelInfo)
 		// CacheData.allChannelMap.get(channelno);
 		// if (programBannerDialog != null) {
