@@ -71,7 +71,7 @@
                 android:id="@+id/next_program_info"
                 android:layout_width="600dip"
                 android:layout_height="50dip"
-                android:layout_marginTop="40dip"
+                android:layout_marginTop="20dip"
                 android:singleLine="true"
                 android:textSize="28sp" />
         </LinearLayout>
