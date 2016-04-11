@@ -278,6 +278,32 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 //		Log.i("mmmm", bufferingProgress + "% buffer");
 
 	}
+	
+//	 public boolean onInfo(MediaPlayer arg0, int arg1, int arg2) {        
+//		 switch (arg1) {        
+//		 case MediaPlayer.MEDIA_INFO_BUFFERING_START:
+//			 //开始缓存，暂停播放            
+//			 if (isPlaying()) {                
+//				 stopPlayer();                
+//				 needResume = true;            
+//				 }           
+//			 mLoadingView.setVisibility(View.VISIBLE);            
+//			 break;        
+//			 case MediaPlayer.MEDIA_INFO_BUFFERING_END:            
+//				 //缓存完成，继续播放            
+//				 if (needResume)                
+//					 startPlayer();            
+//				 mLoadingView.setVisibility(View.GONE);            
+//				 break;        
+//				 case MediaPlayer.MEDIA_INFO_DOWNLOAD_RATE_CHANGED:
+//					 //显示 下载速度            
+//					 Logger.e("download rate:" + arg2);            
+//					 break;        
+//					 }        
+//		 return true;    
+//		 }
+//		 }
+//	 }
 
 	/* 播放过程中时间进行更新显示 */
 	// public void refreshVideoTime(TextView txvLen, TextView txvCur) {

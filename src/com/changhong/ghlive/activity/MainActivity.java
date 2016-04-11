@@ -63,6 +63,8 @@ public class MainActivity extends BaseActivity {
 	private SeekBar liveSeekBar;
 	// private Banner programBan;
 	private BannerDialog programBannerDialog;
+	
+	private Banner ban;
 
 	private VolleyTool volleyTool;
 	private RequestQueue mReQueue;
@@ -635,6 +637,7 @@ public class MainActivity extends BaseActivity {
 		channelListLinear.setVisibility(View.VISIBLE);
 		focusView.setVisibility(View.VISIBLE);
 		linear_vertical_line.setVisibility(View.VISIBLE);
+		chListView.setVisibility(View.VISIBLE);
 		chListView.setSelection(curListIndex);
 		mhandler.removeCallbacks(runnable);
 		mhandler.postDelayed(runnable, 5000);
@@ -685,6 +688,9 @@ public class MainActivity extends BaseActivity {
 
 	/* show banner dialog */
 	public void showDialogBanner(String channelno) {
+		if(ban!=null){
+			ban.cancelBanner();
+		}
 		ChannelInfo curChannel = (ChannelInfo) CacheData.allChannelMap.get(channelno);
 		if (programBannerDialog != null) {
 			programBannerDialog.cancel();
@@ -697,7 +703,10 @@ public class MainActivity extends BaseActivity {
 	public void showToastBanner(String channelno) {
 
 		ChannelInfo curChannel = (ChannelInfo) CacheData.allChannelMap.get(channelno);
-		Banner ban = new Banner(this, curChannel, curChannelPrograms);
+//		if(ban!=null){
+//			ban.cancelBanner();
+//		}
+		ban = new Banner(this, curChannel, curChannelPrograms);
 		ban.show();
 
 		// ChannelInfo curChannel = (ChannelInfo)

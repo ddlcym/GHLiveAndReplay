@@ -262,6 +262,15 @@ public class ReplayPlayActivity extends Activity {
 
 		return super.onKeyDown(keyCode, event);
 	}
+	
+	
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		player.stop();
+	}
 
 	@Override
 	protected void onDestroy() {
