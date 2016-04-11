@@ -84,6 +84,8 @@ public class Banner {
 		// bannerToast.setGravity(Gravity.BOTTOM, 0, 2);
 		bannerToast.setDuration(Toast.LENGTH_LONG);
 		bannerToast.show();
+//		bannerToast.getView().iss
+//		bann
 		// bannerToast.cancel();
 		// showMyToast(bannerToast, 16);// 测试显示toast
 	}
@@ -152,7 +154,12 @@ public class Banner {
 		nextProgramName
 				.setText("即将播放：" + nextProgramBeginTime + "-" + nextProgramEndTime + "  " + programListInfo.get(2).getEventName());
 	}
-
+	
+	/* 判断Toast 是否真正显示 */
+	public boolean isToastShow(){
+		return bannerToast.getView().isShown();
+	}
+	
 	private int getPlayingProgress() {
 		int startTime = 0;
 
