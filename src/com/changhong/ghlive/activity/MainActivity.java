@@ -961,7 +961,7 @@ public class MainActivity extends BaseActivity {
 		// showAudioPlaying(false);
 		// }
 
-		Log.i(TAG, "1");
+//		Log.i(TAG, "1");
 		PlayVideo.getInstance().playLiveProgram(mhandler, curChannel);
 
 		CacheData.curChannelNum = curChannel.getChannelNumber();
@@ -1055,6 +1055,9 @@ public class MainActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		// programBan.cancelBanner();
 		super.onPause();
+		player.stop();
+		programBannerDialog.dismiss();
+		ban.cancelBanner();
 	}
 
 	@Override
@@ -1062,6 +1065,9 @@ public class MainActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		super.onDestroy();
 		player.stop();
+		programBannerDialog.dismiss();
+		ban.cancelBanner();
+		
 	}
 
 }
