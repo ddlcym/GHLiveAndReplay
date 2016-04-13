@@ -599,7 +599,6 @@ public class MainActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		String dialogButtonTextOk = MainActivity.this.getString(R.string.str_zhn_yes);
 		String dialogButtonTextCancel = MainActivity.this.getString(R.string.str_zhn_no);
-
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
 			if(ban.isToastShow()){
@@ -747,6 +746,9 @@ public class MainActivity extends BaseActivity {
 		}
 
 			break;	
+		case Class_Constant.KEYCODE_INFO_KEY:
+			Log.i("mmmm", "MainActivity   info");
+			break;
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -862,6 +864,9 @@ public class MainActivity extends BaseActivity {
 		chListView.setSelection(curListIndex);
 		mhandler.removeCallbacks(runnable);
 		mhandler.postDelayed(runnable, 5000);
+		chListView.setFocusable(true);
+		chListView.requestFocus();
+		chListView.setSelection(curListIndex);
 	}
 
 	// 用户注册
