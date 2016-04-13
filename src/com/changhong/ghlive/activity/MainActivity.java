@@ -742,7 +742,7 @@ public class MainActivity extends BaseActivity {
 		case Class_Constant.KEYCODE_KEY_DIGIT8:
 		case Class_Constant.KEYCODE_KEY_DIGIT9: 
 		{
-//			onVkey(keyCode);
+			onVkey(keyCode);
 		}
 
 			break;	
