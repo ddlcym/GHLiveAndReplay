@@ -746,9 +746,25 @@ public class MainActivity extends BaseActivity {
 		}
 
 			break;	
-		case Class_Constant.KEYCODE_INFO_KEY:
-			Log.i("mmmm", "MainActivity   info");
+		case Class_Constant.MENU_ID_DTV_ROOT:
+			Log.i("mmmm", "本控 info键");
+			if(ban!=null&&!ban.isToastShow()){
+				ban.show();
+			}
 			break;
+			
+		case Class_Constant.KEYCODE_MENU_KEY:
+			
+			break;
+			
+		case Class_Constant.KEYCODE_BACK_KEY:
+			
+			if(channelListLinear.isShown()){
+				mhandler.post(runnable);
+				return false;
+			}
+			break;
+			
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -862,8 +878,8 @@ public class MainActivity extends BaseActivity {
 		linear_vertical_line.setVisibility(View.VISIBLE);
 		chListView.setVisibility(View.VISIBLE);
 		chListView.setSelection(curListIndex);
-		mhandler.removeCallbacks(runnable);
-		mhandler.postDelayed(runnable, 5000);
+//		mhandler.removeCallbacks(runnable);
+//		mhandler.postDelayed(runnable, 5000);
 		chListView.setFocusable(true);
 		chListView.requestFocus();
 		chListView.setSelection(curListIndex);
