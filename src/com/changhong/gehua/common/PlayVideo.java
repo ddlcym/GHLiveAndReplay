@@ -52,6 +52,7 @@ public class PlayVideo {
 	public void playLiveProgram(final Handler mhandler, ChannelInfo outterchanInfo) {
 		mReQueue.cancelAll("program");
 		String realurl = processData.getLivePlayUrlString(outterchanInfo);
+//		String realurl ="http://ott.yun.gehua.net.cn:8080/msis/getPlayURL?version=V001&userCode=15914018212&userName=15914018212&resourceCode=8414&resolution=1280*720&terminalType=4&playType=2&authKey=18396420fbd7f6fa6ba8a444cb5f2786";
 		String pgmRequestURL = processData.getCurrentChannelProgramList(outterchanInfo);//获取节目列表List
 		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, realurl, null,
 				new Response.Listener<org.json.JSONObject>() {
@@ -60,12 +61,12 @@ public class PlayVideo {
 					public void onResponse(org.json.JSONObject arg0) {
 						// TODO Auto-generated method stub
 						// 相应成功
-						// Log.i(TAG, "PlayVideo-getPlayURL_arg0：" + arg0);
+						 Log.i(TAG, "PlayVideo-getPlayURL_arg0：" + arg0);
 						// Message msg=new Message();
 						// msg.what=Class_Constant.PLAY_LIVE;
 						// msg.obj=jsonResolve.getHDPlayURL(arg0);
 						// handler.sendMessage(msg);
-						final String playurl = jsonResolve.getHDPlayURL(arg0);
+						final String playurl = jsonResolve.getLivePlayURL(arg0);
 						// Log.i("mmmm", "play url is " + playurl);
 
 						Message msg = new Message();
@@ -90,9 +91,9 @@ public class PlayVideo {
 
 					@Override
 					public void onResponse(org.json.JSONObject arg0) {
-						Log.i("TAG", " PlayVideo-arg0:" + arg0);
+						Log.i(TAG, " PlayVideo-arg0:" + arg0);
 
-						String playurl = jsonResolve.getHDPlayURL(arg0);
+						String playurl = jsonResolve.getLivePlayURL(arg0);
 						Message msg = new Message();
 						msg.what = Class_Constant.PLAY_URL;
 						msg.obj = playurl;
@@ -114,7 +115,7 @@ public class PlayVideo {
 					@Override
 					public void onResponse(org.json.JSONObject arg0) {
 
-						final String playurl = jsonResolve.getHDPlayURL(arg0);
+						final String playurl = jsonResolve.getLivePlayURL(arg0);
 						// Log.i("zyt", "replay url is + 0326 --" + playurl);
 						videoView.post(new Runnable() {
 

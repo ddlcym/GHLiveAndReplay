@@ -158,6 +158,31 @@
             android:src="@drawable/dtv_prolist_ok"
             android:visibility="gone" />
     </LinearLayout>
+    <TextView
+		android:layout_gravity="top|left"
+		android:layout_marginTop="50dip"
+		android:layout_marginLeft="1050dip"
+		android:id="@+id/id_dtv_digital_root"
+		android:visibility="gone"
+		android:textColor="#ffffff00"
+		android:gravity="center"
+		android:textSize="50sp"
+		android:layout_width="180dip"
+		android:layout_height="85dip"
+		android:background="@drawable/smart_digital_back" />
+	<TextView
+		android:layout_gravity="top|left"
+		android:layout_marginTop="50dip"
+		android:layout_marginLeft="1050dip"
+		android:id="@+id/id_dtv_digital_root_invalid"
+		android:visibility="gone"
+		android:textColor="#ffff0000"
+		android:gravity="center"
+		android:textSize="32sp"
+		android:text="@string/str_epg_digital_invalid"
+		android:layout_width="180dip"
+		android:layout_height="85dip"
+		android:background="@drawable/smart_digital_back" />
 
     <SeekBar
         android:id="@+id/liveskbProgress"

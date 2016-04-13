@@ -89,6 +89,8 @@ public class ReplayPlayActivity extends Activity {
 		surfaceView = (SurfaceView) this.findViewById(R.id.surfaceView1);
 		videoTimeLength = (TextView) this.findViewById(R.id.video_timelength);
 		videoCurrentTime = (TextView) this.findViewById(R.id.video_currenttime);
+		skbProgress.setClickable(false);
+		skbProgress.setFocusable(false);
 	}
 
 	public void initData() {
@@ -158,9 +160,8 @@ public class ReplayPlayActivity extends Activity {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		Bundle bundle = getIntent().getExtras();
-		channel = (ChannelInfo) bundle.getSerializable("channel");
-		mprogram = (ProgramInfo) bundle.getSerializable("program");
+		channel = CacheData.getCurChannel();
+		mprogram = CacheData.getCurProgram();
 		playVideo(channel, mprogram);
 	}
 
@@ -251,12 +252,13 @@ public class ReplayPlayActivity extends Activity {
 		// TODO Auto-generated method stub
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
+			
 			Player.handleProgress
-					.sendEmptyMessage(Class_Constant.RE_FAST_FORWARD);
+					.sendEmptyMessage(Class_Constant.RE_FAST_FORWARD_DOWN);
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
 			Player.handleProgress
-					.sendEmptyMessage(Class_Constant.RE_FAST_REVERSE);
+					.sendEmptyMessage(Class_Constant.RE_FAST_REVERSE_DOWN);
 			break;
 		}
 
@@ -264,6 +266,26 @@ public class ReplayPlayActivity extends Activity {
 	}
 	
 	
+	
+
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+		
+		switch (keyCode) {
+		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
+			
+			Player.handleProgress
+					.sendEmptyMessage(Class_Constant.RE_FAST_FORWARD_UP);
+			break;
+		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
+			Player.handleProgress
+					.sendEmptyMessage(Class_Constant.RE_FAST_REVERSE_UP);
+			break;
+		}
+		
+		return super.onKeyUp(keyCode, event);
+	}
 
 	@Override
 	protected void onPause() {

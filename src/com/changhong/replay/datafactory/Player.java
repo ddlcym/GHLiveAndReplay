@@ -7,6 +7,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.changhong.gehua.common.Class_Constant;
+import com.changhong.gehua.common.MD5Encrypt;
 import com.changhong.ghlive.activity.MyApp;
 
 import android.media.AudioManager;
@@ -35,8 +36,11 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 	private static boolean playingFlag = false;
 	private static  Handler parentHandler;
 	public static boolean handlerFlag=true;
+	public static boolean keyFlag=false;
 
 	private static TextView videoCurrentTime;
+	
+	private static long desPositon=0;
 
 	public Player(Handler parentHandler,SurfaceView mySurfaceView, SeekBar skbProgress, TextView txvCurrent) {
 		this.skbProgress = skbProgress;
@@ -49,7 +53,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 		// 防止音频出不来
 		surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 		mTimer.schedule(mTimerTask, 0, 1000);
-		this.skbProgress.setOnSeekBarChangeListener(mySeekChangeLis);
+//		this.skbProgress.setOnSeekBarChangeListener(mySeekChangeLis);
 	}
 
 	/*******************************************************
@@ -60,87 +64,69 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 		public void run() {
 			if (mediaPlayer == null)
 				return;
-			if (mediaPlayer.isPlaying() && playingFlag&&videoCurrentTime!=null) {
+			if (mediaPlayer.isPlaying() && playingFlag&&videoCurrentTime!=null&&!keyFlag) {
 				handleProgress.sendEmptyMessage(Class_Constant.RE_UPDATE_PROGRESS);
 			}
 		}
 	};
 
-	OnSeekBarChangeListener mySeekChangeLis = new OnSeekBarChangeListener() {
-		int myprogress = 0;
-
-		@Override
-		public void onStopTrackingTouch(SeekBar seekBar) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void onStartTrackingTouch(SeekBar seekBar) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-			// TODO Auto-generated method stub
-			playingFlag = false;
-			myprogress = progress * mediaPlayer.getDuration() / seekBar.getMax();
-			mediaPlayer.seekTo(myprogress);
-		}
-	};
 
 	public static Handler handleProgress = new Handler() {
 		public void handleMessage(Message msg) {
-			int curPos = 0;
-			int fastPos = 0;
-			int forPos=0;
-			int duration = 0;
+			long skPos = 0;
+			long skDuration = skbProgress.getMax();
+			long mediaDuration = mediaPlayer.getDuration();;
 			switch (msg.what) {
 			case Class_Constant.REPLAY_SEEK_TO:
-				curPos = msg.arg1;
-				duration = mediaPlayer.getDuration();
+				skPos = msg.arg1;
+				mediaDuration = mediaPlayer.getDuration();
 
-				if (duration > 0) {
-					long pos = skbProgress.getMax() * curPos / duration;
+				if (mediaDuration > 0) {
+					long pos = skbProgress.getMax() * skPos / mediaDuration;
 					skbProgress.setProgress((int) pos);
 				}
 				break;
-			case Class_Constant.RE_FAST_FORWARD:
+			case Class_Constant.RE_FAST_FORWARD_DOWN:
 				if(!playingFlag){
 					return;
 				}
-				curPos = skbProgress.getProgress();
-				forPos=curPos + 5;
-				if(forPos<skbProgress.getMax()){
-					skbProgress.setProgress(forPos);
-					
-				}else{
+				keyFlag=true;
+				desPositon = skDuration*(mediaDuration*skbProgress.getProgress()/skDuration+15000)/mediaDuration;
+				
+				if(desPositon>=skDuration){
 					if(handlerFlag){
-					parentHandler.sendEmptyMessage(Class_Constant.RE_NEXT_PROGRAM);
-					handlerFlag=false;
-					}
+						parentHandler.sendEmptyMessage(Class_Constant.RE_NEXT_PROGRAM);
+						handlerFlag=false;
+						}
+					desPositon=0;
 				}
-				
+				skbProgress.setProgress((int)desPositon);
 				break;
-			case Class_Constant.RE_FAST_REVERSE:
-				curPos = skbProgress.getProgress();
-				fastPos = curPos - 5;
+			case Class_Constant.RE_FAST_REVERSE_DOWN:
 				
 				if(!playingFlag){
 					return;
 				}
-				if(fastPos<0){
+				keyFlag=true;
+				desPositon = skDuration*(mediaDuration*skbProgress.getProgress()/skDuration-15000)/mediaDuration;
+				if(desPositon<0){
+					desPositon=0;
+				}
+				
+				if(desPositon<0){
 					if(handlerFlag){
 						handlerFlag=false;
 					parentHandler.sendEmptyMessage(Class_Constant.RE_LAST_PROGRAM);
-					
+					desPositon=0;
 					}
-				}else{
-					skbProgress.setProgress(forPos);
 				}
-				
-				skbProgress.setProgress(fastPos);
+					skbProgress.setProgress((int)desPositon);
+//				
+				break;
+			case Class_Constant.RE_FAST_FORWARD_UP:
+			case Class_Constant.RE_FAST_REVERSE_UP:
+				mediaPlayer.seekTo((int)(mediaDuration*desPositon/skDuration));
+				keyFlag=false;
 				break;
 			case Class_Constant.RE_PLAY:
 
@@ -151,9 +137,8 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 
 			case Class_Constant.RE_UPDATE_PROGRESS:
 				int position = mediaPlayer.getCurrentPosition();
-				duration = mediaPlayer.getDuration();
-				if (duration > 0) {
-					long pos = skbProgress.getMax() * position / duration;
+				if (mediaDuration > 0) {
+					long pos = skbProgress.getMax() * position / mediaDuration;
 					skbProgress.setProgress((int) pos);
 				}
 				SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
@@ -173,7 +158,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 
 	public void playUrl(String videoUrl) {
 		handlerFlag=true;
-		if (null == mediaPlayer)
+		if (null == mediaPlayer||null==videoUrl)
 			return;
 		
 		try {
@@ -234,6 +219,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 			mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			mediaPlayer.setOnBufferingUpdateListener(this);
 			mediaPlayer.setOnPreparedListener(this);
+			mediaPlayer.setOnCompletionListener(this);
 		} catch (Exception e) {
 			Log.e("mediaPlayer", "error", e);
 		}
@@ -264,8 +250,10 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 	@Override
 	public void onCompletion(MediaPlayer arg0) {
 		// TODO Auto-generated method stub
-
+		parentHandler.sendEmptyMessage(Class_Constant.RE_NEXT_PROGRAM);
 	}
+
+	
 
 	// 播放视频准备好播放后调用此方法
 	@Override
@@ -276,7 +264,6 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 		if (bufferingProgress != 0) {
 		}
 //		Log.i("mmmm", bufferingProgress + "% buffer");
-
 	}
 	
 //	 public boolean onInfo(MediaPlayer arg0, int arg1, int arg2) {        

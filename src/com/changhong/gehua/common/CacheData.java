@@ -21,6 +21,8 @@ public class CacheData {
 	
 	public static List<ChannelInfo> allChannelExtraInfo=new ArrayList<ChannelInfo>();
 
+	public static ChannelInfo curChannel;
+	public static ProgramInfo curProgram;
 	
 	
 	public static List<ChannelInfo> getAllChannelExtraInfo() {
@@ -76,5 +78,22 @@ public class CacheData {
 	public static void setAllChannelInfo(List<ChannelInfo> allChannelInfo) {
 		CacheData.allChannelInfo = allChannelInfo;
 	}
+
+	public static ChannelInfo getCurChannel() {
+		return curChannel;
+	}
+
+	public static void setCurChannel(ChannelInfo curChannel) {
+		CacheData.curChannel = curChannel;
+	}
+
+	public static ProgramInfo getCurProgram() {
+		return curProgram;
+	}
+
+	public static void setCurProgram(ProgramInfo curProgram) {
+		CacheData.curProgram = curProgram;
+	}
+	
 	
 }

@@ -191,7 +191,7 @@ public class BannerDialog extends Dialog {
 					public void onResponse(org.json.JSONObject arg0) {
 						// TODO Auto-generated method stub
 //						 Log.i(TAG, "MainActivity=dvbBack:" + arg0);
-						final String url=JsonResolve.getInstance().getHDPlayURL(arg0);
+						final String url=JsonResolve.getInstance().getLivePlayURL(arg0);
 						new Thread(new Runnable() {
 							
 							@Override

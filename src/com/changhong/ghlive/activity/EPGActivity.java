@@ -711,10 +711,9 @@ public class EPGActivity extends BaseActivity {
 
 		ProgramInfo program = curProgramList.get(position);
 		Intent mIntent = new Intent(EPGActivity.this, ReplayPlayActivity.class);
-		Bundle mBundle = new Bundle();
-		mBundle.putSerializable("program", program);
-		mBundle.putSerializable("channel", curChannel);
-		mIntent.putExtras(mBundle);
+		
+		CacheData.setCurProgram(program);
+		CacheData.setCurChannel(curChannel);
 
 		startActivity(mIntent);
 	}
