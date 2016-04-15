@@ -6,6 +6,8 @@ public class Class_Constant {
 
 	
 	
+	public final static int REPLAY_DIALOG_END_OK = 2008;
+	public final static int REPLAY_DIALOG_END_CANCEL = 2009;
 	public final static int TOAST_BANNER_PROGRAM_PASS = 3000;
 	public final static int PLAY_LIVE = 3001;
 	public static final int PLAY_URL = 3002;
