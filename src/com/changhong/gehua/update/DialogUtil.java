@@ -124,7 +124,7 @@ public class DialogUtil {
 		return showAlertDialog(context, title, content, "确    认", "取    消",
 				listener);
 	}
-
+	
 	/**
 	 * 显示对话框
 	 * 
