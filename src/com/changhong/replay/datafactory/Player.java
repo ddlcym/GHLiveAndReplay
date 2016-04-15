@@ -6,6 +6,8 @@ import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.xml.datatype.Duration;
+
 import com.changhong.gehua.common.Class_Constant;
 import com.changhong.gehua.common.MD5Encrypt;
 import com.changhong.ghlive.activity.MyApp;
@@ -40,8 +42,9 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 
 	private static TextView videoCurrentTime;
 	
-	private static long desPositon=0;
-
+	private static int desPositon=0;
+	private static int duration=0;
+	
 	public Player(Handler parentHandler,SurfaceView mySurfaceView, SeekBar skbProgress, TextView txvCurrent) {
 		this.skbProgress = skbProgress;
 		this.surfaceView = mySurfaceView;
@@ -73,60 +76,58 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 
 	public static Handler handleProgress = new Handler() {
 		public void handleMessage(Message msg) {
-			long skPos = 0;
-			long skDuration = skbProgress.getMax();
-			long mediaDuration = mediaPlayer.getDuration();;
+			int skPos = 0;
 			switch (msg.what) {
 			case Class_Constant.REPLAY_SEEK_TO:
 				skPos = msg.arg1;
-				mediaDuration = mediaPlayer.getDuration();
 
-				if (mediaDuration > 0) {
-					long pos = skbProgress.getMax() * skPos / mediaDuration;
-					skbProgress.setProgress((int) pos);
+				if (duration > 0) {
+					skbProgress.setProgress(skPos);
 				}
 				break;
 			case Class_Constant.RE_FAST_FORWARD_DOWN:
 				if(!playingFlag){
 					return;
 				}
+				mediaPlayer.pause();
 				keyFlag=true;
-				desPositon = skDuration*(mediaDuration*skbProgress.getProgress()/skDuration+15000)/mediaDuration;
+				desPositon = skbProgress.getProgress()+15000;
 				
-				if(desPositon>=skDuration){
+				if(desPositon>=duration){
 					if(handlerFlag){
-						parentHandler.sendEmptyMessage(Class_Constant.RE_NEXT_PROGRAM);
 						handlerFlag=false;
+						parentHandler.sendEmptyMessage(Class_Constant.RE_NEXT_PROGRAM);
+						
 						}
-					desPositon=0;
+					desPositon=duration;
 				}
-				skbProgress.setProgress((int)desPositon);
+				skbProgress.setProgress(desPositon);
 				break;
 			case Class_Constant.RE_FAST_REVERSE_DOWN:
 				
 				if(!playingFlag){
 					return;
 				}
+				mediaPlayer.pause();
 				keyFlag=true;
-				desPositon = skDuration*(mediaDuration*skbProgress.getProgress()/skDuration-15000)/mediaDuration;
-				if(desPositon<0){
-					desPositon=0;
-				}
+				desPositon = skbProgress.getProgress()-15000;
 				
 				if(desPositon<0){
 					if(handlerFlag){
 						handlerFlag=false;
 					parentHandler.sendEmptyMessage(Class_Constant.RE_LAST_PROGRAM);
-					desPositon=0;
+					
 					}
+					desPositon=0;
 				}
-					skbProgress.setProgress((int)desPositon);
+					skbProgress.setProgress(desPositon);
 //				
 				break;
 			case Class_Constant.RE_FAST_FORWARD_UP:
 			case Class_Constant.RE_FAST_REVERSE_UP:
-				mediaPlayer.seekTo((int)(mediaDuration*desPositon/skDuration));
+				mediaPlayer.seekTo(desPositon);
 				keyFlag=false;
+				mediaPlayer.start();
 				break;
 			case Class_Constant.RE_PLAY:
 
@@ -137,9 +138,8 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 
 			case Class_Constant.RE_UPDATE_PROGRESS:
 				int position = mediaPlayer.getCurrentPosition();
-				if (mediaDuration > 0) {
-					long pos = skbProgress.getMax() * position / mediaDuration;
-					skbProgress.setProgress((int) pos);
+				if (duration > 0) {
+					skbProgress.setProgress( position);
 				}
 				SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
 				formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -166,6 +166,8 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 //			mediaPlayer.stop();
 			mediaPlayer.setDataSource(videoUrl);
 			mediaPlayer.prepare();// prepare֮���Զ�����
+			duration=mediaPlayer.getDuration();
+			skbProgress.setMax(duration);
 			// mediaPlayer.start();
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block

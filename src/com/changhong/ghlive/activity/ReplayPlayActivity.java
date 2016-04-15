@@ -260,6 +260,14 @@ public class ReplayPlayActivity extends Activity {
 			Player.handleProgress
 					.sendEmptyMessage(Class_Constant.RE_FAST_REVERSE_DOWN);
 			break;
+		case Class_Constant.KEYCODE_OK_KEY:
+			if(player.isPlayerPlaying()){
+				player.pause();
+			}else{
+				player.play();
+			}
+			
+			break;
 		}
 
 		return super.onKeyDown(keyCode, event);

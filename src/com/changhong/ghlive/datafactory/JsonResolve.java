@@ -28,6 +28,7 @@ import android.util.Log;
 public class JsonResolve {
 
 	private static JsonResolve liveJsonResolve;
+	private Date date;
 
 	public static JsonResolve getInstance() {
 		if (null == liveJsonResolve) {
@@ -177,7 +178,8 @@ public class JsonResolve {
 					proMaps.put(date, new ArrayList<ProgramInfo>());
 
 				}
-				proMaps.get(date).add(program);
+				if(isOutOfDate(program)){
+				proMaps.get(date).add(program);}
 			}
 		}
 
@@ -331,5 +333,15 @@ public class JsonResolve {
 		});
 
 		return outterList;
+	}
+	
+	private boolean isOutOfDate(ProgramInfo program){
+		boolean flag=false;
+		if(null==date){
+			date=new Date();
+		}
+		flag=date.after(program.getEndTime());
+		
+		return flag;
 	}
 }
