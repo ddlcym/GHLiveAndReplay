@@ -255,13 +255,12 @@ public class MainActivity extends BaseActivity {
 		@Override
 		public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 			// TODO show the select channel
-
 			// int[] pos = { -1, -1 };
 			if (view != null) {
 				// view.getLocationOnScreen(pos);
 				// dislistfocus((FrameLayout) view);
-				mhandler.removeCallbacks(runnable);
-				mhandler.postDelayed(runnable, 5000);
+//				mhandler.removeCallbacks(runnable);
+//				mhandler.postDelayed(runnable, 5000);
 				// TextView channelIndex = (TextView)
 				// view.findViewById(R.id.chanId);
 				// curChannelNO = channelIndex.getText().toString();
@@ -696,6 +695,9 @@ public class MainActivity extends BaseActivity {
 			if (channelListLinear.isShown()) {
 				chListView.setFocusable(true);
 				chListView.requestFocus();
+				if(0==chListView.getSelectedItemPosition()){
+					chListView.setSelection(chLstAdapter.getCount()-1);
+				}
 			} else {
 				// 播放之后的一个频道
 				if (curListIndex == (chListView.getCount() - 1)) {
@@ -716,6 +718,9 @@ public class MainActivity extends BaseActivity {
 			if (channelListLinear.isShown()) {
 				chListView.setFocusable(true);
 				chListView.requestFocus();
+				if((chLstAdapter.getCount()-1)==chListView.getSelectedItemPosition()){
+					chListView.setSelection(0);
+				}
 			} else {
 				// 播放之前一个频道
 				if (curListIndex == 0) {

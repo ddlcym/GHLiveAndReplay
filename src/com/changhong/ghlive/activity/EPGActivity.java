@@ -11,6 +11,7 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.changhong.gehua.common.CacheData;
 import com.changhong.gehua.common.ChannelInfo;
+import com.changhong.gehua.common.Class_Constant;
 import com.changhong.gehua.common.ProcessData;
 import com.changhong.gehua.common.ProgramInfo;
 import com.changhong.gehua.common.VolleyTool;
@@ -29,6 +30,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
@@ -825,6 +827,34 @@ public class EPGActivity extends BaseActivity {
 		focusView.setLayoutParams(focusItemParams);
 		focusView.setVisibility(View.VISIBLE);
 		focusView.bringToFront();
+	}
+	
+	
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+		
+		
+		
+		
+		switch (keyCode) {
+		case Class_Constant.KEYCODE_UP_ARROW_KEY:
+			if (channelListview.isFocusable()) {
+				if(0==channelListview.getSelectedItemPosition()){
+					channelListview.setSelection(channelAdapter.getCount()-1);
+				}
+			}
+			break;
+		case Class_Constant.KEYCODE_DOWN_ARROW_KEY:
+			if (channelListview.isFocusable()) {
+				if((channelAdapter.getCount()-1)==channelListview.getSelectedItemPosition()){
+					channelListview.setSelection(0);
+				}
+			} 
+			break;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 	// -------------------system function------------------

@@ -61,7 +61,7 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:nextFocusRight="@+id/EpgWeekInfo"
-                android:nextFocusUp="@+id/epg_chanlistTitle"
+                android:nextFocusUp="@+id/ChanlIstView"
                 android:scrollbars="none" >
             </com.changhong.replay.datafactory.EpgListview>
         </LinearLayout>
