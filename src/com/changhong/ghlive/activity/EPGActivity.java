@@ -477,7 +477,7 @@ public class EPGActivity extends BaseActivity {
 	public void showWeekDay() {
 		epgWeekInfoView.setNumColumns(CacheData.getDayMonths().size());
 		dayMonthAdapter.setData(CacheData.getDayMonths());
-		epgWeekInfoView.setSelection(EventlitItemindex);
+//		epgWeekInfoView.setSelection(EventlitItemindex);
 	}
 
 	public void showChannelList(int channelType) {
@@ -834,9 +834,6 @@ public class EPGActivity extends BaseActivity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
-		
-		
-		
 		
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_UP_ARROW_KEY:
