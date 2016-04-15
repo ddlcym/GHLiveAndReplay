@@ -50,7 +50,7 @@ import com.changhong.replay.datafactory.Player;
 public class MainActivity extends BaseActivity {
 
 	private String TAG = "mmmm";
-	
+
 	// view
 	private ImageView focusView; // foucus image
 	private TextView epgListTitleView;// chanellist title
@@ -63,13 +63,12 @@ public class MainActivity extends BaseActivity {
 	private SeekBar liveSeekBar;
 	private TextView tvRootDigitalkey, tvRootDigitalKeyInvalid;
 
-
 	/**
 	 * Digital key
 	 */
 	private int iKeyNum = 0;
 	private int iKey = 0;
-	
+
 	// private Banner programBan;
 	private BannerDialog programBannerDialog;
 
@@ -127,65 +126,53 @@ public class MainActivity extends BaseActivity {
 				if (null == curProgram) {
 					curProgram = new ProgramInfo();
 				}
-				if(curChannelPrograms.size()>0){
-				curProgram = curChannelPrograms.get(1);
-				showToastBanner(curChannelNO);
+				if (curChannelPrograms.size() > 0) {
+					curProgram = curChannelPrograms.get(1);
+					showToastBanner(curChannelNO);
 				}
 				break;
 
-			case Class_Constant.MESSAGE_HANDLER_DIGITALKEY:
-				{
-					String succ = playChannel(String.valueOf(iKey), true);
-					//int succ = objApplication.playChannelKeyInput(iKey,true);
-					if(null==succ)
-					{
-						tvRootDigitalkey.setVisibility(View.INVISIBLE);
-						tvRootDigitalKeyInvalid.setVisibility(View.VISIBLE);
-					}
-					else
-					{
-						Message msg2 = new Message();
-						msg2.what = Class_Constant.MESSAGE_SHOW_DIGITALKEY;
-						msg2.arg1 = iKey;
-						sendMessage(msg2);
-					}
-					iKeyNum = 0;
-					iKey = 0;
-					mhandler.removeMessages(Class_Constant.MESSAGE_HANDLER_DIGITALKEY);
-					mhandler.sendEmptyMessageDelayed(Class_Constant.MESSAGE_DISAPPEAR_DIGITAL, 2000);		
+			case Class_Constant.MESSAGE_HANDLER_DIGITALKEY: {
+				String succ = playChannel(String.valueOf(iKey), true);
+				// int succ = objApplication.playChannelKeyInput(iKey,true);
+				if (null == succ) {
+					tvRootDigitalkey.setVisibility(View.INVISIBLE);
+					tvRootDigitalKeyInvalid.setVisibility(View.VISIBLE);
+				} else {
+					Message msg2 = new Message();
+					msg2.what = Class_Constant.MESSAGE_SHOW_DIGITALKEY;
+					msg2.arg1 = iKey;
+					sendMessage(msg2);
 				}
+				iKeyNum = 0;
+				iKey = 0;
+				mhandler.removeMessages(Class_Constant.MESSAGE_HANDLER_DIGITALKEY);
+				mhandler.sendEmptyMessageDelayed(Class_Constant.MESSAGE_DISAPPEAR_DIGITAL, 2000);
+			}
 				break;
 			case Class_Constant.MESSAGE_SHOW_DIGITALKEY:
 				int channelId = msg.arg1;
 				tvRootDigitalKeyInvalid.setVisibility(View.GONE);
 				tvRootDigitalkey.setVisibility(View.VISIBLE);
 				String digitalText = null;
-				if(channelId < 10)
-				{
-					digitalText = "00"+channelId;
-				}
-				else if(channelId < 100)
-				{
-					digitalText = "0"+channelId;
-				}
-				else
-				{
-					digitalText = ""+channelId;
+				if (channelId < 10) {
+					digitalText = "00" + channelId;
+				} else if (channelId < 100) {
+					digitalText = "0" + channelId;
+				} else {
+					digitalText = "" + channelId;
 				}
 				tvRootDigitalkey.setText(digitalText);
 				mhandler.removeMessages(Class_Constant.MESSAGE_DISAPPEAR_DIGITAL);
-				mhandler.sendEmptyMessageDelayed(Class_Constant.MESSAGE_DISAPPEAR_DIGITAL,3500);
+				mhandler.sendEmptyMessageDelayed(Class_Constant.MESSAGE_DISAPPEAR_DIGITAL, 3500);
 				break;
-				
-			case Class_Constant.MESSAGE_DISAPPEAR_DIGITAL:
-			{
+
+			case Class_Constant.MESSAGE_DISAPPEAR_DIGITAL: {
 				iKey = 0;
-				if(tvRootDigitalKeyInvalid != null)
-				{
+				if (tvRootDigitalKeyInvalid != null) {
 					tvRootDigitalKeyInvalid.setVisibility(View.INVISIBLE);
 				}
-				if(tvRootDigitalkey != null)
-				{
+				if (tvRootDigitalkey != null) {
 					tvRootDigitalkey.setVisibility(View.INVISIBLE);
 				}
 			}
@@ -230,10 +217,10 @@ public class MainActivity extends BaseActivity {
 		channelListLinear = (LinearLayout) findViewById(R.id.chlist_back);
 		linear_vertical_line = (LinearLayout) findViewById(R.id.linear_vertical_line);
 		liveSeekBar = (SeekBar) findViewById(R.id.liveskbProgress);
-		
+
 		tvRootDigitalkey = (TextView) findViewById(R.id.id_dtv_digital_root);
 		tvRootDigitalKeyInvalid = (TextView) findViewById(R.id.id_dtv_digital_root_invalid);
-		
+
 		// videoView.setMediaController(new MediaController(this));
 		surfaceView.setFocusable(false);
 		chListView.setFocusable(false);
@@ -600,7 +587,7 @@ public class MainActivity extends BaseActivity {
 		String dialogButtonTextCancel = MainActivity.this.getString(R.string.str_zhn_no);
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
-			if(ban.isToastShow()){
+			if (ban.isToastShow()) {
 				ban.cancelBanner();
 			}
 			showChannelListView();
@@ -735,7 +722,7 @@ public class MainActivity extends BaseActivity {
 				}
 			}
 			break;
-			
+
 		case Class_Constant.KEYCODE_KEY_DIGIT0:
 		case Class_Constant.KEYCODE_KEY_DIGIT1:
 		case Class_Constant.KEYCODE_KEY_DIGIT2:
@@ -745,39 +732,37 @@ public class MainActivity extends BaseActivity {
 		case Class_Constant.KEYCODE_KEY_DIGIT6:
 		case Class_Constant.KEYCODE_KEY_DIGIT7:
 		case Class_Constant.KEYCODE_KEY_DIGIT8:
-		case Class_Constant.KEYCODE_KEY_DIGIT9: 
-		{
+		case Class_Constant.KEYCODE_KEY_DIGIT9: {
 			onVkey(keyCode);
 		}
 
-			break;	
+			break;
 		case Class_Constant.MENU_ID_DTV_ROOT:
 			Log.i("mmmm", "本控 info键");
-			if(ban!=null&&!ban.isToastShow()){
+			if (ban != null && !ban.isToastShow()) {
 				ban.show();
 			}
 			break;
-			
+
 		case Class_Constant.KEYCODE_MENU_KEY:
-			
+
 			break;
-			
+
 		case Class_Constant.KEYCODE_BACK_KEY:
-			
-			if(channelListLinear.isShown()){
+
+			if (channelListLinear.isShown()) {
 				mhandler.post(runnable);
 				return false;
 			}
 			break;
-			
+
 		}
 		return super.onKeyDown(keyCode, event);
 	}
 
 	private boolean onVkey(int ri_KeyCode) {
 		boolean b_Result = false;
-		
-		
+
 		switch (ri_KeyCode) {
 		case Class_Constant.KEYCODE_KEY_DIGIT0:
 		case Class_Constant.KEYCODE_KEY_DIGIT1:
@@ -825,46 +810,29 @@ public class MainActivity extends BaseActivity {
 
 				}
 
-
 				tvRootDigitalKeyInvalid.setVisibility(View.GONE);
 				tvRootDigitalkey.setVisibility(View.VISIBLE);
-				if(iKey < 10)
-				{
-					if(iKeyNum == 1)
-					{
-						tvRootDigitalkey.setText("--"+iKey);
+				if (iKey < 10) {
+					if (iKeyNum == 1) {
+						tvRootDigitalkey.setText("--" + iKey);
+					} else if (iKeyNum == 2) {
+						tvRootDigitalkey.setText("-0" + iKey);
+					} else {
+						tvRootDigitalkey.setText("00" + iKey);
 					}
-					else if(iKeyNum == 2)
-					{
-						tvRootDigitalkey.setText("-0"+iKey);
+				} else if (iKey < 100) {
+					if (iKeyNum == 2) {
+						tvRootDigitalkey.setText("-" + iKey);
+					} else {
+						tvRootDigitalkey.setText("0" + iKey);
 					}
-					else
-					{
-						tvRootDigitalkey.setText("00"+iKey);
-					}
+				} else {
+					tvRootDigitalkey.setText("" + iKey);
 				}
-				else if(iKey < 100)
-				{
-					if(iKeyNum == 2)
-					{
-						 	tvRootDigitalkey.setText("-"+iKey);
-					}
-					else
-					{
-						tvRootDigitalkey.setText("0"+iKey);
-					}
-				}
-				else
-				{
-					tvRootDigitalkey.setText(""+iKey);
-				}
-				
-				if(iKey  >= 100)
-				{
+
+				if (iKey >= 100) {
 					mhandler.sendEmptyMessageDelayed(Class_Constant.MESSAGE_HANDLER_DIGITALKEY, 2000);
-				}
-				else
-				{
+				} else {
 					mhandler.sendEmptyMessageDelayed(Class_Constant.MESSAGE_HANDLER_DIGITALKEY, 5000);
 				}
 			}
@@ -872,19 +840,19 @@ public class MainActivity extends BaseActivity {
 		}
 
 			break;
-		
+
 		}
 		return b_Result;
 	}
-	
+
 	private void showChannelListView() {
 		channelListLinear.setVisibility(View.VISIBLE);
 		focusView.setVisibility(View.VISIBLE);
 		linear_vertical_line.setVisibility(View.VISIBLE);
 		chListView.setVisibility(View.VISIBLE);
 		chListView.setSelection(curListIndex);
-//		mhandler.removeCallbacks(runnable);
-//		mhandler.postDelayed(runnable, 5000);
+		// mhandler.removeCallbacks(runnable);
+		// mhandler.postDelayed(runnable, 5000);
 		chListView.setFocusable(true);
 		chListView.requestFocus();
 		chListView.setSelection(curListIndex);
@@ -955,7 +923,7 @@ public class MainActivity extends BaseActivity {
 		// }
 		ban = new Banner(this, curChannel, curChannelPrograms);
 		ban.show();
-		
+
 		// ChannelInfo curChannel = (ChannelInfo)
 		// CacheData.allChannelMap.get(channelno);
 		// if (programBannerDialog != null) {
@@ -987,7 +955,7 @@ public class MainActivity extends BaseActivity {
 		// showAudioPlaying(false);
 		// }
 
-//		Log.i(TAG, "1");
+		// Log.i(TAG, "1");
 		PlayVideo.getInstance().playLiveProgram(mhandler, curChannel);
 
 		CacheData.curChannelNum = curChannel.getChannelNumber();
@@ -1093,7 +1061,7 @@ public class MainActivity extends BaseActivity {
 		player.stop();
 		programBannerDialog.dismiss();
 		ban.cancelBanner();
-		
+
 	}
 
 }
