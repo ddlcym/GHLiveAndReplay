@@ -12,13 +12,12 @@ import com.changhong.gehua.common.Class_Constant;
 import com.changhong.gehua.common.PlayVideo;
 import com.changhong.gehua.common.ProcessData;
 import com.changhong.gehua.common.ProgramInfo;
-import com.changhong.gehua.update.DialogUtil;
 import com.changhong.gehua.widget.ReplayEndDialog;
 import com.changhong.ghliveandreplay.R;
 import com.changhong.replay.datafactory.Player;
 
+import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
@@ -28,6 +27,8 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.SurfaceView;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +40,7 @@ public class ReplayPlayActivity extends Activity {
 	private Player player;
 	private String replayChannelId = null;
 	private ReplayEndDialog replayEndDialog;
+	private ImageView palyButton, pauseButton, timeShiftIcon;
 
 	private int maxTimes = 0;
 	ProcessData mProcessData;
@@ -101,7 +103,18 @@ public class ReplayPlayActivity extends Activity {
 		videoCurrentTime = (TextView) this.findViewById(R.id.video_currenttime);
 		skbProgress.setClickable(false);
 		skbProgress.setFocusable(false);
+		palyButton = (ImageView) findViewById(R.id.play_btn);
+		pauseButton = (ImageView) findViewById(R.id.pause_btn);
 
+		timeShiftIcon = (ImageView) findViewById(R.id.time_shift_icon);
+		android.view.ViewGroup.LayoutParams ps = timeShiftIcon.getLayoutParams();
+		ps.height = 50;
+		ps.width = 50;
+		timeShiftIcon.setLayoutParams(ps);
+		timeShiftIcon.setVisibility(View.VISIBLE);
+		if (timeShiftIconRunnable != null) {
+			replayHandler.postDelayed(timeShiftIconRunnable, 5000);
+		}
 	}
 
 	public void initData() {
@@ -264,10 +277,17 @@ public class ReplayPlayActivity extends Activity {
 		case Class_Constant.KEYCODE_OK_KEY:
 			if (player.isPlayerPlaying()) {
 				player.pause();
+				palyButton.setVisibility(View.GONE);
+				pauseButton.setVisibility(View.VISIBLE);
 			} else {
 				player.play();
+				pauseButton.setVisibility(View.GONE);
+				palyButton.setVisibility(View.VISIBLE);
 			}
-
+			if (runnable != null) {
+				replayHandler.removeCallbacks(runnable);
+			}
+			replayHandler.postDelayed(runnable, 5000);
 			break;
 		}
 
@@ -290,6 +310,25 @@ public class ReplayPlayActivity extends Activity {
 
 		return super.onKeyUp(keyCode, event);
 	}
+
+	Runnable runnable = new Runnable() {
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			palyButton.setVisibility(View.GONE);
+			// pauseButton.setVisibility(View.GONE);
+		}
+	};
+
+	Runnable timeShiftIconRunnable = new Runnable() {
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			// palyButton.setVisibility(View.GONE);
+			// pauseButton.setVisibility(View.GONE);
+			timeShiftIcon.setVisibility(View.GONE);
+		}
+	};
 
 	@Override
 	protected void onPause() {
