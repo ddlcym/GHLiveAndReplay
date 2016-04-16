@@ -3,8 +3,10 @@ package com.changhong.gehua.common;
 public class Class_Constant {
 
 	// mainactivity handler type
-	
-	
+
+	public final static int KEYCODE_VOICE_DOWN = 25;// voice down key
+	public final static int KEYCODE_VOICE_UP = 24;// voice up key
+	public final static int KEYCODE_MUTE = 164;// mute key
 	public final static int REPLAY_DIALOG_END_OK = 2008;
 	public final static int REPLAY_DIALOG_END_CANCEL = 2009;
 	public final static int TOAST_BANNER_PROGRAM_PASS = 3000;
@@ -23,9 +25,9 @@ public class Class_Constant {
 	public static final int RE_LAST_PROGRAM = 3013;
 	public static final int LIVE_FAST_FORWARD = 3014;
 	public static final int LIVE_FAST_REVERSE = 3015;
-	public static 	final 	int	MESSAGE_HANDLER_DIGITALKEY	=	3016;	
-	public static  final   int MESSAGE_SHOW_DIGITALKEY     =   3017;
-	public static 	final 	int	MESSAGE_DISAPPEAR_DIGITAL	=	3018;
+	public static final int MESSAGE_HANDLER_DIGITALKEY = 3016;
+	public static final int MESSAGE_SHOW_DIGITALKEY = 3017;
+	public static final int MESSAGE_DISAPPEAR_DIGITAL = 3018;
 	public static final int RE_FAST_FORWARD_UP = 3019;
 	public static final int RE_FAST_REVERSE_UP = 3020;
 
