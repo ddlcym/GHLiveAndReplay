@@ -1017,7 +1017,8 @@ public class MainActivity extends BaseActivity {
 	Runnable bannerDismissRunnable = new Runnable() {
 		@Override
 		public void run() {
-			programBannerDialog.dismiss();
+			// programBannerDialog.dismiss();
+			programBannerDialog.dismissInfoBan();
 		}
 	};
 
