@@ -3,29 +3,6 @@ package com.changhong.ghlive.activity;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Rect;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.SurfaceView;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.SeekBar;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -47,6 +24,30 @@ import com.changhong.ghlive.service.HttpService;
 import com.changhong.ghliveandreplay.R;
 import com.changhong.replay.datafactory.Player;
 
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Rect;
+import android.media.AudioManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.SurfaceView;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.SeekBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
 public class MainActivity extends BaseActivity {
 
 	private String TAG = "mmmm";
@@ -62,6 +63,7 @@ public class MainActivity extends BaseActivity {
 	private ListView chListView;
 	private SeekBar liveSeekBar;
 	private TextView tvRootDigitalkey, tvRootDigitalKeyInvalid;
+	private ImageView muteIconImage;
 
 	/**
 	 * Digital key
@@ -99,6 +101,9 @@ public class MainActivity extends BaseActivity {
 
 	private ChannelListAdapter chLstAdapter;
 	private Player player;
+	private AudioManager audioMgr = null; // Audio管理器，用了控制音量
+	private boolean whetherMute;// mute flag
+	private Bundle outState;
 
 	private Handler mhandler = new Handler() {
 		@Override
@@ -177,12 +182,16 @@ public class MainActivity extends BaseActivity {
 				}
 			}
 				break;
+
+			// next message
 			}
 		}
 	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		whetherMute = false;
+		Log.i("zyt", "activity is created");
 		super.onCreate(savedInstanceState);
 	}
 
@@ -200,6 +209,11 @@ public class MainActivity extends BaseActivity {
 		player = new Player(mhandler, surfaceView, liveSeekBar, null);
 		chListView.setOnItemSelectedListener(myItemSelectLis);
 		chListView.setOnItemClickListener(myClickLis);
+
+		audioMgr = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+		// int max = audioMgr.getStreamMaxVolume( AudioManager.STREAM_VOICE_CALL
+		// );
+		// Log.d("VIOCE_CALL", “max : ” + max + ” current : ” + current);
 		// registerUser();
 		// getUserChannel();
 	}
@@ -229,7 +243,7 @@ public class MainActivity extends BaseActivity {
 		chListView.setAdapter(chLstAdapter);
 		chListView.setOnItemClickListener(myClickLis);
 		chListView.setOnItemSelectedListener(myItemSelectLis);
-
+		muteIconImage = (ImageView) findViewById(R.id.mute_icon);
 	}
 
 	private void startHttpSer() {
@@ -755,8 +769,30 @@ public class MainActivity extends BaseActivity {
 				return false;
 			}
 			break;
+		case Class_Constant.KEYCODE_MUTE:// mute
+			int current = audioMgr.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
 
+			whetherMute = !whetherMute;
+			Log.i("zyt", "keycode mute is  " + whetherMute);
+			if (muteIconImage.isShown()) {
+				muteIconImage.setVisibility(View.GONE);
+			} else {
+				muteIconImage.setVisibility(View.VISIBLE);
+			}
+			break;
+		case Class_Constant.KEYCODE_VOICE_UP:
+		case Class_Constant.KEYCODE_VOICE_DOWN:
+			if (muteIconImage.isShown()) {
+				muteIconImage.setVisibility(View.GONE);
+			}
+			whetherMute = false;
+			break;
+		default:
+			// Log.i("zyt", "onkeydown mute is " + keyCode);
+			break;
+		// next key down call
 		}
+
 		return super.onKeyDown(keyCode, event);
 	}
 
@@ -838,9 +874,7 @@ public class MainActivity extends BaseActivity {
 			}
 
 		}
-
 			break;
-		// next key down call	
 		}
 		return b_Result;
 	}
@@ -1054,6 +1088,7 @@ public class MainActivity extends BaseActivity {
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
+		Log.i("zyt", "resume mute is  " + whetherMute);
 		super.onResume();
 	}
 
@@ -1061,20 +1096,59 @@ public class MainActivity extends BaseActivity {
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		// programBan.cancelBanner();
-		super.onPause();
+		Log.i("zyt", "pause mute is  " + whetherMute);
+//		onSaveInstanceState(outState);
+		onStop();
 		player.stop();
 		programBannerDialog.dismiss();
 		ban.cancelBanner();
+		super.onPause();
+		// onDestroy();
+		// onStop();
+		// Log.i("zyt", "activity pause()");
+	}
+
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		Log.i("zyt", "activity stop()");
+		super.onStop();
 	}
 
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
-		super.onDestroy();
+		Log.i("zyt", "activity destroyed()");
+		whetherMute = false;
 		player.stop();
 		programBannerDialog.dismiss();
 		ban.cancelBanner();
-
+		super.onDestroy();
 	}
+	
+//	@Override
+//	protected void onSaveInstanceState(Bundle outState) {
+//		// TODO Auto-generated method stub
+//		outState.putBoolean("WHTHER_MUTE", whetherMute);// 被摧毁前缓存一些数据
+//		Log.i("zyt", "save mute is " + whetherMute);
+//		super.onSaveInstanceState(outState);
+//	}
+	
+	// protected void onRestoreInstanceState(Bundle savedInstanceState) {
+	// whetherMute = savedInstanceState.getBoolean("WHTHER_MUTE"); //
+	// // 被重新创建后恢复缓存的数据
+	// if (whetherMute) {
+	// muteIconImage.setVisibility(View.VISIBLE);
+	// }
+	// Log.i("zyt", "restore mute is " + whetherMute);
+	// super.onRestoreInstanceState(savedInstanceState);
+	// }
+
+	//
+	// protected void onSaveInstanceState(Bundle outState) {
+	// outState.putBoolean("WHTHER_MUTE", whetherMute);// 被摧毁前缓存一些数据
+	// Log.i("zyt", "save mute is " + whetherMute);
+	// super.onSaveInstanceState(outState);
+	// }
 
 }
