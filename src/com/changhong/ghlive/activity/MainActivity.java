@@ -211,6 +211,7 @@ public class MainActivity extends BaseActivity {
 		chListView.setOnItemClickListener(myClickLis);
 
 		audioMgr = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+		audioMgr.setStreamMute(AudioManager.STREAM_MUSIC, false);
 		// int max = audioMgr.getStreamMaxVolume( AudioManager.STREAM_VOICE_CALL
 		// );
 		// Log.d("VIOCE_CALL", “max : ” + max + ” current : ” + current);
@@ -785,6 +786,7 @@ public class MainActivity extends BaseActivity {
 			if (muteIconImage.isShown()) {
 				muteIconImage.setVisibility(View.GONE);
 			}
+//			audioMgr.setStreamMute(AudioManager.STREAM_MUSIC, true);
 			whetherMute = false;
 			break;
 		default:
@@ -1097,7 +1099,7 @@ public class MainActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		// programBan.cancelBanner();
 		Log.i("zyt", "pause mute is  " + whetherMute);
-//		onSaveInstanceState(outState);
+		// onSaveInstanceState(outState);
 		onStop();
 		player.stop();
 		programBannerDialog.dismiss();
@@ -1125,15 +1127,15 @@ public class MainActivity extends BaseActivity {
 		ban.cancelBanner();
 		super.onDestroy();
 	}
-	
-//	@Override
-//	protected void onSaveInstanceState(Bundle outState) {
-//		// TODO Auto-generated method stub
-//		outState.putBoolean("WHTHER_MUTE", whetherMute);// 被摧毁前缓存一些数据
-//		Log.i("zyt", "save mute is " + whetherMute);
-//		super.onSaveInstanceState(outState);
-//	}
-	
+
+	// @Override
+	// protected void onSaveInstanceState(Bundle outState) {
+	// // TODO Auto-generated method stub
+	// outState.putBoolean("WHTHER_MUTE", whetherMute);// 被摧毁前缓存一些数据
+	// Log.i("zyt", "save mute is " + whetherMute);
+	// super.onSaveInstanceState(outState);
+	// }
+
 	// protected void onRestoreInstanceState(Bundle savedInstanceState) {
 	// whetherMute = savedInstanceState.getBoolean("WHTHER_MUTE"); //
 	// // 被重新创建后恢复缓存的数据
