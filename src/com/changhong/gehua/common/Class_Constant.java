@@ -3,7 +3,6 @@ package com.changhong.gehua.common;
 public class Class_Constant {
 
 	// mainactivity handler type
-
 	
 	
 	public final static int REPLAY_DIALOG_END_OK = 2008;

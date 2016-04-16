@@ -38,19 +38,17 @@ public class BannerDialog extends Dialog {
 	private Handler mHandler;
 	private Player player;
 	private String TAG = "mmmm";
-	
-	
+
 	private SeekBar programPlayBar;
 	TextView channel_name = null;// 频道名称
 	TextView channel_number = null;// 频道ID
 	TextView currentProgramName = null;
 	TextView nextProgramName = null;
-	private ProcessData processData=null;
+	private ProcessData processData = null;
 	private RequestQueue mReQueue;
-	
-	
+
 	public BannerDialog(Context context, ChannelInfo outterChannelInfo, List<ProgramInfo> outterListProgramInfo,
-			Handler outterHandler,Player play) {
+			Handler outterHandler, Player play) {
 		super(context, R.style.Translucent_NoTitle);
 		setContentView(R.layout.bannernew);
 
@@ -58,7 +56,7 @@ public class BannerDialog extends Dialog {
 		channelInfo = outterChannelInfo;
 		programListInfo = outterListProgramInfo;
 		mHandler = outterHandler;
-		this.player=play;
+		this.player = play;
 
 		initView();
 		// initData();
@@ -106,39 +104,39 @@ public class BannerDialog extends Dialog {
 
 		channel_name.setText(channelInfo.getChannelName());
 		channel_number.setText(channelInfo.getChannelNumber());
-		currentProgramName.setText(
-				"正在播放：" + currentProgramBginTime + "-" + currentProgramEndTime + "  " + programListInfo.get(1).getEventName());
-		nextProgramName
-				.setText("即将播放：" + nextProgramBeginTime + "-" + nextProgramEndTime + "  " + programListInfo.get(2).getEventName());
-		processData=new ProcessData();
-		mReQueue=VolleyTool.getInstance().getRequestQueue();
+		currentProgramName.setText("正在播放：" + currentProgramBginTime + "-" + currentProgramEndTime + "  "
+				+ programListInfo.get(1).getEventName());
+		nextProgramName.setText("即将播放：" + nextProgramBeginTime + "-" + nextProgramEndTime + "  "
+				+ programListInfo.get(2).getEventName());
+		processData = new ProcessData();
+		mReQueue = VolleyTool.getInstance().getRequestQueue();
 		dvbBack();
 	}
 
-	OnSeekBarChangeListener myOnSeekChange=new OnSeekBarChangeListener() {
+	OnSeekBarChangeListener myOnSeekChange = new OnSeekBarChangeListener() {
 		int myprogress = 0;
+
 		@Override
 		public void onStopTrackingTouch(SeekBar seekBar) {
 			// TODO Auto-generated method stub
-			
+
 		}
-		
+
 		@Override
 		public void onStartTrackingTouch(SeekBar seekBar) {
 			// TODO Auto-generated method stub
-			
+
 		}
-		
+
 		@Override
-		public void onProgressChanged(SeekBar seekBar, int progress,
-				boolean fromUser) {
+		public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 			// TODO Auto-generated method stub
-			
+
 			myprogress = progress * player.mediaPlayer.getDuration() / seekBar.getMax();
 			player.mediaPlayer.seekTo(myprogress);
 		}
 	};
-	
+
 	@Override
 	public void show() {
 		super.show();
@@ -162,12 +160,19 @@ public class BannerDialog extends Dialog {
 		case Class_Constant.KEYCODE_DOWN_ARROW_KEY:
 			Log.i("zyt", "dialog down key is pressed");
 			break;
-			
+
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
-//			mHandler.sendEmptyMessage(Class_Constant.LIVE_FAST_FORWARD);
+			// mHandler.sendEmptyMessage(Class_Constant.LIVE_FAST_FORWARD);
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
-//			mHandler.sendEmptyMessage(Class_Constant.LIVE_FAST_REVERSE);
+			// mHandler.sendEmptyMessage(Class_Constant.LIVE_FAST_REVERSE);
+			break;
+		case Class_Constant.KEYCODE_OK_KEY:
+			if (player.isPlayerPlaying()) {
+				player.pause();
+			} else {
+				player.play();
+			}
 			break;
 		default:
 			mHandler.removeCallbacks(bannerRunnable);
@@ -177,40 +182,41 @@ public class BannerDialog extends Dialog {
 		return super.onKeyDown(keyCode, event);
 	}
 
-	private void dvbBack(){
-		ChannelInfo channel=CacheData.getAllChannelMap().get(CacheData.getCurChannelNum());
-		
-//		String equestURL=processData.getReplayPlayUrlString(channel, programListInfo.get(1), 0);
-		
-		String requestURL=processData.getLiveBackPlayUrl(channel,0);
-		
+	private void dvbBack() {
+		ChannelInfo channel = CacheData.getAllChannelMap().get(CacheData.getCurChannelNum());
+
+		// String equestURL=processData.getReplayPlayUrlString(channel,
+		// programListInfo.get(1), 0);
+
+		String requestURL = processData.getLiveBackPlayUrl(channel, 0);
+
 		playLiveBack(requestURL);
 	}
-	
-	private void playLiveBack(String requestURL){
+
+	private void playLiveBack(String requestURL) {
 		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, requestURL, null,
 				new Response.Listener<org.json.JSONObject>() {
 
 					@Override
 					public void onResponse(org.json.JSONObject arg0) {
 						// TODO Auto-generated method stub
-//						 Log.i(TAG, "MainActivity=dvbBack:" + arg0);
-						final String url=JsonResolve.getInstance().getLivePlayURL(arg0);
+						// Log.i(TAG, "MainActivity=dvbBack:" + arg0);
+						final String url = JsonResolve.getInstance().getLivePlayURL(arg0);
 						new Thread(new Runnable() {
-							
+
 							@Override
 							public void run() {
 								// TODO Auto-generated method stub
 								player.playUrl(url);
 							}
 						}).start();
-						
+
 					}
 				}, errorListener);
 		jsonObjectRequest.setTag(MainActivity.class.getSimpleName());// 设置tag,cancelAll的时候使用
 		mReQueue.add(jsonObjectRequest);
 	}
-	
+
 	private Response.ErrorListener errorListener = new Response.ErrorListener() {
 		@Override
 		public void onErrorResponse(VolleyError arg0) {
@@ -218,7 +224,7 @@ public class BannerDialog extends Dialog {
 			Log.i(TAG, "MainActivity=error：" + arg0);
 		}
 	};
-	
+
 	Runnable bannerRunnable = new Runnable() {
 		@Override
 		public void run() {

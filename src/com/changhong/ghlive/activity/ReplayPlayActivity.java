@@ -3,6 +3,7 @@ package com.changhong.ghlive.activity;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.IllegalFormatCodePointException;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -112,15 +113,19 @@ public class ReplayPlayActivity extends Activity {
 		ps.width = 50;
 		timeShiftIcon.setLayoutParams(ps);
 		timeShiftIcon.setVisibility(View.VISIBLE);
-		if (timeShiftIconRunnable != null) {
-			replayHandler.postDelayed(timeShiftIconRunnable, 5000);
-		}
+		// if (timeShiftIconRunnable != null) {
+		// replayHandler.postDelayed(timeShiftIconRunnable, 5000);
+		// }
 	}
 
 	public void initData() {
 		mProcessData = new ProcessData();
 		player = new Player(replayHandler, surfaceView, skbProgress, videoCurrentTime);
 		replayEndDialog = new ReplayEndDialog(this, replayHandler);
+		if (progressBarRunnable != null) {
+			replayHandler.removeCallbacks(progressBarRunnable);
+		}
+		replayHandler.postDelayed(progressBarRunnable, 5000);
 	}
 
 	/* play net video */
@@ -268,11 +273,20 @@ public class ReplayPlayActivity extends Activity {
 		// TODO Auto-generated method stub
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
-
 			Player.handleProgress.sendEmptyMessage(Class_Constant.RE_FAST_FORWARD_DOWN);
+			skbProgress.setVisibility(View.VISIBLE);
+			if (progressBarRunnable != null) {
+				replayHandler.removeCallbacks(progressBarRunnable);
+			}
+			replayHandler.postDelayed(progressBarRunnable, 5000);
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
 			Player.handleProgress.sendEmptyMessage(Class_Constant.RE_FAST_REVERSE_DOWN);
+			skbProgress.setVisibility(View.VISIBLE);
+			if (progressBarRunnable != null) {
+				replayHandler.removeCallbacks(progressBarRunnable);
+			}
+			replayHandler.postDelayed(progressBarRunnable, 5000);
 			break;
 		case Class_Constant.KEYCODE_OK_KEY:
 			if (player.isPlayerPlaying()) {
@@ -320,13 +334,14 @@ public class ReplayPlayActivity extends Activity {
 		}
 	};
 
-	Runnable timeShiftIconRunnable = new Runnable() {
+	Runnable progressBarRunnable = new Runnable() {
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
 			// palyButton.setVisibility(View.GONE);
 			// pauseButton.setVisibility(View.GONE);
-			timeShiftIcon.setVisibility(View.GONE);
+			// timeShiftIcon.setVisibility(View.GONE);
+			skbProgress.setVisibility(View.GONE);
 		}
 	};
 

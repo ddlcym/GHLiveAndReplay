@@ -117,7 +117,7 @@ public class UpdateReceiver extends BroadcastReceiver {
 			if (!forceInstall) {
 				Dialog dialog = DialogUtil.showAlertDialog(mContext, "已经为您准备好更新", "最新的版本已经下载完成,是否安装更新？",
 						new DialogBtnOnClickListener() {
-
+							
 							@Override
 							public void onSubmit(DialogMessage dialogMessage) {
 								// 休息1秒安装

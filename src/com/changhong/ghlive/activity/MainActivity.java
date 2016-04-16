@@ -246,8 +246,8 @@ public class MainActivity extends BaseActivity {
 			if (view != null) {
 				// view.getLocationOnScreen(pos);
 				// dislistfocus((FrameLayout) view);
-//				mhandler.removeCallbacks(runnable);
-//				mhandler.postDelayed(runnable, 5000);
+				// mhandler.removeCallbacks(runnable);
+				// mhandler.postDelayed(runnable, 5000);
 				// TextView channelIndex = (TextView)
 				// view.findViewById(R.id.chanId);
 				// curChannelNO = channelIndex.getText().toString();
@@ -677,13 +677,14 @@ public class MainActivity extends BaseActivity {
 			// PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
 			Log.i("zyt", "beign to show to toast banner");
 			showDialogBanner(curChannelNO);
+			mhandler.postDelayed(bannerDismissRunnable, 5000);
 			break;
 		case Class_Constant.KEYCODE_UP_ARROW_KEY:
 			if (channelListLinear.isShown()) {
 				chListView.setFocusable(true);
 				chListView.requestFocus();
-				if(0==chListView.getSelectedItemPosition()){
-					chListView.setSelection(chLstAdapter.getCount()-1);
+				if (0 == chListView.getSelectedItemPosition()) {
+					chListView.setSelection(chLstAdapter.getCount() - 1);
 				}
 			} else {
 				// 播放之后的一个频道
@@ -705,7 +706,7 @@ public class MainActivity extends BaseActivity {
 			if (channelListLinear.isShown()) {
 				chListView.setFocusable(true);
 				chListView.requestFocus();
-				if((chLstAdapter.getCount()-1)==chListView.getSelectedItemPosition()){
+				if ((chLstAdapter.getCount() - 1) == chListView.getSelectedItemPosition()) {
 					chListView.setSelection(0);
 				}
 			} else {
@@ -839,7 +840,7 @@ public class MainActivity extends BaseActivity {
 		}
 
 			break;
-
+		// next key down call	
 		}
 		return b_Result;
 	}
@@ -977,6 +978,19 @@ public class MainActivity extends BaseActivity {
 			linear_vertical_line.setVisibility(View.INVISIBLE);
 			liveSeekBar.setVisibility(View.INVISIBLE);
 			chListView.setVisibility(View.INVISIBLE);
+		}
+	};
+
+	Runnable bannerDismissRunnable = new Runnable() {
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			// channelListLinear.setVisibility(View.INVISIBLE);
+			// focusView.setVisibility(View.INVISIBLE);
+			// linear_vertical_line.setVisibility(View.INVISIBLE);
+			// liveSeekBar.setVisibility(View.INVISIBLE);
+			// chListView.setVisibility(View.INVISIBLE);
+			programBannerDialog.dismiss();
 		}
 	};
 
