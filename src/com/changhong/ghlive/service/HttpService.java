@@ -1,5 +1,7 @@
 package com.changhong.ghlive.service;
 
+import java.util.Date;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -8,14 +10,20 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.changhong.gehua.common.ChannelInfo;
 import com.changhong.gehua.common.ProcessData;
 import com.changhong.gehua.common.VolleyTool;
+import com.changhong.gehua.update.DateUtils;
 import com.changhong.gehua.update.UpdateReceiver;
 import com.changhong.gehua.update.UpdateThread;
 import com.changhong.ghlive.activity.MyApp;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 public class HttpService extends Service {
 
@@ -26,6 +34,16 @@ public class HttpService extends Service {
 
 	private ProcessData processData;
 	private UpdateReceiver mUpdateReceiver;
+	private Context mContext;
+
+	public HttpService() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public HttpService(Context outterContext) {
+		// TODO Auto-generated constructor stub
+		mContext = outterContext;
+	}
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -37,11 +55,10 @@ public class HttpService extends Service {
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		super.onCreate();
-//		Log.i(TAG, "process is here 0-0");
+		// Log.i(TAG, "process is here 0-0");
 		// start updateThread
-//		checkUpdate();
+		// checkUpdate();
 		initData();
-
 	}
 
 	@Override
@@ -54,10 +71,8 @@ public class HttpService extends Service {
 			ChannelInfo channel = (ChannelInfo) intent.getSerializableExtra("playLiveChannel");
 			if (channel != null) {
 				// getPointProList(channel);
-
 			}
 		}
-
 		return super.onStartCommand(intent, flags, startId);
 	}
 
@@ -65,11 +80,12 @@ public class HttpService extends Service {
 		if (null == processData) {
 			processData = new ProcessData();
 		}
-		// update thread needed broadcastreceiver
-
 		volleyTool = VolleyTool.getInstance();
 		mReQueue = volleyTool.getRequestQueue();
 		getChannelList();
+
+		IntentFilter filter = new IntentFilter();
+		filter.addAction("WHETHER_MUTE");
 	}
 
 	private void getChannelList() {
@@ -146,8 +162,25 @@ public class HttpService extends Service {
 
 	/* init the process of apk update */
 	public void checkUpdate() {
-//		Log.i(TAG, "process is in the checkupdate");
+		// Log.i(TAG, "process is in the checkupdate");
 		mUpdateReceiver = new UpdateReceiver(MyApp.getContext());
 		new Thread(new UpdateThread(MyApp.getContext(), mUpdateReceiver)).start();
+	}
+
+	/* save mute state */
+	public void saveMutesState(String muteState) {
+		if (mContext != null) {
+			SharedPreferences preferences = mContext.getSharedPreferences("mute_setting", Context.MODE_PRIVATE);
+			SharedPreferences.Editor editor = preferences.edit();
+
+			editor.putString("UPDATE_MUTE", muteState);
+			editor.commit();
+		}
+	}
+
+	/* get mute state */
+	public String getMuteState() {
+		SharedPreferences preferences = mContext.getSharedPreferences("mute_setting", Context.MODE_PRIVATE);
+		return preferences.getString("UPDATE_MUTE", "");
 	}
 }
