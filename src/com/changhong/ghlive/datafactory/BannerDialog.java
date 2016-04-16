@@ -180,11 +180,15 @@ public class BannerDialog extends Dialog {
 	private void dvbBack(){
 		ChannelInfo channel=CacheData.getAllChannelMap().get(CacheData.getCurChannelNum());
 		
-		String equestURL=processData.getReplayPlayUrlString(channel, programListInfo.get(1), 0);
+//		String equestURL=processData.getReplayPlayUrlString(channel, programListInfo.get(1), 0);
 		
-//		String equestURL=processData.getLiveBackPlayUrl(channel);
+		String requestURL=processData.getLiveBackPlayUrl(channel,0);
 		
-		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, equestURL, null,
+		playLiveBack(requestURL);
+	}
+	
+	private void playLiveBack(String requestURL){
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, requestURL, null,
 				new Response.Listener<org.json.JSONObject>() {
 
 					@Override
@@ -205,9 +209,6 @@ public class BannerDialog extends Dialog {
 				}, errorListener);
 		jsonObjectRequest.setTag(MainActivity.class.getSimpleName());// 设置tag,cancelAll的时候使用
 		mReQueue.add(jsonObjectRequest);
-		
-		
-		
 	}
 	
 	private Response.ErrorListener errorListener = new Response.ErrorListener() {

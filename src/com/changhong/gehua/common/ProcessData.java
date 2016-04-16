@@ -127,8 +127,8 @@ public class ProcessData {
 		return strPOSTReturn(rawPlainStr, "msis/getPlayURL");
 	}
 	
-	public String getLiveBackPlayUrl(ChannelInfo channel){
-		String rawPlainStr="http://ott.yun.gehua.net.cn:8080/msis/getPlayURL?version=V001&userCode=15914018212&userName=15914018212&resourceCode="+channel.getResourceCode()+"&resolution=1280*720&terminalType=4&playType=4&delay=360";
+	public String getLiveBackPlayUrl(ChannelInfo channel,int delay){
+		String rawPlainStr="http://ott.yun.gehua.net.cn:8080/msis/getPlayURL?version=V001&userCode=15914018212&userName=15914018212&resourceCode="+channel.getResourceCode()+"&resolution=1280*720&terminalType=4&playType=4&delay="+delay;
 				
 		return strPOSTReturn(rawPlainStr, "msis/getPlayURL");
 	}

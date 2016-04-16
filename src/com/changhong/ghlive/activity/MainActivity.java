@@ -738,7 +738,6 @@ public class MainActivity extends BaseActivity {
 
 			break;
 		case Class_Constant.MENU_ID_DTV_ROOT:
-			Log.i("mmmm", "本控 info键");
 			if (ban != null && !ban.isToastShow()) {
 				ban.show();
 			}
