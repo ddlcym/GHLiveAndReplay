@@ -13,6 +13,15 @@
     </SurfaceView>
 
     <ImageView
+        android:id="@+id/mute_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|top"
+        android:paddingTop="15dip"
+        android:src="@drawable/mute_icon"
+        android:visibility="gone" />
+
+    <ImageView
         android:id="@+id/set_focus_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -67,7 +76,7 @@
                     android:gravity="center"
                     android:textSize="@dimen/FONT_SIZE_BIG" >
                 </TextView>
-				
+
                 <ImageView
                     android:layout_width="40dip"
                     android:layout_height="wrap_content"
@@ -111,10 +120,10 @@
                     android:cacheColorHint="#00000000"
                     android:clipChildren="true"
                     android:divider="@drawable/smart_list_divider"
-                    android:visibility="gone"
                     android:drawSelectorOnTop="false"
                     android:fadingEdge="none"
-                    android:scrollbars="none" />
+                    android:scrollbars="none"
+                    android:visibility="gone" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
@@ -158,31 +167,33 @@
             android:src="@drawable/dtv_prolist_ok"
             android:visibility="gone" />
     </LinearLayout>
+
     <TextView
-		android:layout_gravity="top|left"
-		android:layout_marginTop="50dip"
-		android:layout_marginLeft="1050dip"
-		android:id="@+id/id_dtv_digital_root"
-		android:visibility="gone"
-		android:textColor="#ffffff00"
-		android:gravity="center"
-		android:textSize="50sp"
-		android:layout_width="180dip"
-		android:layout_height="85dip"
-		android:background="@drawable/smart_digital_back" />
-	<TextView
-		android:layout_gravity="top|left"
-		android:layout_marginTop="50dip"
-		android:layout_marginLeft="1050dip"
-		android:id="@+id/id_dtv_digital_root_invalid"
-		android:visibility="gone"
-		android:textColor="#ffff0000"
-		android:gravity="center"
-		android:textSize="32sp"
-		android:text="@string/str_epg_digital_invalid"
-		android:layout_width="180dip"
-		android:layout_height="85dip"
-		android:background="@drawable/smart_digital_back" />
+        android:id="@+id/id_dtv_digital_root"
+        android:layout_width="180dip"
+        android:layout_height="85dip"
+        android:layout_gravity="top|left"
+        android:layout_marginLeft="1050dip"
+        android:layout_marginTop="50dip"
+        android:background="@drawable/smart_digital_back"
+        android:gravity="center"
+        android:textColor="#ffffff00"
+        android:textSize="50sp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/id_dtv_digital_root_invalid"
+        android:layout_width="180dip"
+        android:layout_height="85dip"
+        android:layout_gravity="top|left"
+        android:layout_marginLeft="1050dip"
+        android:layout_marginTop="50dip"
+        android:background="@drawable/smart_digital_back"
+        android:gravity="center"
+        android:text="@string/str_epg_digital_invalid"
+        android:textColor="#ffff0000"
+        android:textSize="32sp"
+        android:visibility="gone" />
 
     <SeekBar
         android:id="@+id/liveskbProgress"
