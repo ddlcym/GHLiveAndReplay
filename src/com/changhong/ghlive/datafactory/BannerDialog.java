@@ -24,8 +24,11 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -46,6 +49,8 @@ public class BannerDialog extends Dialog {
 	TextView nextProgramName = null;
 	private ProcessData processData = null;
 	private RequestQueue mReQueue;
+	private LinearLayout timeShiftInfo;
+	private ImageView palyButton, pauseButton, timeShiftIcon;
 
 	public BannerDialog(Context context, ChannelInfo outterChannelInfo, List<ProgramInfo> outterListProgramInfo,
 			Handler outterHandler, Player play) {
@@ -93,6 +98,13 @@ public class BannerDialog extends Dialog {
 		// View bannerView = findViewById(R.id.id_dtv_banner);
 		// bannerView.getBackground().setAlpha(255);
 		programPlayBar.setOnSeekBarChangeListener(myOnSeekChange);
+
+		timeShiftInfo = (LinearLayout) findViewById(R.id.id_dtv_banner);
+		timeShiftIcon = (ImageView) findViewById(R.id.time_shift_icon);
+		android.view.ViewGroup.LayoutParams ps = timeShiftIcon.getLayoutParams();
+		ps.height = 50;
+		ps.width = 50;
+		timeShiftIcon.setLayoutParams(ps);
 	}
 
 	public void initData() {
@@ -215,6 +227,10 @@ public class BannerDialog extends Dialog {
 				}, errorListener);
 		jsonObjectRequest.setTag(MainActivity.class.getSimpleName());// 设置tag,cancelAll的时候使用
 		mReQueue.add(jsonObjectRequest);
+	}
+
+	public void dismissInfoBan() {
+		timeShiftInfo.setVisibility(View.GONE);
 	}
 
 	private Response.ErrorListener errorListener = new Response.ErrorListener() {
