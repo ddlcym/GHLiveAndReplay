@@ -73,12 +73,9 @@ public class MainActivity extends BaseActivity {
 
 	// private Banner programBan;
 	private BannerDialog programBannerDialog;
-
 	private Banner ban;
-
 	private VolleyTool volleyTool;
 	private RequestQueue mReQueue;
-
 	private ProcessData processData;
 
 	// kinds of channel list
@@ -92,7 +89,6 @@ public class MainActivity extends BaseActivity {
 	private List<ChannelInfo> otherTvList = new ArrayList<ChannelInfo>();
 
 	private List<ProgramInfo> curChannelPrograms = new ArrayList<ProgramInfo>();// 当前频道下的上一个节目，当前节目，下一个节目信息
-
 	private int curListIndex = 0;// 当前list下正在播放的当前节目的index
 	private int curType = 0;
 	private String curChannelNO = "1"; // 当前播放的节目的channelno
@@ -103,7 +99,7 @@ public class MainActivity extends BaseActivity {
 	private Player player;
 	private AudioManager audioMgr = null; // Audio管理器，用了控制音量
 	private boolean whetherMute;// mute flag
-	private Bundle outState;
+	HttpService mHttpService;
 
 	private Handler mhandler = new Handler() {
 		@Override
@@ -122,9 +118,6 @@ public class MainActivity extends BaseActivity {
 				// show toast banner
 				// showToastBanner();
 				break;
-			// case Class_Constant.TOAST_BANNER_PROGRAM_PASS:
-			//
-			// break;
 			case Class_Constant.TOAST_BANNER_PROGRAM_PASS:
 				curChannelPrograms = (List<ProgramInfo>) msg.obj;
 
@@ -182,7 +175,6 @@ public class MainActivity extends BaseActivity {
 				}
 			}
 				break;
-
 			// next message
 			}
 		}
@@ -191,7 +183,9 @@ public class MainActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		whetherMute = false;
-		Log.i("zyt", "activity is created");
+		startHttpSer();
+		whetherMute = Boolean.valueOf(mHttpService.getMuteState());
+		// Log.i("zyt", "current volume state is " + whetherMute);
 		super.onCreate(savedInstanceState);
 	}
 
@@ -203,15 +197,13 @@ public class MainActivity extends BaseActivity {
 		if (null == processData) {
 			processData = new ProcessData();
 		}
-		// startHttpSer();
 		getChannelList();
-		// Log.i("mmmm", "c"+date.getHours()+"-"+date.getMonth());
 		player = new Player(mhandler, surfaceView, liveSeekBar, null);
 		chListView.setOnItemSelectedListener(myItemSelectLis);
 		chListView.setOnItemClickListener(myClickLis);
 
 		audioMgr = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-		audioMgr.setStreamMute(AudioManager.STREAM_MUSIC, false);
+		// audioMgr.setStreamMute(AudioManager.STREAM_MUSIC, false);
 		// int max = audioMgr.getStreamMaxVolume( AudioManager.STREAM_VOICE_CALL
 		// );
 		// Log.d("VIOCE_CALL", “max : ” + max + ” current : ” + current);
@@ -245,10 +237,17 @@ public class MainActivity extends BaseActivity {
 		chListView.setOnItemClickListener(myClickLis);
 		chListView.setOnItemSelectedListener(myItemSelectLis);
 		muteIconImage = (ImageView) findViewById(R.id.mute_icon);
+
+		if (whetherMute) {
+			muteIconImage.setVisibility(View.VISIBLE);
+		} else {
+			muteIconImage.setVisibility(View.GONE);
+		}
 	}
 
 	private void startHttpSer() {
-		Intent intent = new Intent(this, HttpService.class);
+		mHttpService = new HttpService(getApplicationContext());
+		Intent intent = new Intent(this, mHttpService.getClass());
 		startService(intent);
 	}
 
@@ -690,7 +689,6 @@ public class MainActivity extends BaseActivity {
 			// ChannelInfo curChannel =
 			// CacheData.getAllChannelMap().get(curChannelNO);
 			// PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
-			Log.i("zyt", "beign to show to toast banner");
 			showDialogBanner(curChannelNO);
 			mhandler.postDelayed(bannerDismissRunnable, 5000);
 			break;
@@ -717,7 +715,6 @@ public class MainActivity extends BaseActivity {
 			break;
 
 		case Class_Constant.KEYCODE_DOWN_ARROW_KEY:
-			// Log.i("zyt", "activity down key is pressed");
 			if (channelListLinear.isShown()) {
 				chListView.setFocusable(true);
 				chListView.requestFocus();
@@ -771,10 +768,10 @@ public class MainActivity extends BaseActivity {
 			}
 			break;
 		case Class_Constant.KEYCODE_MUTE:// mute
-			int current = audioMgr.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
-
+			// int current =
+			// audioMgr.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
 			whetherMute = !whetherMute;
-			Log.i("zyt", "keycode mute is  " + whetherMute);
+			// Log.i("zyt", "keycode mute is " + whetherMute);
 			if (muteIconImage.isShown()) {
 				muteIconImage.setVisibility(View.GONE);
 			} else {
@@ -786,7 +783,7 @@ public class MainActivity extends BaseActivity {
 			if (muteIconImage.isShown()) {
 				muteIconImage.setVisibility(View.GONE);
 			}
-//			audioMgr.setStreamMute(AudioManager.STREAM_MUSIC, true);
+			// audioMgr.setStreamMute(AudioManager.STREAM_MUSIC, true);
 			whetherMute = false;
 			break;
 		default:
@@ -1020,12 +1017,6 @@ public class MainActivity extends BaseActivity {
 	Runnable bannerDismissRunnable = new Runnable() {
 		@Override
 		public void run() {
-			// TODO Auto-generated method stub
-			// channelListLinear.setVisibility(View.INVISIBLE);
-			// focusView.setVisibility(View.INVISIBLE);
-			// linear_vertical_line.setVisibility(View.INVISIBLE);
-			// liveSeekBar.setVisibility(View.INVISIBLE);
-			// chListView.setVisibility(View.INVISIBLE);
 			programBannerDialog.dismiss();
 		}
 	};
@@ -1099,8 +1090,12 @@ public class MainActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		// programBan.cancelBanner();
 		Log.i("zyt", "pause mute is  " + whetherMute);
-		// onSaveInstanceState(outState);
-		onStop();
+		Intent intent = new Intent();
+		intent.setAction("WHETHER_MUTE"); // 设置Action
+		intent.putExtra("msg", "接收动态注册广播成功！"); // 添加附加信息
+		sendBroadcast(intent);
+		mHttpService.saveMutesState(whetherMute + "");
+		// onStop();
 		player.stop();
 		programBannerDialog.dismiss();
 		ban.cancelBanner();
@@ -1113,7 +1108,7 @@ public class MainActivity extends BaseActivity {
 	@Override
 	protected void onStop() {
 		// TODO Auto-generated method stub
-		Log.i("zyt", "activity stop()");
+		// Log.i("zyt", "activity stop()" + mHttpService.getMuteState());
 		super.onStop();
 	}
 
@@ -1127,30 +1122,5 @@ public class MainActivity extends BaseActivity {
 		ban.cancelBanner();
 		super.onDestroy();
 	}
-
-	// @Override
-	// protected void onSaveInstanceState(Bundle outState) {
-	// // TODO Auto-generated method stub
-	// outState.putBoolean("WHTHER_MUTE", whetherMute);// 被摧毁前缓存一些数据
-	// Log.i("zyt", "save mute is " + whetherMute);
-	// super.onSaveInstanceState(outState);
-	// }
-
-	// protected void onRestoreInstanceState(Bundle savedInstanceState) {
-	// whetherMute = savedInstanceState.getBoolean("WHTHER_MUTE"); //
-	// // 被重新创建后恢复缓存的数据
-	// if (whetherMute) {
-	// muteIconImage.setVisibility(View.VISIBLE);
-	// }
-	// Log.i("zyt", "restore mute is " + whetherMute);
-	// super.onRestoreInstanceState(savedInstanceState);
-	// }
-
-	//
-	// protected void onSaveInstanceState(Bundle outState) {
-	// outState.putBoolean("WHTHER_MUTE", whetherMute);// 被摧毁前缓存一些数据
-	// Log.i("zyt", "save mute is " + whetherMute);
-	// super.onSaveInstanceState(outState);
-	// }
 
 }
