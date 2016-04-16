@@ -275,6 +275,10 @@ public class ReplayPlayActivity extends Activity {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
 			Player.handleProgress.sendEmptyMessage(Class_Constant.RE_FAST_FORWARD_DOWN);
 			skbProgress.setVisibility(View.VISIBLE);
+			palyButton.setVisibility(View.GONE);
+			pauseButton.setVisibility(View.GONE);
+			videoTimeLength.setVisibility(View.VISIBLE);
+			videoCurrentTime.setVisibility(View.VISIBLE);
 			if (progressBarRunnable != null) {
 				replayHandler.removeCallbacks(progressBarRunnable);
 			}
@@ -283,6 +287,10 @@ public class ReplayPlayActivity extends Activity {
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
 			Player.handleProgress.sendEmptyMessage(Class_Constant.RE_FAST_REVERSE_DOWN);
 			skbProgress.setVisibility(View.VISIBLE);
+			palyButton.setVisibility(View.GONE);
+			pauseButton.setVisibility(View.GONE);
+			videoTimeLength.setVisibility(View.VISIBLE);
+			videoCurrentTime.setVisibility(View.VISIBLE);
 			if (progressBarRunnable != null) {
 				replayHandler.removeCallbacks(progressBarRunnable);
 			}
@@ -342,6 +350,8 @@ public class ReplayPlayActivity extends Activity {
 			// pauseButton.setVisibility(View.GONE);
 			// timeShiftIcon.setVisibility(View.GONE);
 			skbProgress.setVisibility(View.GONE);
+			videoTimeLength.setVisibility(View.GONE);
+			videoCurrentTime.setVisibility(View.GONE);
 		}
 	};
 
