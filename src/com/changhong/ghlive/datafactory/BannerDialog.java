@@ -41,6 +41,7 @@ public class BannerDialog extends Dialog {
 	private Handler mHandler;
 	private Player player;
 	private String TAG = "mmmm";
+	private boolean whetherMute;
 
 	private SeekBar programPlayBar;
 	TextView channel_name = null;// 频道名称
@@ -51,6 +52,7 @@ public class BannerDialog extends Dialog {
 	private RequestQueue mReQueue;
 	private LinearLayout timeShiftInfo;
 	private ImageView palyButton, pauseButton, timeShiftIcon;
+	private ImageView muteIconImage;
 
 	public BannerDialog(Context context, ChannelInfo outterChannelInfo, List<ProgramInfo> outterListProgramInfo,
 			Handler outterHandler, Player play) {
@@ -62,6 +64,7 @@ public class BannerDialog extends Dialog {
 		programListInfo = outterListProgramInfo;
 		mHandler = outterHandler;
 		this.player = play;
+		whetherMute = false;
 
 		initView();
 		// initData();
@@ -99,6 +102,7 @@ public class BannerDialog extends Dialog {
 		// bannerView.getBackground().setAlpha(255);
 		programPlayBar.setOnSeekBarChangeListener(myOnSeekChange);
 
+		muteIconImage = (ImageView) findViewById(R.id.mute_icon);
 		timeShiftInfo = (LinearLayout) findViewById(R.id.id_dtv_banner);
 		timeShiftIcon = (ImageView) findViewById(R.id.time_shift_icon);
 		android.view.ViewGroup.LayoutParams ps = timeShiftIcon.getLayoutParams();
@@ -184,6 +188,17 @@ public class BannerDialog extends Dialog {
 				player.pause();
 			} else {
 				player.play();
+			}
+			break;
+		case Class_Constant.KEYCODE_MUTE:// mute
+			// int current =
+			// audioMgr.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
+			whetherMute = !whetherMute;
+			// Log.i("zyt", "keycode mute is " + whetherMute);
+			if (muteIconImage.isShown()) {
+				muteIconImage.setVisibility(View.GONE);
+			} else {
+				muteIconImage.setVisibility(View.VISIBLE);
 			}
 			break;
 		default:
