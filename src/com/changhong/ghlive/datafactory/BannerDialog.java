@@ -56,7 +56,7 @@ public class BannerDialog extends Dialog {
 	private ImageView palyButton, pauseButton, timeShiftIcon;
 	private ImageView muteIconImage;
 	private HttpService mHttpService;
-
+	
 	public BannerDialog(Context context, ChannelInfo outterChannelInfo, List<ProgramInfo> outterListProgramInfo,
 			Handler outterHandler, Player play, HttpService outterHttpService) {
 		super(context, R.style.Translucent_NoTitle);
