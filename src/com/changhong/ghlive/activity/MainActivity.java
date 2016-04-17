@@ -99,7 +99,7 @@ public class MainActivity extends BaseActivity {
 	private Player player;
 	private AudioManager audioMgr = null; // Audio管理器，用了控制音量
 	private boolean whetherMute;// mute flag
-	HttpService mHttpService;
+	private HttpService mHttpService;
 
 	private Handler mhandler = new Handler() {
 		@Override
@@ -175,7 +175,17 @@ public class MainActivity extends BaseActivity {
 				}
 			}
 				break;
-			// next message
+			/* play state is back from time shift mode */
+			case Class_Constant.PLAY_BACKFROM_SHIFT: {
+				whetherMute = Boolean.valueOf(mHttpService.getMuteState());
+				if (whetherMute) {
+					muteIconImage.setVisibility(View.VISIBLE);
+				} else {
+					muteIconImage.setVisibility(View.GONE);
+				}
+				break;
+			}
+				// next message
 			}
 		}
 	};
@@ -689,7 +699,9 @@ public class MainActivity extends BaseActivity {
 			// ChannelInfo curChannel =
 			// CacheData.getAllChannelMap().get(curChannelNO);
 			// PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
+			mHttpService.saveMutesState(whetherMute + "");
 			showDialogBanner(curChannelNO);
+			muteIconImage.setVisibility(View.GONE);
 			mhandler.postDelayed(bannerDismissRunnable, 5000);
 			break;
 		case Class_Constant.KEYCODE_UP_ARROW_KEY:
@@ -943,7 +955,7 @@ public class MainActivity extends BaseActivity {
 		if (programBannerDialog != null) {
 			programBannerDialog.cancel();
 		}
-		programBannerDialog = new BannerDialog(this, curChannel, curChannelPrograms, mhandler, player);
+		programBannerDialog = new BannerDialog(this, curChannel, curChannelPrograms, mhandler, player, mHttpService);
 		programBannerDialog.show();
 	}
 

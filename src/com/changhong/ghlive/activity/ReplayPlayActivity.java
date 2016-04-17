@@ -14,7 +14,9 @@ import com.changhong.gehua.common.PlayVideo;
 import com.changhong.gehua.common.ProcessData;
 import com.changhong.gehua.common.ProgramInfo;
 import com.changhong.gehua.widget.ReplayEndDialog;
+import com.changhong.ghlive.service.HttpService;
 import com.changhong.ghliveandreplay.R;
+import com.changhong.ghliveandreplay.R.id;
 import com.changhong.replay.datafactory.Player;
 
 import android.app.ActionBar.LayoutParams;
@@ -41,7 +43,8 @@ public class ReplayPlayActivity extends Activity {
 	private Player player;
 	private String replayChannelId = null;
 	private ReplayEndDialog replayEndDialog;
-	private ImageView palyButton, pauseButton, timeShiftIcon;
+	private ImageView palyButton, pauseButton, timeShiftIcon, forwardIcon, backwardIcon;
+	private ImageView muteIconImage;
 
 	private int maxTimes = 0;
 	ProcessData mProcessData;
@@ -49,6 +52,8 @@ public class ReplayPlayActivity extends Activity {
 	ProgramInfo mprogram;
 	String replayurl = "";
 	private List<ProgramInfo> curProgramList = new ArrayList<ProgramInfo>();
+	private boolean whetherMute;
+	private HttpService mHttpService;
 
 	private Handler replayHandler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
@@ -92,7 +97,11 @@ public class ReplayPlayActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.replay_play);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-
+		whetherMute = false;
+		if (mHttpService == null) {
+			mHttpService = new HttpService(getApplicationContext());
+		}
+		whetherMute = Boolean.valueOf(mHttpService.getMuteState());
 		initView();
 		initData();
 	}
@@ -107,15 +116,20 @@ public class ReplayPlayActivity extends Activity {
 		palyButton = (ImageView) findViewById(R.id.play_btn);
 		pauseButton = (ImageView) findViewById(R.id.pause_btn);
 
+		muteIconImage = (ImageView) findViewById(R.id.mute_icon);
 		timeShiftIcon = (ImageView) findViewById(R.id.time_shift_icon);
+		forwardIcon = (ImageView) findViewById(R.id.fast_forward);
+		backwardIcon = (ImageView) findViewById(R.id.fast_backward);
 		android.view.ViewGroup.LayoutParams ps = timeShiftIcon.getLayoutParams();
 		ps.height = 50;
 		ps.width = 50;
 		timeShiftIcon.setLayoutParams(ps);
 		timeShiftIcon.setVisibility(View.VISIBLE);
-		// if (timeShiftIconRunnable != null) {
-		// replayHandler.postDelayed(timeShiftIconRunnable, 5000);
-		// }
+		if (whetherMute) {
+			muteIconImage.setVisibility(View.VISIBLE);
+		} else {
+			muteIconImage.setVisibility(View.GONE);
+		}
 	}
 
 	public void initData() {
@@ -283,6 +297,16 @@ public class ReplayPlayActivity extends Activity {
 				replayHandler.removeCallbacks(progressBarRunnable);
 			}
 			replayHandler.postDelayed(progressBarRunnable, 5000);
+			backwardIcon.setVisibility(View.GONE);
+			forwardIcon.setVisibility(View.VISIBLE);
+			replayHandler.postDelayed(new Runnable() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					forwardIcon.setVisibility(View.GONE);
+				}
+			}, 5000);
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
 			Player.handleProgress.sendEmptyMessage(Class_Constant.RE_FAST_REVERSE_DOWN);
@@ -295,6 +319,16 @@ public class ReplayPlayActivity extends Activity {
 				replayHandler.removeCallbacks(progressBarRunnable);
 			}
 			replayHandler.postDelayed(progressBarRunnable, 5000);
+			forwardIcon.setVisibility(View.GONE);
+			backwardIcon.setVisibility(View.VISIBLE);
+			replayHandler.postDelayed(new Runnable() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					backwardIcon.setVisibility(View.GONE);
+				}
+			}, 5000);
 			break;
 		case Class_Constant.KEYCODE_OK_KEY:
 			if (player.isPlayerPlaying()) {
@@ -310,6 +344,25 @@ public class ReplayPlayActivity extends Activity {
 				replayHandler.removeCallbacks(runnable);
 			}
 			replayHandler.postDelayed(runnable, 5000);
+			break;
+		case Class_Constant.KEYCODE_MUTE:// mute
+			// int current =
+			// audioMgr.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
+			whetherMute = !whetherMute;
+			// Log.i("zyt", "keycode mute is " + whetherMute);
+			if (muteIconImage.isShown()) {
+				muteIconImage.setVisibility(View.GONE);
+			} else {
+				muteIconImage.setVisibility(View.VISIBLE);
+			}
+			break;
+		case Class_Constant.KEYCODE_VOICE_UP:
+		case Class_Constant.KEYCODE_VOICE_DOWN:
+			if (muteIconImage.isShown()) {
+				muteIconImage.setVisibility(View.GONE);
+			}
+			// audioMgr.setStreamMute(AudioManager.STREAM_MUSIC, true);
+			whetherMute = false;
 			break;
 		}
 
@@ -358,8 +411,9 @@ public class ReplayPlayActivity extends Activity {
 	@Override
 	protected void onPause() {
 		// TODO Auto-generated method stub
-		super.onPause();
 		player.stop();
+		mHttpService.saveMutesState(whetherMute + "");
+		super.onPause();
 	}
 
 	@Override
