@@ -4,6 +4,7 @@ public class Class_Constant {
 
 	// mainactivity handler type
 
+	public final static int PLAY_BACKFROM_SHIFT = 2007;// voice down key
 	public final static int KEYCODE_VOICE_DOWN = 25;// voice down key
 	public final static int KEYCODE_VOICE_UP = 24;// voice up key
 	public final static int KEYCODE_MUTE = 164;// mute key
