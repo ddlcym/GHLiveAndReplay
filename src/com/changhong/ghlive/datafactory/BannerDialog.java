@@ -44,7 +44,7 @@ public class BannerDialog extends Dialog {
 	private Player player;
 	private String TAG = "mmmm";
 	private boolean whetherMute;
-
+	
 	private SeekBar programPlayBar;
 	TextView channel_name = null;// 频道名称
 	TextView channel_number = null;// 频道ID
