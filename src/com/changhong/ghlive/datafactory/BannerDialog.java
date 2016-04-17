@@ -15,12 +15,14 @@ import com.changhong.gehua.common.ProgramInfo;
 import com.changhong.gehua.common.Utils;
 import com.changhong.gehua.common.VolleyTool;
 import com.changhong.ghlive.activity.MainActivity;
+import com.changhong.ghlive.service.HttpService;
 import com.changhong.ghliveandreplay.R;
 import com.changhong.replay.datafactory.Player;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -53,9 +55,10 @@ public class BannerDialog extends Dialog {
 	private LinearLayout timeShiftInfo;
 	private ImageView palyButton, pauseButton, timeShiftIcon;
 	private ImageView muteIconImage;
+	private HttpService mHttpService;
 
 	public BannerDialog(Context context, ChannelInfo outterChannelInfo, List<ProgramInfo> outterListProgramInfo,
-			Handler outterHandler, Player play) {
+			Handler outterHandler, Player play, HttpService outterHttpService) {
 		super(context, R.style.Translucent_NoTitle);
 		setContentView(R.layout.bannernew);
 
@@ -63,6 +66,7 @@ public class BannerDialog extends Dialog {
 		channelInfo = outterChannelInfo;
 		programListInfo = outterListProgramInfo;
 		mHandler = outterHandler;
+		mHttpService = outterHttpService;
 		this.player = play;
 		whetherMute = false;
 
@@ -98,11 +102,17 @@ public class BannerDialog extends Dialog {
 		currentProgramName = (TextView) findViewById(R.id.current_program_info);
 		nextProgramName = (TextView) findViewById(R.id.next_program_info);
 		programPlayBar = (SeekBar) findViewById(R.id.program_progress);
-		// View bannerView = findViewById(R.id.id_dtv_banner);
-		// bannerView.getBackground().setAlpha(255);
 		programPlayBar.setOnSeekBarChangeListener(myOnSeekChange);
 
+		palyButton = (ImageView) findViewById(R.id.play_btn);
+		pauseButton = (ImageView) findViewById(R.id.pause_btn);
 		muteIconImage = (ImageView) findViewById(R.id.mute_icon);
+		whetherMute = Boolean.valueOf(mHttpService.getMuteState());
+		if (whetherMute) {
+			muteIconImage.setVisibility(View.VISIBLE);
+		} else {
+			muteIconImage.setVisibility(View.GONE);
+		}
 		timeShiftInfo = (LinearLayout) findViewById(R.id.id_dtv_banner);
 		timeShiftIcon = (ImageView) findViewById(R.id.time_shift_icon);
 		android.view.ViewGroup.LayoutParams ps = timeShiftIcon.getLayoutParams();
@@ -171,6 +181,10 @@ public class BannerDialog extends Dialog {
 		switch (keyCode) {
 		/* 返回--取消 */
 		case KeyEvent.KEYCODE_BACK:
+			mHttpService.saveMutesState(whetherMute + "");
+			Message msg = new Message();
+			msg.what = Class_Constant.PLAY_BACKFROM_SHIFT;
+			mHandler.sendMessage(msg);
 			dismiss();
 			break;
 		case Class_Constant.KEYCODE_DOWN_ARROW_KEY:
@@ -178,17 +192,33 @@ public class BannerDialog extends Dialog {
 			break;
 
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
+			palyButton.setVisibility(View.GONE);
+			pauseButton.setVisibility(View.GONE);
 			// mHandler.sendEmptyMessage(Class_Constant.LIVE_FAST_FORWARD);
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
+			palyButton.setVisibility(View.GONE);
+			pauseButton.setVisibility(View.GONE);
 			// mHandler.sendEmptyMessage(Class_Constant.LIVE_FAST_REVERSE);
 			break;
 		case Class_Constant.KEYCODE_OK_KEY:
 			if (player.isPlayerPlaying()) {
 				player.pause();
+				palyButton.setVisibility(View.GONE);
+				pauseButton.setVisibility(View.VISIBLE);
 			} else {
 				player.play();
+				pauseButton.setVisibility(View.GONE);
+				palyButton.setVisibility(View.VISIBLE);
 			}
+			mHandler.postDelayed(new Runnable() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					palyButton.setVisibility(View.GONE);
+				}
+			}, 5000);
 			break;
 		case Class_Constant.KEYCODE_MUTE:// mute
 			// int current =
@@ -200,6 +230,14 @@ public class BannerDialog extends Dialog {
 			} else {
 				muteIconImage.setVisibility(View.VISIBLE);
 			}
+			break;
+		case Class_Constant.KEYCODE_VOICE_UP:
+		case Class_Constant.KEYCODE_VOICE_DOWN:
+			if (muteIconImage.isShown()) {
+				muteIconImage.setVisibility(View.GONE);
+			}
+			// audioMgr.setStreamMute(AudioManager.STREAM_MUSIC, true);
+			whetherMute = false;
 			break;
 		default:
 			mHandler.removeCallbacks(bannerRunnable);
