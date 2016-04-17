@@ -299,9 +299,6 @@ pauseButton.setVisibility(View.GONE);
 		mReQueue.add(jsonObjectRequest);
 	}
 	
-	public void dismissInfoBan() {
-		timeShiftInfo.setVisibility(View.GONE);
-	}
 	private Response.ErrorListener errorListener = new Response.ErrorListener() {
 		@Override
 		public void onErrorResponse(VolleyError arg0) {

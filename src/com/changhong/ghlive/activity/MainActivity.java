@@ -706,7 +706,6 @@ public class MainActivity extends BaseActivity {
 			mHttpService.saveMutesState(whetherMute + "");
 			showDialogBanner(curChannelNO);
 			muteIconImage.setVisibility(View.GONE);
-			mhandler.postDelayed(bannerDismissRunnable, 5000);
 			break;
 		case Class_Constant.KEYCODE_UP_ARROW_KEY:
 			if (channelListLinear.isShown()) {
@@ -959,7 +958,7 @@ public class MainActivity extends BaseActivity {
 		if (programBannerDialog != null) {
 			programBannerDialog.cancel();
 		}
-//		programBannerDialog = new BannerDialog(this, curChannel, curChannelPrograms, mhandler, surfaceView, mHttpService);
+		programBannerDialog = new BannerDialog(this, curChannel, curChannelPrograms, mhandler, surfaceView, mHttpService);
 		programBannerDialog.show();
 	}
 
@@ -1031,13 +1030,6 @@ public class MainActivity extends BaseActivity {
 		}
 	};
 
-	Runnable bannerDismissRunnable = new Runnable() {
-		@Override
-		public void run() {
-			// programBannerDialog.dismiss();
-//			programBannerDialog.dismissInfoBan();
-		}
-	};
 
 	public int playPlusOrSub(int outterChannelId, int code) {
 		// code :0 plus 1 sub
