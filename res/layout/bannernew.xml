@@ -83,7 +83,7 @@
                     android:textSize="25sp" />
             </RelativeLayout>
             <SeekBar
-                    android:id="@+id/program_progress"
+                    android:id="@+id/bannernew_program_progress"
                     android:layout_width="600dp"
                     android:layout_height="20dip"
                     android:max="100" />

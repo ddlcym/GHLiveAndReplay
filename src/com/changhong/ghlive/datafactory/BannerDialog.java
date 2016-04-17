@@ -108,7 +108,7 @@ public class BannerDialog extends Dialog {
 		channel_number = (TextView) findViewById(R.id.banner_service_id);
 		currentProgramName = (TextView) findViewById(R.id.current_program_info);
 		nextProgramName = (TextView) findViewById(R.id.next_program_info);
-		programPlayBar = (SeekBar) findViewById(R.id.program_progress);
+		programPlayBar = (SeekBar) findViewById(R.id.bannernew_program_progress);
 		bannerView = (LinearLayout)findViewById(R.id.live_back_banner);
 		timeLength= (TextView) findViewById(R.id.live_timelength);
 		curTime= (TextView) findViewById(R.id.live_currenttime);
@@ -128,6 +128,8 @@ public class BannerDialog extends Dialog {
 		ps.height = 50;
 		ps.width = 50;
 		timeShiftIcon.setLayoutParams(ps);
+		programPlayBar.setFocusable(false);
+		programPlayBar.setClickable(false);
 		
 	}
 
@@ -176,7 +178,7 @@ public class BannerDialog extends Dialog {
 		switch (keyCode) {
 		/* 返回--取消 */
 		case KeyEvent.KEYCODE_BACK:
-mHttpService.saveMutesState(whetherMute + "");
+			mHttpService.saveMutesState(whetherMute + "");
 			Message msg = new Message();
 			msg.what = Class_Constant.PLAY_BACKFROM_SHIFT;
 			parentHandler.sendMessage(msg);
@@ -188,23 +190,24 @@ mHttpService.saveMutesState(whetherMute + "");
 			break;
 
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
-palyButton.setVisibility(View.GONE);
+			palyButton.setVisibility(View.GONE);
 			pauseButton.setVisibility(View.GONE);
-			 player.handleProgress.sendEmptyMessage(Class_Constant.LIVE_FAST_FORWARD);
+			Log.i("mmmm", "banner-handleProgress"+Player.handleProgress);
+			 Player.handleProgress.sendEmptyMessage(Class_Constant.LIVE_FAST_FORWARD);
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
-palyButton.setVisibility(View.GONE);
+			palyButton.setVisibility(View.GONE);
 			pauseButton.setVisibility(View.GONE);
-			player.handleProgress.sendEmptyMessage(Class_Constant.LIVE_FAST_REVERSE);
+			Player.handleProgress.sendEmptyMessage(Class_Constant.LIVE_FAST_REVERSE);
 			break;
 		case Class_Constant.KEYCODE_OK_KEY:
 			if (player.isPlayerPlaying()) {
 				player.pause();
-palyButton.setVisibility(View.GONE);
+				palyButton.setVisibility(View.GONE);
 				pauseButton.setVisibility(View.VISIBLE);
 			} else {
 				player.play();
-pauseButton.setVisibility(View.GONE);
+				pauseButton.setVisibility(View.GONE);
 				palyButton.setVisibility(View.VISIBLE);
 			}
 			parentHandler.postDelayed(new Runnable() {

@@ -177,6 +177,10 @@ public class MainActivity extends BaseActivity {
 				break;
 				
 			case Class_Constant.BACK_TO_LIVE:
+				if(programBannerDialog!=null){
+					programBannerDialog.dismiss();
+					Toast.makeText(MainActivity.this, "退回到直播模式", Toast.LENGTH_SHORT).show();
+				}
 				PlayVideo.getInstance().playLiveProgram(mhandler, CacheData.getCurChannel());
 				break;
 			/* play state is back from time shift mode */

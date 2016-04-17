@@ -72,10 +72,10 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 
 	public Player(Handler parentHandler, SurfaceView mySurfaceView,
 			SeekBar skbProgress, TextView txvCurrent) {
-		this.skbProgress = skbProgress;
+		Player.skbProgress = skbProgress;
 		this.surfaceView = mySurfaceView;
-		this.videoCurrentTime = txvCurrent;
-		this.parentHandler = parentHandler;
+		Player.videoCurrentTime = txvCurrent;
+		Player.parentHandler = parentHandler;
 
 		surfaceHolder = surfaceView.getHolder();
 		surfaceHolder.addCallback(this);
@@ -98,7 +98,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 			if (mediaPlayer == null)
 				return;
 			if (liveFlag) {
-				if (mediaPlayer.isPlaying() && videoCurrentTime != null && !keyFlag) {
+				if (mediaPlayer.isPlaying() && Player.videoCurrentTime != null && !keyFlag) {
 					handleProgress.sendEmptyMessage(Class_Constant.RE_UPDATE_PROGRESS);
 				}
 			} else {
@@ -118,7 +118,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 				skPos = msg.arg1;
 
 				if (duration > 0) {
-					skbProgress.setProgress(skPos);
+					Player.skbProgress.setProgress(skPos);
 				}
 				break;
 			case Class_Constant.RE_FAST_FORWARD_DOWN:
@@ -127,7 +127,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 				}
 				mediaPlayer.pause();
 				keyFlag = true;
-				desPositon = skbProgress.getProgress() + 30000;
+				desPositon = Player.skbProgress.getProgress() + 30000;
 
 				if (desPositon >= duration) {
 					if (handlerFlag) {
@@ -138,7 +138,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 					}
 					desPositon = duration;
 				}
-				skbProgress.setProgress(desPositon);
+				Player.skbProgress.setProgress(desPositon);
 				break;
 			case Class_Constant.RE_FAST_REVERSE_DOWN:
 
@@ -149,7 +149,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 				mediaPlayer.pause();
 				}
 				keyFlag = true;
-				desPositon = skbProgress.getProgress() - 30000;
+				desPositon = Player.skbProgress.getProgress() - 30000;
 
 				if (desPositon < 0) {
 					if (handlerFlag) {
@@ -161,7 +161,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 					desPositon = 0;
 				}
 				
-				skbProgress.setProgress(desPositon);
+				Player.skbProgress.setProgress(desPositon);
 				//
 				break;
 			case Class_Constant.RE_FAST_FORWARD_UP:
@@ -171,8 +171,10 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 				mediaPlayer.seekTo(desPositon);
 				
 				}else{
+					if(desPositon>=0){
 					delayTime=getPlayDelayTimes();
 					playLiveBack(curChannel, delayTime);
+					}
 				}
 				mediaPlayer.start();
 				keyFlag = false;
@@ -193,7 +195,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 					
 				}
 				if (duration > 0) {
-					skbProgress.setProgress(position);
+					Player.skbProgress.setProgress(position);
 				}
 				videoCurrentTime.setText(Utils.millToDateStr(position));
 				break;
@@ -203,15 +205,18 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 				mediaPlayer.pause();
 				}
 				keyFlag = true;
-				desPositon = skbProgress.getProgress() + 30000;
+				Log.i("mmmm", "Player-handleProgress"+handleProgress);
+				desPositon =Player.skbProgress.getProgress() + 30000;
 				if (IsOutOfTimes(desPositon)) {
 					if (handlerFlag) {
 						parentHandler.sendEmptyMessage(Class_Constant.BACK_TO_LIVE);
-
 					}
-					desPositon = getLiveMaxTime();
+					keyFlag=false;
+					desPositon=-1;
+					break;
+					
 				}
-				skbProgress.setProgress(desPositon);
+				Player.skbProgress.setProgress(desPositon);
 				break;
 			case Class_Constant.LIVE_FAST_REVERSE:
 				
@@ -219,14 +224,14 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 				mediaPlayer.pause();
 				}
 				keyFlag = true;
-				desPositon = skbProgress.getProgress() - 30000;
+				desPositon = Player.skbProgress.getProgress() - 30000;
 				if (desPositon < 0) {
 					//提示已经到开始位置了
 					
 					desPositon = 0;
 				}
 				
-				skbProgress.setProgress(desPositon);
+				Player.skbProgress.setProgress(desPositon);
 				
 				break;
 			}
@@ -253,7 +258,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 			
 			if(!liveFlag){
 				duration = mediaPlayer.getDuration();
-				skbProgress.setMax(duration);
+				Player.skbProgress.setMax(duration);
 			}else{
 				curBeginTime=getStartTime();
 			}
@@ -351,9 +356,9 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 	// 播放视频准备好播放后调用此方法
 	@Override
 	public void onBufferingUpdate(MediaPlayer arg0, int bufferingProgress) {
-		skbProgress.setSecondaryProgress(bufferingProgress);
+		Player.skbProgress.setSecondaryProgress(bufferingProgress);
 		playingFlag = true;
-		int currentProgress = skbProgress.getMax()
+		int currentProgress = Player.skbProgress.getMax()
 				* mediaPlayer.getCurrentPosition() / mediaPlayer.getDuration();
 		if (bufferingProgress != 0) {
 		}
@@ -430,7 +435,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 	private static int getPlayDelayTimes(){
 		long times=0;
 		Date date=new Date();
-		times=(date.getTime()-skbProgress.getProgress()-CacheData.getCurProgram().getBeginTime().getTime())/1000;
+		times=(date.getTime()-Player.skbProgress.getProgress()-CacheData.getCurProgram().getBeginTime().getTime())/1000;
 		
 		return (int) times;
 	}
