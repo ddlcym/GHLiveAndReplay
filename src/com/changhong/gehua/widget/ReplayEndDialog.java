@@ -24,7 +24,7 @@ public class ReplayEndDialog extends Dialog {
 	public ReplayEndDialog(Context context, Handler outterHandler) {
 		super(context);
 		mHandler = outterHandler;
-		setContentView(R.layout.replayenddia);
+		setContentView(R.layout.replay_end_dia);
 		initView();
 		initData();
 		// TODO Auto-generated constructor stub
