@@ -1,7 +1,5 @@
 package com.changhong.ghlive.service;
 
-import java.util.Date;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -10,20 +8,17 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.changhong.gehua.common.ChannelInfo;
 import com.changhong.gehua.common.ProcessData;
 import com.changhong.gehua.common.VolleyTool;
-import com.changhong.gehua.update.DateUtils;
 import com.changhong.gehua.update.UpdateReceiver;
 import com.changhong.gehua.update.UpdateThread;
 import com.changhong.ghlive.activity.MyApp;
 
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 public class HttpService extends Service {
 
