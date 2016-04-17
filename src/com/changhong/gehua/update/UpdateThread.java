@@ -76,7 +76,7 @@ public class UpdateThread implements Runnable {
 		homefilter.addAction("MAIN_UPDATE_DOWNLOAD");
 		homefilter.addAction("MAIN_UPDATE_INSTALL");
 		mContext.registerReceiver(mUpdateReceiver, homefilter);
-
+		
 		/**
 		 * 更新的时间检 如果当前更新过了就不用在更新
 		 */
