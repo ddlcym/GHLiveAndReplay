@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+    android:layout_width="wrap_content"
     android:layout_height="fill_parent" >
 
     <SurfaceView
@@ -10,6 +10,15 @@
     </SurfaceView>
 
     <ImageView
+        android:id="@+id/mute_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|top"
+        android:paddingTop="15dip"
+        android:src="@drawable/mute_icon"
+        android:visibility="gone" />
+
+    <ImageView
         android:id="@+id/time_shift_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,7 +26,7 @@
         android:paddingRight="15dip"
         android:paddingTop="15dip"
         android:src="@drawable/back"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <ImageView
         android:id="@+id/play_btn"
@@ -78,5 +87,21 @@
             android:textSize="25sp" />
         <!-- </LinearLayout> -->
     </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/fast_forward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/fast_forward"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/fast_backward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/fast_backward"
+        android:visibility="gone" />
 
 </FrameLayout>
