@@ -31,6 +31,9 @@ public class Class_Constant {
 	public static final int MESSAGE_DISAPPEAR_DIGITAL = 3018;
 	public static final int RE_FAST_FORWARD_UP = 3019;
 	public static final int RE_FAST_REVERSE_UP = 3020;
+	public static final int BACK_TO_LIVE = 3021;
+	
+	
 
 	public final static int MAX_NO_OF_PROGRAMS = 500; // ����Ŀ��
 	public final static int MAX_NO_OF_CARRIERS = 40; // ���Ƶ����

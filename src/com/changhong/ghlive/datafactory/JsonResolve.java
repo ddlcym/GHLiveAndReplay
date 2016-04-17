@@ -221,6 +221,7 @@ public class JsonResolve {
 		if(jsonDatas!=null){
 		list.add(2, jsonToProgram(jsonDatas));
 		}
+		CacheData.setCurPrograms(list);
 		return list;
 	}
 	

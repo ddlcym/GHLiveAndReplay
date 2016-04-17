@@ -376,10 +376,10 @@ public class ReplayPlayActivity extends Activity {
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
 
-			Player.handleProgress.sendEmptyMessage(Class_Constant.RE_FAST_FORWARD_UP);
+			player.handleProgress.sendEmptyMessage(Class_Constant.RE_FAST_FORWARD_UP);
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
-			Player.handleProgress.sendEmptyMessage(Class_Constant.RE_FAST_REVERSE_UP);
+			player.handleProgress.sendEmptyMessage(Class_Constant.RE_FAST_REVERSE_UP);
 			break;
 		}
 

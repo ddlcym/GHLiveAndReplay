@@ -28,4 +28,11 @@ public class Utils {
 		
 		return df.format(outterDate);
 	}
+	
+	public static String millToDateStr(int milliseconds ){
+		SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+		formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+		
+		return formatter.format(milliseconds);
+	}
 }

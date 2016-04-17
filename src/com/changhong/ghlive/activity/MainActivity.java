@@ -165,7 +165,7 @@ public class MainActivity extends BaseActivity {
 				mhandler.sendEmptyMessageDelayed(Class_Constant.MESSAGE_DISAPPEAR_DIGITAL, 3500);
 				break;
 
-			case Class_Constant.MESSAGE_DISAPPEAR_DIGITAL: {
+			case Class_Constant.MESSAGE_DISAPPEAR_DIGITAL: 
 				iKey = 0;
 				if (tvRootDigitalKeyInvalid != null) {
 					tvRootDigitalKeyInvalid.setVisibility(View.INVISIBLE);
@@ -173,7 +173,11 @@ public class MainActivity extends BaseActivity {
 				if (tvRootDigitalkey != null) {
 					tvRootDigitalkey.setVisibility(View.INVISIBLE);
 				}
-			}
+			
+				break;
+				
+			case Class_Constant.BACK_TO_LIVE:
+				PlayVideo.getInstance().playLiveProgram(mhandler, CacheData.getCurChannel());
 				break;
 			/* play state is back from time shift mode */
 			case Class_Constant.PLAY_BACKFROM_SHIFT: {
@@ -611,7 +615,7 @@ public class MainActivity extends BaseActivity {
 		String dialogButtonTextCancel = MainActivity.this.getString(R.string.str_zhn_no);
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
-			if (ban.isToastShow()) {
+			if (ban!=null&&ban.isToastShow()) {
 				ban.cancelBanner();
 			}
 			showChannelListView();
@@ -955,7 +959,7 @@ public class MainActivity extends BaseActivity {
 		if (programBannerDialog != null) {
 			programBannerDialog.cancel();
 		}
-		programBannerDialog = new BannerDialog(this, curChannel, curChannelPrograms, mhandler, player, mHttpService);
+//		programBannerDialog = new BannerDialog(this, curChannel, curChannelPrograms, mhandler, surfaceView, mHttpService);
 		programBannerDialog.show();
 	}
 
@@ -1004,6 +1008,7 @@ public class MainActivity extends BaseActivity {
 		PlayVideo.getInstance().playLiveProgram(mhandler, curChannel);
 
 		CacheData.curChannelNum = curChannel.getChannelNumber();
+		CacheData.setCurChannel(curChannel);
 		curChannelNO = channelno;
 
 		// curChannel = CacheData.getAllChannelMap().get(curChannelNO);
@@ -1030,7 +1035,7 @@ public class MainActivity extends BaseActivity {
 		@Override
 		public void run() {
 			// programBannerDialog.dismiss();
-			programBannerDialog.dismissInfoBan();
+//			programBannerDialog.dismissInfoBan();
 		}
 	};
 
@@ -1109,8 +1114,11 @@ public class MainActivity extends BaseActivity {
 		sendBroadcast(intent);
 		mHttpService.saveMutesState(whetherMute + "");
 		// onStop();
+		if(player!=null)
 		player.stop();
+		if(programBannerDialog!=null)
 		programBannerDialog.dismiss();
+		if(ban!=null)
 		ban.cancelBanner();
 		super.onPause();
 		// onDestroy();

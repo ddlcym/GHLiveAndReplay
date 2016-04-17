@@ -2,15 +2,28 @@ package com.changhong.replay.datafactory;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.xml.datatype.Duration;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.changhong.gehua.common.CacheData;
+import com.changhong.gehua.common.ChannelInfo;
 import com.changhong.gehua.common.Class_Constant;
 import com.changhong.gehua.common.MD5Encrypt;
+import com.changhong.gehua.common.ProcessData;
+import com.changhong.gehua.common.ProgramInfo;
+import com.changhong.gehua.common.Utils;
+import com.changhong.gehua.common.VolleyTool;
 import com.changhong.ghlive.activity.MyApp;
+import com.changhong.ghlive.datafactory.JsonResolve;
 
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -26,37 +39,54 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Player implements OnBufferingUpdateListener, OnCompletionListener, MediaPlayer.OnPreparedListener,
-		SurfaceHolder.Callback {
+public class Player implements OnBufferingUpdateListener, OnCompletionListener,
+		MediaPlayer.OnPreparedListener, SurfaceHolder.Callback {
 	private int videoWidth;
 	private int videoHeight;
 	public static MediaPlayer mediaPlayer;
 	private SurfaceHolder surfaceHolder;
-	private static SeekBar skbProgress;
+	public static SeekBar skbProgress;
 	private SurfaceView surfaceView;
 	private Timer mTimer = new Timer();
 	private static boolean playingFlag = false;
-	private static  Handler parentHandler;
-	public static boolean handlerFlag=true;
-	public static boolean keyFlag=false;
+	private static Handler parentHandler;
+	public static boolean handlerFlag = true;
+	public static boolean keyFlag = false;
 
 	private static TextView videoCurrentTime;
+
+	private static int desPositon = 0;
+	private static int duration = 0;
 	
-	private static int desPositon=0;
-	private static int duration=0;
+	/*
+	 * 直播时移的参数
+	 */
+	private static boolean liveFlag = false;
+	private static int curBeginTime=0;
+	private static ProcessData processData = null;
+	private static RequestQueue mReQueue;
+	private static ChannelInfo curChannel;
+	private static ProgramInfo curProgram;
 	
-	public Player(Handler parentHandler,SurfaceView mySurfaceView, SeekBar skbProgress, TextView txvCurrent) {
+	private static int delayTime=0;//秒
+
+	public Player(Handler parentHandler, SurfaceView mySurfaceView,
+			SeekBar skbProgress, TextView txvCurrent) {
 		this.skbProgress = skbProgress;
 		this.surfaceView = mySurfaceView;
 		this.videoCurrentTime = txvCurrent;
-		this.parentHandler=parentHandler;
+		this.parentHandler = parentHandler;
 
 		surfaceHolder = surfaceView.getHolder();
 		surfaceHolder.addCallback(this);
 		// 防止音频出不来
 		surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 		mTimer.schedule(mTimerTask, 0, 1000);
-//		this.skbProgress.setOnSeekBarChangeListener(mySeekChangeLis);
+		processData = new ProcessData();
+		mReQueue = VolleyTool.getInstance().getRequestQueue();
+		curChannel = CacheData.getAllChannelMap().get(CacheData.getCurChannelNum());
+		delayTime=0;
+		// this.skbProgress.setOnSeekBarChangeListener(mySeekChangeLis);
 	}
 
 	/*******************************************************
@@ -67,16 +97,22 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 		public void run() {
 			if (mediaPlayer == null)
 				return;
-			if (mediaPlayer.isPlaying() && playingFlag&&videoCurrentTime!=null&&!keyFlag) {
-				handleProgress.sendEmptyMessage(Class_Constant.RE_UPDATE_PROGRESS);
+			if (liveFlag) {
+				if (mediaPlayer.isPlaying() && videoCurrentTime != null && !keyFlag) {
+					handleProgress.sendEmptyMessage(Class_Constant.RE_UPDATE_PROGRESS);
+				}
+			} else {
+				if (mediaPlayer.isPlaying() && playingFlag&& videoCurrentTime != null && !keyFlag) {
+					handleProgress.sendEmptyMessage(Class_Constant.RE_UPDATE_PROGRESS);
+				}
 			}
 		}
 	};
 
-
 	public static Handler handleProgress = new Handler() {
 		public void handleMessage(Message msg) {
 			int skPos = 0;
+			int position=0;
 			switch (msg.what) {
 			case Class_Constant.REPLAY_SEEK_TO:
 				skPos = msg.arg1;
@@ -86,48 +122,61 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 				}
 				break;
 			case Class_Constant.RE_FAST_FORWARD_DOWN:
-				if(!playingFlag){
+				if (!playingFlag) {
 					return;
 				}
 				mediaPlayer.pause();
-				keyFlag=true;
-				desPositon = skbProgress.getProgress()+15000;
-				
-				if(desPositon>=duration){
-					if(handlerFlag){
-						handlerFlag=false;
-						parentHandler.sendEmptyMessage(Class_Constant.RE_NEXT_PROGRAM);
-						
-						}
-					desPositon=duration;
+				keyFlag = true;
+				desPositon = skbProgress.getProgress() + 30000;
+
+				if (desPositon >= duration) {
+					if (handlerFlag) {
+						handlerFlag = false;
+						parentHandler
+								.sendEmptyMessage(Class_Constant.RE_NEXT_PROGRAM);
+
+					}
+					desPositon = duration;
 				}
 				skbProgress.setProgress(desPositon);
 				break;
 			case Class_Constant.RE_FAST_REVERSE_DOWN:
-				
-				if(!playingFlag){
+
+				if (!playingFlag) {
 					return;
 				}
+				if(mediaPlayer.isPlaying()){
 				mediaPlayer.pause();
-				keyFlag=true;
-				desPositon = skbProgress.getProgress()-15000;
-				
-				if(desPositon<0){
-					if(handlerFlag){
-						handlerFlag=false;
-					parentHandler.sendEmptyMessage(Class_Constant.RE_LAST_PROGRAM);
-					
-					}
-					desPositon=0;
 				}
-					skbProgress.setProgress(desPositon);
-//				
+				keyFlag = true;
+				desPositon = skbProgress.getProgress() - 30000;
+
+				if (desPositon < 0) {
+					if (handlerFlag) {
+						handlerFlag = false;
+						parentHandler
+								.sendEmptyMessage(Class_Constant.RE_LAST_PROGRAM);
+
+					}
+					desPositon = 0;
+				}
+				
+				skbProgress.setProgress(desPositon);
+				//
 				break;
 			case Class_Constant.RE_FAST_FORWARD_UP:
 			case Class_Constant.RE_FAST_REVERSE_UP:
+				
+				if(!liveFlag){
 				mediaPlayer.seekTo(desPositon);
-				keyFlag=false;
+				
+				}else{
+					delayTime=getPlayDelayTimes();
+					playLiveBack(curChannel, delayTime);
+				}
 				mediaPlayer.start();
+				keyFlag = false;
+				
 				break;
 			case Class_Constant.RE_PLAY:
 
@@ -137,13 +186,48 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 				break;
 
 			case Class_Constant.RE_UPDATE_PROGRESS:
-				int position = mediaPlayer.getCurrentPosition();
-				if (duration > 0) {
-					skbProgress.setProgress( position);
+				if(liveFlag){
+					position=mediaPlayer.getCurrentPosition()+curBeginTime-delayTime*1000;
+				}else{
+					position = mediaPlayer.getCurrentPosition();
+					
 				}
-				SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
-				formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
-				videoCurrentTime.setText(formatter.format(position));
+				if (duration > 0) {
+					skbProgress.setProgress(position);
+				}
+				videoCurrentTime.setText(Utils.millToDateStr(position));
+				break;
+				
+			case Class_Constant.LIVE_FAST_FORWARD:
+				if(mediaPlayer.isPlaying()){
+				mediaPlayer.pause();
+				}
+				keyFlag = true;
+				desPositon = skbProgress.getProgress() + 30000;
+				if (IsOutOfTimes(desPositon)) {
+					if (handlerFlag) {
+						parentHandler.sendEmptyMessage(Class_Constant.BACK_TO_LIVE);
+
+					}
+					desPositon = getLiveMaxTime();
+				}
+				skbProgress.setProgress(desPositon);
+				break;
+			case Class_Constant.LIVE_FAST_REVERSE:
+				
+				if(mediaPlayer.isPlaying()){
+				mediaPlayer.pause();
+				}
+				keyFlag = true;
+				desPositon = skbProgress.getProgress() - 30000;
+				if (desPositon < 0) {
+					//提示已经到开始位置了
+					
+					desPositon = 0;
+				}
+				
+				skbProgress.setProgress(desPositon);
+				
 				break;
 			}
 
@@ -156,18 +240,23 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 		mediaPlayer.start();
 	}
 
-	public void playUrl(String videoUrl) {
-		handlerFlag=true;
-		if (null == mediaPlayer||null==videoUrl)
+	public static void playUrl(String videoUrl) {
+		handlerFlag = true;
+		if (null == mediaPlayer || null == videoUrl)
 			return;
-		
+
 		try {
 			mediaPlayer.reset();
-//			mediaPlayer.stop();
+			// mediaPlayer.stop();
 			mediaPlayer.setDataSource(videoUrl);
 			mediaPlayer.prepare();// prepare֮���Զ�����
-			duration=mediaPlayer.getDuration();
-			skbProgress.setMax(duration);
+			
+			if(!liveFlag){
+				duration = mediaPlayer.getDuration();
+				skbProgress.setMax(duration);
+			}else{
+				curBeginTime=getStartTime();
+			}
 			// mediaPlayer.start();
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
@@ -206,12 +295,15 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 			mediaPlayer = null;
 		}
 	}
+	
+	
+
+	
 
 	@Override
 	public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {
 		Log.e("mediaPlayer", "surface changed");
 	}
-	
 
 	@Override
 	public void surfaceCreated(SurfaceHolder arg0) {
@@ -243,7 +335,8 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 		if (videoHeight != 0 && videoWidth != 0) {
 			arg0.start();
 		} else {
-			Toast.makeText(MyApp.getContext(), "视频无效", Toast.LENGTH_SHORT).show();
+			Toast.makeText(MyApp.getContext(), "视频无效", Toast.LENGTH_SHORT)
+					.show();
 			Log.i("mm", "videoWidth or videoHeight =0");
 		}
 		Log.e("mediaPlayer", "onPrepared");
@@ -255,48 +348,138 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 		parentHandler.sendEmptyMessage(Class_Constant.RE_NEXT_PROGRAM);
 	}
 
-	
-
 	// 播放视频准备好播放后调用此方法
 	@Override
 	public void onBufferingUpdate(MediaPlayer arg0, int bufferingProgress) {
 		skbProgress.setSecondaryProgress(bufferingProgress);
 		playingFlag = true;
-		int currentProgress = skbProgress.getMax() * mediaPlayer.getCurrentPosition() / mediaPlayer.getDuration();
+		int currentProgress = skbProgress.getMax()
+				* mediaPlayer.getCurrentPosition() / mediaPlayer.getDuration();
 		if (bufferingProgress != 0) {
 		}
-//		Log.i("mmmm", bufferingProgress + "% buffer");
+		// Log.i("mmmm", bufferingProgress + "% buffer");
 	}
-	
-//	 public boolean onInfo(MediaPlayer arg0, int arg1, int arg2) {        
-//		 switch (arg1) {        
-//		 case MediaPlayer.MEDIA_INFO_BUFFERING_START:
-//			 //开始缓存，暂停播放            
-//			 if (isPlaying()) {                
-//				 stopPlayer();                
-//				 needResume = true;            
-//				 }           
-//			 mLoadingView.setVisibility(View.VISIBLE);            
-//			 break;        
-//			 case MediaPlayer.MEDIA_INFO_BUFFERING_END:            
-//				 //缓存完成，继续播放            
-//				 if (needResume)                
-//					 startPlayer();            
-//				 mLoadingView.setVisibility(View.GONE);            
-//				 break;        
-//				 case MediaPlayer.MEDIA_INFO_DOWNLOAD_RATE_CHANGED:
-//					 //显示 下载速度            
-//					 Logger.e("download rate:" + arg2);            
-//					 break;        
-//					 }        
-//		 return true;    
-//		 }
-//		 }
-//	 }
+
+	// public boolean onInfo(MediaPlayer arg0, int arg1, int arg2) {
+	// switch (arg1) {
+	// case MediaPlayer.MEDIA_INFO_BUFFERING_START:
+	// //开始缓存，暂停播放
+	// if (isPlaying()) {
+	// stopPlayer();
+	// needResume = true;
+	// }
+	// mLoadingView.setVisibility(View.VISIBLE);
+	// break;
+	// case MediaPlayer.MEDIA_INFO_BUFFERING_END:
+	// //缓存完成，继续播放
+	// if (needResume)
+	// startPlayer();
+	// mLoadingView.setVisibility(View.GONE);
+	// break;
+	// case MediaPlayer.MEDIA_INFO_DOWNLOAD_RATE_CHANGED:
+	// //显示 下载速度
+	// Logger.e("download rate:" + arg2);
+	// break;
+	// }
+	// return true;
+	// }
+	// }
+	// }
 
 	/* 播放过程中时间进行更新显示 */
 	// public void refreshVideoTime(TextView txvLen, TextView txvCur) {
 	// txvLen.setText("");
 	// txvCur.setText("");
 	// }
+	
+	private static void playLiveBack(ChannelInfo channel,int delay) {
+		mReQueue.cancelAll("bannerDialog");
+		String requestURL = processData.getLiveBackPlayUrl(channel, delay);
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, requestURL, null,
+				new Response.Listener<org.json.JSONObject>() {
+
+					@Override
+					public void onResponse(org.json.JSONObject arg0) {
+						// TODO Auto-generated method stub
+						// Log.i(TAG, "MainActivity=dvbBack:" + arg0);
+						final String url = JsonResolve.getInstance().getLivePlayURL(arg0);
+						new Thread(new Runnable() {
+
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								playUrl(url);
+							}
+						}).start();
+
+					}
+				}, errorListener);
+		jsonObjectRequest.setTag("bannerDialog");// 设置tag,cancelAll的时候使用
+		mReQueue.add(jsonObjectRequest);
+	}
+	
+	
+	private static Response.ErrorListener errorListener = new Response.ErrorListener() {
+		@Override
+		public void onErrorResponse(VolleyError arg0) {
+			// TODO Auto-generated method stub
+			Log.i("mmmm", "MainActivity=error：" + arg0);
+		}
+	};
+	
+	private static int getPlayDelayTimes(){
+		long times=0;
+		Date date=new Date();
+		times=(date.getTime()-skbProgress.getProgress()-CacheData.getCurProgram().getBeginTime().getTime())/1000;
+		
+		return (int) times;
+	}
+	
+	private static boolean IsOutOfTimes(int progress){
+		boolean flag=true;
+		long times=0;
+		Date date=new Date();
+		times=(date.getTime()-progress-CacheData.getCurProgram().getBeginTime().getTime())/1000;
+		if(times>3){
+			flag=false;
+		}else{
+			flag=true;
+		}
+		
+		return flag;
+	} 
+	
+	private static int getLiveMaxTime(){
+		long times=0;
+		Date date=new Date();
+		times=date.getTime()-CacheData.getCurProgram().getBeginTime().getTime();
+		return (int) times;
+	}
+	
+	public boolean isLiveFlag() {
+		return liveFlag;
+	}
+
+	public void setLiveFlag(boolean liveFlag) {
+		this.liveFlag = liveFlag;
+	}
+	
+	
+
+	public static int getDuration() {
+		return duration;
+	}
+
+	public static void setDuration(int duration) {
+		Player.duration = duration;
+	}
+	
+	private static int getStartTime(){
+		long time=0;
+		int beginTime=0;
+		beginTime=(int)CacheData.getCurProgram().getBeginTime().getTime();
+		Date date=new Date();
+		time=date.getTime()-beginTime ;
+		return (int)time;
+	}
 }
