@@ -58,7 +58,7 @@ public class BannerDialog extends Dialog {
 	private RequestQueue mReQueue;
 	private ChannelInfo curChannel;
 	private LinearLayout timeShiftInfo;
-	private ImageView palyButton, pauseButton, timeShiftIcon;
+	private ImageView palyButton, pauseButton, timeShiftIcon, forwardIcon, backwardIcon;
 	private ImageView muteIconImage;
 	private HttpService mHttpService;
 
@@ -102,6 +102,9 @@ public class BannerDialog extends Dialog {
 		window.setGravity(Gravity.BOTTOM);
 
 		/* 频道名称、频道ID 节目名称 */
+		forwardIcon = (ImageView) findViewById(R.id.fast_forward);
+		backwardIcon = (ImageView) findViewById(R.id.fast_backward);
+
 		channel_name = (TextView) findViewById(R.id.banner_channel_name_id);
 		channel_number = (TextView) findViewById(R.id.banner_service_id);
 		currentProgramName = (TextView) findViewById(R.id.current_program_info);
@@ -194,6 +197,15 @@ public class BannerDialog extends Dialog {
 			pauseButton.setVisibility(View.GONE);
 			parentHandler.removeCallbacks(bannerRunnable);
 			parentHandler.postDelayed(bannerRunnable, 5000);
+			forwardIcon.setVisibility(View.VISIBLE);
+			parentHandler.postDelayed(new Runnable() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					forwardIcon.setVisibility(View.GONE);
+				}
+			}, 5000);
 			Log.i("mmmm", "banner-handleProgress" + Player.handleProgress);
 			Player.handleProgress.sendEmptyMessage(Class_Constant.LIVE_FAST_FORWARD);
 			break;
@@ -203,9 +215,20 @@ public class BannerDialog extends Dialog {
 			pauseButton.setVisibility(View.GONE);
 			parentHandler.removeCallbacks(bannerRunnable);
 			parentHandler.postDelayed(bannerRunnable, 5000);
+			backwardIcon.setVisibility(View.VISIBLE);
+			parentHandler.postDelayed(new Runnable() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					backwardIcon.setVisibility(View.GONE);
+				}
+			}, 5000);
 			Player.handleProgress.sendEmptyMessage(Class_Constant.LIVE_FAST_REVERSE);
 			break;
 		case Class_Constant.KEYCODE_OK_KEY:
+			forwardIcon.setVisibility(View.GONE);
+			backwardIcon.setVisibility(View.GONE);
 			if (player.isPlayerPlaying()) {
 				player.pause();
 				palyButton.setVisibility(View.GONE);
