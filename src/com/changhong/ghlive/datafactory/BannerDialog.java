@@ -10,10 +10,12 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.changhong.gehua.common.CacheData;
 import com.changhong.gehua.common.ChannelInfo;
 import com.changhong.gehua.common.Class_Constant;
+import com.changhong.gehua.common.CommonMethod;
 import com.changhong.gehua.common.ProcessData;
 import com.changhong.gehua.common.ProgramInfo;
 import com.changhong.gehua.common.Utils;
 import com.changhong.gehua.common.VolleyTool;
+import com.changhong.ghlive.activity.MyApp;
 import com.changhong.ghlive.service.HttpService;
 import com.changhong.ghliveandreplay.R;
 import com.changhong.replay.datafactory.Player;
@@ -257,6 +259,10 @@ public class BannerDialog extends Dialog {
 			// audioMgr.setStreamMute(AudioManager.STREAM_MUSIC, true);
 			whetherMute = false;
 			mHttpService.saveMutesState(whetherMute + "");
+			break;
+		case Class_Constant.KEYCODE_MENU_KEY:
+			// Log.i("zyt", "onkeydown menukey is pressed " + keyCode);
+			CommonMethod.startSettingPage(MyApp.getContext());
 			break;
 		default:
 			// parentHandler.removeCallbacks(bannerRunnable);
