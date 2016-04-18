@@ -121,8 +121,8 @@ public class ReplayPlayActivity extends Activity {
 		forwardIcon = (ImageView) findViewById(R.id.fast_forward);
 		backwardIcon = (ImageView) findViewById(R.id.fast_backward);
 		android.view.ViewGroup.LayoutParams ps = timeShiftIcon.getLayoutParams();
-		ps.height = 50;
-		ps.width = 50;
+		ps.height = 90;
+		ps.width = 90;
 		timeShiftIcon.setLayoutParams(ps);
 		timeShiftIcon.setVisibility(View.VISIBLE);
 		if (whetherMute) {
