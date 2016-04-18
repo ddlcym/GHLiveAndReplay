@@ -43,7 +43,6 @@ public class BannerDialog extends Dialog {
 	private Player player;
 	private String TAG = "mmmm";
 	private boolean whetherMute;
-	
 
 	private SeekBar programPlayBar;
 	private TextView channel_name = null;// 频道名称
@@ -54,7 +53,7 @@ public class BannerDialog extends Dialog {
 	private TextView curTime;
 	private SurfaceView surView;
 	private LinearLayout bannerView;
-	
+
 	private ProcessData processData = null;
 	private RequestQueue mReQueue;
 	private ChannelInfo curChannel;
@@ -62,10 +61,9 @@ public class BannerDialog extends Dialog {
 	private ImageView palyButton, pauseButton, timeShiftIcon;
 	private ImageView muteIconImage;
 	private HttpService mHttpService;
-	
-	
+
 	public BannerDialog(Context context, ChannelInfo outterChannelInfo, List<ProgramInfo> outterListProgramInfo,
-			Handler outterHandler,SurfaceView surView,HttpService outterHttpService) {
+			Handler outterHandler, SurfaceView surView, HttpService outterHttpService) {
 		super(context, R.style.Translucent_NoTitle);
 		setContentView(R.layout.bannernew);
 
@@ -75,7 +73,7 @@ public class BannerDialog extends Dialog {
 		parentHandler = outterHandler;
 		mHttpService = outterHttpService;
 		whetherMute = false;
-		this.surView=surView;
+		this.surView = surView;
 
 		initView();
 		// initData();
@@ -109,9 +107,9 @@ public class BannerDialog extends Dialog {
 		currentProgramName = (TextView) findViewById(R.id.current_program_info);
 		nextProgramName = (TextView) findViewById(R.id.next_program_info);
 		programPlayBar = (SeekBar) findViewById(R.id.bannernew_program_progress);
-		bannerView = (LinearLayout)findViewById(R.id.live_back_banner);
-		timeLength= (TextView) findViewById(R.id.live_timelength);
-		curTime= (TextView) findViewById(R.id.live_currenttime);
+		bannerView = (LinearLayout) findViewById(R.id.live_back_banner);
+		timeLength = (TextView) findViewById(R.id.live_timelength);
+		curTime = (TextView) findViewById(R.id.live_currenttime);
 		// bannerView.getBackground().setAlpha(255);
 		palyButton = (ImageView) findViewById(R.id.play_btn);
 		pauseButton = (ImageView) findViewById(R.id.pause_btn);
@@ -125,12 +123,12 @@ public class BannerDialog extends Dialog {
 		timeShiftInfo = (LinearLayout) findViewById(R.id.id_dtv_banner);
 		timeShiftIcon = (ImageView) findViewById(R.id.time_shift_icon);
 		android.view.ViewGroup.LayoutParams ps = timeShiftIcon.getLayoutParams();
-		ps.height = 50;
-		ps.width = 50;
+		ps.height = 90;
+		ps.width = 90;
 		timeShiftIcon.setLayoutParams(ps);
 		programPlayBar.setFocusable(false);
 		programPlayBar.setClickable(false);
-		
+
 	}
 
 	public void initData() {
@@ -139,26 +137,25 @@ public class BannerDialog extends Dialog {
 		String currentProgramEndTime = Utils.hourAndMinute(programListInfo.get(1).getEndTime());
 		String nextProgramBeginTime = Utils.hourAndMinute(programListInfo.get(2).getBeginTime());
 		String nextProgramEndTime = Utils.hourAndMinute(programListInfo.get(2).getEndTime());
-		long length=programListInfo.get(1).getEndTime().getTime()-programListInfo.get(1).getBeginTime().getTime();
+		long length = programListInfo.get(1).getEndTime().getTime() - programListInfo.get(1).getBeginTime().getTime();
 		channel_name.setText(channelInfo.getChannelName());
 		channel_number.setText(channelInfo.getChannelNumber());
 		currentProgramName.setText("正在播放：" + currentProgramBginTime + "-" + currentProgramEndTime + "  "
 				+ programListInfo.get(1).getEventName());
 		nextProgramName.setText("即将播放：" + nextProgramBeginTime + "-" + nextProgramEndTime + "  "
 				+ programListInfo.get(2).getEventName());
-		timeLength.setText(Utils.millToDateStr((int)length));
-		programPlayBar.setMax((int)length);
-		player.setDuration((int)length);
+		timeLength.setText(Utils.millToDateStr((int) length));
+		programPlayBar.setMax((int) length);
+		player.setDuration((int) length);
 		palyButton.setVisibility(View.GONE);
 		pauseButton.setVisibility(View.GONE);
 		processData = new ProcessData();
 		mReQueue = VolleyTool.getInstance().getRequestQueue();
 		curChannel = CacheData.getAllChannelMap().get(CacheData.getCurChannelNum());
-		player=new Player(parentHandler, surView, programPlayBar, curTime);
+		player = new Player(parentHandler, surView, programPlayBar, curTime);
 		player.setLiveFlag(true);
 		dvbBack();
 	}
-
 
 	@Override
 	public void show() {
@@ -192,8 +189,8 @@ public class BannerDialog extends Dialog {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
 			palyButton.setVisibility(View.GONE);
 			pauseButton.setVisibility(View.GONE);
-			Log.i("mmmm", "banner-handleProgress"+Player.handleProgress);
-			 Player.handleProgress.sendEmptyMessage(Class_Constant.LIVE_FAST_FORWARD);
+			Log.i("mmmm", "banner-handleProgress" + Player.handleProgress);
+			Player.handleProgress.sendEmptyMessage(Class_Constant.LIVE_FAST_FORWARD);
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
 			palyButton.setVisibility(View.GONE);
@@ -219,8 +216,8 @@ public class BannerDialog extends Dialog {
 				}
 			}, 5000);
 			break;
-		
-	case Class_Constant.KEYCODE_MUTE:// mute
+
+		case Class_Constant.KEYCODE_MUTE:// mute
 			// int current =
 			// audioMgr.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
 			whetherMute = !whetherMute;
@@ -231,7 +228,7 @@ public class BannerDialog extends Dialog {
 				muteIconImage.setVisibility(View.VISIBLE);
 			}
 			break;
-			case Class_Constant.KEYCODE_VOICE_UP:
+		case Class_Constant.KEYCODE_VOICE_UP:
 		case Class_Constant.KEYCODE_VOICE_DOWN:
 			if (muteIconImage.isShown()) {
 				muteIconImage.setVisibility(View.GONE);
@@ -239,14 +236,14 @@ public class BannerDialog extends Dialog {
 			// audioMgr.setStreamMute(AudioManager.STREAM_MUSIC, true);
 			whetherMute = false;
 			break;
-			default:
+		default:
 			parentHandler.removeCallbacks(bannerRunnable);
 			parentHandler.postDelayed(bannerRunnable, 5000);
 			break;
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-	
+
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
@@ -265,17 +262,14 @@ public class BannerDialog extends Dialog {
 	}
 
 	private void dvbBack() {
-		
 
 		// String equestURL=processData.getReplayPlayUrlString(channel,
 		// programListInfo.get(1), 0);
 
-		
-
-		playLiveBack(curChannel,0);
+		playLiveBack(curChannel, 0);
 	}
 
-	private void playLiveBack(ChannelInfo channel,int delay) {
+	private void playLiveBack(ChannelInfo channel, int delay) {
 		mReQueue.cancelAll("bannerDialog");
 		String requestURL = processData.getLiveBackPlayUrl(channel, delay);
 		CacheData.setCurProgram(programListInfo.get(1));
@@ -301,7 +295,7 @@ public class BannerDialog extends Dialog {
 		jsonObjectRequest.setTag("bannerDialog");// 设置tag,cancelAll的时候使用
 		mReQueue.add(jsonObjectRequest);
 	}
-	
+
 	private Response.ErrorListener errorListener = new Response.ErrorListener() {
 		@Override
 		public void onErrorResponse(VolleyError arg0) {
@@ -317,5 +311,5 @@ public class BannerDialog extends Dialog {
 			bannerView.setVisibility(View.INVISIBLE);
 		}
 	};
-	
+
 }

@@ -30,7 +30,7 @@ public class ChannelListAdapter extends BaseAdapter {
 		myList = list;
 		notifyDataSetChanged();
 	}
-
+	
 	class ViewHolder {
 		TextView channelResourceOrder;
 		// TextView channelIndex;
