@@ -197,6 +197,7 @@ public class BannerDialog extends Dialog {
 			pauseButton.setVisibility(View.GONE);
 			parentHandler.removeCallbacks(bannerRunnable);
 			parentHandler.postDelayed(bannerRunnable, 5000);
+			backwardIcon.setVisibility(View.GONE);
 			forwardIcon.setVisibility(View.VISIBLE);
 			parentHandler.postDelayed(new Runnable() {
 
@@ -215,6 +216,7 @@ public class BannerDialog extends Dialog {
 			pauseButton.setVisibility(View.GONE);
 			parentHandler.removeCallbacks(bannerRunnable);
 			parentHandler.postDelayed(bannerRunnable, 5000);
+			forwardIcon.setVisibility(View.GONE);
 			backwardIcon.setVisibility(View.VISIBLE);
 			parentHandler.postDelayed(new Runnable() {
 
@@ -252,6 +254,7 @@ public class BannerDialog extends Dialog {
 			// int current =
 			// audioMgr.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
 			whetherMute = !whetherMute;
+			mHttpService.saveMutesState(whetherMute + "");
 			// Log.i("zyt", "keycode mute is " + whetherMute);
 			if (muteIconImage.isShown()) {
 				muteIconImage.setVisibility(View.GONE);
@@ -266,6 +269,7 @@ public class BannerDialog extends Dialog {
 			}
 			// audioMgr.setStreamMute(AudioManager.STREAM_MUSIC, true);
 			whetherMute = false;
+			mHttpService.saveMutesState(whetherMute + "");
 			break;
 		default:
 			// parentHandler.removeCallbacks(bannerRunnable);
