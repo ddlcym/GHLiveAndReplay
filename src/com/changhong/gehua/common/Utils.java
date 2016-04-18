@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 public class Utils {
-
+	
 	public static String dateToString(Date date) {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		df = DateFormat.getDateInstance(DateFormat.MEDIUM);
