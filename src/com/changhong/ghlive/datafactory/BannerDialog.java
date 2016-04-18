@@ -136,6 +136,9 @@ public class BannerDialog extends Dialog {
 
 	public void initData() {
 		// + programListInfo.get(1).getBeginTime()
+		if(programListInfo.size()<3){
+			return;
+		}
 		String currentProgramBginTime = Utils.hourAndMinute(programListInfo.get(1).getBeginTime());
 		String currentProgramEndTime = Utils.hourAndMinute(programListInfo.get(1).getEndTime());
 		String nextProgramBeginTime = Utils.hourAndMinute(programListInfo.get(2).getBeginTime());

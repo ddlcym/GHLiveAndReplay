@@ -64,6 +64,7 @@ public class MainActivity extends BaseActivity {
 	private SeekBar liveSeekBar;
 	private TextView tvRootDigitalkey, tvRootDigitalKeyInvalid;
 	private ImageView muteIconImage;
+	private ImageView liveCurtain;
 
 	/**
 	 * Digital key
@@ -91,7 +92,7 @@ public class MainActivity extends BaseActivity {
 	private List<ProgramInfo> curChannelPrograms = new ArrayList<ProgramInfo>();// 当前频道下的上一个节目，当前节目，下一个节目信息
 	private int curListIndex = 0;// 当前list下正在播放的当前节目的index
 	private int curType = 0;
-	private String curChannelNO = "1"; // 当前播放的节目的channelno
+	private String curChannelNO = "2"; // 当前播放的节目的channelno
 	private ProgramInfo curProgram = null;
 	private String curPlayURL = null;
 
@@ -111,7 +112,7 @@ public class MainActivity extends BaseActivity {
 
 				// player.playUrl(curPlayURL);
 				playNetVideo();
-
+				
 				ChannelInfo curChannel = CacheData.getAllChannelMap().get(curChannelNO);
 				PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
 
@@ -245,7 +246,7 @@ public class MainActivity extends BaseActivity {
 
 		tvRootDigitalkey = (TextView) findViewById(R.id.id_dtv_digital_root);
 		tvRootDigitalKeyInvalid = (TextView) findViewById(R.id.id_dtv_digital_root_invalid);
-
+		liveCurtain=(ImageView)findViewById(R.id.live_curtain);
 		// videoView.setMediaController(new MediaController(this));
 		surfaceView.setFocusable(false);
 		chListView.setFocusable(false);
@@ -1070,9 +1071,10 @@ public class MainActivity extends BaseActivity {
 			public void run() {
 				// TODO Auto-generated method stub
 				player.playUrl(curPlayURL);
+				
 			}
 		}).start();
-
+		liveCurtain.setVisibility(View.GONE);
 	}
 
 	/* whether net is connected */
