@@ -125,7 +125,7 @@ public class ReplayPlayActivity extends Activity {
 		ps.height = 90;
 		ps.width = 90;
 		timeShiftIcon.setLayoutParams(ps);
-		timeShiftIcon.setVisibility(View.VISIBLE);
+//		timeShiftIcon.setVisibility(View.VISIBLE);
 		if (whetherMute) {
 			muteIconImage.setVisibility(View.VISIBLE);
 		} else {
