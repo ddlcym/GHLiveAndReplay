@@ -27,7 +27,7 @@ public class ChannelRepListAdapter extends BaseAdapter {
 		this.context = con;
 		inflater = LayoutInflater.from(context);
 	}
-
+	
 	public void setData(List<ChannelInfo> curChannels) {
 		this.repChannels = curChannels;
 		notifyDataSetChanged();
