@@ -27,6 +27,7 @@ import com.changhong.ghlive.datafactory.JsonResolve;
 import com.hisilicon.android.mediaplayer.HiMediaPlayer;
 
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -254,11 +255,11 @@ public class Player implements HiMediaPlayer.OnBufferingUpdateListener, HiMediaP
 			mediaPlayer.setDataSource(videoUrl);
 			mediaPlayer.prepare();// prepare֮���Զ�����
 			
-			if(!liveFlag){
+			if(liveFlag){
+				curBeginTime=getStartTime();
+			}else{
 				duration = mediaPlayer.getDuration();
 				Player.skbProgress.setMax(duration);
-			}else{
-				curBeginTime=getStartTime();
 			}
 			// mediaPlayer.start();
 		} catch (IllegalArgumentException e) {
@@ -295,6 +296,7 @@ public class Player implements HiMediaPlayer.OnBufferingUpdateListener, HiMediaP
 		if (mediaPlayer != null) {
 			mediaPlayer.stop();
 			mediaPlayer.release();
+			mediaPlayer.setFreezeMode(1);
 			mediaPlayer = null;
 		}
 	}
@@ -314,6 +316,7 @@ public class Player implements HiMediaPlayer.OnBufferingUpdateListener, HiMediaP
 			mediaPlayer = new HiMediaPlayer();
 			mediaPlayer.setDisplay(surfaceHolder);
 //			mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+			mediaPlayer.setFreezeMode(0);
 			mediaPlayer.setOnBufferingUpdateListener(this);
 			mediaPlayer.setOnPreparedListener(this);
 			mediaPlayer.setOnCompletionListener(this);
