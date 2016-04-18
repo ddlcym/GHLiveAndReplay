@@ -160,6 +160,24 @@
         android:visibility="gone" />
 
     <ImageView
+        android:id="@+id/fast_forward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/fast_forward"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/fast_backward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/fast_backward"
+        android:visibility="gone" />
+
+    <ImageView
         android:id="@+id/mute_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
