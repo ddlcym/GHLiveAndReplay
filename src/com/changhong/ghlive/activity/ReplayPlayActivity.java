@@ -125,7 +125,7 @@ public class ReplayPlayActivity extends Activity {
 		ps.height = 90;
 		ps.width = 90;
 		timeShiftIcon.setLayoutParams(ps);
-//		timeShiftIcon.setVisibility(View.VISIBLE);
+		// timeShiftIcon.setVisibility(View.VISIBLE);
 		if (whetherMute) {
 			muteIconImage.setVisibility(View.VISIBLE);
 		} else {
@@ -300,14 +300,6 @@ public class ReplayPlayActivity extends Activity {
 			replayHandler.postDelayed(progressBarRunnable, 5000);
 			backwardIcon.setVisibility(View.GONE);
 			forwardIcon.setVisibility(View.VISIBLE);
-			replayHandler.postDelayed(new Runnable() {
-
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					forwardIcon.setVisibility(View.GONE);
-				}
-			}, 5000);
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
 			Player.handleProgress.sendEmptyMessage(Class_Constant.RE_FAST_REVERSE_DOWN);
@@ -322,14 +314,6 @@ public class ReplayPlayActivity extends Activity {
 			replayHandler.postDelayed(progressBarRunnable, 5000);
 			forwardIcon.setVisibility(View.GONE);
 			backwardIcon.setVisibility(View.VISIBLE);
-			replayHandler.postDelayed(new Runnable() {
-
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					backwardIcon.setVisibility(View.GONE);
-				}
-			}, 5000);
 			break;
 		case Class_Constant.KEYCODE_OK_KEY:
 			forwardIcon.setVisibility(View.GONE);
@@ -380,10 +364,11 @@ public class ReplayPlayActivity extends Activity {
 
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
-
+			forwardIcon.setVisibility(View.GONE);
 			player.handleProgress.sendEmptyMessage(Class_Constant.RE_FAST_FORWARD_UP);
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
+			backwardIcon.setVisibility(View.GONE);
 			player.handleProgress.sendEmptyMessage(Class_Constant.RE_FAST_REVERSE_UP);
 			break;
 		}
