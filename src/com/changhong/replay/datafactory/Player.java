@@ -24,11 +24,9 @@ import com.changhong.gehua.common.Utils;
 import com.changhong.gehua.common.VolleyTool;
 import com.changhong.ghlive.activity.MyApp;
 import com.changhong.ghlive.datafactory.JsonResolve;
+import com.hisilicon.android.mediaplayer.HiMediaPlayer;
 
 import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnBufferingUpdateListener;
-import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -39,11 +37,11 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Player implements OnBufferingUpdateListener, OnCompletionListener,
-		MediaPlayer.OnPreparedListener, SurfaceHolder.Callback {
+public class Player implements HiMediaPlayer.OnBufferingUpdateListener, HiMediaPlayer.OnCompletionListener,
+	HiMediaPlayer.OnPreparedListener, SurfaceHolder.Callback {
 	private int videoWidth;
 	private int videoHeight;
-	public static MediaPlayer mediaPlayer;
+	public static HiMediaPlayer mediaPlayer;
 	private SurfaceHolder surfaceHolder;
 	public static SeekBar skbProgress;
 	private SurfaceView surfaceView;
@@ -132,8 +130,8 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 				if (desPositon >= duration) {
 					if (handlerFlag) {
 						handlerFlag = false;
-						parentHandler
-								.sendEmptyMessage(Class_Constant.RE_NEXT_PROGRAM);
+//						parentHandler
+//								.sendEmptyMessage(Class_Constant.RE_NEXT_PROGRAM);
 
 					}
 					desPositon = duration;
@@ -154,8 +152,8 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 				if (desPositon < 0) {
 					if (handlerFlag) {
 						handlerFlag = false;
-						parentHandler
-								.sendEmptyMessage(Class_Constant.RE_LAST_PROGRAM);
+//						parentHandler
+//								.sendEmptyMessage(Class_Constant.RE_LAST_PROGRAM);
 
 					}
 					desPositon = 0;
@@ -313,9 +311,9 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 	@Override
 	public void surfaceCreated(SurfaceHolder arg0) {
 		try {
-			mediaPlayer = new MediaPlayer();
+			mediaPlayer = new HiMediaPlayer();
 			mediaPlayer.setDisplay(surfaceHolder);
-			mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+//			mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			mediaPlayer.setOnBufferingUpdateListener(this);
 			mediaPlayer.setOnPreparedListener(this);
 			mediaPlayer.setOnCompletionListener(this);
@@ -334,7 +332,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 	/**
 	 * ͨ��onPrepared����
 	 */
-	public void onPrepared(MediaPlayer arg0) {
+	public void onPrepared(HiMediaPlayer arg0) {
 		videoWidth = mediaPlayer.getVideoWidth();
 		videoHeight = mediaPlayer.getVideoHeight();
 		if (videoHeight != 0 && videoWidth != 0) {
@@ -348,14 +346,13 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 	}
 
 	@Override
-	public void onCompletion(MediaPlayer arg0) {
+	public void onCompletion(HiMediaPlayer arg0) {
 		// TODO Auto-generated method stub
 		parentHandler.sendEmptyMessage(Class_Constant.RE_NEXT_PROGRAM);
 	}
 
 	// 播放视频准备好播放后调用此方法
-	@Override
-	public void onBufferingUpdate(MediaPlayer arg0, int bufferingProgress) {
+	public void onBufferingUpdate(HiMediaPlayer arg0, int bufferingProgress) {
 		Player.skbProgress.setSecondaryProgress(bufferingProgress);
 		playingFlag = true;
 		int currentProgress = Player.skbProgress.getMax()
