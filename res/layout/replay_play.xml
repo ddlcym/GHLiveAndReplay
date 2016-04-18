@@ -27,7 +27,7 @@
         android:paddingRight="15dip"
         android:paddingTop="15dip"
         android:src="@drawable/back"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/play_btn"
