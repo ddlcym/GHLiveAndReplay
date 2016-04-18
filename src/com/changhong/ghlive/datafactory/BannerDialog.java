@@ -160,6 +160,8 @@ public class BannerDialog extends Dialog {
 	@Override
 	public void show() {
 		super.show();
+		parentHandler.removeCallbacks(bannerRunnable);
+		parentHandler.postDelayed(bannerRunnable, 5000);
 		initData();
 	}
 
@@ -187,14 +189,20 @@ public class BannerDialog extends Dialog {
 			break;
 
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
+			bannerView.setVisibility(View.VISIBLE);
 			palyButton.setVisibility(View.GONE);
 			pauseButton.setVisibility(View.GONE);
+			parentHandler.removeCallbacks(bannerRunnable);
+			parentHandler.postDelayed(bannerRunnable, 5000);
 			Log.i("mmmm", "banner-handleProgress" + Player.handleProgress);
 			Player.handleProgress.sendEmptyMessage(Class_Constant.LIVE_FAST_FORWARD);
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
+			bannerView.setVisibility(View.VISIBLE);
 			palyButton.setVisibility(View.GONE);
 			pauseButton.setVisibility(View.GONE);
+			parentHandler.removeCallbacks(bannerRunnable);
+			parentHandler.postDelayed(bannerRunnable, 5000);
 			Player.handleProgress.sendEmptyMessage(Class_Constant.LIVE_FAST_REVERSE);
 			break;
 		case Class_Constant.KEYCODE_OK_KEY:
@@ -237,8 +245,8 @@ public class BannerDialog extends Dialog {
 			whetherMute = false;
 			break;
 		default:
-			parentHandler.removeCallbacks(bannerRunnable);
-			parentHandler.postDelayed(bannerRunnable, 5000);
+			// parentHandler.removeCallbacks(bannerRunnable);
+			// parentHandler.postDelayed(bannerRunnable, 5000);
 			break;
 		}
 		return super.onKeyDown(keyCode, event);
