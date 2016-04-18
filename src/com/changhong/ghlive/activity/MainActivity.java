@@ -11,6 +11,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.changhong.gehua.common.CacheData;
 import com.changhong.gehua.common.ChannelInfo;
 import com.changhong.gehua.common.Class_Constant;
+import com.changhong.gehua.common.CommonMethod;
 import com.changhong.gehua.common.PlayVideo;
 import com.changhong.gehua.common.ProcessData;
 import com.changhong.gehua.common.ProgramInfo;
@@ -112,7 +113,7 @@ public class MainActivity extends BaseActivity {
 
 				// player.playUrl(curPlayURL);
 				playNetVideo();
-				
+
 				ChannelInfo curChannel = CacheData.getAllChannelMap().get(curChannelNO);
 				PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
 
@@ -246,7 +247,7 @@ public class MainActivity extends BaseActivity {
 
 		tvRootDigitalkey = (TextView) findViewById(R.id.id_dtv_digital_root);
 		tvRootDigitalKeyInvalid = (TextView) findViewById(R.id.id_dtv_digital_root_invalid);
-		liveCurtain=(ImageView)findViewById(R.id.live_curtain);
+		liveCurtain = (ImageView) findViewById(R.id.live_curtain);
 		// videoView.setMediaController(new MediaController(this));
 		surfaceView.setFocusable(false);
 		chListView.setFocusable(false);
@@ -777,9 +778,10 @@ public class MainActivity extends BaseActivity {
 			break;
 
 		case Class_Constant.KEYCODE_MENU_KEY:
-
+			// Log.i("zyt", "onkeydown menukey is pressed " + keyCode);
+			CommonMethod.startSettingPage(MyApp.getContext());
 			break;
-
+			
 		case Class_Constant.KEYCODE_BACK_KEY:
 
 			if (channelListLinear.isShown()) {
@@ -809,7 +811,7 @@ public class MainActivity extends BaseActivity {
 			mHttpService.saveMutesState(whetherMute + "");
 			break;
 		default:
-			// Log.i("zyt", "onkeydown mute is " + keyCode);
+			Log.i("zyt", "onkeydown default is " + keyCode);
 			break;
 		// next key down call
 		}
@@ -1071,7 +1073,7 @@ public class MainActivity extends BaseActivity {
 			public void run() {
 				// TODO Auto-generated method stub
 				player.playUrl(curPlayURL);
-				
+
 			}
 		}).start();
 		liveCurtain.setVisibility(View.GONE);

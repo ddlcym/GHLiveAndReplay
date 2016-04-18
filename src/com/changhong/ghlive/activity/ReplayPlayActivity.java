@@ -10,6 +10,7 @@ import java.util.TimeZone;
 import com.changhong.gehua.common.CacheData;
 import com.changhong.gehua.common.ChannelInfo;
 import com.changhong.gehua.common.Class_Constant;
+import com.changhong.gehua.common.CommonMethod;
 import com.changhong.gehua.common.PlayVideo;
 import com.changhong.gehua.common.ProcessData;
 import com.changhong.gehua.common.ProgramInfo;
@@ -352,6 +353,10 @@ public class ReplayPlayActivity extends Activity {
 			// audioMgr.setStreamMute(AudioManager.STREAM_MUSIC, true);
 			whetherMute = false;
 			mHttpService.saveMutesState(whetherMute + "");
+			break;
+		case Class_Constant.KEYCODE_MENU_KEY:
+			// Log.i("zyt", "onkeydown menukey is pressed " + keyCode);
+			CommonMethod.startSettingPage(MyApp.getContext());
 			break;
 		}
 
