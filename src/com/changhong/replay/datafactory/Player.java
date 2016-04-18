@@ -345,6 +345,10 @@ public class Player implements HiMediaPlayer.OnBufferingUpdateListener, HiMediaP
 					.show();
 			Log.i("mm", "videoWidth or videoHeight =0");
 		}
+		if(liveFlag){
+			handleProgress.sendEmptyMessage(Class_Constant.RE_UPDATE_PROGRESS);
+			mediaPlayer.pause();
+		}
 		Log.e("mediaPlayer", "onPrepared");
 	}
 

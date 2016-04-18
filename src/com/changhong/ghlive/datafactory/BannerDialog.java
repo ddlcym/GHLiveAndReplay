@@ -154,7 +154,6 @@ public class BannerDialog extends Dialog {
 		programPlayBar.setMax((int) length);
 		player.setDuration((int) length);
 		palyButton.setVisibility(View.GONE);
-		pauseButton.setVisibility(View.GONE);
 		processData = new ProcessData();
 		mReQueue = VolleyTool.getInstance().getRequestQueue();
 		curChannel = CacheData.getAllChannelMap().get(CacheData.getCurChannelNum());
@@ -183,6 +182,7 @@ public class BannerDialog extends Dialog {
 		switch (keyCode) {
 		/* 返回--取消 */
 		case KeyEvent.KEYCODE_BACK:
+			player.setLiveFlag(false);
 			mHttpService.saveMutesState(whetherMute + "");
 			Message msg = new Message();
 			msg.what = Class_Constant.PLAY_BACKFROM_SHIFT;

@@ -625,25 +625,25 @@ public class MainActivity extends BaseActivity {
 			}
 			showChannelListView();
 			// 切换频道类型，更新频道列表的数据
-			// if (curType == 6) {
-			// curType = 0;
-			// } else {
-			// curType++;
-			// }
-			// showChannelList();
-			// chListView.setFocusable(true);
-			// chListView.requestFocus();
-			// chListView.setSelection(curListIndex);
+			 if (curType == 6) {
+			 curType = 0;
+			 } else {
+				 ++curType;
+			 }
+			 showChannelList();
+			 chListView.setFocusable(true);
+			 chListView.requestFocus();
+			 chListView.setSelection(curListIndex);
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
 			// 切换频道类型，更新频道列表的数据
-			// if (curType == 0) {
-			// curType = 6;
-			// } else {
-			// curType--;
-			// }
-			// showChannelList();
-			// chListView.setSelection(0);
+			 if (curType == 0) {
+			 curType = 6;
+			 } else {
+				 --curType;
+			 }
+			 showChannelList();
+			 chListView.setSelection(0);
 
 			break;
 

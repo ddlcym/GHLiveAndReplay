@@ -129,7 +129,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:src="@drawable/pause"
-        android:visibility="gone" >
+        android:visibility="visible" >
     </ImageView>
 
     <ImageView
