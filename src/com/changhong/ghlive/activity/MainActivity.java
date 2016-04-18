@@ -165,7 +165,7 @@ public class MainActivity extends BaseActivity {
 				mhandler.sendEmptyMessageDelayed(Class_Constant.MESSAGE_DISAPPEAR_DIGITAL, 3500);
 				break;
 
-			case Class_Constant.MESSAGE_DISAPPEAR_DIGITAL: 
+			case Class_Constant.MESSAGE_DISAPPEAR_DIGITAL:
 				iKey = 0;
 				if (tvRootDigitalKeyInvalid != null) {
 					tvRootDigitalKeyInvalid.setVisibility(View.INVISIBLE);
@@ -173,11 +173,11 @@ public class MainActivity extends BaseActivity {
 				if (tvRootDigitalkey != null) {
 					tvRootDigitalkey.setVisibility(View.INVISIBLE);
 				}
-			
+
 				break;
-				
+
 			case Class_Constant.BACK_TO_LIVE:
-				if(programBannerDialog!=null){
+				if (programBannerDialog != null) {
 					programBannerDialog.dismiss();
 					Toast.makeText(MainActivity.this, "退回到直播模式", Toast.LENGTH_SHORT).show();
 				}
@@ -619,7 +619,7 @@ public class MainActivity extends BaseActivity {
 		String dialogButtonTextCancel = MainActivity.this.getString(R.string.str_zhn_no);
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
-			if (ban!=null&&ban.isToastShow()) {
+			if (ban != null && ban.isToastShow()) {
 				ban.cancelBanner();
 			}
 			showChannelListView();
@@ -791,6 +791,7 @@ public class MainActivity extends BaseActivity {
 			// audioMgr.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
 			whetherMute = !whetherMute;
 			// Log.i("zyt", "keycode mute is " + whetherMute);
+			mHttpService.saveMutesState(whetherMute + "");
 			if (muteIconImage.isShown()) {
 				muteIconImage.setVisibility(View.GONE);
 			} else {
@@ -804,6 +805,7 @@ public class MainActivity extends BaseActivity {
 			}
 			// audioMgr.setStreamMute(AudioManager.STREAM_MUSIC, true);
 			whetherMute = false;
+			mHttpService.saveMutesState(whetherMute + "");
 			break;
 		default:
 			// Log.i("zyt", "onkeydown mute is " + keyCode);
@@ -962,7 +964,8 @@ public class MainActivity extends BaseActivity {
 		if (programBannerDialog != null) {
 			programBannerDialog.cancel();
 		}
-		programBannerDialog = new BannerDialog(this, curChannel, curChannelPrograms, mhandler, surfaceView, mHttpService);
+		programBannerDialog = new BannerDialog(this, curChannel, curChannelPrograms, mhandler, surfaceView,
+				mHttpService);
 		programBannerDialog.show();
 	}
 
@@ -1033,7 +1036,6 @@ public class MainActivity extends BaseActivity {
 			chListView.setVisibility(View.INVISIBLE);
 		}
 	};
-
 
 	public int playPlusOrSub(int outterChannelId, int code) {
 		// code :0 plus 1 sub
@@ -1110,12 +1112,12 @@ public class MainActivity extends BaseActivity {
 		sendBroadcast(intent);
 		mHttpService.saveMutesState(whetherMute + "");
 		// onStop();
-		if(player!=null)
-		player.stop();
-		if(programBannerDialog!=null)
-		programBannerDialog.dismiss();
-		if(ban!=null)
-		ban.cancelBanner();
+		if (player != null)
+			player.stop();
+		if (programBannerDialog != null)
+			programBannerDialog.dismiss();
+		if (ban != null)
+			ban.cancelBanner();
 		super.onPause();
 		// onDestroy();
 		// onStop();

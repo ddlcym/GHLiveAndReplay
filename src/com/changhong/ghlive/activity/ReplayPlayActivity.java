@@ -97,11 +97,12 @@ public class ReplayPlayActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.replay_play);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-		whetherMute = false;
+		// whetherMute = false;
 		if (mHttpService == null) {
 			mHttpService = new HttpService(getApplicationContext());
 		}
 		whetherMute = Boolean.valueOf(mHttpService.getMuteState());
+
 		initView();
 		initData();
 	}
@@ -352,6 +353,7 @@ public class ReplayPlayActivity extends Activity {
 			// audioMgr.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
 			whetherMute = !whetherMute;
 			// Log.i("zyt", "keycode mute is " + whetherMute);
+			mHttpService.saveMutesState(whetherMute + "");
 			if (muteIconImage.isShown()) {
 				muteIconImage.setVisibility(View.GONE);
 			} else {
@@ -365,6 +367,7 @@ public class ReplayPlayActivity extends Activity {
 			}
 			// audioMgr.setStreamMute(AudioManager.STREAM_MUSIC, true);
 			whetherMute = false;
+			mHttpService.saveMutesState(whetherMute + "");
 			break;
 		}
 
