@@ -28,3 +28,7 @@
 -dontwarn com.android.volley.**
 -keep class android.support.v4.** {*;}
 -dontwarn android.support.v4.**
+-keep class com.hisilicon.android.mediaplayer.** {*;}
+-dontwarn com.hisilicon.android.mediaplayer.**
+
+
