@@ -331,6 +331,8 @@ public class ReplayPlayActivity extends Activity {
 			}, 5000);
 			break;
 		case Class_Constant.KEYCODE_OK_KEY:
+			forwardIcon.setVisibility(View.GONE);
+			backwardIcon.setVisibility(View.GONE);
 			if (player.isPlayerPlaying()) {
 				player.pause();
 				palyButton.setVisibility(View.GONE);
