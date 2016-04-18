@@ -96,37 +96,19 @@
                 android:textSize="28sp" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dip"
-            android:orientation="horizontal" >
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" >
 
                 <TextView
                     android:layout_width="400dip"
                     android:layout_height="50dip"
-                    android:layout_marginTop="25dip"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="25dip"
                     android:singleLine="true"
                     android:text="返回键：退出时移模式"
                     android:textColor="@color/white"
                     android:textSize="28sp"
                     android:visibility="visible" />
 
-                <TextView
-                    android:layout_width="400dip"
-                    android:layout_height="50dip"
-                    android:layout_marginTop="5dip"
-                    android:singleLine="true"
-                    android:text="右键：显示节目列表"
-                    android:textColor="@color/white"
-                    android:textSize="28sp" />
-            </LinearLayout>
-        </LinearLayout>
     </LinearLayout>
 
     <ImageView

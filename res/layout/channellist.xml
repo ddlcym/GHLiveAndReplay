@@ -11,6 +11,15 @@
         android:layout_marginRight="0dp"
         android:focusable="false" >
     </SurfaceView>
+    <ImageView 
+        android:id="@+id/live_curtain"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginRight="0dp"
+        android:background="@color/black"
+        android:focusable="false" 
+        android:visibility="visible"
+        />
 
     <ImageView
         android:id="@+id/mute_icon"
