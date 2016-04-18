@@ -136,7 +136,7 @@ public class BannerDialog extends Dialog {
 
 	public void initData() {
 		// + programListInfo.get(1).getBeginTime()
-		if(programListInfo.size()<3){
+		if (programListInfo.size() < 3) {
 			return;
 		}
 		String currentProgramBginTime = Utils.hourAndMinute(programListInfo.get(1).getBeginTime());
@@ -202,14 +202,6 @@ public class BannerDialog extends Dialog {
 			parentHandler.postDelayed(bannerRunnable, 5000);
 			backwardIcon.setVisibility(View.GONE);
 			forwardIcon.setVisibility(View.VISIBLE);
-			parentHandler.postDelayed(new Runnable() {
-
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					forwardIcon.setVisibility(View.GONE);
-				}
-			}, 5000);
 			Log.i("mmmm", "banner-handleProgress" + Player.handleProgress);
 			Player.handleProgress.sendEmptyMessage(Class_Constant.LIVE_FAST_FORWARD);
 			break;
@@ -221,14 +213,6 @@ public class BannerDialog extends Dialog {
 			parentHandler.postDelayed(bannerRunnable, 5000);
 			forwardIcon.setVisibility(View.GONE);
 			backwardIcon.setVisibility(View.VISIBLE);
-			parentHandler.postDelayed(new Runnable() {
-
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					backwardIcon.setVisibility(View.GONE);
-				}
-			}, 5000);
 			Player.handleProgress.sendEmptyMessage(Class_Constant.LIVE_FAST_REVERSE);
 			break;
 		case Class_Constant.KEYCODE_OK_KEY:
@@ -290,9 +274,11 @@ public class BannerDialog extends Dialog {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
 
 			Player.handleProgress.sendEmptyMessage(Class_Constant.RE_FAST_FORWARD_UP);
+			forwardIcon.setVisibility(View.GONE);
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
 			Player.handleProgress.sendEmptyMessage(Class_Constant.RE_FAST_REVERSE_UP);
+			backwardIcon.setVisibility(View.GONE);
 			break;
 		}
 
