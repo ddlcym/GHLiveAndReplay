@@ -1,30 +1,9 @@
 package com.changhong.replay.datafactory;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import javax.xml.datatype.Duration;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.changhong.gehua.common.CacheData;
-import com.changhong.gehua.common.ChannelInfo;
-import com.changhong.gehua.common.Class_Constant;
-import com.changhong.gehua.common.MD5Encrypt;
-import com.changhong.gehua.common.ProcessData;
-import com.changhong.gehua.common.ProgramInfo;
-import com.changhong.gehua.common.Utils;
-import com.changhong.gehua.common.VolleyTool;
-import com.changhong.ghlive.activity.MyApp;
-import com.changhong.ghlive.datafactory.JsonResolve;
-import com.hisilicon.android.mediaplayer.HiMediaPlayer;
 
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -34,15 +13,30 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Player implements HiMediaPlayer.OnBufferingUpdateListener, HiMediaPlayer.OnCompletionListener,
-		HiMediaPlayer.OnPreparedListener, SurfaceHolder.Callback {
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.changhong.gehua.common.CacheData;
+import com.changhong.gehua.common.ChannelInfo;
+import com.changhong.gehua.common.Class_Constant;
+import com.changhong.gehua.common.CommonMethod;
+import com.changhong.gehua.common.ProcessData;
+import com.changhong.gehua.common.ProgramInfo;
+import com.changhong.gehua.common.Utils;
+import com.changhong.gehua.common.VolleyTool;
+import com.changhong.ghlive.activity.MyApp;
+import com.changhong.ghlive.datafactory.JsonResolve;
+
+public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnCompletionListener,
+		MediaPlayer.OnPreparedListener, SurfaceHolder.Callback {
 	private int videoWidth;
 	private int videoHeight;
-	public static HiMediaPlayer mediaPlayer;
+	public static MediaPlayer mediaPlayer;
 	private SurfaceHolder surfaceHolder;
 	public static SeekBar skbProgress;
 	private SurfaceView surfaceView;
@@ -80,7 +74,11 @@ public class Player implements HiMediaPlayer.OnBufferingUpdateListener, HiMediaP
 		surfaceHolder.addCallback(this);
 		// 防止音频出不来
 		surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+		try{
 		mTimer.schedule(mTimerTask, 0, 1000);
+		}catch (IllegalStateException e){
+			e.printStackTrace();
+		}
 		processData = new ProcessData();
 		mReQueue = VolleyTool.getInstance().getRequestQueue();
 		curChannel = CacheData.getAllChannelMap().get(CacheData.getCurChannelNum());
@@ -97,14 +95,18 @@ public class Player implements HiMediaPlayer.OnBufferingUpdateListener, HiMediaP
 		public void run() {
 			if (mediaPlayer == null)
 				return;
+			try{
 			if (liveFlag) {
-				if (mediaPlayer.isPlaying() && Player.videoCurrentTime != null && !keyFlag) {
+				if (mediaPlayer!=null&&mediaPlayer.isPlaying() && Player.videoCurrentTime != null && !keyFlag) {
 					handleProgress.sendEmptyMessage(Class_Constant.RE_UPDATE_PROGRESS);
 				}
 			} else {
-				if (mediaPlayer.isPlaying() && playingFlag && videoCurrentTime != null && !keyFlag) {
+				if (mediaPlayer!=null&&mediaPlayer.isPlaying() && playingFlag && videoCurrentTime != null && !keyFlag) {
 					handleProgress.sendEmptyMessage(Class_Constant.RE_UPDATE_PROGRESS);
 				}
+			}
+			}catch (IllegalStateException e){
+				e.printStackTrace();
 			}
 		}
 	};
@@ -297,7 +299,13 @@ public class Player implements HiMediaPlayer.OnBufferingUpdateListener, HiMediaP
 		if (mediaPlayer != null) {
 			mediaPlayer.stop();
 			mediaPlayer.release();
-			mediaPlayer.setFreezeMode(1);
+//			mediaPlayer.setFreezeMode(1);
+			try {
+				CommonMethod.excuteCmd(CommonMethod.cmdBlack);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			mediaPlayer = null;
 		}
 	}
@@ -310,10 +318,17 @@ public class Player implements HiMediaPlayer.OnBufferingUpdateListener, HiMediaP
 	@Override
 	public void surfaceCreated(SurfaceHolder arg0) {
 		try {
-			mediaPlayer = new HiMediaPlayer();
+			try {
+				CommonMethod.excuteCmd(CommonMethod.cmdFreeze);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			mediaPlayer = new MediaPlayer();
 			mediaPlayer.setDisplay(surfaceHolder);
-			// mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-			mediaPlayer.setFreezeMode(0);
+			 mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+//			mediaPlayer.setFreezeMode(0);
+			
 			mediaPlayer.setOnBufferingUpdateListener(this);
 			mediaPlayer.setOnPreparedListener(this);
 			mediaPlayer.setOnCompletionListener(this);
@@ -332,7 +347,7 @@ public class Player implements HiMediaPlayer.OnBufferingUpdateListener, HiMediaP
 	/**
 	 * ͨ��onPrepared����
 	 */
-	public void onPrepared(HiMediaPlayer arg0) {
+	public void onPrepared(MediaPlayer arg0) {
 		videoWidth = mediaPlayer.getVideoWidth();
 		videoHeight = mediaPlayer.getVideoHeight();
 		if (videoHeight != 0 && videoWidth != 0) {
@@ -352,13 +367,13 @@ public class Player implements HiMediaPlayer.OnBufferingUpdateListener, HiMediaP
 	}
 
 	@Override
-	public void onCompletion(HiMediaPlayer arg0) {
+	public void onCompletion(MediaPlayer arg0) {
 		// TODO Auto-generated method stub
 		parentHandler.sendEmptyMessage(Class_Constant.RE_NEXT_PROGRAM);
 	}
 
 	// 播放视频准备好播放后调用此方法
-	public void onBufferingUpdate(HiMediaPlayer arg0, int bufferingProgress) {
+	public void onBufferingUpdate(MediaPlayer arg0, int bufferingProgress) {
 		Player.skbProgress.setSecondaryProgress(bufferingProgress);
 		playingFlag = true;
 		int currentProgress = Player.skbProgress.getMax() * mediaPlayer.getCurrentPosition()

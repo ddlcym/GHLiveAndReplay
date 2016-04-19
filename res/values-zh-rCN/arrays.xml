@@ -612,13 +612,12 @@
     </string-array>
 
             <string-array name="tvtype">
-        <item >"全部"</item>
-        <item >"央视"</item>
-        <item >"卫视"</item>
-        <item >"地方"</item>
-        <item >"高清"</item>
-        <item >"喜爱"</item>
-        <item >"其他"</item>
+        <item >"全部频道"</item>
+        <item >"央视频道"</item>
+        <item >"卫视频道"</item>
+        <item >"北京频道"</item>
+        <item >"高清频道"</item>
+       <!--  <item >"喜爱"</item><item >"其他"</item> -->
     </string-array>
     
              <string-array name="tvtype_tianj">

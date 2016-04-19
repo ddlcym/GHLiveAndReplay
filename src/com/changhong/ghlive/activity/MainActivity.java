@@ -85,7 +85,7 @@ public class MainActivity extends BaseActivity {
 	private List<ChannelInfo> channelsAll = new ArrayList<ChannelInfo>();
 	private List<ChannelInfo> CCTVList = new ArrayList<ChannelInfo>();
 	private List<ChannelInfo> starTvList = new ArrayList<ChannelInfo>();
-	private List<ChannelInfo> favTvList = new ArrayList<ChannelInfo>();
+//	private List<ChannelInfo> favTvList = new ArrayList<ChannelInfo>();
 	private List<ChannelInfo> localTvList = new ArrayList<ChannelInfo>();
 	private List<ChannelInfo> HDTvList = new ArrayList<ChannelInfo>();
 	private List<ChannelInfo> otherTvList = new ArrayList<ChannelInfo>();
@@ -96,6 +96,7 @@ public class MainActivity extends BaseActivity {
 	private String curChannelNO = "2"; // 当前播放的节目的channelno
 	private ProgramInfo curProgram = null;
 	private String curPlayURL = null;
+	private boolean keydownFlag=false;
 
 	private ChannelListAdapter chLstAdapter;
 	private Player player;
@@ -219,7 +220,7 @@ public class MainActivity extends BaseActivity {
 		}
 		getChannelList();
 		player = new Player(mhandler, surfaceView, liveSeekBar, null);
-		chListView.setOnItemSelectedListener(myItemSelectLis);
+//		chListView.setOnItemSelectedListener(myItemSelectLis);
 		chListView.setOnItemClickListener(myClickLis);
 
 		audioMgr = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -323,7 +324,7 @@ public class MainActivity extends BaseActivity {
 			// }
 			curListIndex = position;
 			String channelNO = channelIndex.getText().toString();
-			// Log.i(TAG, index);
+//			 Log.i(TAG, "myClickLis"+position);
 			playChannel(channelNO, true);
 
 			curChannelNO = channelNO;
@@ -391,7 +392,7 @@ public class MainActivity extends BaseActivity {
 		channelsAll.clear();
 		CCTVList.clear();
 		starTvList.clear();
-		favTvList.clear();
+//		favTvList.clear();
 		localTvList.clear();
 		HDTvList.clear();
 		otherTvList.clear();
@@ -419,11 +420,11 @@ public class MainActivity extends BaseActivity {
 			if (classBytypeStar) {
 				starTvList.add(dvbChannel);
 			}
-			String regExLocal = "CDTV|SCTV|" + getResources().getString(R.string.rongcheng) + "|"
-					+ getResources().getString(R.string.jingniu) + "|" + getResources().getString(R.string.qingyang)
-					+ "|" + getResources().getString(R.string.wuhou) + "|" + getResources().getString(R.string.chenghua)
-					+ "|" + getResources().getString(R.string.jinjiang) + "|"
-					+ getResources().getString(R.string.chengdu) + "|" + getResources().getString(R.string.sichuan);
+			String regExLocal = "BTV|" + getResources().getString(R.string.beijing_h);
+//					+ "|"+ getResources().getString(R.string.jingniu) + "|" + getResources().getString(R.string.qingyang)
+//					+ "|" + getResources().getString(R.string.wuhou) + "|" + getResources().getString(R.string.chenghua)
+//					+ "|" + getResources().getString(R.string.jinjiang) + "|"
+//					+ getResources().getString(R.string.chengdu) + "|" + getResources().getString(R.string.sichuan);
 			java.util.regex.Pattern patternLocal = java.util.regex.Pattern.compile(regExLocal);
 			java.util.regex.Matcher matcherLocal = patternLocal.matcher(dvbChannel.getChannelName());
 			boolean classBytypeLocal = matcherLocal.find();
@@ -597,14 +598,14 @@ public class MainActivity extends BaseActivity {
 			epgListTitleView.setText(TVtype[4]);
 			curChannels = HDTvList;
 			break;
-		case 5:
-			epgListTitleView.setText(TVtype[5]);
-			curChannels = favTvList;
-			break;
-		case 6:
-			epgListTitleView.setText(TVtype[6]);
-			curChannels = otherTvList;
-			break;
+//		case 5:
+//			epgListTitleView.setText(TVtype[5]);
+//			curChannels = favTvList;
+//			break;
+//		case 5:
+//			epgListTitleView.setText(TVtype[6]);
+//			curChannels = otherTvList;
+//			break;
 		}
 		mCurChannels = curChannels;
 		curListIndex=0;
@@ -627,7 +628,7 @@ public class MainActivity extends BaseActivity {
 			}
 			showChannelListView();
 			// 切换频道类型，更新频道列表的数据
-			 if (curType == 6) {
+			 if (curType == (TVtype.length-1)) {
 			 curType = 0;
 			 } 
 			 showChannelList();
@@ -639,7 +640,7 @@ public class MainActivity extends BaseActivity {
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
 			// 切换频道类型，更新频道列表的数据
 			 if (curType == 0) {
-			 curType = 6;
+			 curType = (TVtype.length-1);
 			 } else {
 				 curType--;
 			 }
@@ -683,6 +684,7 @@ public class MainActivity extends BaseActivity {
 //					playChannel(mCurChannels.get(curListIndex).getChannelNumber(), true);
 					//显示频道号和名称
 					showToastBanner(mCurChannels.get(curListIndex).getChannelNumber());
+					keydownFlag=true;
 				}
 			}
 			break;
@@ -704,6 +706,7 @@ public class MainActivity extends BaseActivity {
 //				playChannel(mCurChannels.get(curListIndex).getChannelNumber(), true);
 				//显示频道号和名称
 				showToastBanner(mCurChannels.get(curListIndex).getChannelNumber());
+				keydownFlag=true;
 			}
 			break;
 
@@ -718,7 +721,7 @@ public class MainActivity extends BaseActivity {
 			muteIconImage.setVisibility(View.GONE);
 			break;
 		case Class_Constant.KEYCODE_UP_ARROW_KEY:
-			if (channelListLinear.isShown()) {
+			if (chListView.isShown()) {
 				chListView.setFocusable(true);
 				chListView.requestFocus();
 				if (0 == chListView.getSelectedItemPosition()) {
@@ -736,12 +739,13 @@ public class MainActivity extends BaseActivity {
 				if (mCurChannels != null && mCurChannels.size() != 0) {
 //					playChannel(mCurChannels.get(curListIndex).getChannelNumber(), true);
 					showToastBanner(mCurChannels.get(curListIndex).getChannelNumber());
+					keydownFlag=true;
 				}
 			}
 			break;
 
 		case Class_Constant.KEYCODE_DOWN_ARROW_KEY:
-			if (channelListLinear.isShown()) {
+			if (chListView.isShown()) {
 				chListView.setFocusable(true);
 				chListView.requestFocus();
 				if ((chLstAdapter.getCount() - 1) == chListView.getSelectedItemPosition()) {
@@ -759,6 +763,7 @@ public class MainActivity extends BaseActivity {
 				if (mCurChannels != null && mCurChannels.size() != 0) {
 //					playChannel(mCurChannels.get(curListIndex).getChannelNumber(), true);
 					showToastBanner(mCurChannels.get(curListIndex).getChannelNumber());
+					keydownFlag=true;
 				}
 			}
 			break;
@@ -836,8 +841,9 @@ public class MainActivity extends BaseActivity {
 		case Class_Constant.KEYCODE_CHANNEL_DOWN:
 		case Class_Constant.KEYCODE_UP_ARROW_KEY:
 		case Class_Constant.KEYCODE_DOWN_ARROW_KEY:
-			if (mCurChannels != null && mCurChannels.size() != 0) {
+			if (mCurChannels != null && mCurChannels.size() != 0&&keydownFlag) {
 				playChannel(mCurChannels.get(curListIndex).getChannelNumber(), true);
+				keydownFlag=false;
 			}
 			
 			break;
