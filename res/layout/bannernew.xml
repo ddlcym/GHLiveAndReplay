@@ -104,7 +104,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="25dip"
                     android:singleLine="true"
-                    android:text="返回键：退出时移模式"
+                    android:text="退出键：退出时移模式"
                     android:textColor="@color/white"
                     android:textSize="28sp"
                     android:visibility="visible" />
