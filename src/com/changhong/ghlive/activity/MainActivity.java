@@ -607,6 +607,7 @@ public class MainActivity extends BaseActivity {
 			break;
 		}
 		mCurChannels = curChannels;
+		curListIndex=0;
 		chLstAdapter.setData(mCurChannels);
 		chListView.setVisibility(View.VISIBLE);
 		if (mCurChannels.size() <= 0) {
@@ -640,7 +641,7 @@ public class MainActivity extends BaseActivity {
 			 if (curType == 0) {
 			 curType = 6;
 			 } else {
-				 --curType;
+				 curType--;
 			 }
 			 showChannelList();
 			 chListView.setSelection(0);
