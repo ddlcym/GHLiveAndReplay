@@ -198,6 +198,7 @@ public class EPGActivity extends BaseActivity {
 		epgWeekInfoView.setAdapter(dayMonthAdapter);
 		programsAdapter = new ProgramsAdapter(EPGActivity.this);
 		epgEventListview.setAdapter(programsAdapter);
+		epgWeekInfoView.setFocusable(false);
 	}
 
 	@Override
@@ -223,6 +224,8 @@ public class EPGActivity extends BaseActivity {
 			uiHandler.sendEmptyMessage(MSG_SHOW_CHANNELLIST);
 		}
 		curChannelNum = CacheData.curChannelNum;
+		
+		
 
 	}
 
@@ -275,11 +278,12 @@ public class EPGActivity extends BaseActivity {
 			curDay = CacheData.dayMonths.get(arg2);
 			CacheData.setReplayCurDay(curDay);
 			uiHandler.sendEmptyMessage(MSG_WEEKDAY_CHANGE); // 更新下面的列表
+			
 		}
 
 		@Override
 		public void onNothingSelected(AdapterView<?> arg0) {
-
+			
 		}
 	};
 
@@ -471,12 +475,17 @@ public class EPGActivity extends BaseActivity {
 		// 根据当前保存的数据刷新EventList
 		curProgramList = (List<ProgramInfo>) CacheData.getAllProgramMap().get(curday);
 		programsAdapter.setData(curProgramList);
-
+		//记住上次的位置，如果是第一个日期则OK，否则都不记住
+		View v = epgEventListview.getChildAt(0);  
+		int top = (v == null) ? 0 : v.getTop();
+		epgEventListview.setSelectionFromTop(0, top);
+		
 	}
 
 	public void showWeekDay() {
 		epgWeekInfoView.setNumColumns(CacheData.getDayMonths().size());
 		dayMonthAdapter.setData(CacheData.getDayMonths());
+		
 //		epgWeekInfoView.setSelection(EventlitItemindex);
 	}
 
@@ -837,18 +846,21 @@ public class EPGActivity extends BaseActivity {
 		
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_UP_ARROW_KEY:
-			if (channelListview.isFocusable()) {
+			if (channelListview.hasFocus()) {
 				if(0==channelListview.getSelectedItemPosition()){
 					channelListview.setSelection(channelAdapter.getCount()-1);
 				}
 			}
 			break;
 		case Class_Constant.KEYCODE_DOWN_ARROW_KEY:
-			if (channelListview.isFocusable()) {
+			if (channelListview.hasFocus()) {
 				if((channelAdapter.getCount()-1)==channelListview.getSelectedItemPosition()){
 					channelListview.setSelection(0);
 				}
 			} 
+			break;
+		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
+			epgWeekInfoView.setFocusable(true);
 			break;
 		}
 		return super.onKeyDown(keyCode, event);
