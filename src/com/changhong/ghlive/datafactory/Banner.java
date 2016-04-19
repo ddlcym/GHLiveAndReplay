@@ -59,6 +59,11 @@ public class Banner {
 		channelInfo = outterChannelInfo;
 		programListInfo = outterListProgramInfo;
 	}
+	
+	public void setData(ChannelInfo outterChannelInfo, List<ProgramInfo> outterListProgramInfo){
+		channelInfo = outterChannelInfo;
+		programListInfo = outterListProgramInfo;
+	}
 
 	public void show() {
 		if (bannerToast == null) {
@@ -139,20 +144,27 @@ public class Banner {
 	}
 
 	private void updateBannerGH() {
-		String currentProgramBginTime = Utils.hourAndMinute(programListInfo.get(1).getBeginTime());
-		String currentProgramEndTime = Utils.hourAndMinute(programListInfo.get(1).getEndTime());
-		String nextProgramBeginTime = Utils.hourAndMinute(programListInfo.get(2).getBeginTime());
-		String nextProgramEndTime = Utils.hourAndMinute(programListInfo.get(2).getEndTime());
-		
+		String currentProgramBginTime =null;
+		String currentProgramEndTime=null;
+		String nextProgramBeginTime =null;
+		String nextProgramEndTime=null;
+		if(programListInfo!=null&&programListInfo.size()==3){
+		currentProgramBginTime = Utils.hourAndMinute(programListInfo.get(1).getBeginTime());
+		currentProgramEndTime = Utils.hourAndMinute(programListInfo.get(1).getEndTime());
+		nextProgramBeginTime = Utils.hourAndMinute(programListInfo.get(2).getBeginTime());
+		nextProgramEndTime = Utils.hourAndMinute(programListInfo.get(2).getEndTime());
+		}
 		channel_name.setText(channelInfo.getChannelName());
 		channel_number.setText(channelInfo.getChannelNumber());
 //		currentProgramName.setText(programListInfo.get(1).getEventName());
 //		nextProgramName.setText(programListInfo.get(2).getEventName());
 		
+		if(programListInfo!=null&&programListInfo.size()==3){
 		currentProgramName.setText(
 				"正在播放：" + currentProgramBginTime + "-" + currentProgramEndTime + "  " + programListInfo.get(1).getEventName());
 		nextProgramName
 				.setText("即将播放：" + nextProgramBeginTime + "-" + nextProgramEndTime + "  " + programListInfo.get(2).getEventName());
+		}
 	}
 	
 	/* 判断Toast 是否真正显示 */
