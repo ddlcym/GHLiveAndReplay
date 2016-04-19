@@ -118,6 +118,7 @@ public class BannerDialog extends Dialog {
 		// bannerView.getBackground().setAlpha(255);
 		palyButton = (ImageView) findViewById(R.id.play_btn);
 		pauseButton = (ImageView) findViewById(R.id.pause_btn);
+		pauseButton.setVisibility(View.VISIBLE);
 		muteIconImage = (ImageView) findViewById(R.id.mute_icon);
 		whetherMute = Boolean.valueOf(mHttpService.getMuteState());
 		if (whetherMute) {
@@ -167,8 +168,9 @@ public class BannerDialog extends Dialog {
 	@Override
 	public void show() {
 		super.show();
-		parentHandler.removeCallbacks(bannerRunnable);
-		parentHandler.postDelayed(bannerRunnable, 5000);
+		// player.pause();
+		// parentHandler.removeCallbacks(bannerRunnable);
+		// parentHandler.postDelayed(bannerRunnable, 5000);
 		initData();
 	}
 
@@ -224,19 +226,20 @@ public class BannerDialog extends Dialog {
 				player.pause();
 				palyButton.setVisibility(View.GONE);
 				pauseButton.setVisibility(View.VISIBLE);
+				if (bannerRunnable != null) {
+					parentHandler.removeCallbacks(bannerRunnable);
+				}
+				bannerView.setVisibility(View.VISIBLE);
 			} else {
 				player.play();
 				pauseButton.setVisibility(View.GONE);
 				palyButton.setVisibility(View.VISIBLE);
+				parentHandler.removeCallbacks(bannerRunnable);
+				parentHandler.postDelayed(bannerRunnable, 5000);
+				parentHandler.removeCallbacks(playBtnRunnable);
+				parentHandler.postDelayed(playBtnRunnable, 5000);
 			}
-			parentHandler.postDelayed(new Runnable() {
 
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					palyButton.setVisibility(View.GONE);
-				}
-			}, 5000);
 			break;
 
 		case Class_Constant.KEYCODE_MUTE:// mute
@@ -338,7 +341,16 @@ public class BannerDialog extends Dialog {
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
-			bannerView.setVisibility(View.INVISIBLE);
+			bannerView.setVisibility(View.GONE);
+		}
+	};
+
+	Runnable playBtnRunnable = new Runnable() {
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			palyButton.setVisibility(View.GONE);
 		}
 	};
 
