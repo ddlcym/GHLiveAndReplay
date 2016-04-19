@@ -347,7 +347,7 @@ public class Player implements HiMediaPlayer.OnBufferingUpdateListener, HiMediaP
 		}
 		if(liveFlag){
 			handleProgress.sendEmptyMessage(Class_Constant.RE_UPDATE_PROGRESS);
-			mediaPlayer.pause();
+//			mediaPlayer.pause();
 		}
 		Log.e("mediaPlayer", "onPrepared");
 	}
