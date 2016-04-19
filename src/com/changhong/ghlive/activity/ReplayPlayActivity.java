@@ -85,8 +85,9 @@ public class ReplayPlayActivity extends Activity {
 				finish();
 				break;
 			case Class_Constant.REPLAY_DIALOG_END_OK:
-				player.playUrl(replayurl);
+				// player.playUrl(replayurl);
 				replayEndDialog.dismiss();
+				playNextProgram();
 				break;
 			}
 		}
@@ -357,6 +358,13 @@ public class ReplayPlayActivity extends Activity {
 		case Class_Constant.KEYCODE_MENU_KEY:
 			// Log.i("zyt", "onkeydown menukey is pressed " + keyCode);
 			CommonMethod.startSettingPage(MyApp.getContext());
+			break;
+		case Class_Constant.KEYCODE_BACK_KEY:
+			// Log.i("zyt", "onkeydown back key is pressed " + keyCode);
+			// finish();
+			break;
+		default:
+			// Log.i("zyt", "default onkeydown back key is pressed " + keyCode);
 			break;
 		}
 
