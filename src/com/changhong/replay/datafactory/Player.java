@@ -39,7 +39,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class Player implements HiMediaPlayer.OnBufferingUpdateListener, HiMediaPlayer.OnCompletionListener,
-	HiMediaPlayer.OnPreparedListener, SurfaceHolder.Callback {
+		HiMediaPlayer.OnPreparedListener, SurfaceHolder.Callback {
 	private int videoWidth;
 	private int videoHeight;
 	public static HiMediaPlayer mediaPlayer;
@@ -56,21 +56,21 @@ public class Player implements HiMediaPlayer.OnBufferingUpdateListener, HiMediaP
 
 	private static int desPositon = 0;
 	private static int duration = 0;
-	
+
 	/*
 	 * 直播时移的参数
 	 */
 	private static boolean liveFlag = false;
-	private static int curBeginTime=0;
+	private static int curBeginTime = 0;
 	private static ProcessData processData = null;
 	private static RequestQueue mReQueue;
 	private static ChannelInfo curChannel;
 	private static ProgramInfo curProgram;
-	
-	private static int delayTime=0;//秒
 
-	public Player(Handler parentHandler, SurfaceView mySurfaceView,
-			SeekBar skbProgress, TextView txvCurrent) {
+	private static int delayTime = 0;// 秒
+	private static boolean firstPlayInShift = true;// 直播中第一次进入时移
+
+	public Player(Handler parentHandler, SurfaceView mySurfaceView, SeekBar skbProgress, TextView txvCurrent) {
 		Player.skbProgress = skbProgress;
 		this.surfaceView = mySurfaceView;
 		Player.videoCurrentTime = txvCurrent;
@@ -84,7 +84,8 @@ public class Player implements HiMediaPlayer.OnBufferingUpdateListener, HiMediaP
 		processData = new ProcessData();
 		mReQueue = VolleyTool.getInstance().getRequestQueue();
 		curChannel = CacheData.getAllChannelMap().get(CacheData.getCurChannelNum());
-		delayTime=0;
+		delayTime = 0;
+		firstPlayInShift = true;
 		// this.skbProgress.setOnSeekBarChangeListener(mySeekChangeLis);
 	}
 
@@ -101,7 +102,7 @@ public class Player implements HiMediaPlayer.OnBufferingUpdateListener, HiMediaP
 					handleProgress.sendEmptyMessage(Class_Constant.RE_UPDATE_PROGRESS);
 				}
 			} else {
-				if (mediaPlayer.isPlaying() && playingFlag&& videoCurrentTime != null && !keyFlag) {
+				if (mediaPlayer.isPlaying() && playingFlag && videoCurrentTime != null && !keyFlag) {
 					handleProgress.sendEmptyMessage(Class_Constant.RE_UPDATE_PROGRESS);
 				}
 			}
@@ -111,7 +112,7 @@ public class Player implements HiMediaPlayer.OnBufferingUpdateListener, HiMediaP
 	public static Handler handleProgress = new Handler() {
 		public void handleMessage(Message msg) {
 			int skPos = 0;
-			int position=0;
+			int position = 0;
 			switch (msg.what) {
 			case Class_Constant.REPLAY_SEEK_TO:
 				skPos = msg.arg1;
@@ -131,8 +132,8 @@ public class Player implements HiMediaPlayer.OnBufferingUpdateListener, HiMediaP
 				if (desPositon >= duration) {
 					if (handlerFlag) {
 						handlerFlag = false;
-//						parentHandler
-//								.sendEmptyMessage(Class_Constant.RE_NEXT_PROGRAM);
+						// parentHandler
+						// .sendEmptyMessage(Class_Constant.RE_NEXT_PROGRAM);
 
 					}
 					desPositon = duration;
@@ -144,8 +145,8 @@ public class Player implements HiMediaPlayer.OnBufferingUpdateListener, HiMediaP
 				if (!playingFlag) {
 					return;
 				}
-				if(mediaPlayer.isPlaying()){
-				mediaPlayer.pause();
+				if (mediaPlayer.isPlaying()) {
+					mediaPlayer.pause();
 				}
 				keyFlag = true;
 				desPositon = Player.skbProgress.getProgress() - 30000;
@@ -153,31 +154,31 @@ public class Player implements HiMediaPlayer.OnBufferingUpdateListener, HiMediaP
 				if (desPositon < 0) {
 					if (handlerFlag) {
 						handlerFlag = false;
-//						parentHandler
-//								.sendEmptyMessage(Class_Constant.RE_LAST_PROGRAM);
+						// parentHandler
+						// .sendEmptyMessage(Class_Constant.RE_LAST_PROGRAM);
 
 					}
 					desPositon = 0;
 				}
-				
+
 				Player.skbProgress.setProgress(desPositon);
 				//
 				break;
 			case Class_Constant.RE_FAST_FORWARD_UP:
 			case Class_Constant.RE_FAST_REVERSE_UP:
-				
-				if(!liveFlag){
-				mediaPlayer.seekTo(desPositon);
-				
-				}else{
-					if(desPositon>=0){
-					delayTime=getPlayDelayTimes();
-					playLiveBack(curChannel, delayTime);
+
+				if (!liveFlag) {
+					mediaPlayer.seekTo(desPositon);
+
+				} else {
+					if (desPositon >= 0) {
+						delayTime = getPlayDelayTimes();
+						playLiveBack(curChannel, delayTime);
 					}
 				}
 				mediaPlayer.start();
 				keyFlag = false;
-				
+
 				break;
 			case Class_Constant.RE_PLAY:
 
@@ -187,51 +188,51 @@ public class Player implements HiMediaPlayer.OnBufferingUpdateListener, HiMediaP
 				break;
 
 			case Class_Constant.RE_UPDATE_PROGRESS:
-				if(liveFlag){
-					position=mediaPlayer.getCurrentPosition()+curBeginTime-delayTime*1000;
-				}else{
+				if (liveFlag) {
+					position = mediaPlayer.getCurrentPosition() + curBeginTime - delayTime * 1000;
+				} else {
 					position = mediaPlayer.getCurrentPosition();
-					
+
 				}
 				if (duration > 0) {
 					Player.skbProgress.setProgress(position);
 				}
 				videoCurrentTime.setText(Utils.millToDateStr(position));
 				break;
-				
+
 			case Class_Constant.LIVE_FAST_FORWARD:
-				if(mediaPlayer.isPlaying()){
-				mediaPlayer.pause();
+				if (mediaPlayer.isPlaying()) {
+					mediaPlayer.pause();
 				}
 				keyFlag = true;
-				Log.i("mmmm", "Player-handleProgress"+handleProgress);
-				desPositon =Player.skbProgress.getProgress() + 30000;
+				Log.i("mmmm", "Player-handleProgress" + handleProgress);
+				desPositon = Player.skbProgress.getProgress() + 30000;
 				if (IsOutOfTimes(desPositon)) {
 					if (handlerFlag) {
 						parentHandler.sendEmptyMessage(Class_Constant.BACK_TO_LIVE);
 					}
-					keyFlag=false;
-					desPositon=-1;
+					keyFlag = false;
+					desPositon = -1;
 					break;
-					
+
 				}
 				Player.skbProgress.setProgress(desPositon);
 				break;
 			case Class_Constant.LIVE_FAST_REVERSE:
-				
-				if(mediaPlayer.isPlaying()){
-				mediaPlayer.pause();
+
+				if (mediaPlayer.isPlaying()) {
+					mediaPlayer.pause();
 				}
 				keyFlag = true;
 				desPositon = Player.skbProgress.getProgress() - 30000;
 				if (desPositon < 0) {
-					//提示已经到开始位置了
-					
+					// 提示已经到开始位置了
+
 					desPositon = 0;
 				}
-				
+
 				Player.skbProgress.setProgress(desPositon);
-				
+
 				break;
 			}
 
@@ -254,10 +255,10 @@ public class Player implements HiMediaPlayer.OnBufferingUpdateListener, HiMediaP
 			// mediaPlayer.stop();
 			mediaPlayer.setDataSource(videoUrl);
 			mediaPlayer.prepare();// prepare֮���Զ�����
-			
-			if(liveFlag){
-				curBeginTime=getStartTime();
-			}else{
+
+			if (liveFlag) {
+				curBeginTime = getStartTime();
+			} else {
 				duration = mediaPlayer.getDuration();
 				Player.skbProgress.setMax(duration);
 			}
@@ -300,10 +301,6 @@ public class Player implements HiMediaPlayer.OnBufferingUpdateListener, HiMediaP
 			mediaPlayer = null;
 		}
 	}
-	
-	
-
-	
 
 	@Override
 	public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {
@@ -315,7 +312,7 @@ public class Player implements HiMediaPlayer.OnBufferingUpdateListener, HiMediaP
 		try {
 			mediaPlayer = new HiMediaPlayer();
 			mediaPlayer.setDisplay(surfaceHolder);
-//			mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+			// mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			mediaPlayer.setFreezeMode(0);
 			mediaPlayer.setOnBufferingUpdateListener(this);
 			mediaPlayer.setOnPreparedListener(this);
@@ -341,13 +338,15 @@ public class Player implements HiMediaPlayer.OnBufferingUpdateListener, HiMediaP
 		if (videoHeight != 0 && videoWidth != 0) {
 			arg0.start();
 		} else {
-			Toast.makeText(MyApp.getContext(), "视频无效", Toast.LENGTH_SHORT)
-					.show();
+			Toast.makeText(MyApp.getContext(), "视频无效", Toast.LENGTH_SHORT).show();
 			Log.i("mm", "videoWidth or videoHeight =0");
 		}
-		if(liveFlag){
+		if (liveFlag) {
 			handleProgress.sendEmptyMessage(Class_Constant.RE_UPDATE_PROGRESS);
-//			mediaPlayer.pause();
+			if (firstPlayInShift == true) {
+				mediaPlayer.pause();
+			}
+			firstPlayInShift = false;
 		}
 		Log.e("mediaPlayer", "onPrepared");
 	}
@@ -362,8 +361,8 @@ public class Player implements HiMediaPlayer.OnBufferingUpdateListener, HiMediaP
 	public void onBufferingUpdate(HiMediaPlayer arg0, int bufferingProgress) {
 		Player.skbProgress.setSecondaryProgress(bufferingProgress);
 		playingFlag = true;
-		int currentProgress = Player.skbProgress.getMax()
-				* mediaPlayer.getCurrentPosition() / mediaPlayer.getDuration();
+		int currentProgress = Player.skbProgress.getMax() * mediaPlayer.getCurrentPosition()
+				/ mediaPlayer.getDuration();
 		if (bufferingProgress != 0) {
 		}
 		// Log.i("mmmm", bufferingProgress + "% buffer");
@@ -400,8 +399,8 @@ public class Player implements HiMediaPlayer.OnBufferingUpdateListener, HiMediaP
 	// txvLen.setText("");
 	// txvCur.setText("");
 	// }
-	
-	private static void playLiveBack(ChannelInfo channel,int delay) {
+
+	private static void playLiveBack(ChannelInfo channel, int delay) {
 		mReQueue.cancelAll("bannerDialog");
 		String requestURL = processData.getLiveBackPlayUrl(channel, delay);
 		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, requestURL, null,
@@ -426,8 +425,7 @@ public class Player implements HiMediaPlayer.OnBufferingUpdateListener, HiMediaP
 		jsonObjectRequest.setTag("bannerDialog");// 设置tag,cancelAll的时候使用
 		mReQueue.add(jsonObjectRequest);
 	}
-	
-	
+
 	private static Response.ErrorListener errorListener = new Response.ErrorListener() {
 		@Override
 		public void onErrorResponse(VolleyError arg0) {
@@ -435,36 +433,37 @@ public class Player implements HiMediaPlayer.OnBufferingUpdateListener, HiMediaP
 			Log.i("mmmm", "MainActivity=error：" + arg0);
 		}
 	};
-	
-	private static int getPlayDelayTimes(){
-		long times=0;
-		Date date=new Date();
-		times=(date.getTime()-Player.skbProgress.getProgress()-CacheData.getCurProgram().getBeginTime().getTime())/1000;
-		
+
+	private static int getPlayDelayTimes() {
+		long times = 0;
+		Date date = new Date();
+		times = (date.getTime() - Player.skbProgress.getProgress() - CacheData.getCurProgram().getBeginTime().getTime())
+				/ 1000;
+
 		return (int) times;
 	}
-	
-	private static boolean IsOutOfTimes(int progress){
-		boolean flag=true;
-		long times=0;
-		Date date=new Date();
-		times=(date.getTime()-progress-CacheData.getCurProgram().getBeginTime().getTime())/1000;
-		if(times>3){
-			flag=false;
-		}else{
-			flag=true;
+
+	private static boolean IsOutOfTimes(int progress) {
+		boolean flag = true;
+		long times = 0;
+		Date date = new Date();
+		times = (date.getTime() - progress - CacheData.getCurProgram().getBeginTime().getTime()) / 1000;
+		if (times > 3) {
+			flag = false;
+		} else {
+			flag = true;
 		}
-		
+
 		return flag;
-	} 
-	
-	private static int getLiveMaxTime(){
-		long times=0;
-		Date date=new Date();
-		times=date.getTime()-CacheData.getCurProgram().getBeginTime().getTime();
+	}
+
+	private static int getLiveMaxTime() {
+		long times = 0;
+		Date date = new Date();
+		times = date.getTime() - CacheData.getCurProgram().getBeginTime().getTime();
 		return (int) times;
 	}
-	
+
 	public boolean isLiveFlag() {
 		return liveFlag;
 	}
@@ -472,8 +471,6 @@ public class Player implements HiMediaPlayer.OnBufferingUpdateListener, HiMediaP
 	public void setLiveFlag(boolean liveFlag) {
 		this.liveFlag = liveFlag;
 	}
-	
-	
 
 	public static int getDuration() {
 		return duration;
@@ -482,13 +479,13 @@ public class Player implements HiMediaPlayer.OnBufferingUpdateListener, HiMediaP
 	public static void setDuration(int duration) {
 		Player.duration = duration;
 	}
-	
-	private static int getStartTime(){
-		long time=0;
-		int beginTime=0;
-		beginTime=(int)CacheData.getCurProgram().getBeginTime().getTime();
-		Date date=new Date();
-		time=date.getTime()-beginTime ;
-		return (int)time;
+
+	private static int getStartTime() {
+		long time = 0;
+		int beginTime = 0;
+		beginTime = (int) CacheData.getCurProgram().getBeginTime().getTime();
+		Date date = new Date();
+		time = date.getTime() - beginTime;
+		return (int) time;
 	}
 }
