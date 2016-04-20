@@ -164,6 +164,9 @@ public class Banner {
 				"正在播放：" + currentProgramBginTime + "-" + currentProgramEndTime + "  " + programListInfo.get(1).getEventName());
 		nextProgramName
 				.setText("即将播放：" + nextProgramBeginTime + "-" + nextProgramEndTime + "  " + programListInfo.get(2).getEventName());
+		}else{
+			currentProgramName.setText("");
+			nextProgramName.setText("");
 		}
 	}
 	

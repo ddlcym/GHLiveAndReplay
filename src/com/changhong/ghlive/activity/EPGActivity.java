@@ -475,7 +475,7 @@ public class EPGActivity extends BaseActivity {
 		// 根据当前保存的数据刷新EventList
 		curProgramList = (List<ProgramInfo>) CacheData.getAllProgramMap().get(curday);
 		programsAdapter.setData(curProgramList);
-		//记住上次的位置，如果是第一个日期则OK，否则都不记住
+		//记住上次的位置，如果是第一个日期则记住，其他日期否则都不记住
 		View v = epgEventListview.getChildAt(0);  
 		int top = (v == null) ? 0 : v.getTop();
 		epgEventListview.setSelectionFromTop(0, top);
