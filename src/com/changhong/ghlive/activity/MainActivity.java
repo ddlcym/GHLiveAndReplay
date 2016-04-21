@@ -93,7 +93,7 @@ public class MainActivity extends BaseActivity {
 	private List<ProgramInfo> curChannelPrograms = new ArrayList<ProgramInfo>();// 当前频道下的上一个节目，当前节目，下一个节目信息
 	private int curListIndex = 0;// 当前list下正在播放的当前节目的index
 	private int curType = 0;
-	private String curChannelNO = "2"; // 当前播放的节目的channelno
+	private String curChannelNO = "621"; // 当前播放的节目的channelno
 	private ProgramInfo curProgram = null;
 	private String curPlayURL = null;
 	private boolean keydownFlag=false;
@@ -122,7 +122,7 @@ public class MainActivity extends BaseActivity {
 				// showToastBanner();
 				break;
 			case Class_Constant.TOAST_BANNER_PROGRAM_PASS:
-				curChannelPrograms = (List<ProgramInfo>) msg.obj;
+				curChannelPrograms = CacheData.getCurPrograms();
 
 				if (null == curProgram) {
 					curProgram = new ProgramInfo();
@@ -626,16 +626,22 @@ public class MainActivity extends BaseActivity {
 			if (ban != null && ban.isToastShow()) {
 				ban.cancelBanner();
 			}
-			showChannelListView();
+			
 			// 切换频道类型，更新频道列表的数据
-			 if (curType == (TVtype.length-1)) {
-			 curType = 0;
-			 } 
+			if(chListView.isShown()){
+				if(curType==(TVtype.length-1)){
+					curType = 0;
+				}else{
+					curType++;
+				}
+			}else{
+				curType = 0;
+			}
+			showChannelListView();
 			 showChannelList();
 			 chListView.setFocusable(true);
 			 chListView.requestFocus();
 			 chListView.setSelection(curListIndex);
-				 curType++;
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
 			// 切换频道类型，更新频道列表的数据
@@ -662,7 +668,7 @@ public class MainActivity extends BaseActivity {
 			// }
 			break;
 		case Class_Constant.KEYCODE_CHANNEL_UP:
-			if (curListIndex == (chListView.getCount() - 1)) {
+			if (curListIndex == (channelsAll.size() - 1)) {
 				chListView.setSelection(0);
 				curListIndex = 0;
 			} else {
@@ -672,40 +678,40 @@ public class MainActivity extends BaseActivity {
 			if (!StringUtils.hasLength(curChannelNO)) {
 				// 第一次进入时
 				chListView.setSelection(0);
-				curChannelNO = mCurChannels.get(0).getChannelNumber();
-				if (mCurChannels != null && mCurChannels.size() != 0) {
+				curChannelNO = channelsAll.get(0).getChannelNumber();
+				if (channelsAll != null && channelsAll.size() != 0) {
 					playChannel(curChannelNO, true);
 				}
 			} else {
-				chListView.setFocusable(true);
-				chListView.requestFocus();
-				chListView.setSelection(curListIndex);
-				if (mCurChannels != null && mCurChannels.size() != 0) {
+//				chListView.setFocusable(true);
+//				chListView.requestFocus();
+//				chListView.setSelection(curListIndex);
+				if (channelsAll != null && channelsAll.size() != 0) {
 //					playChannel(mCurChannels.get(curListIndex).getChannelNumber(), true);
 					//显示频道号和名称
-					showToastBanner(mCurChannels.get(curListIndex).getChannelNumber());
+					showToastBanner(channelsAll.get(curListIndex).getChannelNumber());
 					keydownFlag=true;
 				}
 			}
 			break;
 		case Class_Constant.KEYCODE_CHANNEL_DOWN:
 			if (curListIndex == 0) {
-				chListView.setSelection(chListView.getCount() - 1);
-				curListIndex = chListView.getCount() - 1;
+				chListView.setSelection(channelsAll.size() - 1);
+				curListIndex = channelsAll.size() - 1;
 			} else {
 				chListView.setSelection(curListIndex - 1);
 				curListIndex = curListIndex - 1;
 			}
 			if (!StringUtils.hasLength(curChannelNO)) {
-				curChannelNO = mCurChannels.get(0).getChannelNumber();
+				curChannelNO = channelsAll.get(0).getChannelNumber();
 			}
-			chListView.setFocusable(true);
-			chListView.requestFocus();
-			chListView.setSelection(curListIndex);
-			if (mCurChannels != null && mCurChannels.size() != 0) {
+//			chListView.setFocusable(true);
+//			chListView.requestFocus();
+//			chListView.setSelection(curListIndex);
+			if (mCurChannels != null && channelsAll.size() != 0) {
 //				playChannel(mCurChannels.get(curListIndex).getChannelNumber(), true);
 				//显示频道号和名称
-				showToastBanner(mCurChannels.get(curListIndex).getChannelNumber());
+				showToastBanner(channelsAll.get(curListIndex).getChannelNumber());
 				keydownFlag=true;
 			}
 			break;
@@ -729,16 +735,16 @@ public class MainActivity extends BaseActivity {
 				}
 			} else {
 				// 播放之后的一个频道
-				if (curListIndex == (chListView.getCount() - 1)) {
+				if (curListIndex == (channelsAll.size() - 1)) {
 					chListView.setSelection(0);
 					curListIndex = 0;
 				} else {
 					chListView.setSelection(curListIndex + 1);
 					curListIndex = curListIndex + 1;
 				}
-				if (mCurChannels != null && mCurChannels.size() != 0) {
+				if (channelsAll != null && channelsAll.size() != 0) {
 //					playChannel(mCurChannels.get(curListIndex).getChannelNumber(), true);
-					showToastBanner(mCurChannels.get(curListIndex).getChannelNumber());
+					showToastBanner(channelsAll.get(curListIndex).getChannelNumber());
 					keydownFlag=true;
 				}
 			}
@@ -754,15 +760,15 @@ public class MainActivity extends BaseActivity {
 			} else {
 				// 播放之前一个频道
 				if (curListIndex == 0) {
-					chListView.setSelection(chListView.getCount() - 1);
-					curListIndex = chListView.getCount() - 1;
+					chListView.setSelection(channelsAll.size() - 1);
+					curListIndex = channelsAll.size() - 1;
 				} else {
 					chListView.setSelection(curListIndex - 1);
 					curListIndex = curListIndex - 1;
 				}
-				if (mCurChannels != null && mCurChannels.size() != 0) {
+				if (channelsAll != null && channelsAll.size() != 0) {
 //					playChannel(mCurChannels.get(curListIndex).getChannelNumber(), true);
-					showToastBanner(mCurChannels.get(curListIndex).getChannelNumber());
+					showToastBanner(channelsAll.get(curListIndex).getChannelNumber());
 					keydownFlag=true;
 				}
 			}
@@ -841,8 +847,8 @@ public class MainActivity extends BaseActivity {
 		case Class_Constant.KEYCODE_CHANNEL_DOWN:
 		case Class_Constant.KEYCODE_UP_ARROW_KEY:
 		case Class_Constant.KEYCODE_DOWN_ARROW_KEY:
-			if (mCurChannels != null && mCurChannels.size() != 0&&keydownFlag) {
-				playChannel(mCurChannels.get(curListIndex).getChannelNumber(), true);
+			if (channelsAll != null && channelsAll.size() != 0&&keydownFlag) {
+				playChannel(channelsAll.get(curListIndex).getChannelNumber(), true);
 				keydownFlag=false;
 			}
 			
@@ -904,23 +910,23 @@ public class MainActivity extends BaseActivity {
 
 				tvRootDigitalKeyInvalid.setVisibility(View.GONE);
 				tvRootDigitalkey.setVisibility(View.VISIBLE);
-				if (iKey < 10) {
-					if (iKeyNum == 1) {
-						tvRootDigitalkey.setText("--" + iKey);
-					} else if (iKeyNum == 2) {
-						tvRootDigitalkey.setText("-0" + iKey);
-					} else {
-						tvRootDigitalkey.setText("00" + iKey);
-					}
-				} else if (iKey < 100) {
-					if (iKeyNum == 2) {
-						tvRootDigitalkey.setText("-" + iKey);
-					} else {
-						tvRootDigitalkey.setText("0" + iKey);
-					}
-				} else {
+//				if (iKey < 10) {
+//					if (iKeyNum == 1) {
+//						tvRootDigitalkey.setText("--" + iKey);
+//					} else if (iKeyNum == 2) {
+//						tvRootDigitalkey.setText("-0" + iKey);
+//					} else {
+//						tvRootDigitalkey.setText("00" + iKey);
+//					}
+//				} else if (iKey < 100) {
+//					if (iKeyNum == 2) {
+//						tvRootDigitalkey.setText("-" + iKey);
+//					} else {
+//						tvRootDigitalkey.setText("0" + iKey);
+//					}
+//				} else {
 					tvRootDigitalkey.setText("" + iKey);
-				}
+//				}
 
 				if (iKey >= 100) {
 					mhandler.sendEmptyMessageDelayed(Class_Constant.MESSAGE_HANDLER_DIGITALKEY, 2000);
@@ -1055,7 +1061,7 @@ public class MainActivity extends BaseActivity {
 		CacheData.curChannelNum = curChannel.getChannelNumber();
 		CacheData.setCurChannel(curChannel);
 		curChannelNO = channelno;
-
+		curListIndex=channelsAll.indexOf(curChannel);
 		// curChannel = CacheData.getAllChannelMap().get(curChannelNO);
 		// PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
 
@@ -1067,7 +1073,7 @@ public class MainActivity extends BaseActivity {
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
-
+			curType=0;
 			channelListLinear.setVisibility(View.INVISIBLE);
 			focusView.setVisibility(View.INVISIBLE);
 			linear_vertical_line.setVisibility(View.INVISIBLE);

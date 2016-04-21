@@ -137,6 +137,7 @@ public class PlayVideo {
 
 	/* 获取当前节目信息 */
 	public void getProgramInfo(final Handler handler, ChannelInfo outterChannelInfo) {
+		mReQueue.cancelAll("program");
 		String pgmRequestURL = processData.getCurrentChannelProgramList(outterChannelInfo);
 		Log.i("zyt", pgmRequestURL);
 		// final ProgramInfo rPgmInfo = new ProgramInfo();
@@ -151,12 +152,13 @@ public class PlayVideo {
 
 						Message msg = new Message();
 						msg.what = Class_Constant.TOAST_BANNER_PROGRAM_PASS;
-						msg.obj = jsonResolve.curJsonProToString(arg0);
-						handler.sendMessage(msg);
+						CacheData.setCurPrograms(jsonResolve.curJsonProToString(arg0));
+						handler.removeMessages(Class_Constant.TOAST_BANNER_PROGRAM_PASS);
+						handler.sendEmptyMessageDelayed(Class_Constant.TOAST_BANNER_PROGRAM_PASS, 1000);
 
 					}
 				}, errorListener);
-		jsonObjectRequest.setTag(HttpService.class.getSimpleName());// 设置tag,cancelAll的时候使用
+		jsonObjectRequest.setTag("program");// 设置tag,cancelAll的时候使用
 		mReQueue.add(jsonObjectRequest);
 	}
 
