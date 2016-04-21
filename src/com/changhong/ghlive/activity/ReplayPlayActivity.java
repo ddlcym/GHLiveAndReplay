@@ -324,15 +324,19 @@ public class ReplayPlayActivity extends Activity {
 				player.pause();
 				palyButton.setVisibility(View.GONE);
 				pauseButton.setVisibility(View.VISIBLE);
+				skbProgress.setVisibility(View.VISIBLE);
+				videoTimeLength.setVisibility(View.VISIBLE);
+				videoCurrentTime.setVisibility(View.VISIBLE);
 			} else {
 				player.play();
 				pauseButton.setVisibility(View.GONE);
 				palyButton.setVisibility(View.VISIBLE);
+				if (runnable != null) {
+					replayHandler.removeCallbacks(runnable);
+				}
+				replayHandler.postDelayed(runnable, 5000);
 			}
-			if (runnable != null) {
-				replayHandler.removeCallbacks(runnable);
-			}
-			replayHandler.postDelayed(runnable, 5000);
+
 			break;
 		case Class_Constant.KEYCODE_MUTE:// mute
 			// int current =
@@ -394,6 +398,9 @@ public class ReplayPlayActivity extends Activity {
 		public void run() {
 			// TODO Auto-generated method stub
 			palyButton.setVisibility(View.GONE);
+			skbProgress.setVisibility(View.GONE);
+			videoTimeLength.setVisibility(View.GONE);
+			videoCurrentTime.setVisibility(View.GONE);
 			// pauseButton.setVisibility(View.GONE);
 		}
 	};
