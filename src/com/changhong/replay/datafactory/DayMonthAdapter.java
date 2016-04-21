@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.changhong.gehua.common.Utils;
 import com.changhong.ghliveandreplay.R;
 
 public class DayMonthAdapter extends BaseAdapter{
@@ -47,21 +48,33 @@ public class DayMonthAdapter extends BaseAdapter{
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
 		ViewHolder viewHolder;
+		String day;
+		String week=null;
 		if (convertView == null) {
 			viewHolder = new ViewHolder();
 			convertView = LayoutInflater.from(mContext).inflate(R.layout.epg_main_weekitem, null);	
 			viewHolder.day=(TextView)convertView.findViewById(R.id.epg_week_Tview_date);
+			viewHolder.week=(TextView)convertView.findViewById(R.id.epg_week_Tview_week);
 			convertView.setTag(viewHolder);
 		}else{
 			viewHolder=(ViewHolder) convertView.getTag();
 		}
-		viewHolder.day.setText(mlist.get(position));
+		day=mlist.get(position);
+		viewHolder.day.setText(Utils.truncateDaateString(day, 5, day.length()));
+		try {
+			week=Utils.DateToWeek(Utils.strToDate(day));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		viewHolder.week.setText(week);
 		return convertView;
 	}
 	
  class ViewHolder {
 		
 		TextView day;
+		TextView week;
 
 	}
 

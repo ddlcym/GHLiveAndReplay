@@ -85,7 +85,7 @@
             android:nextFocusDown="@+id/EpgEventInfo"
             android:nextFocusLeft="@+id/epg_chanlistTitle"
             android:paddingRight="20dip"
-            android:paddingTop="15dip" >
+            android:paddingTop="10dip" >
         </GridView>
 
         <!-- 设置 listSelector,避免listview自动对选中条填充纯色背景 -->

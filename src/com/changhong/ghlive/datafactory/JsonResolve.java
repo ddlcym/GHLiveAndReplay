@@ -172,7 +172,7 @@ public class JsonResolve {
 				list.add(program);
 				Date dt = program.getEventDate();
 				String date = Utils.dateToString(dt);
-				date = truncateDaateString(date, 5, date.length());
+				
 				if (!dayMonth.contains(date)) {
 					dayMonth.addFirst(date);
 					proMaps.put(date, new ArrayList<ProgramInfo>());
@@ -313,11 +313,7 @@ public class JsonResolve {
 		return date;
 	}
 
-	/* truncate date string length */
-	public String truncateDaateString(String dateStr, int start, int end) {
-
-		return dateStr.substring(start, end);
-	}
+	
 
 	/* sort channels info num */
 	public List<ChannelInfo> sortChannels(List<ChannelInfo> outterList) {

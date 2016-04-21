@@ -2,19 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/epg_weekitemlayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="80dp"
     android:orientation="vertical" >
     
  	<TextView android:id="@+id/epg_week_Tview_date"
 	    android:layout_width="110dip"
-		android:layout_height="40dip"
+		android:layout_height="wrap_content"
 		android:textColor="@color/white"
 		android:textSize="22sp"
 		android:gravity="center" />
     
  	<TextView android:id="@+id/epg_week_Tview_week"
 	    android:layout_width="110dip"
-		android:layout_height="40dip"
+		android:layout_height="wrap_content"
+		android:textColor="@color/white"
 		android:textSize="22sp"
 		android:gravity="center" />
  	
