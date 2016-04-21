@@ -160,14 +160,14 @@ public class Banner {
 //		currentProgramName.setText(programListInfo.get(1).getEventName());
 //		nextProgramName.setText(programListInfo.get(2).getEventName());
 		}
-		if(programListInfo!=null&&programListInfo.size()==3){
+		if(programListInfo!=null&&programListInfo.size()==3&&!flag){
 		currentProgramName.setText(
 				"正在播放：" + currentProgramBginTime + "-" + currentProgramEndTime + "  " + programListInfo.get(1).getEventName());
 		nextProgramName
 				.setText("即将播放：" + nextProgramBeginTime + "-" + nextProgramEndTime + "  " + programListInfo.get(2).getEventName());
 		}else{
-			currentProgramName.setText("");
-			nextProgramName.setText("");
+			currentProgramName.setText("正在播放：");
+			nextProgramName.setText("即将播放：");
 		}
 	}
 	
