@@ -129,7 +129,7 @@ public class MainActivity extends BaseActivity {
 				}
 				if (curChannelPrograms.size() > 0) {
 					curProgram = curChannelPrograms.get(1);
-					showToastBanner(curChannelNO);
+					showToastBanner(curChannelNO,false);
 				}
 				break;
 
@@ -689,7 +689,7 @@ public class MainActivity extends BaseActivity {
 				if (channelsAll != null && channelsAll.size() != 0) {
 //					playChannel(mCurChannels.get(curListIndex).getChannelNumber(), true);
 					//显示频道号和名称
-					showToastBanner(channelsAll.get(curListIndex).getChannelNumber());
+					showToastBanner(channelsAll.get(curListIndex).getChannelNumber(),true);
 					keydownFlag=true;
 				}
 			}
@@ -711,7 +711,7 @@ public class MainActivity extends BaseActivity {
 			if (mCurChannels != null && channelsAll.size() != 0) {
 //				playChannel(mCurChannels.get(curListIndex).getChannelNumber(), true);
 				//显示频道号和名称
-				showToastBanner(channelsAll.get(curListIndex).getChannelNumber());
+				showToastBanner(channelsAll.get(curListIndex).getChannelNumber(),true);
 				keydownFlag=true;
 			}
 			break;
@@ -744,7 +744,7 @@ public class MainActivity extends BaseActivity {
 				}
 				if (channelsAll != null && channelsAll.size() != 0) {
 //					playChannel(mCurChannels.get(curListIndex).getChannelNumber(), true);
-					showToastBanner(channelsAll.get(curListIndex).getChannelNumber());
+					showToastBanner(channelsAll.get(curListIndex).getChannelNumber(),true);
 					keydownFlag=true;
 				}
 			}
@@ -768,7 +768,7 @@ public class MainActivity extends BaseActivity {
 				}
 				if (channelsAll != null && channelsAll.size() != 0) {
 //					playChannel(mCurChannels.get(curListIndex).getChannelNumber(), true);
-					showToastBanner(channelsAll.get(curListIndex).getChannelNumber());
+					showToastBanner(channelsAll.get(curListIndex).getChannelNumber(),true);
 					keydownFlag=true;
 				}
 			}
@@ -790,7 +790,7 @@ public class MainActivity extends BaseActivity {
 			break;
 		case Class_Constant.MENU_ID_DTV_ROOT:
 			if (ban != null && !ban.isToastShow()) {
-				ban.show();
+				ban.show(true);
 			}
 			break;
 
@@ -1012,7 +1012,7 @@ public class MainActivity extends BaseActivity {
 	}
 
 	/* show banner toast */
-	public void showToastBanner(String channelno) {
+	public void showToastBanner(String channelno,boolean flag) {
 
 		ChannelInfo curChannel = (ChannelInfo) CacheData.allChannelMap.get(channelno);
 		// if(ban!=null){
@@ -1022,7 +1022,7 @@ public class MainActivity extends BaseActivity {
 			ban = new Banner(this, curChannel, curChannelPrograms);
 		}
 		ban.setData(curChannel, curChannelPrograms);
-		ban.show();
+		ban.show(flag);
 
 		// ChannelInfo curChannel = (ChannelInfo)
 		// CacheData.allChannelMap.get(channelno);

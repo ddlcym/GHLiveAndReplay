@@ -153,8 +153,7 @@ public class PlayVideo {
 						Message msg = new Message();
 						msg.what = Class_Constant.TOAST_BANNER_PROGRAM_PASS;
 						CacheData.setCurPrograms(jsonResolve.curJsonProToString(arg0));
-						handler.removeMessages(Class_Constant.TOAST_BANNER_PROGRAM_PASS);
-						handler.sendEmptyMessageDelayed(Class_Constant.TOAST_BANNER_PROGRAM_PASS, 1000);
+						handler.sendEmptyMessage(Class_Constant.TOAST_BANNER_PROGRAM_PASS);
 
 					}
 				}, errorListener);
