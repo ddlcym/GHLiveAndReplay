@@ -129,7 +129,7 @@ public class MainActivity extends BaseActivity {
 				}
 				if (curChannelPrograms.size() > 0) {
 					curProgram = curChannelPrograms.get(1);
-					showToastBanner(curChannelNO,false);
+					showToastBanner(CacheData.getCurChannel());
 				}
 				break;
 
@@ -689,7 +689,10 @@ public class MainActivity extends BaseActivity {
 				if (channelsAll != null && channelsAll.size() != 0) {
 //					playChannel(mCurChannels.get(curListIndex).getChannelNumber(), true);
 					//显示频道号和名称
-					showToastBanner(channelsAll.get(curListIndex).getChannelNumber(),true);
+//					showToastBanner(channelsAll.get(curListIndex).getChannelNumber());
+					ChannelInfo curChannel = channelsAll.get(curListIndex);
+					CacheData.setCurChannel(curChannel);
+					PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
 					keydownFlag=true;
 				}
 			}
@@ -711,7 +714,10 @@ public class MainActivity extends BaseActivity {
 			if (mCurChannels != null && channelsAll.size() != 0) {
 //				playChannel(mCurChannels.get(curListIndex).getChannelNumber(), true);
 				//显示频道号和名称
-				showToastBanner(channelsAll.get(curListIndex).getChannelNumber(),true);
+//				showToastBanner(channelsAll.get(curListIndex));
+				ChannelInfo curChannel = channelsAll.get(curListIndex);
+				CacheData.setCurChannel(curChannel);
+				PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
 				keydownFlag=true;
 			}
 			break;
@@ -744,7 +750,10 @@ public class MainActivity extends BaseActivity {
 				}
 				if (channelsAll != null && channelsAll.size() != 0) {
 //					playChannel(mCurChannels.get(curListIndex).getChannelNumber(), true);
-					showToastBanner(channelsAll.get(curListIndex).getChannelNumber(),true);
+//					showToastBanner(channelsAll.get(curListIndex));
+					ChannelInfo curChannel = channelsAll.get(curListIndex);
+					CacheData.setCurChannel(curChannel);
+					PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
 					keydownFlag=true;
 				}
 			}
@@ -768,7 +777,10 @@ public class MainActivity extends BaseActivity {
 				}
 				if (channelsAll != null && channelsAll.size() != 0) {
 //					playChannel(mCurChannels.get(curListIndex).getChannelNumber(), true);
-					showToastBanner(channelsAll.get(curListIndex).getChannelNumber(),true);
+//					showToastBanner(channelsAll.get(curListIndex));
+					ChannelInfo curChannel = channelsAll.get(curListIndex);
+					CacheData.setCurChannel(curChannel);
+					PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
 					keydownFlag=true;
 				}
 			}
@@ -790,7 +802,7 @@ public class MainActivity extends BaseActivity {
 			break;
 		case Class_Constant.MENU_ID_DTV_ROOT:
 			if (ban != null && !ban.isToastShow()) {
-				ban.show(true);
+				ban.show();
 			}
 			break;
 
@@ -1012,17 +1024,16 @@ public class MainActivity extends BaseActivity {
 	}
 
 	/* show banner toast */
-	public void showToastBanner(String channelno,boolean flag) {
+	public void showToastBanner(ChannelInfo channel) {
 
-		ChannelInfo curChannel = (ChannelInfo) CacheData.allChannelMap.get(channelno);
 		// if(ban!=null){
 		// ban.cancelBanner();
 		// }
 		if(null==ban){
-			ban = new Banner(this, curChannel, curChannelPrograms);
+			ban = new Banner(this, channel, curChannelPrograms);
 		}
-		ban.setData(curChannel, curChannelPrograms);
-		ban.show(flag);
+		ban.setData(channel, curChannelPrograms);
+		ban.show();
 
 		// ChannelInfo curChannel = (ChannelInfo)
 		// CacheData.allChannelMap.get(channelno);

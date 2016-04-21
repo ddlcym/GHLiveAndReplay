@@ -137,7 +137,7 @@ public class PlayVideo {
 
 	/* 获取当前节目信息 */
 	public void getProgramInfo(final Handler handler, ChannelInfo outterChannelInfo) {
-		mReQueue.cancelAll("program");
+//		mReQueue.cancelAll("program");
 		String pgmRequestURL = processData.getCurrentChannelProgramList(outterChannelInfo);
 		Log.i("zyt", pgmRequestURL);
 		// final ProgramInfo rPgmInfo = new ProgramInfo();
@@ -157,7 +157,7 @@ public class PlayVideo {
 
 					}
 				}, errorListener);
-		jsonObjectRequest.setTag("program");// 设置tag,cancelAll的时候使用
+		jsonObjectRequest.setTag("abc");// 设置tag,cancelAll的时候使用
 		mReQueue.add(jsonObjectRequest);
 	}
 

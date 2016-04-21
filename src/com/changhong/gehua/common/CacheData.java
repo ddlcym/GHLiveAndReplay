@@ -16,7 +16,7 @@ public class CacheData {
 	
 	public static String replayCurDay="";
 
-	public static String curChannelNum="";
+	public static String curChannelNum="621";
 	public static List<String> dayMonths=new LinkedList<String>();
 	
 	public static List<ChannelInfo> allChannelExtraInfo=new ArrayList<ChannelInfo>();

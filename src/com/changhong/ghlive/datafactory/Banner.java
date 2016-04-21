@@ -65,7 +65,7 @@ public class Banner {
 		programListInfo = outterListProgramInfo;
 	}
 
-	public void show(boolean flag) {
+	public void show() {
 		if (bannerToast == null) {
 			bannerToast = new Toast(mContext);
 			bannerToast.setGravity(Gravity.BOTTOM, 0, 0);
@@ -82,7 +82,7 @@ public class Banner {
 		}
 		// updatePFInfo();
 		// updateBanner();
-		updateBannerGH(flag);
+		updateBannerGH();
 		// updateDateTime();
 		bannerToast.setView(bannerView);
 		// bannerToast.setGravity(Gravity.RIGHT | Gravity.BOTTOM, 0, 2);
@@ -143,7 +143,7 @@ public class Banner {
 		// textview_timeshift_support.setText(getTimeShiftSupportString(channel.chanId));
 	}
 
-	private void updateBannerGH(boolean flag) {
+	private void updateBannerGH() {
 		String currentProgramBginTime =null;
 		String currentProgramEndTime=null;
 		String nextProgramBeginTime =null;
@@ -154,13 +154,11 @@ public class Banner {
 		nextProgramBeginTime = Utils.hourAndMinute(programListInfo.get(2).getBeginTime());
 		nextProgramEndTime = Utils.hourAndMinute(programListInfo.get(2).getEndTime());
 		}
-		if(flag){
 		channel_name.setText(channelInfo.getChannelName());
 		channel_number.setText(channelInfo.getChannelNumber());
 //		currentProgramName.setText(programListInfo.get(1).getEventName());
 //		nextProgramName.setText(programListInfo.get(2).getEventName());
-		}
-		if(programListInfo!=null&&programListInfo.size()==3&&!flag){
+		if(programListInfo!=null&&programListInfo.size()==3){
 		currentProgramName.setText(
 				"正在播放：" + currentProgramBginTime + "-" + currentProgramEndTime + "  " + programListInfo.get(1).getEventName());
 		nextProgramName
