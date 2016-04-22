@@ -120,7 +120,7 @@ public class BannerDialog extends Dialog {
 		pauseButton = (ImageView) findViewById(R.id.pause_btn);
 		pauseButton.setVisibility(View.VISIBLE);
 		muteIconImage = (ImageView) findViewById(R.id.mute_icon);
-		whetherMute = Boolean.valueOf(mHttpService.getMuteState());
+		whetherMute = Boolean.valueOf(CommonMethod.getMuteState(MyApp.getContext()));
 		if (whetherMute) {
 			muteIconImage.setVisibility(View.VISIBLE);
 		} else {
@@ -187,7 +187,7 @@ public class BannerDialog extends Dialog {
 		/* 返回--取消 */
 		case KeyEvent.KEYCODE_BACK:
 			player.setLiveFlag(false);
-			mHttpService.saveMutesState(whetherMute + "");
+			CommonMethod.saveMutesState((whetherMute + ""),MyApp.getContext());
 			Message msg = new Message();
 			msg.what = Class_Constant.PLAY_BACKFROM_SHIFT;
 			parentHandler.sendMessage(msg);
@@ -246,7 +246,7 @@ public class BannerDialog extends Dialog {
 			// int current =
 			// audioMgr.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
 			whetherMute = !whetherMute;
-			mHttpService.saveMutesState(whetherMute + "");
+			CommonMethod.saveMutesState((whetherMute + ""),MyApp.getContext());
 			// Log.i("zyt", "keycode mute is " + whetherMute);
 			if (muteIconImage.isShown()) {
 				muteIconImage.setVisibility(View.GONE);
@@ -261,7 +261,7 @@ public class BannerDialog extends Dialog {
 			}
 			// audioMgr.setStreamMute(AudioManager.STREAM_MUSIC, true);
 			whetherMute = false;
-			mHttpService.saveMutesState(whetherMute + "");
+			CommonMethod.saveMutesState((whetherMute + ""),MyApp.getContext());
 			break;
 		case Class_Constant.KEYCODE_MENU_KEY:
 			// Log.i("zyt", "onkeydown menukey is pressed " + keyCode);
