@@ -576,27 +576,26 @@ public class MainActivity extends BaseActivity {
 
 	private void showChannelList() {
 		// TODO show channellist
-		List<ChannelInfo> curChannels = null;
 		switch (curType) {
 		case 0:
 			epgListTitleView.setText(TVtype[0]);
-			curChannels = channelsAll;
+			mCurChannels = channelsAll;
 			break;
 		case 1:
 			epgListTitleView.setText(TVtype[1]);
-			curChannels = CCTVList;
+			mCurChannels = CCTVList;
 			break;
 		case 2:
 			epgListTitleView.setText(TVtype[2]);
-			curChannels = starTvList;
+			mCurChannels = starTvList;
 			break;
 		case 3:
 			epgListTitleView.setText(TVtype[3]);
-			curChannels = localTvList;
+			mCurChannels = localTvList;
 			break;
 		case 4:
 			epgListTitleView.setText(TVtype[4]);
-			curChannels = HDTvList;
+			mCurChannels = HDTvList;
 			break;
 //		case 5:
 //			epgListTitleView.setText(TVtype[5]);
@@ -607,8 +606,10 @@ public class MainActivity extends BaseActivity {
 //			curChannels = otherTvList;
 //			break;
 		}
-		mCurChannels = curChannels;
-		curListIndex=0;
+		curListIndex=mCurChannels.indexOf(CacheData.getCurChannel());
+		if(-1==curListIndex){
+			curListIndex=0;
+		}
 		chLstAdapter.setData(mCurChannels);
 		chListView.setVisibility(View.VISIBLE);
 		if (mCurChannels.size() <= 0) {
@@ -728,9 +729,14 @@ public class MainActivity extends BaseActivity {
 			// ChannelInfo curChannel =
 			// CacheData.getAllChannelMap().get(curChannelNO);
 			// PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
+			
+			if(tvRootDigitalkey.isShown()){
+				mhandler.sendEmptyMessage(Class_Constant.MESSAGE_HANDLER_DIGITALKEY);
+			}else{
 			mHttpService.saveMutesState(whetherMute + "");
 			showDialogBanner(curChannelNO);
 			muteIconImage.setVisibility(View.GONE);
+			}
 			break;
 		case Class_Constant.KEYCODE_UP_ARROW_KEY:
 			if (chListView.isShown()) {
@@ -958,7 +964,6 @@ public class MainActivity extends BaseActivity {
 		focusView.setVisibility(View.VISIBLE);
 		linear_vertical_line.setVisibility(View.VISIBLE);
 		chListView.setVisibility(View.VISIBLE);
-		chListView.setSelection(curListIndex);
 		// mhandler.removeCallbacks(runnable);
 		// mhandler.postDelayed(runnable, 5000);
 		chListView.setFocusable(true);
