@@ -103,7 +103,7 @@ public class ReplayPlayActivity extends Activity {
 		if (mHttpService == null) {
 			mHttpService = new HttpService(getApplicationContext());
 		}
-		whetherMute = Boolean.valueOf(mHttpService.getMuteState());
+		whetherMute = Boolean.valueOf(CommonMethod.getMuteState(MyApp.getContext()));
 
 		initView();
 		initData();
@@ -343,7 +343,7 @@ public class ReplayPlayActivity extends Activity {
 			// audioMgr.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
 			whetherMute = !whetherMute;
 			// Log.i("zyt", "keycode mute is " + whetherMute);
-			mHttpService.saveMutesState(whetherMute + "");
+			CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
 			if (muteIconImage.isShown()) {
 				muteIconImage.setVisibility(View.GONE);
 			} else {
@@ -357,7 +357,7 @@ public class ReplayPlayActivity extends Activity {
 			}
 			// audioMgr.setStreamMute(AudioManager.STREAM_MUSIC, true);
 			whetherMute = false;
-			mHttpService.saveMutesState(whetherMute + "");
+			CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
 			break;
 		case Class_Constant.KEYCODE_MENU_KEY:
 			// Log.i("zyt", "onkeydown menukey is pressed " + keyCode);
@@ -422,7 +422,7 @@ public class ReplayPlayActivity extends Activity {
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		player.stop();
-		mHttpService.saveMutesState(whetherMute + "");
+		CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
 		super.onPause();
 	}
 

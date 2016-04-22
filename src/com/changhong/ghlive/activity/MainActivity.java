@@ -85,7 +85,7 @@ public class MainActivity extends BaseActivity {
 	private List<ChannelInfo> channelsAll = new ArrayList<ChannelInfo>();
 	private List<ChannelInfo> CCTVList = new ArrayList<ChannelInfo>();
 	private List<ChannelInfo> starTvList = new ArrayList<ChannelInfo>();
-//	private List<ChannelInfo> favTvList = new ArrayList<ChannelInfo>();
+	// private List<ChannelInfo> favTvList = new ArrayList<ChannelInfo>();
 	private List<ChannelInfo> localTvList = new ArrayList<ChannelInfo>();
 	private List<ChannelInfo> HDTvList = new ArrayList<ChannelInfo>();
 	private List<ChannelInfo> otherTvList = new ArrayList<ChannelInfo>();
@@ -96,7 +96,7 @@ public class MainActivity extends BaseActivity {
 	private String curChannelNO = "621"; // 当前播放的节目的channelno
 	private ProgramInfo curProgram = null;
 	private String curPlayURL = null;
-	private boolean keydownFlag=false;
+	private boolean keydownFlag = false;
 
 	private ChannelListAdapter chLstAdapter;
 	private Player player;
@@ -188,7 +188,7 @@ public class MainActivity extends BaseActivity {
 				break;
 			/* play state is back from time shift mode */
 			case Class_Constant.PLAY_BACKFROM_SHIFT: {
-				whetherMute = Boolean.valueOf(mHttpService.getMuteState());
+				whetherMute = Boolean.valueOf(CommonMethod.getMuteState(MyApp.getContext()));
 				if (whetherMute) {
 					muteIconImage.setVisibility(View.VISIBLE);
 				} else {
@@ -205,7 +205,7 @@ public class MainActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		whetherMute = false;
 		startHttpSer();
-		whetherMute = Boolean.valueOf(mHttpService.getMuteState());
+		whetherMute = Boolean.valueOf(CommonMethod.getMuteState(MyApp.getContext()));
 		// Log.i("zyt", "current volume state is " + whetherMute);
 		super.onCreate(savedInstanceState);
 	}
@@ -220,7 +220,7 @@ public class MainActivity extends BaseActivity {
 		}
 		getChannelList();
 		player = new Player(mhandler, surfaceView, liveSeekBar, null);
-//		chListView.setOnItemSelectedListener(myItemSelectLis);
+		// chListView.setOnItemSelectedListener(myItemSelectLis);
 		chListView.setOnItemClickListener(myClickLis);
 
 		audioMgr = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -324,7 +324,7 @@ public class MainActivity extends BaseActivity {
 			// }
 			curListIndex = position;
 			String channelNO = channelIndex.getText().toString();
-//			 Log.i(TAG, "myClickLis"+position);
+			// Log.i(TAG, "myClickLis"+position);
 			playChannel(channelNO, true);
 
 			curChannelNO = channelNO;
@@ -392,7 +392,7 @@ public class MainActivity extends BaseActivity {
 		channelsAll.clear();
 		CCTVList.clear();
 		starTvList.clear();
-//		favTvList.clear();
+		// favTvList.clear();
 		localTvList.clear();
 		HDTvList.clear();
 		otherTvList.clear();
@@ -421,10 +421,13 @@ public class MainActivity extends BaseActivity {
 				starTvList.add(dvbChannel);
 			}
 			String regExLocal = "BTV|" + getResources().getString(R.string.beijing_h);
-//					+ "|"+ getResources().getString(R.string.jingniu) + "|" + getResources().getString(R.string.qingyang)
-//					+ "|" + getResources().getString(R.string.wuhou) + "|" + getResources().getString(R.string.chenghua)
-//					+ "|" + getResources().getString(R.string.jinjiang) + "|"
-//					+ getResources().getString(R.string.chengdu) + "|" + getResources().getString(R.string.sichuan);
+			// + "|"+ getResources().getString(R.string.jingniu) + "|" +
+			// getResources().getString(R.string.qingyang)
+			// + "|" + getResources().getString(R.string.wuhou) + "|" +
+			// getResources().getString(R.string.chenghua)
+			// + "|" + getResources().getString(R.string.jinjiang) + "|"
+			// + getResources().getString(R.string.chengdu) + "|" +
+			// getResources().getString(R.string.sichuan);
 			java.util.regex.Pattern patternLocal = java.util.regex.Pattern.compile(regExLocal);
 			java.util.regex.Matcher matcherLocal = patternLocal.matcher(dvbChannel.getChannelName());
 			boolean classBytypeLocal = matcherLocal.find();
@@ -597,18 +600,18 @@ public class MainActivity extends BaseActivity {
 			epgListTitleView.setText(TVtype[4]);
 			mCurChannels = HDTvList;
 			break;
-//		case 5:
-//			epgListTitleView.setText(TVtype[5]);
-//			curChannels = favTvList;
-//			break;
-//		case 5:
-//			epgListTitleView.setText(TVtype[6]);
-//			curChannels = otherTvList;
-//			break;
+		// case 5:
+		// epgListTitleView.setText(TVtype[5]);
+		// curChannels = favTvList;
+		// break;
+		// case 5:
+		// epgListTitleView.setText(TVtype[6]);
+		// curChannels = otherTvList;
+		// break;
 		}
-		curListIndex=mCurChannels.indexOf(CacheData.getCurChannel());
-		if(-1==curListIndex){
-			curListIndex=0;
+		curListIndex = mCurChannels.indexOf(CacheData.getCurChannel());
+		if (-1 == curListIndex) {
+			curListIndex = 0;
 		}
 		chLstAdapter.setData(mCurChannels);
 		chListView.setVisibility(View.VISIBLE);
@@ -627,32 +630,32 @@ public class MainActivity extends BaseActivity {
 			if (ban != null && ban.isToastShow()) {
 				ban.cancelBanner();
 			}
-			
+
 			// 切换频道类型，更新频道列表的数据
-			if(chListView.isShown()){
-				if(curType==(TVtype.length-1)){
+			if (chListView.isShown()) {
+				if (curType == (TVtype.length - 1)) {
 					curType = 0;
-				}else{
+				} else {
 					curType++;
 				}
-			}else{
+			} else {
 				curType = 0;
 			}
 			showChannelListView();
-			 showChannelList();
-			 chListView.setFocusable(true);
-			 chListView.requestFocus();
-			 chListView.setSelection(curListIndex);
+			showChannelList();
+			chListView.setFocusable(true);
+			chListView.requestFocus();
+			chListView.setSelection(curListIndex);
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
 			// 切换频道类型，更新频道列表的数据
-			 if (curType == 0) {
-			 curType = (TVtype.length-1);
-			 } else {
-				 curType--;
-			 }
-			 showChannelList();
-			 chListView.setSelection(0);
+			if (curType == 0) {
+				curType = (TVtype.length - 1);
+			} else {
+				curType--;
+			}
+			showChannelList();
+			chListView.setSelection(0);
 
 			break;
 
@@ -684,17 +687,18 @@ public class MainActivity extends BaseActivity {
 					playChannel(curChannelNO, true);
 				}
 			} else {
-//				chListView.setFocusable(true);
-//				chListView.requestFocus();
-//				chListView.setSelection(curListIndex);
+				// chListView.setFocusable(true);
+				// chListView.requestFocus();
+				// chListView.setSelection(curListIndex);
 				if (channelsAll != null && channelsAll.size() != 0) {
-//					playChannel(mCurChannels.get(curListIndex).getChannelNumber(), true);
-					//显示频道号和名称
-//					showToastBanner(channelsAll.get(curListIndex).getChannelNumber());
+					// playChannel(mCurChannels.get(curListIndex).getChannelNumber(),
+					// true);
+					// 显示频道号和名称
+					// showToastBanner(channelsAll.get(curListIndex).getChannelNumber());
 					ChannelInfo curChannel = channelsAll.get(curListIndex);
 					CacheData.setCurChannel(curChannel);
 					PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
-					keydownFlag=true;
+					keydownFlag = true;
 				}
 			}
 			break;
@@ -709,17 +713,18 @@ public class MainActivity extends BaseActivity {
 			if (!StringUtils.hasLength(curChannelNO)) {
 				curChannelNO = channelsAll.get(0).getChannelNumber();
 			}
-//			chListView.setFocusable(true);
-//			chListView.requestFocus();
-//			chListView.setSelection(curListIndex);
+			// chListView.setFocusable(true);
+			// chListView.requestFocus();
+			// chListView.setSelection(curListIndex);
 			if (mCurChannels != null && channelsAll.size() != 0) {
-//				playChannel(mCurChannels.get(curListIndex).getChannelNumber(), true);
-				//显示频道号和名称
-//				showToastBanner(channelsAll.get(curListIndex));
+				// playChannel(mCurChannels.get(curListIndex).getChannelNumber(),
+				// true);
+				// 显示频道号和名称
+				// showToastBanner(channelsAll.get(curListIndex));
 				ChannelInfo curChannel = channelsAll.get(curListIndex);
 				CacheData.setCurChannel(curChannel);
 				PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
-				keydownFlag=true;
+				keydownFlag = true;
 			}
 			break;
 
@@ -729,13 +734,13 @@ public class MainActivity extends BaseActivity {
 			// ChannelInfo curChannel =
 			// CacheData.getAllChannelMap().get(curChannelNO);
 			// PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
-			
-			if(tvRootDigitalkey.isShown()){
+
+			if (tvRootDigitalkey.isShown()) {
 				mhandler.sendEmptyMessage(Class_Constant.MESSAGE_HANDLER_DIGITALKEY);
-			}else{
-			mHttpService.saveMutesState(whetherMute + "");
-			showDialogBanner(curChannelNO);
-			muteIconImage.setVisibility(View.GONE);
+			} else {
+				CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
+				showDialogBanner(curChannelNO);
+				muteIconImage.setVisibility(View.GONE);
 			}
 			break;
 		case Class_Constant.KEYCODE_UP_ARROW_KEY:
@@ -755,12 +760,13 @@ public class MainActivity extends BaseActivity {
 					curListIndex = curListIndex + 1;
 				}
 				if (channelsAll != null && channelsAll.size() != 0) {
-//					playChannel(mCurChannels.get(curListIndex).getChannelNumber(), true);
-//					showToastBanner(channelsAll.get(curListIndex));
+					// playChannel(mCurChannels.get(curListIndex).getChannelNumber(),
+					// true);
+					// showToastBanner(channelsAll.get(curListIndex));
 					ChannelInfo curChannel = channelsAll.get(curListIndex);
 					CacheData.setCurChannel(curChannel);
 					PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
-					keydownFlag=true;
+					keydownFlag = true;
 				}
 			}
 			break;
@@ -782,12 +788,13 @@ public class MainActivity extends BaseActivity {
 					curListIndex = curListIndex - 1;
 				}
 				if (channelsAll != null && channelsAll.size() != 0) {
-//					playChannel(mCurChannels.get(curListIndex).getChannelNumber(), true);
-//					showToastBanner(channelsAll.get(curListIndex));
+					// playChannel(mCurChannels.get(curListIndex).getChannelNumber(),
+					// true);
+					// showToastBanner(channelsAll.get(curListIndex));
 					ChannelInfo curChannel = channelsAll.get(curListIndex);
 					CacheData.setCurChannel(curChannel);
 					PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
-					keydownFlag=true;
+					keydownFlag = true;
 				}
 			}
 			break;
@@ -816,7 +823,7 @@ public class MainActivity extends BaseActivity {
 			// Log.i("zyt", "onkeydown menukey is pressed " + keyCode);
 			CommonMethod.startSettingPage(MyApp.getContext());
 			break;
-			
+
 		case Class_Constant.KEYCODE_BACK_KEY:
 
 			if (channelListLinear.isShown()) {
@@ -829,7 +836,7 @@ public class MainActivity extends BaseActivity {
 			// audioMgr.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
 			whetherMute = !whetherMute;
 			// Log.i("zyt", "keycode mute is " + whetherMute);
-			mHttpService.saveMutesState(whetherMute + "");
+			CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
 			if (muteIconImage.isShown()) {
 				muteIconImage.setVisibility(View.GONE);
 			} else {
@@ -843,7 +850,7 @@ public class MainActivity extends BaseActivity {
 			}
 			// audioMgr.setStreamMute(AudioManager.STREAM_MUSIC, true);
 			whetherMute = false;
-			mHttpService.saveMutesState(whetherMute + "");
+			CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
 			break;
 		default:
 			Log.i("zyt", "onkeydown default is " + keyCode);
@@ -853,25 +860,23 @@ public class MainActivity extends BaseActivity {
 
 		return super.onKeyDown(keyCode, event);
 	}
-	
-	
 
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
-		
+
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_CHANNEL_UP:
 		case Class_Constant.KEYCODE_CHANNEL_DOWN:
 		case Class_Constant.KEYCODE_UP_ARROW_KEY:
 		case Class_Constant.KEYCODE_DOWN_ARROW_KEY:
-			if (channelsAll != null && channelsAll.size() != 0&&keydownFlag) {
+			if (channelsAll != null && channelsAll.size() != 0 && keydownFlag) {
 				playChannel(channelsAll.get(curListIndex).getChannelNumber(), true);
-				keydownFlag=false;
+				keydownFlag = false;
 			}
-			
+
 			break;
-			
+
 		}
 		return super.onKeyUp(keyCode, event);
 	}
@@ -928,23 +933,23 @@ public class MainActivity extends BaseActivity {
 
 				tvRootDigitalKeyInvalid.setVisibility(View.GONE);
 				tvRootDigitalkey.setVisibility(View.VISIBLE);
-//				if (iKey < 10) {
-//					if (iKeyNum == 1) {
-//						tvRootDigitalkey.setText("--" + iKey);
-//					} else if (iKeyNum == 2) {
-//						tvRootDigitalkey.setText("-0" + iKey);
-//					} else {
-//						tvRootDigitalkey.setText("00" + iKey);
-//					}
-//				} else if (iKey < 100) {
-//					if (iKeyNum == 2) {
-//						tvRootDigitalkey.setText("-" + iKey);
-//					} else {
-//						tvRootDigitalkey.setText("0" + iKey);
-//					}
-//				} else {
-					tvRootDigitalkey.setText("" + iKey);
-//				}
+				// if (iKey < 10) {
+				// if (iKeyNum == 1) {
+				// tvRootDigitalkey.setText("--" + iKey);
+				// } else if (iKeyNum == 2) {
+				// tvRootDigitalkey.setText("-0" + iKey);
+				// } else {
+				// tvRootDigitalkey.setText("00" + iKey);
+				// }
+				// } else if (iKey < 100) {
+				// if (iKeyNum == 2) {
+				// tvRootDigitalkey.setText("-" + iKey);
+				// } else {
+				// tvRootDigitalkey.setText("0" + iKey);
+				// }
+				// } else {
+				tvRootDigitalkey.setText("" + iKey);
+				// }
 
 				if (iKey >= 100) {
 					mhandler.sendEmptyMessageDelayed(Class_Constant.MESSAGE_HANDLER_DIGITALKEY, 2000);
@@ -1034,7 +1039,7 @@ public class MainActivity extends BaseActivity {
 		// if(ban!=null){
 		// ban.cancelBanner();
 		// }
-		if(null==ban){
+		if (null == ban) {
 			ban = new Banner(this, channel, curChannelPrograms);
 		}
 		ban.setData(channel, curChannelPrograms);
@@ -1077,7 +1082,7 @@ public class MainActivity extends BaseActivity {
 		CacheData.curChannelNum = curChannel.getChannelNumber();
 		CacheData.setCurChannel(curChannel);
 		curChannelNO = channelno;
-		curListIndex=channelsAll.indexOf(curChannel);
+		curListIndex = channelsAll.indexOf(curChannel);
 		// curChannel = CacheData.getAllChannelMap().get(curChannelNO);
 		// PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
 
@@ -1089,7 +1094,7 @@ public class MainActivity extends BaseActivity {
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
-			curType=0;
+			curType = 0;
 			channelListLinear.setVisibility(View.INVISIBLE);
 			focusView.setVisibility(View.INVISIBLE);
 			linear_vertical_line.setVisibility(View.INVISIBLE);
@@ -1172,7 +1177,7 @@ public class MainActivity extends BaseActivity {
 		intent.setAction("WHETHER_MUTE"); // 设置Action
 		intent.putExtra("msg", "接收动态注册广播成功！"); // 添加附加信息
 		sendBroadcast(intent);
-		mHttpService.saveMutesState(whetherMute + "");
+		CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
 		// onStop();
 		if (player != null)
 			player.stop();
