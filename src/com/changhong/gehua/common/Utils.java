@@ -43,12 +43,18 @@ public class Utils {
 		return df.format(outterDate);
 	}
 	
-	public static String millToDateStr(int milliseconds ){
+	public static String millToDateStr(long milliseconds ){
 		SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
 		formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
 		
 		return formatter.format(milliseconds);
 	}
+	
+	public static String millToLiveBackStr(long milliseconds){
+		Date date=new Date(milliseconds);
+		DateFormat df = new SimpleDateFormat("HH:mm:ss");
+		return df.format(date);
+	} 
 	
 	
 	/**

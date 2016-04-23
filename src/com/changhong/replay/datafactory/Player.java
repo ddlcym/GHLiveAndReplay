@@ -191,15 +191,18 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 
 			case Class_Constant.RE_UPDATE_PROGRESS:
 				if (liveFlag) {
-					position = mediaPlayer.getCurrentPosition() + curBeginTime - delayTime * 1000;
+					int curmedPos=mediaPlayer.getCurrentPosition();
+					position = curmedPos + curBeginTime - delayTime * 1000;
+					long beginTime=CacheData.getCurProgram().getBeginTime().getTime();
+					videoCurrentTime.setText(Utils.millToLiveBackStr(position+beginTime));
 				} else {
 					position = mediaPlayer.getCurrentPosition();
+					videoCurrentTime.setText(Utils.millToDateStr(position));
 
 				}
 				if (duration > 0) {
 					Player.skbProgress.setProgress(position);
 				}
-				videoCurrentTime.setText(Utils.millToDateStr(position));
 				break;
 
 			case Class_Constant.LIVE_FAST_FORWARD:
