@@ -346,7 +346,7 @@ public class MainActivity extends BaseActivity {
 			String channelNO = channelIndex.getText().toString();
 			// Log.i(TAG, "myClickLis"+position);
 			playChannel(channelNO, true);
-
+			
 			curChannelNO = channelNO;
 			mhandler.post(runnable);
 			Log.i("zyt", "play channel number is " + curChannelNO);
@@ -1110,7 +1110,7 @@ public class MainActivity extends BaseActivity {
 
 	// ============play video=========================================
 	public String playChannel(String channelno, boolean isCheckPlaying) {
-
+		
 		if (channelno.equals(curChannelNO) && isCheckPlaying) {
 			return channelno;
 		}
@@ -1138,7 +1138,9 @@ public class MainActivity extends BaseActivity {
 		curListIndex = channelsAll.indexOf(curChannel);
 		// curChannel = CacheData.getAllChannelMap().get(curChannelNO);
 		// PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
-
+		
+		CommonMethod.saveChannelLastTime(Integer.parseInt(curChannelNO), MyApp.getContext());
+		
 		return curChannelNO;
 	}
 
@@ -1235,7 +1237,7 @@ public class MainActivity extends BaseActivity {
 		intent.putExtra("msg", "接收动态注册广播成功！"); // 添加附加信息
 		sendBroadcast(intent);
 		CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
-		CommonMethod.saveChannelLastTime(Integer.parseInt(curChannelNO), MyApp.getContext());
+//		CommonMethod.saveChannelLastTime(Integer.parseInt(curChannelNO), MyApp.getContext());
 		// onStop();
 		if (player != null)
 			player.stop();
