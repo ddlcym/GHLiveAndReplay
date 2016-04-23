@@ -95,7 +95,7 @@ public class MainActivity extends BaseActivity {
 	private List<ProgramInfo> curChannelPrograms = new ArrayList<ProgramInfo>();// 当前频道下的上一个节目，当前节目，下一个节目信息
 	private int curListIndex = 0;// 当前list下正在播放的当前节目的index
 	private int curType = 0;
-	private String curChannelNO = "621"; // 当前播放的节目的channelno
+	private String curChannelNO = null; // 当前播放的节目的channelno
 	private ProgramInfo curProgram = null;
 	private String curPlayURL = null;
 	private boolean keydownFlag = false;
@@ -212,7 +212,9 @@ public class MainActivity extends BaseActivity {
 		whetherMute = false;
 		startHttpSer();
 		whetherMute = Boolean.valueOf(CommonMethod.getMuteState(MyApp.getContext()));
+		curChannelNO = String.valueOf(CommonMethod.getChannelLastTime(MyApp.getContext()));
 		// Log.i("zyt", "current volume state is " + whetherMute);
+		 Log.i("zyt", "current channel number is " + curChannelNO);
 		super.onCreate(savedInstanceState);
 	}
 
@@ -1192,7 +1194,8 @@ public class MainActivity extends BaseActivity {
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
-		Log.i("zyt", "resume mute is  " + whetherMute);
+		// Log.i("zyt", "resume mute is " + whetherMute);
+		curChannelNO = String.valueOf(CommonMethod.getChannelLastTime(MyApp.getContext()));
 		super.onResume();
 	}
 
@@ -1206,6 +1209,7 @@ public class MainActivity extends BaseActivity {
 		intent.putExtra("msg", "接收动态注册广播成功！"); // 添加附加信息
 		sendBroadcast(intent);
 		CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
+		CommonMethod.saveChannelLastTime(Integer.parseInt(curChannelNO), MyApp.getContext());
 		// onStop();
 		if (player != null)
 			player.stop();
