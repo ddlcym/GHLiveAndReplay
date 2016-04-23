@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/transparent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/id_dtv_banner"
+        android:layout_width="match_parent"
+        android:layout_height="200dip"
+        android:background="#88323232"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="512dip"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="240dip"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="30dip"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/banner_service_id"
+                android:layout_width="156dip"
+                android:layout_height="80dip"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="15dip"
+                android:gravity="center|fill_vertical"
+                android:textSize="65sp" />
+
+            <TextView
+                android:id="@+id/banner_channel_name_id"
+                android:layout_width="230dip"
+                android:layout_height="70dip"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="5dip"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:gravity="center|fill_vertical"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:maxWidth="150dip"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:textSize="@dimen/FONT_SIZE_BIG" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="80dip"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/current_program_info"
+                android:layout_width="600dip"
+                android:layout_height="50dip"
+                android:layout_marginTop="25dip"
+                android:singleLine="true"
+                android:textSize="28sp" />
+
+            <SeekBar
+                android:id="@+id/program_progress"
+                android:layout_width="550dip"
+                android:layout_height="20dip"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="20dip"
+                android:max="100" />
+
+            <TextView
+                android:id="@+id/next_program_info"
+                android:layout_width="600dip"
+                android:layout_height="50dip"
+                android:layout_marginTop="20dip"
+                android:singleLine="true"
+                android:textSize="28sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dip"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="400dip"
+                    android:layout_height="50dip"
+                    android:layout_marginTop="25dip"
+                    android:singleLine="true"
+                    android:text="信息：红键/进入增强电视"
+                    android:textSize="28sp"
+                    android:visibility="invisible" />
+
+                <TextView
+                    android:layout_width="400dip"
+                    android:layout_height="50dip"
+                    android:layout_marginTop="5dip"
+                    android:singleLine="true"
+                    android:text="右键：显示节目列表"
+                    android:textSize="28sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
