@@ -48,6 +48,7 @@ public class LivePlayBannerDialog extends Dialog {
 	public void setData(ChannelInfo outterChannelInfo, List<ProgramInfo> outterListProgramInfo) {
 		channelInfo = outterChannelInfo;
 		programListInfo = outterListProgramInfo;
+		initData();
 	}
 
 	@Override
@@ -116,4 +117,15 @@ public class LivePlayBannerDialog extends Dialog {
 		
 		return super.onKeyDown(keyCode, event);
 	}
+	
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+		Message msg = new Message();
+		msg.what = Class_Constant.DIALOG_ONKEY_UP;
+		msg.arg1 = keyCode;
+		mHandler.sendMessage(msg);
+		return super.onKeyUp(keyCode, event);
+	}
+
 }
