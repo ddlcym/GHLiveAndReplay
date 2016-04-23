@@ -82,7 +82,7 @@ public class EPGActivity extends BaseActivity {
 	private ProgramsAdapter programsAdapter;
 	// EpgEvent 控制
 	private static int EventlitItemindex = 0;
-	
+
 	private static String[] tvType;
 	// WeekInfo 控制
 	// List<Map<String, Object>> SimpleAdapterWeekdata = null;
@@ -155,7 +155,7 @@ public class EPGActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-//		startHttpSer();
+		// startHttpSer();
 		super.onCreate(savedInstanceState);
 	}
 
@@ -224,8 +224,6 @@ public class EPGActivity extends BaseActivity {
 			uiHandler.sendEmptyMessage(MSG_SHOW_CHANNELLIST);
 		}
 		curChannelNum = CacheData.curChannelNum;
-		
-		
 
 	}
 
@@ -278,12 +276,12 @@ public class EPGActivity extends BaseActivity {
 			curDay = CacheData.dayMonths.get(arg2);
 			CacheData.setReplayCurDay(curDay);
 			uiHandler.sendEmptyMessage(MSG_WEEKDAY_CHANGE); // 更新下面的列表
-			
+
 		}
 
 		@Override
 		public void onNothingSelected(AdapterView<?> arg0) {
-			
+
 		}
 	};
 
@@ -475,18 +473,18 @@ public class EPGActivity extends BaseActivity {
 		// 根据当前保存的数据刷新EventList
 		curProgramList = (List<ProgramInfo>) CacheData.getAllProgramMap().get(curday);
 		programsAdapter.setData(curProgramList);
-		//记住上次的位置，如果是第一个日期则记住，其他日期否则都不记住
-		View v = epgEventListview.getChildAt(0);  
+		// 记住上次的位置，如果是第一个日期则记住，其他日期否则都不记住
+		View v = epgEventListview.getChildAt(0);
 		int top = (v == null) ? 0 : v.getTop();
 		epgEventListview.setSelectionFromTop(0, top);
-		
+
 	}
 
 	public void showWeekDay() {
 		epgWeekInfoView.setNumColumns(CacheData.getDayMonths().size());
 		dayMonthAdapter.setData(CacheData.getDayMonths());
-		
-//		epgWeekInfoView.setSelection(EventlitItemindex);
+
+		// epgWeekInfoView.setSelection(EventlitItemindex);
 	}
 
 	public void showChannelList(int channelType) {
@@ -722,7 +720,7 @@ public class EPGActivity extends BaseActivity {
 
 		ProgramInfo program = curProgramList.get(position);
 		Intent mIntent = new Intent(EPGActivity.this, ReplayPlayActivity.class);
-		
+
 		CacheData.setCurProgram(program);
 		CacheData.setCurChannel(curChannel);
 
@@ -837,32 +835,62 @@ public class EPGActivity extends BaseActivity {
 		focusView.setVisibility(View.VISIBLE);
 		focusView.bringToFront();
 	}
-	
-	
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
-		
+
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_UP_ARROW_KEY:
 			if (channelListview.hasFocus()) {
-				if(0==channelListview.getSelectedItemPosition()){
-					channelListview.setSelection(channelAdapter.getCount()-1);
+				if (0 == channelListview.getSelectedItemPosition()) {
+					channelListview.setSelection(channelAdapter.getCount() - 1);
 				}
 			}
 			break;
 		case Class_Constant.KEYCODE_DOWN_ARROW_KEY:
 			if (channelListview.hasFocus()) {
-				if((channelAdapter.getCount()-1)==channelListview.getSelectedItemPosition()){
+				if ((channelAdapter.getCount() - 1) == channelListview.getSelectedItemPosition()) {
 					channelListview.setSelection(0);
 				}
-			} 
+			}
 			break;
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
 			epgWeekInfoView.setFocusable(true);
 			break;
+		case Class_Constant.KEYCODE_CHANNEL_UP://回看列表page +操作
+			if(channelListview.hasFocus()){
+				int pageUpIndex = channelListview.getSelectedItemPosition() + 8;
+				if(pageUpIndex > (channelAdapter.getCount()-1)){
+					pageUpIndex = pageUpIndex - (channelAdapter.getCount());	
+				}
+				if((pageUpIndex>(channelAdapter.getCount()-8))&&(pageUpIndex<=(channelAdapter.getCount()-1))){
+					pageUpIndex = channelAdapter.getCount() - 8;
+				}
+				if((pageUpIndex > 0)&&(pageUpIndex < 7)){
+					pageUpIndex = 0;
+				}
+				channelListview.setSelection(pageUpIndex);
+			}
+			break;
+		case Class_Constant.KEYCODE_CHANNEL_DOWN://回看列表 page -操作
+			if(channelListview.hasFocus()){
+				int pageDownIndex = channelListview.getSelectedItemPosition() - 8;
+				if(pageDownIndex < 0){
+					pageDownIndex = channelAdapter.getCount() + pageDownIndex;
+				}
+				if((pageDownIndex>(channelAdapter.getCount()-8))&&(pageDownIndex<=(channelAdapter.getCount()-1))){
+					pageDownIndex = channelAdapter.getCount() - 8;
+				}
+				if((pageDownIndex > 0)&&(pageDownIndex < 7)){
+					pageDownIndex = 0;
+				}
+				channelListview.setSelection(pageDownIndex);
+			}	
+			break;
+		// next process
 		}
+
 		return super.onKeyDown(keyCode, event);
 	}
 
