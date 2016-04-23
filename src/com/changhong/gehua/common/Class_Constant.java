@@ -33,6 +33,7 @@ public class Class_Constant {
 	public static final int RE_FAST_REVERSE_UP = 3020;
 	public static final int BACK_TO_LIVE = 3021;
 	public static final int DIALOG_ONKEY_DOWN = 3022;
+	public static final int DEFAULT_CHANNEL_NUMBER = 621;//boot default channel number
 
 	public final static int MAX_NO_OF_PROGRAMS = 500; // ����Ŀ��
 	public final static int MAX_NO_OF_CARRIERS = 40; // ���Ƶ����
