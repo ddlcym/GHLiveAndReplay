@@ -21,6 +21,7 @@ import com.changhong.ghlive.datafactory.Banner;
 import com.changhong.ghlive.datafactory.BannerDialog;
 import com.changhong.ghlive.datafactory.ChannelListAdapter;
 import com.changhong.ghlive.datafactory.HandleLiveData;
+import com.changhong.ghlive.datafactory.LivePlayBannerDialog;
 import com.changhong.ghlive.service.HttpService;
 import com.changhong.ghliveandreplay.R;
 import com.changhong.replay.datafactory.Player;
@@ -76,6 +77,7 @@ public class MainActivity extends BaseActivity {
 	// private Banner programBan;
 	private BannerDialog programBannerDialog;
 	private Banner ban;
+	private LivePlayBannerDialog livePlayBanner;
 	private VolleyTool volleyTool;
 	private RequestQueue mReQueue;
 	private ProcessData processData;
@@ -111,6 +113,7 @@ public class MainActivity extends BaseActivity {
 			case Class_Constant.PLAY_LIVE:// 直播
 
 				curPlayURL = (String) msg.getData().getString("PLAY_URL");
+				Log.i("zyt MainActivity", curPlayURL);
 
 				// player.playUrl(curPlayURL);
 				playNetVideo();
@@ -195,6 +198,9 @@ public class MainActivity extends BaseActivity {
 					muteIconImage.setVisibility(View.GONE);
 				}
 				break;
+			}
+			case Class_Constant.DIALOG_ONKEY_DOWN: {
+				dealOnKeyDown(msg.arg1);
 			}
 				// next message
 			}
@@ -623,12 +629,26 @@ public class MainActivity extends BaseActivity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
-		String dialogButtonTextOk = MainActivity.this.getString(R.string.str_zhn_yes);
-		String dialogButtonTextCancel = MainActivity.this.getString(R.string.str_zhn_no);
+		if (Class_Constant.KEYCODE_BACK_KEY == keyCode) {
+
+			if (channelListLinear.isShown()) {
+				mhandler.post(runnable);
+				return false;
+			}
+
+		}
+		dealOnKeyDown(keyCode);
+		return super.onKeyDown(keyCode, event);
+	}
+
+	private boolean dealOnKeyDown(int keyCode) {
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
-			if (ban != null && ban.isToastShow()) {
-				ban.cancelBanner();
+			// if (ban != null && ban.isToastShow()) {
+			// ban.cancelBanner();
+			// }
+			if (livePlayBanner != null && livePlayBanner.isToastShow()) {
+				livePlayBanner.dismiss();
 			}
 
 			// 切换频道类型，更新频道列表的数据
@@ -814,8 +834,14 @@ public class MainActivity extends BaseActivity {
 
 			break;
 		case Class_Constant.MENU_ID_DTV_ROOT:
-			if (ban != null && !ban.isToastShow()) {
-				ban.show();
+			// if (ban != null && !ban.isToastShow()) {
+			// ban.show();
+			// }
+			if (livePlayBanner != null && !(livePlayBanner.isToastShow())) {
+				livePlayBanner.show();
+				if (liveBannerInfoRunnable != null) {
+					mhandler.postDelayed(liveBannerInfoRunnable, 5000);
+				}
 			}
 			break;
 
@@ -824,13 +850,6 @@ public class MainActivity extends BaseActivity {
 			CommonMethod.startSettingPage(MyApp.getContext());
 			break;
 
-		case Class_Constant.KEYCODE_BACK_KEY:
-
-			if (channelListLinear.isShown()) {
-				mhandler.post(runnable);
-				return false;
-			}
-			break;
 		case Class_Constant.KEYCODE_MUTE:// mute
 			// int current =
 			// audioMgr.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
@@ -857,8 +876,7 @@ public class MainActivity extends BaseActivity {
 			break;
 		// next key down call
 		}
-
-		return super.onKeyDown(keyCode, event);
+		return true;
 	}
 
 	@Override
@@ -1021,8 +1039,11 @@ public class MainActivity extends BaseActivity {
 
 	/* show banner dialog */
 	public void showDialogBanner(String channelno) {
-		if (ban != null) {
-			ban.cancelBanner();
+		// if (ban != null) {
+		// ban.cancelBanner();
+		// }
+		if (livePlayBanner != null) {
+			livePlayBanner.dismiss();
 		}
 		ChannelInfo curChannel = (ChannelInfo) CacheData.allChannelMap.get(channelno);
 		if (programBannerDialog != null) {
@@ -1039,12 +1060,19 @@ public class MainActivity extends BaseActivity {
 		// if(ban!=null){
 		// ban.cancelBanner();
 		// }
-		if (null == ban) {
-			ban = new Banner(this, channel, curChannelPrograms);
+		// if (null == ban) {
+		// ban = new Banner(this, channel, curChannelPrograms);
+		// }
+		// ban.setData(channel, curChannelPrograms);
+		// ban.show();
+		if (null == livePlayBanner) {
+			livePlayBanner = new LivePlayBannerDialog(this, channel, curChannelPrograms, mhandler);
 		}
-		ban.setData(channel, curChannelPrograms);
-		ban.show();
-
+		livePlayBanner.setData(channel, curChannelPrograms);
+		livePlayBanner.show();
+		if (liveBannerInfoRunnable != null) {
+			mhandler.postDelayed(liveBannerInfoRunnable, 5000);
+		}
 		// ChannelInfo curChannel = (ChannelInfo)
 		// CacheData.allChannelMap.get(channelno);
 		// if (programBannerDialog != null) {
@@ -1183,8 +1211,10 @@ public class MainActivity extends BaseActivity {
 			player.stop();
 		if (programBannerDialog != null)
 			programBannerDialog.dismiss();
-		if (ban != null)
-			ban.cancelBanner();
+		// if (ban != null)
+		// ban.cancelBanner();
+		if (livePlayBanner != null)
+			livePlayBanner.dismiss();
 		super.onPause();
 		// onDestroy();
 		// onStop();
@@ -1205,8 +1235,17 @@ public class MainActivity extends BaseActivity {
 		whetherMute = false;
 		player.stop();
 		programBannerDialog.dismiss();
-		ban.cancelBanner();
+		// ban.cancelBanner();
+		livePlayBanner.dismiss();
 		super.onDestroy();
 	}
 
+	Runnable liveBannerInfoRunnable = new Runnable() {
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			livePlayBanner.dismiss();
+		}
+	};
 }
