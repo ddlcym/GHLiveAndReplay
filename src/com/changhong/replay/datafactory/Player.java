@@ -195,8 +195,9 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 					int curmedPos=mediaPlayer.getCurrentPosition();
 					position = curmedPos + curBeginTime - delayTime * 1000;
 					if(position>=curProlength){
-						parentHandler.sendEmptyMessage(Class_Constant.LIVE_BACK_PROGRAM_OVER);
-						stop();
+						//通知更新banner条
+//						parentHandler.sendEmptyMessage(Class_Constant.LIVE_BACK_PROGRAM_OVER);
+						
 					}else{
 					long beginTime=CacheData.getCurProgram().getBeginTime().getTime();
 					videoCurrentTime.setText(Utils.millToLiveBackStr(position+beginTime));

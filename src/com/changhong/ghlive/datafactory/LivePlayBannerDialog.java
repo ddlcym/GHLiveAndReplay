@@ -37,7 +37,7 @@ public class LivePlayBannerDialog extends Dialog {
 	private TextView nextProgramName = null;
 	private SeekBar programPlayBar;
 	private LinearLayout livePlayInfo;
-	private Handler mHandler;
+	private Handler parentHandler;
 	
 	
 	private int postion;
@@ -54,7 +54,7 @@ public class LivePlayBannerDialog extends Dialog {
 		mContext = context;
 		channelInfo = outterChannelInfo;
 		programListInfo = outterListProgramInfo;
-		mHandler = outterHandler;
+		parentHandler = outterHandler;
 		initView();
 		try{
 			mTimer.schedule(mTimerTask, 0, 1000);
@@ -71,9 +71,23 @@ public class LivePlayBannerDialog extends Dialog {
 		public void run() {
 			int position=getPosition();
 			if(position>=timeLength){
-				PlayVideo.getInstance().getProgramInfo(mHandler, CacheData.getCurChannel());
+				//通知更新直播banner条
+//				PlayVideo.getInstance().getProgramInfo(mHandler, CacheData.getCurChannel());
+				PlayVideo.getInstance().getProgramInfo(mhanlder, channelInfo);
 			}else{
-			programPlayBar.setProgress(position);
+					programPlayBar.setProgress(position);
+			}
+		}
+	};
+	
+	private Handler mhanlder=new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			
+			switch (msg.what) {
+			case Class_Constant.TOAST_BANNER_PROGRAM_PASS:
+				setData(channelInfo, CacheData.getCurPrograms());
+				break;
 			}
 		}
 	};
@@ -146,7 +160,7 @@ public class LivePlayBannerDialog extends Dialog {
 			Message msg = new Message();
 			msg.what = Class_Constant.DIALOG_ONKEY_DOWN;
 			msg.arg1 = keyCode;
-			mHandler.sendMessage(msg);
+			parentHandler.sendMessage(msg);
 			return false;
 		}
 		
@@ -159,7 +173,7 @@ public class LivePlayBannerDialog extends Dialog {
 		Message msg = new Message();
 		msg.what = Class_Constant.DIALOG_ONKEY_UP;
 		msg.arg1 = keyCode;
-		mHandler.sendMessage(msg);
+		parentHandler.sendMessage(msg);
 		return super.onKeyUp(keyCode, event);
 	}
 
