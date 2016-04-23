@@ -60,6 +60,7 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 	private static RequestQueue mReQueue;
 	private static ChannelInfo curChannel;
 	private static ProgramInfo curProgram;
+	private static int curProlength=0;
 
 	private static int delayTime = 0;// 秒
 	private static boolean firstPlayInShift = true;// 直播中第一次进入时移
@@ -193,8 +194,13 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 				if (liveFlag) {
 					int curmedPos=mediaPlayer.getCurrentPosition();
 					position = curmedPos + curBeginTime - delayTime * 1000;
+					if(position>=curProlength){
+						parentHandler.sendEmptyMessage(Class_Constant.LIVE_BACK_PROGRAM_OVER);
+						stop();
+					}else{
 					long beginTime=CacheData.getCurProgram().getBeginTime().getTime();
 					videoCurrentTime.setText(Utils.millToLiveBackStr(position+beginTime));
+					}
 				} else {
 					position = mediaPlayer.getCurrentPosition();
 					videoCurrentTime.setText(Utils.millToDateStr(position));
@@ -366,6 +372,8 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 			}
 			firstPlayInShift = false;
 		}
+		curProgram=CacheData.getCurProgram();
+		curProlength=(int)(curProgram.getEndTime().getTime()-curProgram.getBeginTime().getTime());
 		Log.e("mediaPlayer", "onPrepared");
 	}
 
@@ -474,6 +482,7 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 
 		return flag;
 	}
+	
 
 	private static int getLiveMaxTime() {
 		long times = 0;

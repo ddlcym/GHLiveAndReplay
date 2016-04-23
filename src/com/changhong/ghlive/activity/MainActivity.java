@@ -214,6 +214,9 @@ public class MainActivity extends BaseActivity {
 			case Class_Constant.DIALOG_ONKEY_UP:
 				dealOnKeyUp(msg.arg1);
 				break;
+			case Class_Constant.LIVE_BACK_PROGRAM_OVER:
+				showDialogBanner(curChannelNO);
+				break;
 				// next message
 			}
 		}

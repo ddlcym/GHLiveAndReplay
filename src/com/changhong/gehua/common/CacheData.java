@@ -101,7 +101,9 @@ public class CacheData {
 
 	public static void setCurPrograms(List<ProgramInfo> curPrograms) {
 		CacheData.curPrograms = curPrograms;
+		if(curPrograms!=null&&curPrograms.size()>1){
 		setCurProgram(curPrograms.get(1));
+		}
 	}
 		
 }

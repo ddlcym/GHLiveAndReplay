@@ -35,6 +35,7 @@ public class Class_Constant {
 	public static final int DIALOG_ONKEY_DOWN = 3022;
 	public static final int DIALOG_ONKEY_UP = 3023;
 	public static final int DEFAULT_CHANNEL_NUMBER = 621;//boot default channel number
+	public static final int LIVE_BACK_PROGRAM_OVER = 3024;//boot default channel number
 
 	public final static int MAX_NO_OF_PROGRAMS = 500; // ����Ŀ��
 	public final static int MAX_NO_OF_CARRIERS = 40; // ���Ƶ����

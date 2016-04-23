@@ -1,12 +1,18 @@
 package com.changhong.ghlive.datafactory;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import com.changhong.gehua.common.CacheData;
 import com.changhong.gehua.common.ChannelInfo;
 import com.changhong.gehua.common.Class_Constant;
+import com.changhong.gehua.common.PlayVideo;
 import com.changhong.gehua.common.ProgramInfo;
 import com.changhong.gehua.common.Utils;
 import com.changhong.ghliveandreplay.R;
+import com.changhong.replay.datafactory.Player;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -32,6 +38,13 @@ public class LivePlayBannerDialog extends Dialog {
 	private SeekBar programPlayBar;
 	private LinearLayout livePlayInfo;
 	private Handler mHandler;
+	
+	
+	private int postion;
+	private int timeLength;
+	
+	//自动更新
+	private Timer mTimer = new Timer();
 
 	public LivePlayBannerDialog(Context context, ChannelInfo outterChannelInfo, List<ProgramInfo> outterListProgramInfo,
 			Handler outterHandler) {
@@ -43,8 +56,28 @@ public class LivePlayBannerDialog extends Dialog {
 		programListInfo = outterListProgramInfo;
 		mHandler = outterHandler;
 		initView();
+		try{
+			mTimer.schedule(mTimerTask, 0, 1000);
+		}catch (IllegalStateException e){
+			e.printStackTrace();
+		}
 	}
 
+	/*******************************************************
+	 * 通过handler更新seekbar
+	 ******************************************************/
+	TimerTask mTimerTask = new TimerTask() {
+		@Override
+		public void run() {
+			int position=getPosition();
+			if(position>=timeLength){
+				PlayVideo.getInstance().getProgramInfo(mHandler, CacheData.getCurChannel());
+			}else{
+			programPlayBar.setProgress(position);
+			}
+		}
+	};
+	
 	public void setData(ChannelInfo outterChannelInfo, List<ProgramInfo> outterListProgramInfo) {
 		channelInfo = outterChannelInfo;
 		programListInfo = outterListProgramInfo;
@@ -83,9 +116,11 @@ public class LivePlayBannerDialog extends Dialog {
 			currentProgramEndTime = Utils.hourAndMinute(programListInfo.get(1).getEndTime());
 			nextProgramBeginTime = Utils.hourAndMinute(programListInfo.get(2).getBeginTime());
 			nextProgramEndTime = Utils.hourAndMinute(programListInfo.get(2).getEndTime());
+			timeLength=(int)(programListInfo.get(1).getEndTime().getTime()-programListInfo.get(1).getBeginTime().getTime());
 		}
 		channel_name.setText(channelInfo.getChannelName());
 		channel_number.setText(channelInfo.getChannelNumber());
+		programPlayBar.setMax(timeLength);
 		// currentProgramName.setText(programListInfo.get(1).getEventName());
 		// nextProgramName.setText(programListInfo.get(2).getEventName());
 		if (programListInfo != null && programListInfo.size() == 3) {
@@ -128,4 +163,10 @@ public class LivePlayBannerDialog extends Dialog {
 		return super.onKeyUp(keyCode, event);
 	}
 
+	private int getPosition(){
+		int position=0;
+		Date date=new Date();
+		position=(int)(date.getTime()-programListInfo.get(1).getBeginTime().getTime());
+		return position;
+	}
 }
