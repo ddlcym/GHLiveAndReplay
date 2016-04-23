@@ -101,7 +101,7 @@ public class BannerDialog extends Dialog {
 		wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
 		wlp.height = WindowManager.LayoutParams.MATCH_PARENT;
 		window.setAttributes(wlp);
-		window.setGravity(Gravity.BOTTOM);
+		window.setGravity(Gravity.TOP);
 
 		/* 频道名称、频道ID 节目名称 */
 		forwardIcon = (ImageView) findViewById(R.id.fast_forward);
@@ -187,7 +187,7 @@ public class BannerDialog extends Dialog {
 		/* 返回--取消 */
 		case KeyEvent.KEYCODE_BACK:
 			player.setLiveFlag(false);
-			CommonMethod.saveMutesState((whetherMute + ""),MyApp.getContext());
+			CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
 			Message msg = new Message();
 			msg.what = Class_Constant.PLAY_BACKFROM_SHIFT;
 			parentHandler.sendMessage(msg);
@@ -246,7 +246,7 @@ public class BannerDialog extends Dialog {
 			// int current =
 			// audioMgr.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
 			whetherMute = !whetherMute;
-			CommonMethod.saveMutesState((whetherMute + ""),MyApp.getContext());
+			CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
 			// Log.i("zyt", "keycode mute is " + whetherMute);
 			if (muteIconImage.isShown()) {
 				muteIconImage.setVisibility(View.GONE);
@@ -261,11 +261,18 @@ public class BannerDialog extends Dialog {
 			}
 			// audioMgr.setStreamMute(AudioManager.STREAM_MUSIC, true);
 			whetherMute = false;
-			CommonMethod.saveMutesState((whetherMute + ""),MyApp.getContext());
+			CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
 			break;
 		case Class_Constant.KEYCODE_MENU_KEY:
 			// Log.i("zyt", "onkeydown menukey is pressed " + keyCode);
 			CommonMethod.startSettingPage(MyApp.getContext());
+			break;
+		case Class_Constant.MENU_ID_DTV_ROOT:
+			bannerView.setVisibility(View.VISIBLE);
+			if (bannerRunnable != null) {
+				parentHandler.removeCallbacks(bannerRunnable);
+				parentHandler.postDelayed(bannerRunnable, 5000);
+			}
 			break;
 		default:
 			// parentHandler.removeCallbacks(bannerRunnable);
