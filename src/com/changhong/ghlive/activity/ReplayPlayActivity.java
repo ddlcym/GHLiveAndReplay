@@ -78,7 +78,7 @@ public class ReplayPlayActivity extends Activity {
 
 				break;
 			case Class_Constant.RE_LAST_PROGRAM:
-//				playLastProgram();
+				// playLastProgram();
 				Log.i("mmmm", "ReplayPlayActivity-RE_NEXT_PROGRAM:" + mprogram.getProgramId());
 				break;
 			case Class_Constant.REPLAY_DIALOG_END_CANCEL:
@@ -234,16 +234,16 @@ public class ReplayPlayActivity extends Activity {
 		curProgramList = (List<ProgramInfo>) CacheData.getAllProgramMap().get(curDay);
 		indexPro = curProgramList.indexOf(mprogram);
 		if (indexPro == (curProgramList.size() - 1)) {
-//			curIndexDay = CacheData.getDayMonths().indexOf(curDay);
-//			if (curIndexDay == (CacheData.getDayMonths().size() - 1)) {
-				Toast.makeText(ReplayPlayActivity.this, "已经是最后一个节目", Toast.LENGTH_SHORT).show();
-				return;
-//			} else {
-//				curDay = CacheData.getDayMonths().get(curIndexDay + 1);
-//				CacheData.setReplayCurDay(curDay);
-//				curProgramList = CacheData.getAllProgramMap().get(curDay);
-//				mprogram = curProgramList.get(0);
-//			}
+			// curIndexDay = CacheData.getDayMonths().indexOf(curDay);
+			// if (curIndexDay == (CacheData.getDayMonths().size() - 1)) {
+			Toast.makeText(ReplayPlayActivity.this, "已经是最后一个节目", Toast.LENGTH_SHORT).show();
+			return;
+			// } else {
+			// curDay = CacheData.getDayMonths().get(curIndexDay + 1);
+			// CacheData.setReplayCurDay(curDay);
+			// curProgramList = CacheData.getAllProgramMap().get(curDay);
+			// mprogram = curProgramList.get(0);
+			// }
 		} else {
 			mprogram = curProgramList.get(curProgramList.indexOf(mprogram) + 1);
 		}
@@ -367,6 +367,16 @@ public class ReplayPlayActivity extends Activity {
 			// Log.i("zyt", "onkeydown back key is pressed " + keyCode);
 			// finish();
 			break;
+		case Class_Constant.MENU_ID_DTV_ROOT:
+			skbProgress.setVisibility(View.VISIBLE);
+			videoTimeLength.setVisibility(View.VISIBLE);
+			videoCurrentTime.setVisibility(View.VISIBLE);
+			if (progressBarRunnable != null) {
+				replayHandler.removeCallbacks(progressBarRunnable);
+			}
+			replayHandler.postDelayed(progressBarRunnable, 5000);
+			break;
+		// next process
 		default:
 			// Log.i("zyt", "default onkeydown back key is pressed " + keyCode);
 			break;
