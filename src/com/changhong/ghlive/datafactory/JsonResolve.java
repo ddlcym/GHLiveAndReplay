@@ -103,25 +103,36 @@ public class JsonResolve {
 
 	public String getLivePlayURL(JSONObject json) {
 		String sdURL = null;
+		Map<String, String> playURLMap=new HashMap<String, String>();
 		JSONArray bitUrlList = getJsonObjectArray(json, "bitPlayUrlList");
 		if(bitUrlList!=null&&bitUrlList.length()>0){
-		for (int i = 0; i < bitUrlList.length(); i++) {
-			JSONObject bitUrl = null;
-			try {
-				bitUrl = bitUrlList.getJSONObject(i);
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				Log.e("mmmm", "bitUrlList:" + bitUrlList);
+			for (int i = 0; i < bitUrlList.length(); i++) {
+				JSONObject bitUrl = null;
+				try {
+					bitUrl = bitUrlList.getJSONObject(i);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					Log.e("mmmm", "bitUrlList:" + bitUrlList);
+				}
+				String type = getJsonObjectString(bitUrl, "bitrate");
+				playURLMap.put(type, getJsonObjectString(bitUrl, "url"));
+				
 			}
-			String type = getJsonObjectString(bitUrl, "bitrate");
-			if (type.contains("高清")) {
-				sdURL = getJsonObjectString(bitUrl, "url");
-				return sdURL;
-			}else if(type.contains("标清")){
-				sdURL = getJsonObjectString(bitUrl, "url");
-			}
-		}}
+		}
+		if (playURLMap.containsKey("电视高清")) {
+			sdURL =playURLMap.get("电视高清");
+			return sdURL;
+		}else if(playURLMap.containsKey("电视标清")){
+			sdURL =playURLMap.get("电视标清");
+			return sdURL;
+		}else if(playURLMap.containsKey("高清")){
+			sdURL =playURLMap.get("高清");
+			return sdURL;
+		}else if(playURLMap.containsKey("标清")){
+			sdURL =playURLMap.get("标清");
+			return sdURL;
+		}
 		return sdURL;
 	}
 	

@@ -1,6 +1,8 @@
 package com.changhong.ghlive.datafactory;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -11,6 +13,7 @@ import com.changhong.gehua.common.CacheData;
 import com.changhong.gehua.common.ChannelInfo;
 import com.changhong.gehua.common.Class_Constant;
 import com.changhong.gehua.common.CommonMethod;
+import com.changhong.gehua.common.PlayVideo;
 import com.changhong.gehua.common.ProcessData;
 import com.changhong.gehua.common.ProgramInfo;
 import com.changhong.gehua.common.Utils;
@@ -63,6 +66,7 @@ public class BannerDialog extends Dialog {
 	private ImageView palyButton, pauseButton, timeShiftIcon, forwardIcon, backwardIcon;
 	private ImageView muteIconImage;
 	private HttpService mHttpService;
+	private Timer mTimer = new Timer();
 
 	public BannerDialog(Context context, ChannelInfo outterChannelInfo, List<ProgramInfo> outterListProgramInfo,
 			Handler outterHandler, SurfaceView surView, HttpService outterHttpService) {
@@ -78,6 +82,11 @@ public class BannerDialog extends Dialog {
 		this.surView = surView;
 
 		initView();
+		try{
+			mTimer.schedule(mTimerTask, 0, 1000);
+			}catch (IllegalStateException e){
+				e.printStackTrace();
+		}
 		// initData();
 		// setContentView(R.layout.setting_sys_help_dialog_details);
 		// help_name=(TextView)findViewById(R.id.help_name);
@@ -94,6 +103,55 @@ public class BannerDialog extends Dialog {
 		// }
 		// });
 	}
+	
+	private Handler mHandler=new Handler(){
+		public void handleMessage(Message msg) {
+			
+			int position = 0;
+			switch (msg.what) {
+			case Class_Constant.RE_UPDATE_PROGRESS:
+				int curmedPos=Player.mediaPlayer.getCurrentPosition();
+				position = curmedPos + Player.curBeginTime - Player.delayTime * 1000;
+				if(position>=Player.curProlength){
+					//通知更新banner条
+//					parentHandler.sendEmptyMessage(Class_Constant.LIVE_BACK_PROGRAM_OVER);
+					PlayVideo.getInstance().getProgramInfo(mHandler, channelInfo);
+				}else{
+				long beginTime=CacheData.getCurProgram().getBeginTime().getTime();
+				Player.videoCurrentTime.setText(Utils.millToLiveBackStr(position+beginTime));
+				}
+				if (Player.duration > 0) {
+					Player.skbProgress.setProgress(position);
+				}
+				break;
+				
+			case Class_Constant.TOAST_BANNER_PROGRAM_PASS:
+				if (programListInfo.size() > 0) {
+					programListInfo=CacheData.getCurPrograms();
+					initData();
+				}
+				break;
+			}
+		}
+	};
+	
+	/*******************************************************
+	 * 通过handler更新seekbar
+	 ******************************************************/
+	TimerTask mTimerTask = new TimerTask() {
+		@Override
+		public void run() {
+			if (Player.mediaPlayer == null)
+				return;
+			try{
+				if (Player.mediaPlayer.isPlaying() && !Player.keyFlag) {
+					Player.handleProgress.sendEmptyMessage(Class_Constant.RE_UPDATE_PROGRESS);
+				}
+			}catch (IllegalStateException e){
+				e.printStackTrace();
+			}
+		}
+	};
 
 	public void initView() {
 		Window window = this.getWindow();

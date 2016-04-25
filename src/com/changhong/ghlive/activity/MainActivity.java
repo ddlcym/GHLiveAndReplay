@@ -113,7 +113,7 @@ public class MainActivity extends BaseActivity {
 			case Class_Constant.PLAY_LIVE:// 直播
 
 				curPlayURL = (String) msg.getData().getString("PLAY_URL");
-				Log.i("zyt MainActivity", curPlayURL);
+//				Log.i("zyt MainActivity", curPlayURL);
 
 				// player.playUrl(curPlayURL);
 				playNetVideo();
@@ -708,66 +708,89 @@ public class MainActivity extends BaseActivity {
 			// chListView.setSelection(0);
 			// }
 			break;
-//		case Class_Constant.KEYCODE_CHANNEL_UP:
-//			curListIndex=channelsAll.indexOf(CacheData.getCurChannel());
-//			if (curListIndex == (channelsAll.size() - 1)) {
-//				chListView.setSelection(0);
-//				curListIndex = 0;
-//			} else {
-//				
-//				
-////				chListView.setSelection(curListIndex + 1);
-//				curListIndex = curListIndex + 1;
-//			}
-//			if (!StringUtils.hasLength(curChannelNO)) {
-//				// 第一次进入时
-//				chListView.setSelection(0);
-//				curChannelNO = channelsAll.get(0).getChannelNumber();
-//				if (channelsAll != null && channelsAll.size() != 0) {
-//					playChannel(curChannelNO, true);
-//				}
-//			} else {
-//				// chListView.setFocusable(true);
-//				// chListView.requestFocus();
-//				// chListView.setSelection(curListIndex);
-//				if (channelsAll != null && channelsAll.size() != 0) {
-//					// playChannel(mCurChannels.get(curListIndex).getChannelNumber(),
-//					// true);
-//					// 显示频道号和名称
-//					// showToastBanner(channelsAll.get(curListIndex).getChannelNumber());
-//					ChannelInfo curChannel = channelsAll.get(curListIndex);
-//					CacheData.setCurChannel(curChannel);
-//					PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
-//					keydownFlag = true;
-//				}
-//			}
-//			break;
-//		case Class_Constant.KEYCODE_CHANNEL_DOWN:
-//			curListIndex=channelsAll.indexOf(CacheData.getCurChannel());
-//			if (curListIndex == 0) {
-////				chListView.setSelection(channelsAll.size() - 1);
-//				curListIndex = channelsAll.size() - 1;
-//			} else {
-////				chListView.setSelection(curListIndex - 1);
-//				curListIndex = curListIndex - 1;
-//			}
-//			if (!StringUtils.hasLength(curChannelNO)) {
-//				curChannelNO = channelsAll.get(0).getChannelNumber();
-//			}
-//			// chListView.setFocusable(true);
-//			// chListView.requestFocus();
-//			// chListView.setSelection(curListIndex);
-//			if (mCurChannels != null && channelsAll.size() != 0) {
-//				// playChannel(mCurChannels.get(curListIndex).getChannelNumber(),
-//				// true);
-//				// 显示频道号和名称
-//				// showToastBanner(channelsAll.get(curListIndex));
-//				ChannelInfo curChannel = channelsAll.get(curListIndex);
-//				CacheData.setCurChannel(curChannel);
-//				PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
-//				keydownFlag = true;
-//			}
-//			break;
+		case Class_Constant.KEYCODE_CHANNEL_UP:
+			
+			if(chListView.isShown()){
+				curListIndex=mCurChannels.indexOf(CacheData.getCurChannel());
+				if (curListIndex == (mCurChannels.size() - 1)) {
+					chListView.setSelection(0);
+					curListIndex = 0;
+				} else {
+					curListIndex = curListIndex + 1;
+				}
+				chListView.setFocusable(true);
+				chListView.requestFocus();
+				chListView.setSelection(curListIndex);
+			}else{
+				curListIndex=channelsAll.indexOf(CacheData.getCurChannel());
+				if (curListIndex == (channelsAll.size() - 1)) {
+					chListView.setSelection(0);
+					curListIndex = 0;
+				} else {
+					curListIndex = curListIndex + 1;
+				}
+				if (!StringUtils.hasLength(curChannelNO)) {
+					// 第一次进入时
+					chListView.setSelection(0);
+					curChannelNO = channelsAll.get(0).getChannelNumber();
+					if (channelsAll != null && channelsAll.size() != 0) {
+						playChannel(curChannelNO, true);
+					}
+				} else {
+					// chListView.setFocusable(true);
+					// chListView.requestFocus();
+					// chListView.setSelection(curListIndex);
+					if (channelsAll != null && channelsAll.size() != 0) {
+						// playChannel(mCurChannels.get(curListIndex).getChannelNumber(),
+						// true);
+						// 显示频道号和名称
+						// showToastBanner(channelsAll.get(curListIndex).getChannelNumber());
+						ChannelInfo curChannel = channelsAll.get(curListIndex);
+						CacheData.setCurChannel(curChannel);
+						PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
+						keydownFlag = true;
+					}
+				}
+			}
+			break;
+		case Class_Constant.KEYCODE_CHANNEL_DOWN:
+			if(chListView.isShown()){
+				curListIndex=mCurChannels.indexOf(CacheData.getCurChannel());
+				if (curListIndex == 0) {
+					curListIndex = channelsAll.size() - 1;
+				} else {
+					curListIndex = curListIndex - 1;
+				}
+				chListView.setFocusable(true);
+				chListView.requestFocus();
+				chListView.setSelection(curListIndex);
+			}else{
+				curListIndex=channelsAll.indexOf(CacheData.getCurChannel());
+				if (curListIndex == 0) {
+	//				chListView.setSelection(channelsAll.size() - 1);
+					curListIndex = channelsAll.size() - 1;
+				} else {
+	//				chListView.setSelection(curListIndex - 1);
+					curListIndex = curListIndex - 1;
+				}
+				if (!StringUtils.hasLength(curChannelNO)) {
+					curChannelNO = channelsAll.get(0).getChannelNumber();
+				}
+				// chListView.setFocusable(true);
+				// chListView.requestFocus();
+				// chListView.setSelection(curListIndex);
+				if (mCurChannels != null && channelsAll.size() != 0) {
+					// playChannel(mCurChannels.get(curListIndex).getChannelNumber(),
+					// true);
+					// 显示频道号和名称
+					// showToastBanner(channelsAll.get(curListIndex));
+					ChannelInfo curChannel = channelsAll.get(curListIndex);
+					CacheData.setCurChannel(curChannel);
+					PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
+					keydownFlag = true;
+				}
+			}
+			break;
 
 		case Class_Constant.KEYCODE_OK_KEY:
 
@@ -784,7 +807,6 @@ public class MainActivity extends BaseActivity {
 				muteIconImage.setVisibility(View.GONE);
 			}
 			break;
-		case Class_Constant.KEYCODE_CHANNEL_UP:
 		case Class_Constant.KEYCODE_UP_ARROW_KEY:
 			if (chListView.isShown()) {
 				chListView.setFocusable(true);
@@ -813,7 +835,6 @@ public class MainActivity extends BaseActivity {
 				}
 			}
 			break;
-		case Class_Constant.KEYCODE_CHANNEL_DOWN:
 		case Class_Constant.KEYCODE_DOWN_ARROW_KEY:
 			if (chListView.isShown()) {
 				chListView.setFocusable(true);
