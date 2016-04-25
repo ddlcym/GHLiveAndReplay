@@ -76,19 +76,19 @@ public class UpdateThread implements Runnable {
 		homefilter.addAction("MAIN_UPDATE_DOWNLOAD");
 		homefilter.addAction("MAIN_UPDATE_INSTALL");
 		mContext.registerReceiver(mUpdateReceiver, homefilter);
-		
+
 		/**
 		 * 更新的时间检 如果当前更新过了就不用在更新
 		 */
 		UpdateLogService preferenceService = new UpdateLogService(mContext);
-		// String updateDate = preferenceService.getUpdateDate();
+		String updateDate = preferenceService.getUpdateDate();
 
 		/* zyt 手动更改上次更新的时间 ，测试代码，需要删除 */
-		GregorianCalendar gc = new GregorianCalendar();
-		gc.setTime(new Date());
-		gc.add(5, -6);
-		Date backSevenDate = gc.getTime();
-		String updateDate = (DateUtils.to10String(backSevenDate));
+		// GregorianCalendar gc = new GregorianCalendar();
+		// gc.setTime(new Date());
+		// gc.add(5, -6);
+		// Date backSevenDate = gc.getTime();
+		// String updateDate = (DateUtils.to10String(backSevenDate));
 
 		if (!updateDate.equals("") && updateDate.compareTo(DateUtils.to10String(new Date())) >= 0) {
 			Log.i(TAG, updateDate);
