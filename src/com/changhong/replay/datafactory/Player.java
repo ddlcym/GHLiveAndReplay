@@ -60,7 +60,7 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 	private static RequestQueue mReQueue;
 	private static ChannelInfo curChannel;
 	private static ProgramInfo curProgram;
-	private static int curProlength=0;
+	private static int curProlength = 0;
 
 	private static int delayTime = 0;// 秒
 	private static boolean firstPlayInShift = true;// 直播中第一次进入时移
@@ -75,9 +75,9 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 		surfaceHolder.addCallback(this);
 		// 防止音频出不来
 		surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-		try{
-		mTimer.schedule(mTimerTask, 0, 1000);
-		}catch (IllegalStateException e){
+		try {
+			mTimer.schedule(mTimerTask, 0, 1000);
+		} catch (IllegalStateException e) {
 			e.printStackTrace();
 		}
 		processData = new ProcessData();
@@ -96,17 +96,18 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 		public void run() {
 			if (mediaPlayer == null)
 				return;
-			try{
-			if (liveFlag) {
-				if (mediaPlayer!=null&&mediaPlayer.isPlaying() && Player.videoCurrentTime != null && !keyFlag) {
-					handleProgress.sendEmptyMessage(Class_Constant.RE_UPDATE_PROGRESS);
+			try {
+				if (liveFlag) {
+					if (mediaPlayer != null && mediaPlayer.isPlaying() && Player.videoCurrentTime != null && !keyFlag) {
+						handleProgress.sendEmptyMessage(Class_Constant.RE_UPDATE_PROGRESS);
+					}
+				} else {
+					if (mediaPlayer != null && mediaPlayer.isPlaying() && playingFlag && videoCurrentTime != null
+							&& !keyFlag) {
+						handleProgress.sendEmptyMessage(Class_Constant.RE_UPDATE_PROGRESS);
+					}
 				}
-			} else {
-				if (mediaPlayer!=null&&mediaPlayer.isPlaying() && playingFlag && videoCurrentTime != null && !keyFlag) {
-					handleProgress.sendEmptyMessage(Class_Constant.RE_UPDATE_PROGRESS);
-				}
-			}
-			}catch (IllegalStateException e){
+			} catch (IllegalStateException e) {
 				e.printStackTrace();
 			}
 		}
@@ -169,19 +170,8 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 				break;
 			case Class_Constant.RE_FAST_FORWARD_UP:
 			case Class_Constant.RE_FAST_REVERSE_UP:
-
-				if (!liveFlag) {
-					mediaPlayer.seekTo(desPositon);
-
-				} else {
-					if (desPositon >= 0) {
-						delayTime = getPlayDelayTimes();
-						playLiveBack(curChannel, delayTime);
-					}
-				}
-				mediaPlayer.start();
-				keyFlag = false;
-
+				parentHandler.removeCallbacks(fastOperationRunnable);
+				parentHandler.postDelayed(fastOperationRunnable, 1500);
 				break;
 			case Class_Constant.RE_PLAY:
 
@@ -192,15 +182,15 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 
 			case Class_Constant.RE_UPDATE_PROGRESS:
 				if (liveFlag) {
-					int curmedPos=mediaPlayer.getCurrentPosition();
+					int curmedPos = mediaPlayer.getCurrentPosition();
 					position = curmedPos + curBeginTime - delayTime * 1000;
-					if(position>=curProlength){
-						//通知更新banner条
-//						parentHandler.sendEmptyMessage(Class_Constant.LIVE_BACK_PROGRAM_OVER);
+					if (position >= curProlength) {
+						// 通知更新banner条
+						// parentHandler.sendEmptyMessage(Class_Constant.LIVE_BACK_PROGRAM_OVER);
 						parentHandler.sendEmptyMessage(Class_Constant.BACK_TO_LIVE);
-					}else{
-					long beginTime=CacheData.getCurProgram().getBeginTime().getTime();
-					videoCurrentTime.setText(Utils.millToLiveBackStr(position+beginTime));
+					} else {
+						long beginTime = CacheData.getCurProgram().getBeginTime().getTime();
+						videoCurrentTime.setText(Utils.millToLiveBackStr(position + beginTime));
 					}
 				} else {
 					position = mediaPlayer.getCurrentPosition();
@@ -309,7 +299,7 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 		if (mediaPlayer != null) {
 			mediaPlayer.stop();
 			mediaPlayer.release();
-//			mediaPlayer.setFreezeMode(1);
+			// mediaPlayer.setFreezeMode(1);
 			try {
 				CommonMethod.excuteCmd(CommonMethod.cmdBlack);
 			} catch (Exception e) {
@@ -336,9 +326,9 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 			}
 			mediaPlayer = new MediaPlayer();
 			mediaPlayer.setDisplay(surfaceHolder);
-			 mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-//			mediaPlayer.setFreezeMode(0);
-			
+			mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+			// mediaPlayer.setFreezeMode(0);
+
 			mediaPlayer.setOnBufferingUpdateListener(this);
 			mediaPlayer.setOnPreparedListener(this);
 			mediaPlayer.setOnCompletionListener(this);
@@ -373,8 +363,8 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 			}
 			firstPlayInShift = false;
 		}
-		curProgram=CacheData.getCurProgram();
-		curProlength=(int)(curProgram.getEndTime().getTime()-curProgram.getBeginTime().getTime());
+		curProgram = CacheData.getCurProgram();
+		curProlength = (int) (curProgram.getEndTime().getTime() - curProgram.getBeginTime().getTime());
 		Log.e("mediaPlayer", "onPrepared");
 	}
 
@@ -483,7 +473,6 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 
 		return flag;
 	}
-	
 
 	private static int getLiveMaxTime() {
 		long times = 0;
@@ -516,4 +505,26 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 		time = date.getTime() - beginTime;
 		return (int) time;
 	}
+
+	// fastforward and fastbackward post delay
+	static Runnable fastOperationRunnable = new Runnable() {
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			// Player.skbProgress.setProgress(desPositon);
+			if (!liveFlag) {
+				mediaPlayer.seekTo(desPositon);
+
+			} else {
+				if (desPositon >= 0) {
+					delayTime = getPlayDelayTimes();
+					playLiveBack(curChannel, delayTime);
+				}
+			}
+			mediaPlayer.start();
+			keyFlag = false;
+		}
+	};
+
 }
