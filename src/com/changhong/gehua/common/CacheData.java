@@ -23,7 +23,7 @@ public class CacheData {
 
 	public static ChannelInfo curChannel;
 	public static ProgramInfo curProgram;
-	public static List<ProgramInfo> curPrograms=new ArrayList<ProgramInfo>();
+	public static List<ProgramInfo> curPrograms=new ArrayList<ProgramInfo>();//当前频道的3个节目
 	
 	public static List<ChannelInfo> getAllChannelExtraInfo() {
 		return allChannelExtraInfo;

@@ -46,23 +46,23 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 	public static boolean handlerFlag = true;
 	public static boolean keyFlag = false;
 
-	public static TextView videoCurrentTime;
+	private static TextView videoCurrentTime;
 
 	private static int desPositon = 0;
-	public static int duration = 0;
+	private static int duration = 0;
 
 	/*
 	 * 直播时移的参数
 	 */
 	private static boolean liveFlag = false;
-	public static int curBeginTime = 0;
+	private static int curBeginTime = 0;
 	private static ProcessData processData = null;
 	private static RequestQueue mReQueue;
 	private static ChannelInfo curChannel;
 	private static ProgramInfo curProgram;
-	public static int curProlength=0;
+	private static int curProlength=0;
 
-	public static int delayTime = 0;// 秒
+	private static int delayTime = 0;// 秒
 	private static boolean firstPlayInShift = true;// 直播中第一次进入时移
 
 	public Player(Handler parentHandler, SurfaceView mySurfaceView, SeekBar skbProgress, TextView txvCurrent) {
@@ -75,12 +75,10 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 		surfaceHolder.addCallback(this);
 		// 防止音频出不来
 		surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-		if(!liveFlag){
-			try{
-			mTimer.schedule(mTimerTask, 0, 1000);
-			}catch (IllegalStateException e){
-				e.printStackTrace();
-			}
+		try{
+		mTimer.schedule(mTimerTask, 0, 1000);
+		}catch (IllegalStateException e){
+			e.printStackTrace();
 		}
 		processData = new ProcessData();
 		mReQueue = VolleyTool.getInstance().getRequestQueue();
