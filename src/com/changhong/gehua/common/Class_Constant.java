@@ -34,7 +34,7 @@ public class Class_Constant {
 	public static final int BACK_TO_LIVE = 3021;
 	public static final int DIALOG_ONKEY_DOWN = 3022;
 	public static final int DIALOG_ONKEY_UP = 3023;
-	public static final int DEFAULT_CHANNEL_NUMBER = 621;//boot default channel number
+	public static final int DEFAULT_CHANNEL_NUMBER = 21;//boot default channel number
 	public static final int LIVE_BACK_PROGRAM_OVER = 3024;//boot default channel number
 	public static final int LIVE_FAST_FORWARD_UP = 3025;
 	public static final int LIVE_FAST_REVERSE_UP = 3026;
