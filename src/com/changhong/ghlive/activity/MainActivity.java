@@ -369,7 +369,7 @@ public class MainActivity extends BaseActivity {
 					public void onResponse(org.json.JSONObject arg0) {
 						// TODO Auto-generated method stub
 						// 相应成功
-						// Log.i(TAG, "HttpService=channle:" + arg0);
+						 Log.i(TAG, "HttpService=channle:" + arg0);
 						channelsAll = HandleLiveData.getInstance().dealChannelJson(arg0);
 						// first set adapter
 						curType = 0;

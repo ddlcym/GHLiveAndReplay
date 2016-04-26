@@ -197,7 +197,7 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 					if(position>=curProlength){
 						//通知更新banner条
 //						parentHandler.sendEmptyMessage(Class_Constant.LIVE_BACK_PROGRAM_OVER);
-						
+						parentHandler.sendEmptyMessage(Class_Constant.BACK_TO_LIVE);
 					}else{
 					long beginTime=CacheData.getCurProgram().getBeginTime().getTime();
 					videoCurrentTime.setText(Utils.millToLiveBackStr(position+beginTime));

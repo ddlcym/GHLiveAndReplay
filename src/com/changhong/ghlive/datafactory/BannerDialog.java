@@ -1,8 +1,6 @@
 package com.changhong.ghlive.datafactory;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -65,7 +63,6 @@ public class BannerDialog extends Dialog {
 	private ImageView palyButton, pauseButton, timeShiftIcon, forwardIcon, backwardIcon;
 	private ImageView muteIconImage;
 	private HttpService mHttpService;
-	private Timer mTimer = new Timer();
 
 	public BannerDialog(Context context, ChannelInfo outterChannelInfo, List<ProgramInfo> outterListProgramInfo,
 			Handler outterHandler, SurfaceView surView, HttpService outterHttpService) {
@@ -81,11 +78,6 @@ public class BannerDialog extends Dialog {
 		this.surView = surView;
 
 		initView();
-//		try{
-//			mTimer.schedule(mTimerTask, 0, 1000);
-//			}catch (IllegalStateException e){
-//				e.printStackTrace();
-//		}
 		// initData();
 		// setContentView(R.layout.setting_sys_help_dialog_details);
 		// help_name=(TextView)findViewById(R.id.help_name);
@@ -102,30 +94,6 @@ public class BannerDialog extends Dialog {
 		// }
 		// });
 	}
-	
-	private Handler mHandler=new Handler(){
-		public void handleMessage(Message msg) {
-			
-		}
-	};
-	
-	/*******************************************************
-	 * 通过handler更新seekbar
-	 ******************************************************/
-	TimerTask mTimerTask = new TimerTask() {
-		@Override
-		public void run() {
-			if (Player.mediaPlayer == null)
-				return;
-			try{
-				if (Player.mediaPlayer.isPlaying() && !Player.keyFlag) {
-					Player.handleProgress.sendEmptyMessage(Class_Constant.RE_UPDATE_PROGRESS);
-				}
-			}catch (IllegalStateException e){
-				e.printStackTrace();
-			}
-		}
-	};
 
 	public void initView() {
 		Window window = this.getWindow();

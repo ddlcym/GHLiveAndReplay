@@ -77,9 +77,10 @@ public class ProcessData {
 
 	/* generate channel list ： 获取频道列表 */
 	public String getChannelList() {
-		String rawPlainStr = serverAdress + chListPendingStr + "version=" + chListVersion + "&channelVersion="
+//		String rawPlainStr = serverAdress + chListPendingStr + "version=" + chListVersion + "&channelVersion="
+//				+ chListChannelVersion + "&resolution=" + chListResolution + "&terminalType=" + chListTerminalType;
+		String rawPlainStr = "http://hd.ott.yun.gehua.net.cn/getChannels?" + "version=" + chListVersion + "&channelVersion="
 				+ chListChannelVersion + "&resolution=" + chListResolution + "&terminalType=" + chListTerminalType;
-
 		return strGETReturn(rawPlainStr);
 	}
 
