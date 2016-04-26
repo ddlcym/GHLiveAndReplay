@@ -436,14 +436,7 @@ public class MainActivity extends BaseActivity {
 			if (classBytype) {
 				CCTVList.add(dvbChannel);
 			}
-			String regExStar;
-			regExStar = getResources().getString(R.string.weishi);
-			java.util.regex.Pattern patternStar = java.util.regex.Pattern.compile(".*" + regExStar + "$");
-			java.util.regex.Matcher matcherStar = patternStar.matcher(dvbChannel.getChannelName());
-			boolean classBytypeStar = matcherStar.matches();
-			if (classBytypeStar) {
-				starTvList.add(dvbChannel);
-			}
+			
 			String regExLocal = "BTV|" + getResources().getString(R.string.beijing_h);
 			// + "|"+ getResources().getString(R.string.jingniu) + "|" +
 			// getResources().getString(R.string.qingyang)
@@ -458,6 +451,16 @@ public class MainActivity extends BaseActivity {
 			if (classBytypeLocal) {
 				localTvList.add(dvbChannel);
 			}
+			
+			String regExStar;
+			regExStar = "CETV|"+"山东教育|"+"CHC|"+getResources().getString(R.string.weishi);
+			java.util.regex.Pattern patternStar = java.util.regex.Pattern.compile(regExStar);
+			java.util.regex.Matcher matcherStar = patternStar.matcher(dvbChannel.getChannelName());
+			boolean classBytypeStar = matcherStar.find();
+			if (classBytypeStar&&!classBytypeLocal) {
+				starTvList.add(dvbChannel);
+			}
+			
 			String regExHD = getResources().getString(R.string.hd_dtv) + "|"
 					+ getResources().getString(R.string.xinyuan_hdtv1) + "|"
 					+ getResources().getString(R.string.xinyuan_hdtv2) + "|"
