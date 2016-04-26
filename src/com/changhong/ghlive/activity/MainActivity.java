@@ -107,13 +107,14 @@ public class MainActivity extends BaseActivity {
 
 	private Handler mhandler = new Handler() {
 		ChannelInfo curChannel;
+
 		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case Class_Constant.PLAY_LIVE:// 直播
 
 				curPlayURL = (String) msg.getData().getString("PLAY_URL");
-//				Log.i("zyt MainActivity", curPlayURL);
+				// Log.i("zyt MainActivity", curPlayURL);
 
 				// player.playUrl(curPlayURL);
 				playNetVideo();
@@ -125,12 +126,12 @@ public class MainActivity extends BaseActivity {
 				// showToastBanner();
 				break;
 			case Class_Constant.TOAST_BANNER_PROGRAM_PASS:
-				int curIndex=-1;
+				int curIndex = -1;
 				curChannelPrograms = CacheData.getCurPrograms();
 				curChannel = channelsAll.get(curListIndex);
-				curIndex=mCurChannels.indexOf(curChannel);
-				if(curIndex>=0&&chListView.isShown()){
-					
+				curIndex = mCurChannels.indexOf(curChannel);
+				if (curIndex >= 0 && chListView.isShown()) {
+
 					chListView.setFocusable(true);
 					chListView.requestFocus();
 					chListView.setSelection(curIndex);
@@ -217,7 +218,7 @@ public class MainActivity extends BaseActivity {
 			case Class_Constant.LIVE_BACK_PROGRAM_OVER:
 				showDialogBanner(curChannelNO);
 				break;
-				// next message
+			// next message
 			}
 		}
 	};
@@ -229,7 +230,7 @@ public class MainActivity extends BaseActivity {
 		whetherMute = Boolean.valueOf(CommonMethod.getMuteState(MyApp.getContext()));
 		curChannelNO = String.valueOf(CommonMethod.getChannelLastTime(MyApp.getContext()));
 		// Log.i("zyt", "current volume state is " + whetherMute);
-		 Log.i("zyt", "current channel number is " + curChannelNO);
+		Log.i("zyt", "current channel number is " + curChannelNO);
 		super.onCreate(savedInstanceState);
 	}
 
@@ -349,7 +350,7 @@ public class MainActivity extends BaseActivity {
 			String channelNO = channelIndex.getText().toString();
 			// Log.i(TAG, "myClickLis"+position);
 			playChannel(channelNO, true);
-			
+
 			curChannelNO = channelNO;
 			mhandler.post(runnable);
 			Log.i("zyt", "play channel number is " + curChannelNO);
@@ -709,20 +710,35 @@ public class MainActivity extends BaseActivity {
 			// }
 			break;
 		case Class_Constant.KEYCODE_CHANNEL_UP:
-			
-			if(chListView.isShown()){
-				curListIndex=mCurChannels.indexOf(CacheData.getCurChannel());
-				if (curListIndex == (mCurChannels.size() - 1)) {
-					chListView.setSelection(0);
-					curListIndex = 0;
-				} else {
-					curListIndex = curListIndex + 1;
+
+			if (chListView.isShown()) {// 呼出频道列表，进行翻页+
+				if (chListView.hasFocus()) {
+					Log.i("zyt press page +", "page + is pressed");
+					curListIndex = mCurChannels.indexOf(CacheData.getCurChannel());
+
+					// int pageUpIndex = curListIndex + 8;
+					int pageUpIndex = chListView.getSelectedItemPosition() + 8;
+					if (pageUpIndex > (mCurChannels.size() - 1)) {
+						pageUpIndex = pageUpIndex - (mCurChannels.size());
+					}
+					if ((pageUpIndex > (mCurChannels.size() - 8)) && (pageUpIndex <= (mCurChannels.size() - 1))) {
+						pageUpIndex = mCurChannels.size() - 8;
+					}
+					if ((pageUpIndex > 0) && (pageUpIndex < 7)) {
+						pageUpIndex = 0;
+					}
+					// if (curListIndex == (mCurChannels.size() - 1)) {
+					// chListView.setSelection(0);
+					// curListIndex = 0;
+					// } else {
+					// curListIndex = curListIndex + 1;
+					// }
+					chListView.setFocusable(true);
+					chListView.requestFocus();
+					chListView.setSelection(pageUpIndex);
 				}
-				chListView.setFocusable(true);
-				chListView.requestFocus();
-				chListView.setSelection(curListIndex);
-			}else{
-				curListIndex=channelsAll.indexOf(CacheData.getCurChannel());
+			} else {
+				curListIndex = channelsAll.indexOf(CacheData.getCurChannel());
 				if (curListIndex == (channelsAll.size() - 1)) {
 					chListView.setSelection(0);
 					curListIndex = 0;
@@ -752,25 +768,39 @@ public class MainActivity extends BaseActivity {
 					}
 				}
 			}
+
 			break;
 		case Class_Constant.KEYCODE_CHANNEL_DOWN:
-			if(chListView.isShown()){
-				curListIndex=mCurChannels.indexOf(CacheData.getCurChannel());
-				if (curListIndex == 0) {
-					curListIndex = channelsAll.size() - 1;
-				} else {
-					curListIndex = curListIndex - 1;
+			if (chListView.isShown()) {
+				if (chListView.hasFocus()) {
+					curListIndex = mCurChannels.indexOf(CacheData.getCurChannel());
+
+					int pageDownIndex = chListView.getSelectedItemPosition() - 8;
+					if (pageDownIndex < 0) {
+						pageDownIndex = mCurChannels.size() + pageDownIndex;
+					}
+					if ((pageDownIndex > (mCurChannels.size() - 8)) && (pageDownIndex <= (mCurChannels.size() - 1))) {
+						pageDownIndex = mCurChannels.size() - 8;
+					}
+					if ((pageDownIndex > 0) && (pageDownIndex < 7)) {
+						pageDownIndex = 0;
+					}
+					// if (curListIndex == 0) {
+					// curListIndex = channelsAll.size() - 1;
+					// } else {
+					// curListIndex = curListIndex - 1;
+					// }
+					chListView.setFocusable(true);
+					chListView.requestFocus();
+					chListView.setSelection(pageDownIndex);
 				}
-				chListView.setFocusable(true);
-				chListView.requestFocus();
-				chListView.setSelection(curListIndex);
-			}else{
-				curListIndex=channelsAll.indexOf(CacheData.getCurChannel());
+			} else {
+				curListIndex = channelsAll.indexOf(CacheData.getCurChannel());
 				if (curListIndex == 0) {
-	//				chListView.setSelection(channelsAll.size() - 1);
+					// chListView.setSelection(channelsAll.size() - 1);
 					curListIndex = channelsAll.size() - 1;
 				} else {
-	//				chListView.setSelection(curListIndex - 1);
+					// chListView.setSelection(curListIndex - 1);
 					curListIndex = curListIndex - 1;
 				}
 				if (!StringUtils.hasLength(curChannelNO)) {
@@ -816,7 +846,7 @@ public class MainActivity extends BaseActivity {
 				}
 			} else {
 				// 播放之后的一个频道
-				curListIndex=channelsAll.indexOf(CacheData.getCurChannel());
+				curListIndex = channelsAll.indexOf(CacheData.getCurChannel());
 				if (curListIndex == (channelsAll.size() - 1)) {
 					chListView.setSelection(0);
 					curListIndex = 0;
@@ -844,7 +874,7 @@ public class MainActivity extends BaseActivity {
 				}
 			} else {
 				// 播放之前一个频道
-				curListIndex=channelsAll.indexOf(CacheData.getCurChannel());
+				curListIndex = channelsAll.indexOf(CacheData.getCurChannel());
 				if (curListIndex == 0) {
 					chListView.setSelection(channelsAll.size() - 1);
 					curListIndex = channelsAll.size() - 1;
@@ -923,8 +953,8 @@ public class MainActivity extends BaseActivity {
 		}
 		return true;
 	}
-	
-	private void dealOnKeyUp(int keyCode){
+
+	private void dealOnKeyUp(int keyCode) {
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_CHANNEL_UP:
 		case Class_Constant.KEYCODE_CHANNEL_DOWN:
@@ -1037,9 +1067,9 @@ public class MainActivity extends BaseActivity {
 		chListView.setVisibility(View.VISIBLE);
 		// mhandler.removeCallbacks(runnable);
 		// mhandler.postDelayed(runnable, 5000);
-//		chListView.setFocusable(true);
-//		chListView.requestFocus();
-//		chListView.setSelection(curListIndex);
+		// chListView.setFocusable(true);
+		// chListView.requestFocus();
+		// chListView.setSelection(curListIndex);
 	}
 
 	// 用户注册
@@ -1134,7 +1164,7 @@ public class MainActivity extends BaseActivity {
 
 	// ============play video=========================================
 	public String playChannel(String channelno, boolean isCheckPlaying) {
-		
+
 		if (channelno.equals(curChannelNO) && isCheckPlaying) {
 			return channelno;
 		}
@@ -1162,9 +1192,9 @@ public class MainActivity extends BaseActivity {
 		curListIndex = channelsAll.indexOf(curChannel);
 		// curChannel = CacheData.getAllChannelMap().get(curChannelNO);
 		// PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
-		
+
 		CommonMethod.saveChannelLastTime(Integer.parseInt(curChannelNO), MyApp.getContext());
-		
+
 		return curChannelNO;
 	}
 
@@ -1174,7 +1204,7 @@ public class MainActivity extends BaseActivity {
 		public void run() {
 			// TODO Auto-generated method stub
 			curType = 0;
-			mCurChannels=channelsAll;
+			mCurChannels = channelsAll;
 			channelListLinear.setVisibility(View.INVISIBLE);
 			focusView.setVisibility(View.INVISIBLE);
 			linear_vertical_line.setVisibility(View.INVISIBLE);
@@ -1215,7 +1245,7 @@ public class MainActivity extends BaseActivity {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				
+
 				player.playUrl(curPlayURL);
 
 			}
@@ -1261,7 +1291,8 @@ public class MainActivity extends BaseActivity {
 		intent.putExtra("msg", "接收动态注册广播成功！"); // 添加附加信息
 		sendBroadcast(intent);
 		CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
-//		CommonMethod.saveChannelLastTime(Integer.parseInt(curChannelNO), MyApp.getContext());
+		// CommonMethod.saveChannelLastTime(Integer.parseInt(curChannelNO),
+		// MyApp.getContext());
 		// onStop();
 		if (player != null)
 			player.stop();
