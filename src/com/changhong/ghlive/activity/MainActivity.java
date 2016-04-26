@@ -369,7 +369,7 @@ public class MainActivity extends BaseActivity {
 					public void onResponse(org.json.JSONObject arg0) {
 						// TODO Auto-generated method stub
 						// 相应成功
-						 Log.i(TAG, "HttpService=channle:" + arg0);
+//						 Log.i(TAG, "MainActivity=channle:" + arg0);
 						channelsAll = HandleLiveData.getInstance().dealChannelJson(arg0);
 						// first set adapter
 						curType = 0;
@@ -383,7 +383,7 @@ public class MainActivity extends BaseActivity {
 						}
 					}
 				}, errorListener);
-		jsonObjectRequest.setTag(HttpService.class.getSimpleName());// 设置tag,cancelAll的时候使用
+		jsonObjectRequest.setTag(MainActivity.class.getSimpleName());// 设置tag,cancelAll的时候使用
 		mReQueue.add(jsonObjectRequest);
 	}
 
@@ -1321,9 +1321,13 @@ public class MainActivity extends BaseActivity {
 		Log.i("zyt", "activity destroyed()");
 		whetherMute = false;
 		player.stop();
-		programBannerDialog.dismiss();
+		if(programBannerDialog!=null){
+			programBannerDialog.dismiss();
+		}
 		// ban.cancelBanner();
+		if(livePlayBanner!=null){
 		livePlayBanner.dismiss();
+		}
 		super.onDestroy();
 	}
 

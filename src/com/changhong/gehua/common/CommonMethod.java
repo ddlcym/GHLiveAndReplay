@@ -57,7 +57,7 @@ public class CommonMethod {
 	/* get mute state */
 	public static int getChannelLastTime(Context mContext) {
 		SharedPreferences preferences = mContext.getSharedPreferences("lastchannel_wathing", Context.MODE_PRIVATE);
-		return preferences.getInt("CHANNEL_LAST_TIME", 621);
+		return preferences.getInt("CHANNEL_LAST_TIME", Class_Constant.DEFAULT_CHANNEL_NUMBER);
 	}
 	
 	/* save channel number last watched */
