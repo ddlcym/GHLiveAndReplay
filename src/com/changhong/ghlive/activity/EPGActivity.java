@@ -223,7 +223,7 @@ public class EPGActivity extends BaseActivity {
 			showChannelList();
 			uiHandler.sendEmptyMessage(MSG_SHOW_CHANNELLIST);
 		}
-		curChannelNum = CacheData.curChannelNum;
+		curChannelNum = "1";
 
 	}
 
