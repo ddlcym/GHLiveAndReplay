@@ -1305,6 +1305,7 @@ public class MainActivity extends BaseActivity {
 		// ban.cancelBanner();
 		if (livePlayBanner != null)
 			livePlayBanner.dismiss();
+		finish();
 		super.onPause();
 		// onDestroy();
 		// onStop();
