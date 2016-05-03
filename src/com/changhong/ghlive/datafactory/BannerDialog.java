@@ -36,6 +36,9 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+/**
+ * @author OscarChang 时移信息条
+ */
 public class BannerDialog extends Dialog {
 
 	private Context mContext;
@@ -186,13 +189,18 @@ public class BannerDialog extends Dialog {
 		switch (keyCode) {
 		/* 返回--取消 */
 		case KeyEvent.KEYCODE_BACK:
-			player.setLiveFlag(false);
-			CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
-			Message msg = new Message();
-			msg.what = Class_Constant.PLAY_BACKFROM_SHIFT;
-			parentHandler.sendMessage(msg);
-			dismiss();
-			parentHandler.sendEmptyMessage(Class_Constant.BACK_TO_LIVE);
+			if (bannerView.isShown()) {
+				bannerView.setVisibility(View.INVISIBLE);
+				return false;
+			} else {
+				player.setLiveFlag(false);
+				CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
+				Message msg = new Message();
+				msg.what = Class_Constant.PLAY_BACKFROM_SHIFT;
+				parentHandler.sendMessage(msg);
+				dismiss();
+				parentHandler.sendEmptyMessage(Class_Constant.BACK_TO_LIVE);
+			}
 			break;
 		case Class_Constant.KEYCODE_DOWN_ARROW_KEY:
 			Log.i("zyt", "dialog down key is pressed");
