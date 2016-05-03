@@ -155,7 +155,7 @@ public class EPGActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		// startHttpSer();
+//		startHttpSer();
 		super.onCreate(savedInstanceState);
 	}
 
@@ -858,35 +858,71 @@ public class EPGActivity extends BaseActivity {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
 			epgWeekInfoView.setFocusable(true);
 			break;
-		case Class_Constant.KEYCODE_CHANNEL_UP://回看列表page +操作
-			if(channelListview.hasFocus()){
+		case Class_Constant.KEYCODE_CHANNEL_UP:// 回看列表page +操作
+			/* 频道列表获得焦点 */
+			if (channelListview.hasFocus()) {
 				int pageUpIndex = channelListview.getSelectedItemPosition() + 8;
-				if(pageUpIndex > (channelAdapter.getCount()-1)){
-					pageUpIndex = pageUpIndex - (channelAdapter.getCount());	
+				if (pageUpIndex > (channelAdapter.getCount() - 1)) {
+					pageUpIndex = pageUpIndex - (channelAdapter.getCount());
 				}
-				if((pageUpIndex>(channelAdapter.getCount()-8))&&(pageUpIndex<=(channelAdapter.getCount()-1))){
+				if ((pageUpIndex > (channelAdapter.getCount() - 8))
+						&& (pageUpIndex <= (channelAdapter.getCount() - 1))) {
 					pageUpIndex = channelAdapter.getCount() - 8;
 				}
-				if((pageUpIndex > 0)&&(pageUpIndex < 7)){
+				if ((pageUpIndex > 0) && (pageUpIndex < 7)) {
 					pageUpIndex = 0;
 				}
 				channelListview.setSelection(pageUpIndex);
 			}
+			/* 节目列表获得焦点 */
+			if(epgEventListview.hasFocus()){
+				int pageUpIndex = epgEventListview.getSelectedItemPosition() + 8;
+				if (pageUpIndex > (programsAdapter.getCount() - 1)) {
+					pageUpIndex = pageUpIndex - (programsAdapter.getCount());
+				}
+				if ((pageUpIndex > (programsAdapter.getCount() - 8))
+						&& (pageUpIndex <= (programsAdapter.getCount() - 1))) {
+					pageUpIndex = programsAdapter.getCount() - 8;
+				}
+				if ((pageUpIndex > 0) && (pageUpIndex < 7)) {
+					pageUpIndex = 0;
+				}
+				epgEventListview.setSelection(pageUpIndex);
+			}
 			break;
-		case Class_Constant.KEYCODE_CHANNEL_DOWN://回看列表 page -操作
-			if(channelListview.hasFocus()){
+		case Class_Constant.KEYCODE_CHANNEL_DOWN:// 回看列表 page -操作
+			/* 频道列表获得焦点 */
+			if (channelListview.hasFocus()) {
 				int pageDownIndex = channelListview.getSelectedItemPosition() - 8;
-				if(pageDownIndex < 0){
+				if (pageDownIndex < 0) {
 					pageDownIndex = channelAdapter.getCount() + pageDownIndex;
 				}
-				if((pageDownIndex>(channelAdapter.getCount()-8))&&(pageDownIndex<=(channelAdapter.getCount()-1))){
+				if ((pageDownIndex > (channelAdapter.getCount() - 8))
+						&& (pageDownIndex <= (channelAdapter.getCount() - 1))) {
 					pageDownIndex = channelAdapter.getCount() - 8;
 				}
-				if((pageDownIndex > 0)&&(pageDownIndex < 7)){
+				if ((pageDownIndex > 0) && (pageDownIndex < 7)) {
 					pageDownIndex = 0;
 				}
 				channelListview.setSelection(pageDownIndex);
-			}	
+			}
+			/* 节目列表获得焦点 */
+			if(epgEventListview.hasFocus())
+			{
+				int pageDownIndex = epgEventListview.getSelectedItemPosition() - 8;
+				if (pageDownIndex < 0) {
+					pageDownIndex = programsAdapter.getCount() + pageDownIndex;
+				}
+				if ((pageDownIndex > (programsAdapter.getCount() - 8))
+						&& (pageDownIndex <= (programsAdapter.getCount() - 1))) {
+					pageDownIndex = programsAdapter.getCount() - 8;
+				}
+				if ((pageDownIndex > 0) && (pageDownIndex < 7)) {
+					pageDownIndex = 0;
+				}
+				epgEventListview.setSelection(pageDownIndex);
+				
+			}
 			break;
 		// next process
 		}
