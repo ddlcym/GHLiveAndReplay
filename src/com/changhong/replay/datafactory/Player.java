@@ -515,14 +515,14 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 			// Player.skbProgress.setProgress(desPositon);
 			if (!liveFlag) {
 				mediaPlayer.seekTo(desPositon);
-
+				mediaPlayer.start();
 			} else {
 				if (desPositon >= 0) {
 					delayTime = getPlayDelayTimes();
 					playLiveBack(curChannel, delayTime);
 				}
 			}
-			mediaPlayer.start();
+			
 			keyFlag = false;
 		}
 	};
