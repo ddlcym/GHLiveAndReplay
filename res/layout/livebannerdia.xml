@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@android:color/transparent"
@@ -11,7 +11,7 @@
         android:layout_height="200dip"
         android:background="#88323232"
         android:layout_gravity="bottom"
-        android:layout_marginTop="512dip"
+        android:layout_alignParentBottom="true"
         android:orientation="horizontal" >
 
         <LinearLayout
@@ -107,4 +107,4 @@
         </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

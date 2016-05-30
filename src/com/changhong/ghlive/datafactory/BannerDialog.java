@@ -104,7 +104,7 @@ public class BannerDialog extends Dialog {
 		wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
 		wlp.height = WindowManager.LayoutParams.MATCH_PARENT;
 		window.setAttributes(wlp);
-		window.setGravity(Gravity.TOP);
+		window.setGravity(Gravity.BOTTOM);
 
 		/* 频道名称、频道ID 节目名称 */
 		forwardIcon = (ImageView) findViewById(R.id.fast_forward);
@@ -131,10 +131,10 @@ public class BannerDialog extends Dialog {
 		}
 		timeShiftInfo = (LinearLayout) findViewById(R.id.id_dtv_banner);
 		timeShiftIcon = (ImageView) findViewById(R.id.time_shift_icon);
-		android.view.ViewGroup.LayoutParams ps = timeShiftIcon.getLayoutParams();
-		ps.height = 90;
-		ps.width = 90;
-		timeShiftIcon.setLayoutParams(ps);
+//		android.view.ViewGroup.LayoutParams ps = timeShiftIcon.getLayoutParams();
+//		ps.height = 90;
+//		ps.width = 90;
+//		timeShiftIcon.setLayoutParams(ps);
 		programPlayBar.setFocusable(false);
 		programPlayBar.setClickable(false);
 
@@ -348,7 +348,7 @@ public class BannerDialog extends Dialog {
 		@Override
 		public void onErrorResponse(VolleyError arg0) {
 			// TODO Auto-generated method stub
-			Log.i(TAG, "MainActivity=error：" + arg0);
+			Log.i(TAG, "bannerdialog=error：" + arg0);
 		}
 	};
 

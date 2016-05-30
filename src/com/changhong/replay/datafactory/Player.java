@@ -40,7 +40,7 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 	private SurfaceHolder surfaceHolder;
 	public static SeekBar skbProgress;
 	private SurfaceView surfaceView;
-	private Timer mTimer = new Timer();
+	private static Timer mTimer = new Timer();
 	private static boolean playingFlag = false;
 	private static Handler parentHandler;
 	public static boolean handlerFlag = true;
@@ -75,6 +75,9 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 		surfaceHolder.addCallback(this);
 		// 防止音频出不来
 		surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+		if(null==mTimer){
+			mTimer=new Timer();
+		}
 		try {
 			mTimer.schedule(mTimerTask, 0, 1000);
 		} catch (IllegalStateException e) {
@@ -181,13 +184,17 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 				break;
 
 			case Class_Constant.RE_UPDATE_PROGRESS:
+				if(null==videoCurrentTime){
+					return;
+				}
 				if (liveFlag) {
 					int curmedPos = mediaPlayer.getCurrentPosition();
 					position = curmedPos + curBeginTime - delayTime * 1000;
 					if (position >= curProlength) {
 						// 通知更新banner条
 						// parentHandler.sendEmptyMessage(Class_Constant.LIVE_BACK_PROGRAM_OVER);
-						parentHandler.sendEmptyMessage(Class_Constant.BACK_TO_LIVE);
+//						liveFlag=false;
+//						parentHandler.sendEmptyMessage(Class_Constant.BACK_TO_LIVE);
 					} else {
 						long beginTime = CacheData.getCurProgram().getBeginTime().getTime();
 						videoCurrentTime.setText(Utils.millToLiveBackStr(position + beginTime));
@@ -253,8 +260,8 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 			return;
 
 		try {
+//			 mediaPlayer.stop();
 			mediaPlayer.reset();
-			// mediaPlayer.stop();
 			mediaPlayer.setDataSource(videoUrl);
 			mediaPlayer.prepare();// prepare֮���Զ�����
 
@@ -264,7 +271,7 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 				duration = mediaPlayer.getDuration();
 				Player.skbProgress.setMax(duration);
 			}
-			// mediaPlayer.start();
+//			 mediaPlayer.start();
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -298,15 +305,20 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 	public static void stop() {
 		if (mediaPlayer != null) {
 			mediaPlayer.stop();
+//			mediaPlayer.reset();
 			mediaPlayer.release();
 			// mediaPlayer.setFreezeMode(1);
-			try {
-				CommonMethod.excuteCmd(CommonMethod.cmdBlack);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//			try {
+//				CommonMethod.excuteCmd(CommonMethod.cmdBlack);
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 			mediaPlayer = null;
+		}
+		if(mTimer!=null){
+		mTimer.cancel();
+		mTimer=null;
 		}
 	}
 
@@ -318,12 +330,12 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 	@Override
 	public void surfaceCreated(SurfaceHolder arg0) {
 		try {
-			try {
-				CommonMethod.excuteCmd(CommonMethod.cmdFreeze);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//			try {
+//				CommonMethod.excuteCmd(CommonMethod.cmdFreeze);
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 			mediaPlayer = new MediaPlayer();
 			mediaPlayer.setDisplay(surfaceHolder);
 			mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -333,9 +345,9 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 			mediaPlayer.setOnPreparedListener(this);
 			mediaPlayer.setOnCompletionListener(this);
 		} catch (Exception e) {
-			Log.e("mediaPlayer", "error", e);
+			Log.e("mmmm", "error"+e);
 		}
-		Log.e("mediaPlayer", "surface created");
+		Log.e("mmmm", "mediaPlayer-surface created");
 	}
 
 	@Override
@@ -358,14 +370,16 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 		}
 		if (liveFlag) {
 			handleProgress.sendEmptyMessage(Class_Constant.RE_UPDATE_PROGRESS);
-			if (firstPlayInShift == true) {
+			if (firstPlayInShift) {
 				mediaPlayer.pause();
 			}
 			firstPlayInShift = false;
 		}
 		curProgram = CacheData.getCurProgram();
+		if(curProgram!=null){
 		curProlength = (int) (curProgram.getEndTime().getTime() - curProgram.getBeginTime().getTime());
-		Log.e("mediaPlayer", "onPrepared");
+		}
+		Log.e("mmmm", "onPrepared");
 	}
 
 	@Override
@@ -382,7 +396,7 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 				/ mediaPlayer.getDuration();
 		if (bufferingProgress != 0) {
 		}
-		// Log.i("mmmm", bufferingProgress + "% buffer");
+//		 Log.i("mmmm", mediaPlayer.isPlaying() + "|isplaying");
 	}
 
 	// public boolean onInfo(MediaPlayer arg0, int arg1, int arg2) {
@@ -486,7 +500,11 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 	}
 
 	public void setLiveFlag(boolean liveFlag) {
-		this.liveFlag = liveFlag;
+		Player.liveFlag = liveFlag;
+	}
+
+	public static void setFirstPlayInShift(boolean firstPlayInShift) {
+		Player.firstPlayInShift = firstPlayInShift;
 	}
 
 	public static int getDuration() {

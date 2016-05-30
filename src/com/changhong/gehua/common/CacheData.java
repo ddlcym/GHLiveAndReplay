@@ -8,6 +8,7 @@ import java.util.Map;
 
 public class CacheData {
 
+	public static boolean ab=true;
 	public static List<ChannelInfo> allChannelInfo=new ArrayList<ChannelInfo>();
 	public static Map<String, ChannelInfo> allChannelMap=new HashMap<String, ChannelInfo>();
 	

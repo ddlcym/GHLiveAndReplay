@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 public class LivePlayBannerDialog extends Dialog {
 
+	//直播下的dialog
 	private Context mContext;
 	private ChannelInfo channelInfo;
 	private List<ProgramInfo> programListInfo;

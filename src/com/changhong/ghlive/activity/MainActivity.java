@@ -195,6 +195,7 @@ public class MainActivity extends BaseActivity {
 				if (programBannerDialog != null) {
 					programBannerDialog.dismiss();
 					Toast.makeText(MainActivity.this, "退回到直播模式", Toast.LENGTH_SHORT).show();
+					Log.i(TAG, "退回到直播模式");
 				}
 				PlayVideo.getInstance().playLiveProgram(mhandler, CacheData.getCurChannel());
 				break;
@@ -225,13 +226,14 @@ public class MainActivity extends BaseActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		whetherMute = false;
 		startHttpSer();
 		whetherMute = Boolean.valueOf(CommonMethod.getMuteState(MyApp.getContext()));
 		curChannelNO = String.valueOf(CommonMethod.getChannelLastTime(MyApp.getContext()));
 		// Log.i("zyt", "current volume state is " + whetherMute);
 		Log.i("zyt", "current channel number is " + curChannelNO);
-		super.onCreate(savedInstanceState);
+		
 	}
 
 	@Override
@@ -244,6 +246,7 @@ public class MainActivity extends BaseActivity {
 		}
 		getChannelList();
 		player = new Player(mhandler, surfaceView, liveSeekBar, null);
+//		Player.setFirstPlayInShift(false);
 		// chListView.setOnItemSelectedListener(myItemSelectLis);
 		chListView.setOnItemClickListener(myClickLis);
 
@@ -1123,6 +1126,10 @@ public class MainActivity extends BaseActivity {
 		// if (ban != null) {
 		// ban.cancelBanner();
 		// }
+		if(null==curChannelPrograms||curChannelPrograms.size()<=0){
+			Toast.makeText(MainActivity.this, "节目信息为空，不能进入时移模式", Toast.LENGTH_SHORT).show();
+			return;
+		}
 		if (livePlayBanner != null) {
 			livePlayBanner.dismiss();
 		}
@@ -1295,21 +1302,8 @@ public class MainActivity extends BaseActivity {
 		sendBroadcast(intent);
 		CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
 		// CommonMethod.saveChannelLastTime(Integer.parseInt(curChannelNO),
-		// MyApp.getContext());
-		// onStop();
-		if (player != null)
-			player.stop();
-		if (programBannerDialog != null)
-			programBannerDialog.dismiss();
-		// if (ban != null)
-		// ban.cancelBanner();
-		if (livePlayBanner != null)
-			livePlayBanner.dismiss();
 		finish();
 		super.onPause();
-		// onDestroy();
-		// onStop();
-		// Log.i("zyt", "activity pause()");
 	}
 
 	@Override
@@ -1322,15 +1316,19 @@ public class MainActivity extends BaseActivity {
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
-		Log.i("zyt", "activity destroyed()");
+		Log.i("mmmm", "mainactivity destroyed()");
 		whetherMute = false;
-		player.stop();
+		player.setLiveFlag(false);
+		Player.stop();
+		player=null;
 		if(programBannerDialog!=null){
 			programBannerDialog.dismiss();
+			programBannerDialog=null;
 		}
 		// ban.cancelBanner();
 		if(livePlayBanner!=null){
 		livePlayBanner.dismiss();
+		livePlayBanner=null;
 		}
 		super.onDestroy();
 	}
@@ -1340,6 +1338,7 @@ public class MainActivity extends BaseActivity {
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
+			if(livePlayBanner!=null)
 			livePlayBanner.dismiss();
 		}
 	};

@@ -61,7 +61,7 @@ public class PlayVideo {
 					public void onResponse(org.json.JSONObject arg0) {
 						// TODO Auto-generated method stub
 						// 相应成功
-						 Log.i(TAG, "PlayVideo-getLivePlayURL_arg0：" + arg0);
+//						 Log.i(TAG, "PlayVideo-getLivePlayURL_arg0：" + arg0);
 						// Message msg=new Message();
 						// msg.what=Class_Constant.PLAY_LIVE;
 						// msg.obj=jsonResolve.getHDPlayURL(arg0);
@@ -139,7 +139,7 @@ public class PlayVideo {
 	public void getProgramInfo(final Handler handler, ChannelInfo outterChannelInfo) {
 //		mReQueue.cancelAll("program");
 		String pgmRequestURL = processData.getCurrentChannelProgramList(outterChannelInfo);
-		Log.i("zyt", pgmRequestURL);
+//		Log.i("zyt", pgmRequestURL);
 		// final ProgramInfo rPgmInfo = new ProgramInfo();
 		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, pgmRequestURL, null,
 				new Response.Listener<org.json.JSONObject>() {
