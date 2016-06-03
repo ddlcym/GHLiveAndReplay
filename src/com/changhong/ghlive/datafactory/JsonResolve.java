@@ -28,7 +28,6 @@ import android.util.Log;
 public class JsonResolve {
 
 	private static JsonResolve liveJsonResolve;
-	private Date date;
 
 	public static JsonResolve getInstance() {
 		if (null == liveJsonResolve) {
@@ -345,9 +344,7 @@ public class JsonResolve {
 	
 	private boolean isOutOfDate(ProgramInfo program){
 		boolean flag=false;
-		if(null==date){
-			date=new Date();
-		}
+		Date date=new Date();
 		flag=date.after(program.getEndTime());
 		
 		return flag;

@@ -325,6 +325,7 @@ public class EPGActivity extends BaseActivity {
 			curChannelNum = channelIdText.getText().toString();
 			curChannel = (ChannelInfo) CacheData.getAllChannelMap().get(curChannelNum);
 
+			//获取指定频道的节目信息
 			getPointProList(curChannel);
 
 			channelCurSelect = (LinearLayout) arg1.findViewById(R.id.epg_chan_itemlayout);
