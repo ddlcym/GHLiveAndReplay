@@ -66,8 +66,12 @@ public class MainActivity extends BaseActivity {
 	private SeekBar liveSeekBar;
 	private TextView tvRootDigitalkey, tvRootDigitalKeyInvalid;
 	private ImageView muteIconImage;
-	private ImageView liveCurtain;
-
+	
+	/*
+	 * 频道类型
+	 */
+	private TextView lastCategory,curCategory,nextCategory;
+	
 	/**
 	 * Digital key
 	 */
@@ -267,7 +271,9 @@ public class MainActivity extends BaseActivity {
 		TVtype = getResources().getStringArray(R.array.tvtype);
 		chListView = (ListView) findViewById(R.id.id_epg_chlist);
 		focusView = (ImageView) findViewById(R.id.set_focus_id);
-		epgListTitleView = (TextView) findViewById(R.id.id_epglist_title);
+		lastCategory = (TextView) findViewById(R.id.last_category);
+		curCategory = (TextView) findViewById(R.id.cur_category);
+		nextCategory = (TextView) findViewById(R.id.next_category);
 		surfaceView = (SurfaceView) findViewById(R.id.surfaceview_live);
 		channelListLinear = (LinearLayout) findViewById(R.id.chlist_back);
 		linear_vertical_line = (LinearLayout) findViewById(R.id.linear_vertical_line);
@@ -275,7 +281,6 @@ public class MainActivity extends BaseActivity {
 
 		tvRootDigitalkey = (TextView) findViewById(R.id.id_dtv_digital_root);
 		tvRootDigitalKeyInvalid = (TextView) findViewById(R.id.id_dtv_digital_root_invalid);
-		liveCurtain = (ImageView) findViewById(R.id.live_curtain);
 		// videoView.setMediaController(new MediaController(this));
 		surfaceView.setFocusable(false);
 		chListView.setFocusable(false);
@@ -611,34 +616,22 @@ public class MainActivity extends BaseActivity {
 		// TODO show channellist
 		switch (curType) {
 		case 0:
-			epgListTitleView.setText(TVtype[0]);
 			mCurChannels = channelsAll;
 			break;
 		case 1:
-			epgListTitleView.setText(TVtype[1]);
 			mCurChannels = CCTVList;
 			break;
 		case 2:
-			epgListTitleView.setText(TVtype[2]);
 			mCurChannels = starTvList;
 			break;
 		case 3:
-			epgListTitleView.setText(TVtype[3]);
 			mCurChannels = localTvList;
 			break;
 		case 4:
-			epgListTitleView.setText(TVtype[4]);
 			mCurChannels = HDTvList;
 			break;
-		// case 5:
-		// epgListTitleView.setText(TVtype[5]);
-		// curChannels = favTvList;
-		// break;
-		// case 5:
-		// epgListTitleView.setText(TVtype[6]);
-		// curChannels = otherTvList;
-		// break;
 		}
+		setCategoryTitle(curType);
 		curListIndex = mCurChannels.indexOf(CacheData.getCurChannel());
 		if (-1 == curListIndex) {
 			curListIndex = 0;
@@ -1261,7 +1254,6 @@ public class MainActivity extends BaseActivity {
 			}
 		}).start();
 		channelListLinear.setVisibility(View.GONE);
-		liveCurtain.setVisibility(View.GONE);
 	}
 
 	/* whether net is connected */
@@ -1342,4 +1334,15 @@ public class MainActivity extends BaseActivity {
 			livePlayBanner.dismiss();
 		}
 	};
+	
+	/*
+	 * 设置频道分类标题
+	 */
+	private  void setCategoryTitle(int index){
+		int size=TVtype.length;
+		int lastIndex=(index-1)>=0?(index-1):(size-1);
+		lastCategory.setText(TVtype[lastIndex % size]);
+		curCategory.setText(TVtype[index]);
+		nextCategory.setText(TVtype[(index+1) % size]);
+	}
 }
