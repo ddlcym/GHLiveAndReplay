@@ -31,7 +31,6 @@
                 android:id="@+id/epg_chan_classifylayout"
                 android:layout_width="fill_parent"
                 android:layout_height="80dip"
-                android:background="@drawable/tvepg_main_chanclassify_selector"
                 android:orientation="horizontal" >
 
                 <TextView
