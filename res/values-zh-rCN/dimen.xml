@@ -3,7 +3,7 @@
 <resources>
 	<dimen name ="FONT_SIZE_BIG"> 30sp</dimen>
 	<dimen name ="FONT_SIZE_SMALL">22sp</dimen>
-	<dimen name ="FONT_SIZE_NORMAL">26sp</dimen>
+	<dimen name ="FONT_SIZE_NORMAL">32sp</dimen>
 	<dimen name ="FONT_SIZE_SUPER_BIG">32sp</dimen>
 	
 		<dimen name="dialog_left_margin">10dp</dimen>

@@ -76,7 +76,7 @@
     <string name="str_epg">指南</string>
     <string name="str_epg_chlist">全部频道</string>
     <string name="str_epg_eventlist">事件信息</string>
-    <string name="str_epg_digital_invalid">无效节目号</string>
+    <string name="str_epg_digital_invalid">输入频道号错误</string>
     <string name="str_zhn_novalidprogram">无电视节目</string>
     <string name="str_zhn_novalidradio">无广播节目</string>
     <string name="str_zhn_ca_main_title">CA</string>
