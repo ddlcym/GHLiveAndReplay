@@ -1061,7 +1061,7 @@ public class MainActivity extends BaseActivity {
 
 	private void showChannelListView() {
 		channelListLinear.setVisibility(View.VISIBLE);
-		focusView.setVisibility(View.VISIBLE);
+//		focusView.setVisibility(View.VISIBLE);
 		linear_vertical_line.setVisibility(View.VISIBLE);
 		chListView.setVisibility(View.VISIBLE);
 		// mhandler.removeCallbacks(runnable);
