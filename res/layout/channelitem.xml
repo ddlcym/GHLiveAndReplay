@@ -3,28 +3,18 @@
     android:id="@+id/dtv_chlistitemFrameLayout01"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@drawable/channellist_item_back"
    >
 
-    <!-- <TextView -->
-    <!-- android:id="@+id/chanIndex" -->
-    <!-- android:layout_width="48dip" -->
-    <!-- android:layout_height="fill_parent" -->
-    <!-- android:layout_gravity="left|center_vertical" -->
-    <!-- android:layout_marginLeft="30dip" -->
-    <!-- android:gravity="left|center_vertical" -->
-    <!-- android:textColor="@color/white" -->
-    <!-- android:textSize="@dimen/FONT_SIZE_NORMAL" /> -->
 
     <TextView
         android:id="@+id/chanId"
-        android:layout_width="60dp"
+        android:layout_width="wrap_content"
         android:layout_height="60dp"
-        android:layout_marginLeft="130dip"
-        android:gravity="center_horizontal"
-        android:paddingTop="22dip"
-        android:textColor="#fff"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        android:layout_marginLeft="80dip"
+        android:gravity="center"
+        android:textColor="@color/channel_list_no"
+        android:textSize="32sp"
         android:visibility="visible" />
 
     <FrameLayout
@@ -35,15 +25,14 @@
         <com.changhong.gehua.common.TextMarquee
             android:id="@+id/chanName"
             android:layout_width="fill_parent"
-            android:layout_height="76dip"
-            android:layout_gravity="center|center_horizontal"
-            android:layout_marginLeft="190dip"
+            android:layout_height="60dp"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="160dip"
             android:ellipsize="marquee"
-            android:gravity="left|center_vertical"
             android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
-            android:textColor="@color/white"
-            android:textSize="@dimen/FONT_SIZE_NORMAL" />
+            android:textColor="@color/channel_list_no"
+            android:textSize="32sp" />
     </FrameLayout>
 
     <!-- <ImageView -->
