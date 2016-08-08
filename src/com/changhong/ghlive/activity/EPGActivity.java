@@ -178,13 +178,16 @@ public class EPGActivity extends BaseActivity {
 		chanListTitleButton.requestFocus();
 
 		channelListview = (EpgListview) findViewById(R.id.ChanlIstView);
+		
 		channelListview.setFocusable(true);
 		channelListview.setFocusableInTouchMode(true);
 		channelListview.setOnFocusChangeListener(ChanListOnfocusChange);
 		channelListview.setOnItemSelectedListener(ChanListOnItemSelected);
 		channelListview.setOnItemClickListener(ChanListOnItemClick);
-
+		
 		epgWeekInfoView = (GridView) findViewById(R.id.EpgWeekInfo);
+		//epgWeekInfoView.
+		
 		epgWeekInfoView.setOnItemSelectedListener(WeekInfoItemSelected);
 
 		epgEventListview = (EpgListview) findViewById(R.id.EpgEventInfo);
@@ -342,7 +345,7 @@ public class EPGActivity extends BaseActivity {
 				// ChannelItemScale(channelCurSelect, true, true);
 				channelLastSelect = channelCurSelect;
 			}
-			// dislistfocus((ViewGroup)arg1);
+			//dislistfocus((ViewGroup)arg1);
 
 		}
 
@@ -482,7 +485,9 @@ public class EPGActivity extends BaseActivity {
 	}
 
 	public void showWeekDay() {
+		Log.i(TAG, String.valueOf(CacheData.getDayMonths().size()));
 		epgWeekInfoView.setNumColumns(CacheData.getDayMonths().size());
+		
 		dayMonthAdapter.setData(CacheData.getDayMonths());
 
 		// epgWeekInfoView.setSelection(EventlitItemindex);
@@ -524,9 +529,9 @@ public class EPGActivity extends BaseActivity {
 			break;
 		}
 		channelAdapter.setData(curChannelList);
-		// if (curChannelList.size() <= 0) {
-		// focusView.setVisibility(View.INVISIBLE);
-		// }
+		//if (curChannelList.size() <= 0) {
+		//  focusView.setVisibility(View.INVISIBLE);
+		//}
 	}
 
 	private void getAllTVtype() {
@@ -818,9 +823,9 @@ public class EPGActivity extends BaseActivity {
 		}
 		curChannelList = curChannels;
 		channelAdapter.setData(curChannelList);
-		// if (curChannelList.size() <= 0) {
+		//if (curChannelList.size() <= 0) {
 		// focusView.setVisibility(View.INVISIBLE);
-		// }
+		//}
 	}
 
 	private void dislistfocus(ViewGroup selected) {

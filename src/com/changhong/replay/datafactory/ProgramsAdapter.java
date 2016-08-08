@@ -72,8 +72,8 @@ public class ProgramsAdapter extends BaseAdapter {
 		Date beginDate = program.getBeginTime();
 		Date endDate = program.getEndTime();
 		String begin = formatDate(beginDate.getHours()) + ":" + formatDate(beginDate.getMinutes());
-		String end = formatDate(endDate.getHours()) + ":" + formatDate(endDate.getMinutes());
-		times = begin + "~" + end;
+		//String end = formatDate(endDate.getHours()) + ":" + formatDate(endDate.getMinutes());
+		times = begin ; //+ "~" + end;
 		return times;
 	}
 

@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 public class Utils {
@@ -19,7 +20,14 @@ public class Utils {
 	  "星期五",
 	  "星期六",
 	};
-	
+	 public static String stringTostring(String strDate) throws Exception {
+			DateFormat df = new SimpleDateFormat("yyyy年MM月dd日", Locale.CHINA);
+			DateFormat df1 = new SimpleDateFormat("yyyy-MM-dd");
+			Date d = df.parse(strDate);
+			return df1.format(d);
+		}
+	 
+	 
 	public static String dateToString(Date date) {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		df = DateFormat.getDateInstance(DateFormat.MEDIUM);
@@ -53,6 +61,7 @@ public class Utils {
 	public static String millToLiveBackStr(long milliseconds){
 		Date date=new Date(milliseconds);
 		DateFormat df = new SimpleDateFormat("HH:mm:ss");
+		//DateFormat df = new SimpleDateFormat("HH:mm");
 		return df.format(date);
 	} 
 	

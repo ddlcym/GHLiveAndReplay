@@ -40,11 +40,11 @@ import android.widget.Toast;
 public class ReplayPlayActivity extends Activity {
 	private SurfaceView surfaceView;
 	private SeekBar skbProgress;
-	private TextView videoTimeLength, videoCurrentTime;
+	private TextView videoCurPro , videoNextPro , videoTimeLength, videoCurrentTime;
 	private Player player;
 	private String replayChannelId = null;
 	private ReplayEndDialog replayEndDialog;
-	private ImageView palyButton, pauseButton, timeShiftIcon, forwardIcon, backwardIcon;
+	private ImageView pfbackImageView , palyButton, pauseButton, forwardIcon, backwardIcon;
 	private ImageView muteIconImage;
 
 	private int maxTimes = 0;
@@ -55,8 +55,11 @@ public class ReplayPlayActivity extends Activity {
 	private List<ProgramInfo> curProgramList = new ArrayList<ProgramInfo>();
 	private boolean whetherMute;
 	private HttpService mHttpService;
+	private String cotentString = null;
+	
 
 	private Handler replayHandler = new Handler() {
+		
 		public void handleMessage(android.os.Message msg) {
 
 			switch (msg.what) {
@@ -65,16 +68,22 @@ public class ReplayPlayActivity extends Activity {
 
 			case Class_Constant.PLAY_URL:
 				replayurl = (String) msg.obj;
-				// Log.i("mmmm", "ReplayPlayActivity-replayurl:" + replayurl);
-				// replayEndDialog = null;
 				playNetVideo();
 				break;
 
 			case Class_Constant.RE_NEXT_PROGRAM:
-				// playNextProgram();
-				// replayEndDialog.
-				replayEndDialog.show();
-				Log.i("mmmm", "ReplayPlayActivity-RE_NEXT_PROGRAM:" + mprogram.getProgramId());
+				String dialogcurDay = CacheData.getReplayCurDay();
+				List<ProgramInfo> dialogcurProgramList = (List<ProgramInfo>) CacheData.getAllProgramMap().get(dialogcurDay);
+				int curindex = dialogcurProgramList.indexOf(mprogram);
+				Log.i("xb", String.valueOf(curindex));
+				Log.i("xb", mprogram.getEventName());
+				if (curindex == (dialogcurProgramList.size() - 1)) {
+					//最后一个节目
+				}else{
+					ProgramInfo dialognextprogram = dialogcurProgramList.get(curindex + 1);
+					replayEndDialog = new ReplayEndDialog(ReplayPlayActivity.this,replayHandler,0,dialognextprogram.getEventName());
+					replayEndDialog.show();
+				}
 
 				break;
 			case Class_Constant.RE_LAST_PROGRAM:
@@ -84,7 +93,7 @@ public class ReplayPlayActivity extends Activity {
 			case Class_Constant.REPLAY_DIALOG_END_CANCEL:
 				finish();
 				break;
-			case Class_Constant.REPLAY_DIALOG_END_OK:
+			case Class_Constant.REPLAY_DIALOG_END_OK:				
 				// player.playUrl(replayurl);
 				replayEndDialog.dismiss();
 				playNextProgram();
@@ -112,6 +121,11 @@ public class ReplayPlayActivity extends Activity {
 	public void initView() {
 		skbProgress = (SeekBar) this.findViewById(R.id.skbProgress);
 		surfaceView = (SurfaceView) this.findViewById(R.id.surfaceView1);
+		
+		videoCurPro = (TextView) this.findViewById(R.id.replay_current_program_info);
+		videoNextPro = (TextView) this.findViewById(R.id.replay_next_program_info);
+		pfbackImageView = (ImageView) findViewById(R.id.PF_back);
+		
 		videoTimeLength = (TextView) this.findViewById(R.id.video_timelength);
 		videoCurrentTime = (TextView) this.findViewById(R.id.video_currenttime);
 		skbProgress.setClickable(false);
@@ -120,13 +134,13 @@ public class ReplayPlayActivity extends Activity {
 		pauseButton = (ImageView) findViewById(R.id.pause_btn);
 
 		muteIconImage = (ImageView) findViewById(R.id.mute_icon);
-		timeShiftIcon = (ImageView) findViewById(R.id.time_shift_icon);
+		//timeShiftIcon = (ImageView) findViewById(R.id.time_shift_icon);
 		forwardIcon = (ImageView) findViewById(R.id.fast_forward);
 		backwardIcon = (ImageView) findViewById(R.id.fast_backward);
-		android.view.ViewGroup.LayoutParams ps = timeShiftIcon.getLayoutParams();
-		ps.height = 90;
-		ps.width = 90;
-		timeShiftIcon.setLayoutParams(ps);
+		//android.view.ViewGroup.LayoutParams ps = timeShiftIcon.getLayoutParams();
+		//ps.height = 90;
+		//ps.width = 90;
+		//timeShiftIcon.setLayoutParams(ps);
 		// timeShiftIcon.setVisibility(View.VISIBLE);
 		if (whetherMute) {
 			muteIconImage.setVisibility(View.VISIBLE);
@@ -138,7 +152,9 @@ public class ReplayPlayActivity extends Activity {
 	public void initData() {
 		mProcessData = new ProcessData();
 		player = new Player(replayHandler, surfaceView, skbProgress, videoCurrentTime);
-		replayEndDialog = new ReplayEndDialog(this, replayHandler);
+		//replayEndDialog = new ReplayEndDialog(this,replayHandler,0,"TTTT");
+		
+		
 		if (progressBarRunnable != null) {
 			replayHandler.removeCallbacks(progressBarRunnable);
 		}
@@ -212,12 +228,35 @@ public class ReplayPlayActivity extends Activity {
 	}
 
 	private void playVideo(ChannelInfo channel, ProgramInfo program) {
+		ProgramInfo nextmprogram;
 		replayChannelId = channel.getChannelID();
 		maxTimes = (int) (mprogram.getEndTime().getTime() - mprogram.getBeginTime().getTime());
 		// skbProgress.setMax(maxTimes);
-		SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
-		formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
-		videoTimeLength.setText("/" + formatter.format(maxTimes));
+		SimpleDateFormat formatter1 = new SimpleDateFormat("HH:mm");
+		formatter1.setTimeZone(TimeZone.getTimeZone("GMT"));
+		videoTimeLength.setText("/" + formatter1.format(maxTimes));
+		
+		SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+		formatter.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
+		String text = "当前节目"+formatter.format(mprogram.getBeginTime().getTime())+"-"+formatter.format(mprogram.getEndTime().getTime())
+						+ mprogram.getEventName();
+		videoCurPro.setText(text);
+		
+		String curDay = CacheData.getReplayCurDay();
+		curProgramList = (List<ProgramInfo>) CacheData.getAllProgramMap().get(curDay);
+		int index = curProgramList.indexOf(mprogram);
+		if (index == (curProgramList.size() - 1)) {
+			Toast.makeText(ReplayPlayActivity.this, "已经是最后一个节目", Toast.LENGTH_SHORT).show();
+			return;
+		} else {
+			nextmprogram = curProgramList.get(curProgramList.indexOf(mprogram) + 1);
+			String textex = "下一节目"+formatter.format(nextmprogram.getBeginTime().getTime())+"-"+formatter.format(nextmprogram.getEndTime().getTime())
+					+ nextmprogram.getEventName();
+			videoNextPro.setText(textex);
+		}
+		
+		pfbackImageView.setBackgroundResource(R.drawable.pf_back);
+		
 		String requestURL = mProcessData.getReplayPlayUrlString(channel, mprogram, 0);
 		// Log.i("mmmm", "ReplayPlayActivity-requestURL:" + requestURL);
 		PlayVideo.getInstance().getProgramPlayURL(replayHandler, requestURL);
@@ -249,7 +288,7 @@ public class ReplayPlayActivity extends Activity {
 		}
 		playVideo(channel, mprogram);
 	}
-
+//播放上一个节目
 	private void playLastProgram() {
 		String curDay = "";
 		int indexPro = 0;
@@ -296,6 +335,11 @@ public class ReplayPlayActivity extends Activity {
 			pauseButton.setVisibility(View.GONE);
 			videoTimeLength.setVisibility(View.VISIBLE);
 			videoCurrentTime.setVisibility(View.VISIBLE);
+			
+			videoCurPro.setVisibility(View.VISIBLE);
+			videoNextPro.setVisibility(View.VISIBLE);
+			pfbackImageView.setVisibility(View.VISIBLE);
+			
 			if (progressBarRunnable != null) {
 				replayHandler.removeCallbacks(progressBarRunnable);
 			}
@@ -310,6 +354,11 @@ public class ReplayPlayActivity extends Activity {
 			pauseButton.setVisibility(View.GONE);
 			videoTimeLength.setVisibility(View.VISIBLE);
 			videoCurrentTime.setVisibility(View.VISIBLE);
+			
+			videoCurPro.setVisibility(View.VISIBLE);
+			videoNextPro.setVisibility(View.VISIBLE);
+			pfbackImageView.setVisibility(View.VISIBLE);
+			
 			if (progressBarRunnable != null) {
 				replayHandler.removeCallbacks(progressBarRunnable);
 			}
@@ -327,6 +376,10 @@ public class ReplayPlayActivity extends Activity {
 				skbProgress.setVisibility(View.VISIBLE);
 				videoTimeLength.setVisibility(View.VISIBLE);
 				videoCurrentTime.setVisibility(View.VISIBLE);
+				
+				videoCurPro.setVisibility(View.VISIBLE);
+				videoNextPro.setVisibility(View.VISIBLE);
+				pfbackImageView.setVisibility(View.VISIBLE);
 			} else {
 				player.play();
 				pauseButton.setVisibility(View.GONE);
@@ -371,6 +424,10 @@ public class ReplayPlayActivity extends Activity {
 			skbProgress.setVisibility(View.VISIBLE);
 			videoTimeLength.setVisibility(View.VISIBLE);
 			videoCurrentTime.setVisibility(View.VISIBLE);
+			
+			videoCurPro.setVisibility(View.VISIBLE);
+			videoNextPro.setVisibility(View.VISIBLE);
+			pfbackImageView.setVisibility(View.VISIBLE);
 			if (progressBarRunnable != null) {
 				replayHandler.removeCallbacks(progressBarRunnable);
 			}
@@ -411,6 +468,10 @@ public class ReplayPlayActivity extends Activity {
 			skbProgress.setVisibility(View.GONE);
 			videoTimeLength.setVisibility(View.GONE);
 			videoCurrentTime.setVisibility(View.GONE);
+			
+			videoCurPro.setVisibility(View.GONE);
+			videoNextPro.setVisibility(View.GONE);
+			pfbackImageView.setVisibility(View.GONE);
 			// pauseButton.setVisibility(View.GONE);
 		}
 	};
@@ -425,6 +486,10 @@ public class ReplayPlayActivity extends Activity {
 			skbProgress.setVisibility(View.GONE);
 			videoTimeLength.setVisibility(View.GONE);
 			videoCurrentTime.setVisibility(View.GONE);
+			
+			videoCurPro.setVisibility(View.GONE);
+			videoNextPro.setVisibility(View.GONE);
+			pfbackImageView.setVisibility(View.GONE);
 		}
 	};
 

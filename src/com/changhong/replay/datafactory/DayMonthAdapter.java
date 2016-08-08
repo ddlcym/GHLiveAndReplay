@@ -1,19 +1,26 @@
 package com.changhong.replay.datafactory;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import android.R.drawable;
+import android.R.raw;
 import android.content.Context;
+import android.provider.ContactsContract.Contacts.Data;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.changhong.gehua.common.Utils;
 import com.changhong.ghliveandreplay.R;
 
 public class DayMonthAdapter extends BaseAdapter{
+	private static final String TAG = "DayMonthAdapter";
 	private List<String> mlist=new ArrayList<String>();
 	private Context mContext=null;
 	
@@ -50,24 +57,36 @@ public class DayMonthAdapter extends BaseAdapter{
 		ViewHolder viewHolder;
 		String day;
 		String week=null;
+		String daystring =null;
 		if (convertView == null) {
 			viewHolder = new ViewHolder();
 			convertView = LayoutInflater.from(mContext).inflate(R.layout.epg_main_weekitem, null);	
 			viewHolder.day=(TextView)convertView.findViewById(R.id.epg_week_Tview_date);
 			viewHolder.week=(TextView)convertView.findViewById(R.id.epg_week_Tview_week);
+			viewHolder.line=(ImageView)convertView.findViewById(R.id.epg_week_line);
 			convertView.setTag(viewHolder);
 		}else{
 			viewHolder=(ViewHolder) convertView.getTag();
 		}
 		day=mlist.get(position);
-		viewHolder.day.setText(Utils.truncateDaateString(day, 5, day.length()));
+		try {
+			 daystring = Utils.stringTostring(day);
+			 Log.i(TAG, daystring);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		Log.i(TAG, daystring.substring(5));
+		viewHolder.day.setText(daystring.substring(5));
 		try {
 			week=Utils.DateToWeek(Utils.strToDate(day));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		viewHolder.week.setText(week);
+		String weekendString = week = "("+week+")";
+		viewHolder.week.setText(weekendString);
+		viewHolder.line.setBackgroundResource(R.color.gray);
 		return convertView;
 	}
 	
@@ -75,7 +94,7 @@ public class DayMonthAdapter extends BaseAdapter{
 		
 		TextView day;
 		TextView week;
-
+		ImageView line;
 	}
 
 }
