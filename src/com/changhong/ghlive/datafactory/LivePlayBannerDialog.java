@@ -139,9 +139,9 @@ public class LivePlayBannerDialog extends Dialog {
 		// currentProgramName.setText(programListInfo.get(1).getEventName());
 		// nextProgramName.setText(programListInfo.get(2).getEventName());
 		if (programListInfo != null && programListInfo.size() == 3) {
-			currentProgramName.setText("正在播放：" + currentProgramBginTime + "-" + currentProgramEndTime + "  "
+			currentProgramName.setText("当前节目       " + currentProgramBginTime + "-" + currentProgramEndTime + "       "
 					+ programListInfo.get(1).getEventName());
-			nextProgramName.setText("即将播放：" + nextProgramBeginTime + "-" + nextProgramEndTime + "  "
+			nextProgramName.setText("下一节目       " + nextProgramBeginTime + "-" + nextProgramEndTime + "       "
 					+ programListInfo.get(2).getEventName());
 		} else {
 			currentProgramName.setText("正在播放：");

@@ -17,6 +17,7 @@ import com.changhong.gehua.common.ProcessData;
 import com.changhong.gehua.common.ProgramInfo;
 import com.changhong.gehua.common.VolleyTool;
 import com.changhong.gehua.update.StringUtils;
+import com.changhong.gehua.widget.DigitalRoot;
 import com.changhong.ghlive.datafactory.Banner;
 import com.changhong.ghlive.datafactory.BannerDialog;
 import com.changhong.ghlive.datafactory.ChannelListAdapter;
@@ -64,7 +65,8 @@ public class MainActivity extends BaseActivity {
 												// channellist layout
 	private ListView chListView;
 	private SeekBar liveSeekBar;
-	private TextView tvRootDigitalkey, tvRootDigitalKeyInvalid;
+	private TextView tvRootDigitalKeyInvalid;
+	private DigitalRoot tvRootDigitalkey;
 	private ImageView muteIconImage;
 	
 	/*
@@ -80,6 +82,9 @@ public class MainActivity extends BaseActivity {
 
 	// private Banner programBan;
 	private BannerDialog programBannerDialog;
+	/*
+	 * 直播banner信息条
+	 */
 	private LivePlayBannerDialog livePlayBanner;
 	private VolleyTool volleyTool;
 	private RequestQueue mReQueue;
@@ -171,15 +176,16 @@ public class MainActivity extends BaseActivity {
 				int channelId = msg.arg1;
 				tvRootDigitalKeyInvalid.setVisibility(View.GONE);
 				tvRootDigitalkey.setVisibility(View.VISIBLE);
-				String digitalText = null;
-				if (channelId < 10) {
-					digitalText = "00" + channelId;
-				} else if (channelId < 100) {
-					digitalText = "0" + channelId;
-				} else {
-					digitalText = "" + channelId;
-				}
-				tvRootDigitalkey.setText(digitalText);
+				int digitalText = 0;
+//				if (channelId < 10) {
+//					digitalText = "00" + channelId;
+//				} else if (channelId < 100) {
+//					digitalText = "0" + channelId;
+//				} else {
+//					digitalText = "" + channelId;
+//				}
+				digitalText =channelId;
+				tvRootDigitalkey.setData(digitalText);
 				mhandler.removeMessages(Class_Constant.MESSAGE_DISAPPEAR_DIGITAL);
 				mhandler.sendEmptyMessageDelayed(Class_Constant.MESSAGE_DISAPPEAR_DIGITAL, 3500);
 				break;
@@ -279,7 +285,7 @@ public class MainActivity extends BaseActivity {
 		linear_vertical_line = (LinearLayout) findViewById(R.id.linear_vertical_line);
 		liveSeekBar = (SeekBar) findViewById(R.id.liveskbProgress);
 
-		tvRootDigitalkey = (TextView) findViewById(R.id.id_dtv_digital_root);
+		tvRootDigitalkey = (DigitalRoot) findViewById(R.id.id_dtv_digital_root);
 		tvRootDigitalKeyInvalid = (TextView) findViewById(R.id.id_dtv_digital_root_invalid);
 		// videoView.setMediaController(new MediaController(this));
 		surfaceView.setFocusable(false);
@@ -1043,7 +1049,7 @@ public class MainActivity extends BaseActivity {
 				// tvRootDigitalkey.setText("0" + iKey);
 				// }
 				// } else {
-				tvRootDigitalkey.setText("" + iKey);
+				tvRootDigitalkey.setData(iKey);
 				// }
 
 				if (iKey >= 100) {
@@ -1114,7 +1120,7 @@ public class MainActivity extends BaseActivity {
 
 	}
 
-	/* show banner dialog */
+	/* show time-shifting banner dialog */
 	public void showDialogBanner(String channelno) {
 		// if (ban != null) {
 		// ban.cancelBanner();
@@ -1135,7 +1141,7 @@ public class MainActivity extends BaseActivity {
 		programBannerDialog.show();
 	}
 
-	/* show banner toast */
+	/* show live banner toast */
 	public void showToastBanner(ChannelInfo channel) {
 
 		// if(ban!=null){
@@ -1302,6 +1308,9 @@ public class MainActivity extends BaseActivity {
 	protected void onStop() {
 		// TODO Auto-generated method stub
 		// Log.i("zyt", "activity stop()" + mHttpService.getMuteState());
+		if(mhandler!=null){
+			mhandler.removeCallbacksAndMessages(null);
+		}
 		super.onStop();
 	}
 
@@ -1322,6 +1331,7 @@ public class MainActivity extends BaseActivity {
 		livePlayBanner.dismiss();
 		livePlayBanner=null;
 		}
+		
 		super.onDestroy();
 	}
 

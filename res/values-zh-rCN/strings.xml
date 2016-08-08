@@ -954,4 +954,6 @@
      <string name="notify_information">信息提示</string>
     <string name="return_button">返    回</string>
 
+    <string name="cur_program">当前节目</string>
+    <string name="next_program">下一节目</string>
 </resources>
