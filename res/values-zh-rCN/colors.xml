@@ -22,5 +22,7 @@
     <color name="live_cur_program">#dfdfdf</color>
     <color name="live_next_program">#888888</color>
 
+    
+    <color name="shift_curtime">#001326</color>
 
 </resources>

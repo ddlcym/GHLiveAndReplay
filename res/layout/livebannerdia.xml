@@ -46,14 +46,25 @@
                     android:scrollHorizontally="true"
                     android:singleLine="true"
                     android:textSize="36sp" />
+                <TextView 
+                    android:id="@+id/live_curtime"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/live_next_program"
+                    android:textSize="36sp" 
+                    android:gravity="end|center_vertical"
+                    />
             </LinearLayout>
 
             <SeekBar
                 android:id="@+id/program_progress"
                 android:layout_width="match_parent"
-                android:layout_height="20dip"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginTop="5dip"
+                android:progressDrawable="@drawable/bg_seekbar"  
+        		android:thumb="@drawable/thumb_bar" 
+        		android:maxHeight="13dip"
+  				android:minHeight="13dip"
                 android:max="100" />
 
             <RelativeLayout

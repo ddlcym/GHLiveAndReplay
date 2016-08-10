@@ -123,8 +123,8 @@
 				android:minHeight="12dip"
 	            android:paddingLeft="10dip"
 	            android:paddingRight="10dip" 
-	            android:progressDrawable="@drawable/po_seekbar"
-	            android:thumb="@drawable/seekbar_thumb"/>
+	            android:progressDrawable="@drawable/bg_seekbar"
+	            android:thumb="@drawable/thumb_bar"/>
 	    	 <TextView
 	            android:id="@+id/video_currenttime"
 	            android:layout_width="wrap_content"

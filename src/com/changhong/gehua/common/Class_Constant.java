@@ -38,6 +38,7 @@ public class Class_Constant {
 	public static final int LIVE_BACK_PROGRAM_OVER = 3024;//boot default channel number
 	public static final int LIVE_FAST_FORWARD_UP = 3025;
 	public static final int LIVE_FAST_REVERSE_UP = 3026;
+	public static final int LIVE_BANNER_CURTIME = 3027;
 
 	public final static int MAX_NO_OF_PROGRAMS = 500; // ����Ŀ��
 	public final static int MAX_NO_OF_CARRIERS = 40; // ���Ƶ����

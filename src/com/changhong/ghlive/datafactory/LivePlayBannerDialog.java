@@ -34,6 +34,7 @@ public class LivePlayBannerDialog extends Dialog {
 	private List<ProgramInfo> programListInfo;
 	private TextView channel_name = null;// 频道名称
 	private TextView channel_number = null;// 频道ID
+	private TextView live_curTime = null;//当前时间
 	private TextView currentProgramName = null;
 	private TextView nextProgramName = null;
 	private SeekBar programPlayBar;
@@ -78,6 +79,7 @@ public class LivePlayBannerDialog extends Dialog {
 			}else{
 					programPlayBar.setProgress(position);
 			}
+			mhanlder.sendEmptyMessage(Class_Constant.LIVE_BANNER_CURTIME);
 		}
 	};
 	
@@ -88,6 +90,9 @@ public class LivePlayBannerDialog extends Dialog {
 			switch (msg.what) {
 			case Class_Constant.TOAST_BANNER_PROGRAM_PASS:
 				setData(channelInfo, CacheData.getCurPrograms());
+				break;
+			case Class_Constant.LIVE_BANNER_CURTIME:
+				showCurTime();
 				break;
 			}
 		}
@@ -117,6 +122,7 @@ public class LivePlayBannerDialog extends Dialog {
 		channel_number = (TextView) findViewById(R.id.banner_service_id);
 		currentProgramName = (TextView) findViewById(R.id.current_program_info);
 		nextProgramName = (TextView) findViewById(R.id.next_program_info);
+		live_curTime = (TextView) findViewById(R.id.live_curtime);
 		programPlayBar = (SeekBar) findViewById(R.id.program_progress);
 		livePlayInfo = (LinearLayout) findViewById(R.id.id_dtv_banner);
 	}
@@ -183,5 +189,11 @@ public class LivePlayBannerDialog extends Dialog {
 		Date date=new Date();
 		position=(int)(date.getTime()-programListInfo.get(1).getBeginTime().getTime());
 		return position;
+	}
+	
+	private void showCurTime(){
+		
+		Date date=new Date();
+		live_curTime.setText(Utils.hourAndMinute(date));
 	}
 }
