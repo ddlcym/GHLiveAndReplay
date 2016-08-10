@@ -1,22 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/epg_weekitemlayout"
-    android:layout_width="match_parent"
-    android:layout_height="80dp"
-    android:orientation="vertical" >
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+     >
     
  	<TextView android:id="@+id/epg_week_Tview_date"
-	    android:layout_width="110dip"
+	    android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:textColor="@color/white"
+		
+		android:textColor="@drawable/list_item_textcolor"
 		android:textSize="22sp"
-		android:gravity="center" />
+		android:gravity="center"/>
     
  	<TextView android:id="@+id/epg_week_Tview_week"
-	    android:layout_width="110dip"
+	    android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:textColor="@color/white"
+		android:textColor="@drawable/list_item_textcolor"
 		android:textSize="22sp"
-		android:gravity="center" />
+		android:gravity="center"/>
+ 	
+ 	 <ImageView android:id="@+id/epg_week_line"
+	    android:layout_width="fill_parent"
+	    android:layout_marginTop="5dip"
+		android:layout_height="1dip"
+		android:layout_gravity="bottom" /> 
  	
 </LinearLayout>
+<!-- android:background="@color/gray" 
+android:layout_marginLeft="12dip"-->

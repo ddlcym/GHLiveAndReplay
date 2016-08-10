@@ -8,7 +8,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
     </SurfaceView>
-
+    
+	 <ImageView
+	       android:id="@+id/PF_back"
+	       android:layout_width="fill_parent"
+	       android:layout_height="fill_parent"
+	       android:layout_gravity="center"
+	       android:visibility="gone" />
+	 
     <ImageView
         android:id="@+id/mute_icon"
         android:layout_width="wrap_content"
@@ -18,91 +25,164 @@
         android:paddingTop="15dip"
         android:src="@drawable/mute_icon"
         android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/time_shift_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right|top"
-        android:paddingRight="15dip"
-        android:paddingTop="15dip"
-        android:src="@drawable/back"
-        android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/play_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:src="@drawable/play"
-        android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/pause_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:src="@drawable/pause"
-        android:visibility="gone" />
-
-    <RelativeLayout
-        android:id="@+id/down_dialog"
-        android:layout_width="match_parent"
-        android:layout_height="80dip"
-        android:layout_gravity="bottom" >
-
-        <SeekBar
-            android:id="@+id/skbProgress"
-            android:layout_width="match_parent"
-            android:layout_height="30dip"
-            android:layout_alignParentTop="true"
-            android:clickable="false"
-            android:focusable="false"
-            android:max="1000"
-            android:paddingLeft="10dip"
-            android:paddingRight="10dip" />
-
-        <!-- <LinearLayout -->
-        <!-- android:id="@+id/entire_time_cont" -->
-        <!-- android:layout_width="12dip" -->
-        <!-- android:layout_height="wrap_content" -->
-        <!-- android:orientation="horizontal" > -->
-
-        <TextView
-            android:id="@+id/video_timelength"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@id/skbProgress"
-            android:paddingRight="30dip"
-            android:text="test"
-            android:textSize="25sp" />
-
-        <TextView
-            android:id="@+id/video_currenttime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/skbProgress"
-            android:layout_toLeftOf="@id/video_timelength"
-            android:text="00:00:00"
-            android:textSize="25sp" />
-        <!-- </LinearLayout> -->
-    </RelativeLayout>
-
-    <ImageView
-        android:id="@+id/fast_forward"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:src="@drawable/fast_forward"
-        android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/fast_backward"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:src="@drawable/fast_backward"
-        android:visibility="gone" />
+	<FrameLayout
+	    android:layout_width="180dip"
+    	android:layout_height="150dip"
+    	android:layout_gravity="left|bottom"
+    	android:paddingLeft="60dip"
+    	android:paddingBottom="10dip" >
+	
+		   <ImageView
+		       android:id="@+id/play_btn"
+		       android:layout_width="fill_parent"
+		       android:layout_height="fill_parent"
+		       
+		       android:src="@drawable/play"
+		       android:visibility="gone" />
+		
+		   <ImageView
+		       android:id="@+id/pause_btn"
+		       android:layout_width="fill_parent"
+		       android:layout_height="fill_parent"
+		      
+		       android:src="@drawable/pause"
+		       android:visibility="gone" />
+		   
+		   <ImageView
+		       android:id="@+id/fast_forward"
+		       android:layout_width="fill_parent"
+		       android:layout_height="fill_parent"
+		       
+		       android:src="@drawable/fast_forward"
+		       android:visibility="gone" />
+		
+		   <ImageView
+		       android:id="@+id/fast_backward"
+		       android:layout_width="fill_parent"
+		       android:layout_height="fill_parent"
+		       
+		       android:src="@drawable/fast_backward"
+		       android:visibility="gone" />
+    </FrameLayout>
+    
+    <LinearLayout
+        android:id="@+id/down_dialog" 
+	    android:layout_width="1000dip"
+    	android:layout_height="wrap_content"
+    	android:layout_gravity="bottom"
+    	android:layout_marginLeft="260dip"
+    	android:orientation="vertical">
+	    
+         
+	     <LinearLayout
+	        android:id="@+id/up_dialog_cur" 
+		    android:layout_width="500dip"
+	    	android:layout_height="fill_parent"
+	    	android:layout_gravity="bottom"
+	    	android:orientation="horizontal">
+	    	<TextView
+	           android:id="@+id/curpro"
+	           android:layout_width="wrap_content"
+	           android:layout_height="50dip"
+	           android:textSize="28sp" 
+	           android:text="@string/cur_program"/>
+	    	<TextView
+	           android:id="@+id/curprotime"
+	           android:layout_width="wrap_content"
+	           android:layout_height="50dip"
+	           android:textSize="28sp" 
+	           android:layout_marginLeft="10dip"
+	           android:text="current_program_time"/>
+		    <com.changhong.gehua.widget.MarqueeText
+	           android:id="@+id/replay_current_program_info"
+	           android:layout_width="200dip"
+	           android:layout_height="50dip"
+	           android:singleLine="true"
+	           android:ellipsize="marquee"
+        	   android:focusableInTouchMode="true"
+	           android:textSize="28sp" 
+	           android:layout_marginLeft="10dip"
+	           android:text="current_program_info"/>
+          </LinearLayout>
+          
+	     
+         <LinearLayout
+		    android:layout_width="fill_parent"
+	    	android:layout_height="wrap_content"
+	    	android:orientation="horizontal"
+	    	android:layout_gravity="bottom">
+	    	
+	    	 <SeekBar
+	            android:id="@+id/skbProgress"
+	            android:layout_width="750dip"
+	            android:layout_height="wrap_content"
+	            android:clickable="false"
+	            android:focusable="false"
+	            android:max="100"
+	            android:maxHeight="12dip"
+				android:minHeight="12dip"
+	            android:paddingLeft="10dip"
+	            android:paddingRight="10dip" 
+	            android:progressDrawable="@drawable/po_seekbar"
+	            android:thumb="@drawable/seekbar_thumb"/>
+	    	 <TextView
+	            android:id="@+id/video_currenttime"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="00:00"
+	            android:textSize="25sp" />
+	   		 <TextView
+	            android:id="@+id/video_timelength"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:paddingRight="30dip"
+	            android:text="00:00"
+	            android:textSize="25sp" />
+	     </LinearLayout>	
+	     
+	     <LinearLayout
+	        android:id="@+id/down_dialog_next" 
+		    android:layout_width="fill_parent"
+	    	android:layout_height="fill_parent"
+	    	android:layout_gravity="bottom"
+	    	android:orientation="horizontal">
+	    	<TextView
+	           android:id="@+id/nextpro"
+	           android:layout_width="wrap_content"
+	           android:layout_height="50dip"
+	           android:textSize="28sp" 
+	           android:text="@string/next_program"/>
+	    	<TextView
+	           android:id="@+id/nextprotime"
+	           android:layout_width="wrap_content"
+	           android:layout_height="50dip"
+	           android:textSize="28sp" 
+	           android:layout_marginLeft="10dip"
+	           android:text="next_program_time"/>
+	    	<com.changhong.gehua.widget.MarqueeText
+                android:id="@+id/replay_next_program_info"
+                android:layout_width="200dip"
+                android:layout_height="50dip"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+        	    android:focusableInTouchMode="true"
+                android:textSize="28sp" 
+                android:layout_marginLeft="10dip"
+                android:text="next_program_info"/>
+	    	
+	    	<ImageView 
+	    	    android:layout_width="wrap_content"
+                android:layout_height="30dip"
+                android:layout_marginLeft="210dip"
+                android:background="@drawable/tishione"/>
+	    	<ImageView 
+	    	    android:layout_width="wrap_content"
+                android:layout_height="30dip"
+                android:layout_marginLeft="10dip"
+                android:background="@drawable/tishitwo"/>
+	    	
+	    </LinearLayout>
+         
+	</LinearLayout>
 
 </FrameLayout>

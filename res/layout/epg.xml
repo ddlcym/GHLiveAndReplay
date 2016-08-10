@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg" >
+    android:background="@drawable/replay_back" >
 
     <ImageView
         android:id="@+id/set_repfocus_id"
@@ -10,81 +10,110 @@
         android:layout_height="wrap_content"
         android:contentDescription="@null"
         android:scaleType="fitXY"
-        android:src="@drawable/chanselect"
+        android:src="@drawable/item_sec"
         android:visibility="invisible" />
+    
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="45dip"
+        android:layout_marginTop="20dip"
+        android:orientation="horizontal" >
+        	<ImageView
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:src="@drawable/replay_logo"/>
+        	
+        	<TextView
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="@string/replay"
+		        android:textColor="@color/white"
+		        android:textSize="30sp" />
+	</LinearLayout>
+	
 
     <LinearLayout
         android:id="@+id/epg_chanlistlayout"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
+        android:layout_width="360dip"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="5dip"
+        android:layout_marginLeft="35dip"
+        android:layout_marginTop="69dip"
         android:orientation="horizontal" >
 
         <LinearLayout
-            android:layout_width="221dip"
+            android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_marginLeft="0dip"
             android:orientation="vertical" >
 
             <LinearLayout
                 android:id="@+id/epg_chan_classifylayout"
                 android:layout_width="fill_parent"
-                android:layout_height="80dip"
+                android:layout_height="50dip"
                 android:orientation="horizontal" >
 
                 <TextView
                     android:id="@+id/epg_chanlistTitle"
-                    android:layout_width="140dip"
+                    android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:layout_marginLeft="12dip"
-                    android:background="@drawable/tvepg_main_chanlist_selected"
                     android:gravity="center"
-                    android:nextFocusDown="@+id/ChanlIstView"
-                    android:nextFocusLeft="@+id/epg_chanlistTitle"
-                    android:nextFocusRight="@+id/EpgWeekInfo"
-                    android:nextFocusUp="@+id/epg_chanlistTitle"
                     android:textColor="@color/white"
                     android:textSize="30sp" >
                 </TextView>
             </LinearLayout>
-
+			<ImageView 
+			     android:layout_width="fill_parent"
+                 android:layout_height="wrap_content"
+                 
+                 android:src="@drawable/channel_navigation"/>
+			
+			
             <!-- 设置 listSelector,避免listview自动对选中条填充纯色背景 -->
 
             <com.changhong.replay.datafactory.EpgListview
                 android:id="@+id/ChanlIstView"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_height="510dip"
                 android:background="@drawable/boder"
-                android:divider="@drawable/chanlistdivider"
+                android:listSelector="@drawable/chanitem_sec_back"
+                
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:nextFocusRight="@+id/EpgWeekInfo"
                 android:nextFocusUp="@+id/ChanlIstView"
-                android:scrollbars="none" >
+                
+                 >
             </com.changhong.replay.datafactory.EpgListview>
+            
+              <!--  android:divider="@drawable/chanlistdivider"
+              
+              android:scrollbars="none"
+              android:divider="@color/touming"  
+    			android:dividerHeight="1px"-->
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/epg_weekeventlayout"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_marginLeft="230dip"
+        android:layout_width="812dip"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="430dip"
+        android:layout_marginTop="55dip"
         android:orientation="vertical" >
 
         <GridView
             android:id="@+id/EpgWeekInfo"
             android:layout_width="fill_parent"
-            android:layout_height="80dp"
+            android:layout_height="80dip"
             android:background="@drawable/boder"
-            android:columnWidth="120dip"
-            android:gravity="center"
-            android:horizontalSpacing="5dp"
+            android:columnWidth="10dip"
+             
+            
             android:nextFocusDown="@+id/EpgEventInfo"
             android:nextFocusLeft="@+id/epg_chanlistTitle"
-            android:paddingRight="20dip"
-            android:paddingTop="10dip" >
+            >
         </GridView>
 
         <!-- 设置 listSelector,避免listview自动对选中条填充纯色背景 -->
@@ -92,13 +121,37 @@
         <com.changhong.replay.datafactory.EpgListview
             android:id="@+id/EpgEventInfo"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="510dip"
             android:background="@drawable/boder"
-            android:divider="@drawable/eventlistdivider"
+            android:listSelector="@drawable/proitem_sec_back"
             android:nextFocusLeft="@+id/ChanlIstView"
             android:nextFocusUp="@+id/EpgWeekInfo"
             android:visibility="visible" >
         </com.changhong.replay.datafactory.EpgListview>
+        
+        <!-- android:divider="@drawable/eventlistdivider"
+        
+         android:horizontalSpacing="5dp"
+         android:paddingRight="20dip"
+            android:paddingTop="10dip"
+          android:listSelector="#00000000"
+          android:listSelector="@drawable/weekitem_sec_back"
+          android:descendantFocusability="afterDescendants"-->
     </LinearLayout>
 
+    
+    
+    <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="30dip"
+        android:layout_marginTop="680dip"
+        android:orientation="horizontal" >
+        
+        <ImageView 
+            android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:src="@drawable/tv_btn_lr"/>
+        
+        </LinearLayout>
 </FrameLayout>

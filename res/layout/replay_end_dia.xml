@@ -1,45 +1,120 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@android:color/transparent" >
-
-    <LinearLayout
-        android:layout_width="600dip"
-        android:layout_height="150dp"
-        android:layout_gravity="center"
-        android:orientation="vertical" >
-
+<!-- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+        
+        <TextView
+            android:id="@+id/dialog_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dip"
+            android:textSize="20sp"
+            android:text="温馨提示"/>
         <TextView
             android:id="@+id/dialog_text"
-            android:layout_width="507dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="220dip"
-            android:text="当前回看已经播放完毕" />
-
+            android:textSize="24sp"
+            />
+        
         <LinearLayout
             android:id="@+id/ll_buttons"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="30dp"
+            android:layout_gravity="bottom"
             android:orientation="horizontal" >
 
-            <Button
+             <Button
+                android:id="@+id/dialog_ok"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+               	android:paddingLeft="5dip"
+                android:layout_weight="1"
+                android:background="@drawable/replay_dialog_sec"/>
+            
+             <Button
                 android:id="@+id/dialog_cancel"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="返回"
-                android:textColor="@color/black" />
+              	android:background="@drawable/replay_dialog_sec"/> 
+        </LinearLayout>
+        
+</LinearLayout>  -->
+
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:paddingTop="15.0dip"
+    android:paddingLeft="22.0dip"
+    android:paddingBottom="0dip"  >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/dialog_title"
+            android:textSize="20sp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="温馨提示"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center" >
+
+            <TextView
+                android:id="@+id/dialog_text"
+                android:textSize="24sp"
+                android:layout_width="350dip"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:singleLine="true"
+                android:lineSpacingMultiplier="1.5"
+                android:minHeight="120.0dip"
+                android:paddingBottom="15.0dip"
+                android:paddingLeft="20.0dip"
+                android:paddingRight="20.0dip"
+                android:paddingTop="15.0dip" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            android:orientation="horizontal"
+            >
 
             <Button
                 android:id="@+id/dialog_ok"
+                android:textSize="20sp"
+                android:textColor="@color/white"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
                 android:layout_weight="1"
-                android:text="播放下一个节目"
-                android:textColor="@color/black" />
+                android:background="@drawable/replay_dialog_sec"
+                android:gravity="center"/>
+
+            <Button
+                android:id="@+id/dialog_cancel"
+                android:textSize="20sp"
+                android:textColor="@color/white"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/replay_dialog_sec"
+                android:gravity="center"/>
         </LinearLayout>
     </LinearLayout>
 
