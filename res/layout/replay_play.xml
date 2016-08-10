@@ -76,7 +76,7 @@
          
 	     <LinearLayout
 	        android:id="@+id/up_dialog_cur" 
-		    android:layout_width="500dip"
+		    android:layout_width="fill_parent"
 	    	android:layout_height="fill_parent"
 	    	android:layout_gravity="bottom"
 	    	android:orientation="horizontal">
@@ -95,7 +95,7 @@
 	           android:text="current_program_time"/>
 		    <com.changhong.gehua.widget.MarqueeText
 	           android:id="@+id/replay_current_program_info"
-	           android:layout_width="200dip"
+	           android:layout_width="270dip"
 	           android:layout_height="50dip"
 	           android:singleLine="true"
 	           android:ellipsize="marquee"
@@ -161,7 +161,7 @@
 	           android:text="next_program_time"/>
 	    	<com.changhong.gehua.widget.MarqueeText
                 android:id="@+id/replay_next_program_info"
-                android:layout_width="200dip"
+                android:layout_width="270dip"
                 android:layout_height="50dip"
                 android:singleLine="true"
                 android:ellipsize="marquee"
@@ -173,7 +173,7 @@
 	    	<ImageView 
 	    	    android:layout_width="wrap_content"
                 android:layout_height="30dip"
-                android:layout_marginLeft="210dip"
+                android:layout_marginLeft="140dip"
                 android:background="@drawable/tishione"/>
 	    	<ImageView 
 	    	    android:layout_width="wrap_content"
