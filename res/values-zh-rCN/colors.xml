@@ -24,5 +24,8 @@
 
     
     <color name="shift_curtime">#001326</color>
+    
+     <color name="replay_curproinfo">#ffffff</color>
+      <color name="replay_nextproinfo">#888888</color>
 
 </resources>

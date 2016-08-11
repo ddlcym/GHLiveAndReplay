@@ -85,12 +85,14 @@
 	           android:layout_width="wrap_content"
 	           android:layout_height="50dip"
 	           android:textSize="28sp" 
+	           android:textColor="@color/replay_curproinfo" 
 	           android:text="@string/cur_program"/>
 	    	<TextView
 	           android:id="@+id/curprotime"
 	           android:layout_width="wrap_content"
 	           android:layout_height="50dip"
 	           android:textSize="28sp" 
+	           android:textColor="@color/replay_curproinfo" 
 	           android:layout_marginLeft="10dip"
 	           android:text="current_program_time"/>
 		    <com.changhong.gehua.widget.MarqueeText
@@ -101,6 +103,7 @@
 	           android:ellipsize="marquee"
         	   android:focusableInTouchMode="true"
 	           android:textSize="28sp" 
+	           android:textColor="@color/replay_curproinfo" 
 	           android:layout_marginLeft="10dip"
 	           android:text="current_program_info"/>
           </LinearLayout>
@@ -150,13 +153,15 @@
 	           android:id="@+id/nextpro"
 	           android:layout_width="wrap_content"
 	           android:layout_height="50dip"
-	           android:textSize="28sp" 
+	           android:textSize="28sp"
+	           android:textColor="@color/replay_nextproinfo" 
 	           android:text="@string/next_program"/>
 	    	<TextView
 	           android:id="@+id/nextprotime"
 	           android:layout_width="wrap_content"
 	           android:layout_height="50dip"
 	           android:textSize="28sp" 
+	           android:textColor="@color/replay_nextproinfo" 
 	           android:layout_marginLeft="10dip"
 	           android:text="next_program_time"/>
 	    	<com.changhong.gehua.widget.MarqueeText
@@ -164,6 +169,7 @@
                 android:layout_width="270dip"
                 android:layout_height="50dip"
                 android:singleLine="true"
+                android:textColor="@color/replay_nextproinfo" 
                 android:ellipsize="marquee"
         	    android:focusableInTouchMode="true"
                 android:textSize="28sp" 

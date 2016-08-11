@@ -3,17 +3,22 @@
     android:id="@+id/epg_chan_itemlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:descendantFocusability="blocksDescendants"
-    android:orientation="horizontal" >
+    
+    android:orientation="horizontal"
+    
+     >
 
-    <!-- 设置 background,避免按钮自动填充背景 -->
+    <!-- 设置 background,避免按钮自动填充背景 android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:descendantFocusability="blocksDescendants" -->
 
     <TextView
         android:id="@+id/epg_chan_Tview_chanindex"
         android:layout_width="60dip"
         android:layout_height="50dip"
         android:gravity="center"
-        android:textColor="@drawable/list_item_textcolor"
+       
+        android:textColor="@color/replay_channellist_text"
         android:textSize="24sp" />
 
     <TextView
@@ -21,15 +26,14 @@
         android:layout_width="fill_parent"
         android:layout_height="50dip"
         android:ellipsize="marquee"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
+       	
         android:gravity="left|center_vertical"
         android:marqueeRepeatLimit="marquee_forever"
         android:singleLine="true"
-        android:textColor="@drawable/list_item_textcolor"
+        android:textColor="@color/replay_channellist_text"
         android:textSize="24sp" />
 
-    <TextView
+     <TextView
         android:id="@+id/channelId"
         android:layout_width="60dp"
         android:layout_height="50dp"
@@ -37,6 +41,6 @@
         android:textColor="@color/grey"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:visibility="gone" />
+        android:visibility="gone" /> 
 
 </LinearLayout>
