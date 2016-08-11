@@ -161,9 +161,8 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 				if (desPositon < 0) {
 					if (handlerFlag) {
 						handlerFlag = false;
-						// parentHandler
-						// .sendEmptyMessage(Class_Constant.RE_LAST_PROGRAM);
-
+						parentHandler.sendEmptyMessage(Class_Constant.RE_LAST_PROGRAM);//回退到最开始
+						Log.i("xb", "Player*********");
 					}
 					desPositon = 0;
 				}

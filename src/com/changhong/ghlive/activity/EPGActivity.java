@@ -179,11 +179,13 @@ public class EPGActivity extends BaseActivity {
 
 		channelListview = (EpgListview) findViewById(R.id.ChanlIstView);
 		
-		channelListview.setFocusable(true);
-		channelListview.setFocusableInTouchMode(true);
-		channelListview.setOnFocusChangeListener(ChanListOnfocusChange);
+		//channelListview.setFocusable(true);
+		//channelListview.setFocusableInTouchMode(true);
+		//channelListview.setOnFocusChangeListener(ChanListOnfocusChange);
 		channelListview.setOnItemSelectedListener(ChanListOnItemSelected);
-		channelListview.setOnItemClickListener(ChanListOnItemClick);
+		//channelListview.setOnItemClickListener(ChanListOnItemClick);
+		
+		//channelListview.setItemsCanFocus(true);
 		
 		epgWeekInfoView = (GridView) findViewById(R.id.EpgWeekInfo);
 		//epgWeekInfoView.
@@ -191,8 +193,8 @@ public class EPGActivity extends BaseActivity {
 		epgWeekInfoView.setOnItemSelectedListener(WeekInfoItemSelected);
 
 		epgEventListview = (EpgListview) findViewById(R.id.EpgEventInfo);
-		epgEventListview.setOnFocusChangeListener(epgEventChangeListener);
-		epgEventListview.setOnItemSelectedListener(epgEventSelectedListener);
+		//epgEventListview.setOnFocusChangeListener(epgEventChangeListener);
+		//epgEventListview.setOnItemSelectedListener(epgEventSelectedListener);
 		epgEventListview.setOnItemClickListener(epgEventClickListener);
 
 		channelAdapter = new ChannelRepListAdapter(EPGActivity.this);
@@ -376,7 +378,7 @@ public class EPGActivity extends BaseActivity {
 		@Override
 		public void onFocusChange(View arg0, boolean arg1) {
 
-			bEventFocus = arg1;
+			/*bEventFocus = arg1;
 			if (arg0.getId() == R.id.EpgEventInfo) {
 				// if (true == arg1) {
 				// bookButton.setFocusable(false);
@@ -391,7 +393,7 @@ public class EPGActivity extends BaseActivity {
 					// epgEventItemScale(EventCurSelect, bEventFocus);
 					EventLastSelect = EventCurSelect;
 				}
-			}
+			}*/
 		}
 	};
 
@@ -400,7 +402,7 @@ public class EPGActivity extends BaseActivity {
 		@Override
 		public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 
-			if (arg1 == null) {
+			/*if (arg1 == null) {
 				return;
 			}
 
@@ -418,7 +420,7 @@ public class EPGActivity extends BaseActivity {
 				// epgEventItemScale(EventCurSelect, true);
 				EventLastSelect = EventCurSelect;
 				// EventlitItemindex = (int) arg3;
-			}
+			}*/
 		}
 
 		@Override

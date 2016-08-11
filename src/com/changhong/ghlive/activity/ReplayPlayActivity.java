@@ -33,6 +33,7 @@ import android.view.KeyEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,10 +41,12 @@ import android.widget.Toast;
 public class ReplayPlayActivity extends Activity {
 	private SurfaceView surfaceView;
 	private SeekBar skbProgress;
-	private TextView videoCurPro , videoNextPro , videoTimeLength, videoCurrentTime;
+	private TextView CurPro,curProtime,videoCurPro , NextPro,NextProtime,videoNextPro , videoTimeLength, videoCurrentTime;
+	private LinearLayout curlinearLayout,nextLinearLayout;
 	private Player player;
 	private String replayChannelId = null;
 	private ReplayEndDialog replayEndDialog;
+	private ReplayEndDialog replayEndlastDialog,firstreplayDialog,replayfirstDialog,backreplaydialog;
 	private ImageView pfbackImageView , palyButton, pauseButton, forwardIcon, backwardIcon;
 	private ImageView muteIconImage;
 
@@ -79,25 +82,97 @@ public class ReplayPlayActivity extends Activity {
 				Log.i("xb", mprogram.getEventName());
 				if (curindex == (dialogcurProgramList.size() - 1)) {
 					//最后一个节目
+					replayEndlastDialog = new ReplayEndDialog(ReplayPlayActivity.this,replayHandler,1,"<"+mprogram.getEventName()+">"+"播放结束");
+					replayEndlastDialog.show();
 				}else{
 					ProgramInfo dialognextprogram = dialogcurProgramList.get(curindex + 1);
-					replayEndDialog = new ReplayEndDialog(ReplayPlayActivity.this,replayHandler,0,dialognextprogram.getEventName());
+					replayEndDialog = new ReplayEndDialog(ReplayPlayActivity.this,replayHandler,0,"<"+dialognextprogram.getEventName()+">"+"即将开始");
 					replayEndDialog.show();
 				}
 
 				break;
 			case Class_Constant.RE_LAST_PROGRAM:
+				Log.i("xb", "replay*********");
+				String lastdialogcurDay = CacheData.getReplayCurDay();
+				List<ProgramInfo> lastdialogcurProgramList = (List<ProgramInfo>) CacheData.getAllProgramMap().get(lastdialogcurDay);
+				int lastcurindex = lastdialogcurProgramList.indexOf(mprogram);
+				Log.i("xb", "last"+String.valueOf(lastcurindex));
+				Log.i("xb", "last"+mprogram.getEventName());
+				if (0 == lastcurindex) {
+					//di一个节目
+					replayfirstDialog = new ReplayEndDialog(ReplayPlayActivity.this,replayHandler,3,"<"+mprogram.getEventName()+">"+"即将开始");
+					replayfirstDialog.show();
+				}else{
+					ProgramInfo lastdialognextprogram = lastdialogcurProgramList.get(lastcurindex - 1);
+					firstreplayDialog = new ReplayEndDialog(ReplayPlayActivity.this,replayHandler,2,"<"+lastdialognextprogram.getEventName()+">"+"即将开始");
+					firstreplayDialog.show();
+				}
 				// playLastProgram();
 				Log.i("mmmm", "ReplayPlayActivity-RE_NEXT_PROGRAM:" + mprogram.getProgramId());
 				break;
 			case Class_Constant.REPLAY_DIALOG_END_CANCEL:
-				finish();
-				break;
-			case Class_Constant.REPLAY_DIALOG_END_OK:				
+				int curtype = msg.getData().getInt("dialogcanceltype",-1);
+				Log.i("xb", "CANCEL"+String.valueOf(curtype));
+				switch (curtype) {
+				case 0:
+					replayEndDialog.dismiss();
+					
+					playVideo(channel, mprogram);
+					break;
+				case 1:
+					replayEndlastDialog.dismiss();
+					playVideo(channel, mprogram);
+					break;
+				case 2:
+					firstreplayDialog.dismiss();
+					playVideo(channel, mprogram);
+					break;
+				case 3:
+					replayfirstDialog.dismiss();
+					playVideo(channel, mprogram);
+					break;
+				case 4:
+					backreplaydialog.dismiss();
+					//playVideo(channel, mprogram);
+					break;
+				default:
+					
+					break;
+				}
+				
+				
+			case Class_Constant.REPLAY_DIALOG_END_OK:
+				int type = msg.getData().getInt("dialogoktype",-1);
+				Log.i("xb", "OK"+String.valueOf(type));
+				switch (type) {
+				case 0:
+					replayEndDialog.dismiss();
+					playNextProgram();
+					break;
+				case 1:
+					replayEndlastDialog.dismiss();
+					finish();
+					break;
+					
+				case 2:
+					firstreplayDialog.dismiss();
+					playLastProgram();
+					break;
+					
+				case 3:
+					replayfirstDialog.dismiss();
+					finish();
+				case 4:
+					backreplaydialog.dismiss();
+					finish();
+					break;
+				default:
+					break;
+				}
+				
 				// player.playUrl(replayurl);
-				replayEndDialog.dismiss();
-				playNextProgram();
-				break;
+				
+				//break;
 			}
 		}
 	};
@@ -121,10 +196,17 @@ public class ReplayPlayActivity extends Activity {
 	public void initView() {
 		skbProgress = (SeekBar) this.findViewById(R.id.skbProgress);
 		surfaceView = (SurfaceView) this.findViewById(R.id.surfaceView1);
-		
+		//add
+		CurPro = (TextView) this.findViewById(R.id.curpro);
+		curProtime = (TextView) this.findViewById(R.id.curprotime);
 		videoCurPro = (TextView) this.findViewById(R.id.replay_current_program_info);
+		NextPro = (TextView) this.findViewById(R.id.nextpro);
+		NextProtime = (TextView) this.findViewById(R.id.nextprotime);
 		videoNextPro = (TextView) this.findViewById(R.id.replay_next_program_info);
+		curlinearLayout = (LinearLayout) this.findViewById(R.id.up_dialog_cur);
+		nextLinearLayout = (LinearLayout) this.findViewById(R.id.down_dialog_next);
 		pfbackImageView = (ImageView) findViewById(R.id.PF_back);
+		
 		
 		videoTimeLength = (TextView) this.findViewById(R.id.video_timelength);
 		videoCurrentTime = (TextView) this.findViewById(R.id.video_currenttime);
@@ -238,21 +320,24 @@ public class ReplayPlayActivity extends Activity {
 		
 		SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
 		formatter.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
-		String text = "当前节目"+formatter.format(mprogram.getBeginTime().getTime())+"-"+formatter.format(mprogram.getEndTime().getTime())
-						+ mprogram.getEventName();
-		videoCurPro.setText(text);
+//		String text = getString(R.string.replay_cur_program)+formatter.format(mprogram.getBeginTime().getTime())+"-"+formatter.format(mprogram.getEndTime().getTime())
+//						+getString(R.string.space)+ mprogram.getEventName();
+		curProtime.setText(formatter.format(mprogram.getBeginTime().getTime())+"-"+formatter.format(mprogram.getEndTime().getTime()));
+		videoCurPro.setText(mprogram.getEventName());
 		
 		String curDay = CacheData.getReplayCurDay();
 		curProgramList = (List<ProgramInfo>) CacheData.getAllProgramMap().get(curDay);
 		int index = curProgramList.indexOf(mprogram);
 		if (index == (curProgramList.size() - 1)) {
-			Toast.makeText(ReplayPlayActivity.this, "已经是最后一个节目", Toast.LENGTH_SHORT).show();
-			return;
+			//Toast.makeText(ReplayPlayActivity.this, "最后一个节目", Toast.LENGTH_SHORT).show();
+			NextProtime.setText("");
+			videoNextPro.setText("");
 		} else {
 			nextmprogram = curProgramList.get(curProgramList.indexOf(mprogram) + 1);
-			String textex = "下一节目"+formatter.format(nextmprogram.getBeginTime().getTime())+"-"+formatter.format(nextmprogram.getEndTime().getTime())
-					+ nextmprogram.getEventName();
-			videoNextPro.setText(textex);
+//			String textex = getString(R.string.replay_next_program)+formatter.format(nextmprogram.getBeginTime().getTime())+"-"+formatter.format(nextmprogram.getEndTime().getTime())
+//					+getString(R.string.space)+ nextmprogram.getEventName();
+			NextProtime.setText(formatter.format(nextmprogram.getBeginTime().getTime())+"-"+formatter.format(nextmprogram.getEndTime().getTime()));
+			videoNextPro.setText(nextmprogram.getEventName());
 		}
 		
 		pfbackImageView.setBackgroundResource(R.drawable.pf_back);
@@ -275,7 +360,7 @@ public class ReplayPlayActivity extends Activity {
 		if (indexPro == (curProgramList.size() - 1)) {
 			// curIndexDay = CacheData.getDayMonths().indexOf(curDay);
 			// if (curIndexDay == (CacheData.getDayMonths().size() - 1)) {
-			Toast.makeText(ReplayPlayActivity.this, "已经是最后一个节目", Toast.LENGTH_SHORT).show();
+			//Toast.makeText(ReplayPlayActivity.this, "已经是最后一个节目", Toast.LENGTH_SHORT).show();
 			return;
 			// } else {
 			// curDay = CacheData.getDayMonths().get(curIndexDay + 1);
@@ -310,14 +395,15 @@ public class ReplayPlayActivity extends Activity {
 		if (0 == indexPro) {
 			curIndexDay = CacheData.getDayMonths().indexOf(curDay);
 			if (0 == curIndexDay) {
-				Toast.makeText(ReplayPlayActivity.this, "已经是第一个节目", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(ReplayPlayActivity.this, "已经是第一个节目", Toast.LENGTH_SHORT).show();
 				return;
-			} else {
+			} 
+			/*else {
 				curDay = CacheData.getDayMonths().get(curIndexDay - 1);
 				CacheData.setReplayCurDay(curDay);
 				curProgramList = CacheData.getAllProgramMap().get(curDay);
 				mprogram = curProgramList.get(curProgramList.size() - 1);
-			}
+			}*/
 		} else {
 			mprogram = curProgramList.get(curProgramList.indexOf(mprogram) - 1);
 		}
@@ -336,8 +422,10 @@ public class ReplayPlayActivity extends Activity {
 			videoTimeLength.setVisibility(View.VISIBLE);
 			videoCurrentTime.setVisibility(View.VISIBLE);
 			
-			videoCurPro.setVisibility(View.VISIBLE);
-			videoNextPro.setVisibility(View.VISIBLE);
+//			videoCurPro.setVisibility(View.VISIBLE);
+//			videoNextPro.setVisibility(View.VISIBLE);
+			curlinearLayout.setVisibility(View.VISIBLE);
+			nextLinearLayout.setVisibility(View.VISIBLE);
 			pfbackImageView.setVisibility(View.VISIBLE);
 			
 			if (progressBarRunnable != null) {
@@ -354,9 +442,12 @@ public class ReplayPlayActivity extends Activity {
 			pauseButton.setVisibility(View.GONE);
 			videoTimeLength.setVisibility(View.VISIBLE);
 			videoCurrentTime.setVisibility(View.VISIBLE);
+//			
+//			videoCurPro.setVisibility(View.VISIBLE);
+//			videoNextPro.setVisibility(View.VISIBLE);
+			curlinearLayout.setVisibility(View.VISIBLE);
+			nextLinearLayout.setVisibility(View.VISIBLE);
 			
-			videoCurPro.setVisibility(View.VISIBLE);
-			videoNextPro.setVisibility(View.VISIBLE);
 			pfbackImageView.setVisibility(View.VISIBLE);
 			
 			if (progressBarRunnable != null) {
@@ -377,8 +468,11 @@ public class ReplayPlayActivity extends Activity {
 				videoTimeLength.setVisibility(View.VISIBLE);
 				videoCurrentTime.setVisibility(View.VISIBLE);
 				
-				videoCurPro.setVisibility(View.VISIBLE);
-				videoNextPro.setVisibility(View.VISIBLE);
+//				videoCurPro.setVisibility(View.VISIBLE);
+//				videoNextPro.setVisibility(View.VISIBLE);
+				curlinearLayout.setVisibility(View.VISIBLE);
+				nextLinearLayout.setVisibility(View.VISIBLE);
+				
 				pfbackImageView.setVisibility(View.VISIBLE);
 			} else {
 				player.play();
@@ -417,7 +511,10 @@ public class ReplayPlayActivity extends Activity {
 			CommonMethod.startSettingPage(MyApp.getContext());
 			break;
 		case Class_Constant.KEYCODE_BACK_KEY:
-			// Log.i("zyt", "onkeydown back key is pressed " + keyCode);
+			
+			Log.i("xb", "onkeydown back key is pressed " + keyCode);
+			backreplaydialog = new ReplayEndDialog(this,replayHandler,4,"你确定退出电视回看");
+			backreplaydialog.show();
 			// finish();
 			break;
 		case Class_Constant.MENU_ID_DTV_ROOT:
@@ -425,8 +522,11 @@ public class ReplayPlayActivity extends Activity {
 			videoTimeLength.setVisibility(View.VISIBLE);
 			videoCurrentTime.setVisibility(View.VISIBLE);
 			
-			videoCurPro.setVisibility(View.VISIBLE);
-			videoNextPro.setVisibility(View.VISIBLE);
+//			videoCurPro.setVisibility(View.VISIBLE);
+//			videoNextPro.setVisibility(View.VISIBLE);
+			
+			curlinearLayout.setVisibility(View.VISIBLE);
+			nextLinearLayout.setVisibility(View.VISIBLE);
 			pfbackImageView.setVisibility(View.VISIBLE);
 			if (progressBarRunnable != null) {
 				replayHandler.removeCallbacks(progressBarRunnable);
@@ -469,8 +569,10 @@ public class ReplayPlayActivity extends Activity {
 			videoTimeLength.setVisibility(View.GONE);
 			videoCurrentTime.setVisibility(View.GONE);
 			
-			videoCurPro.setVisibility(View.GONE);
-			videoNextPro.setVisibility(View.GONE);
+			/*videoCurPro.setVisibility(View.GONE);
+			videoNextPro.setVisibility(View.GONE);*/
+			curlinearLayout.setVisibility(View.GONE);
+			nextLinearLayout.setVisibility(View.GONE);
 			pfbackImageView.setVisibility(View.GONE);
 			// pauseButton.setVisibility(View.GONE);
 		}
@@ -487,8 +589,10 @@ public class ReplayPlayActivity extends Activity {
 			videoTimeLength.setVisibility(View.GONE);
 			videoCurrentTime.setVisibility(View.GONE);
 			
-			videoCurPro.setVisibility(View.GONE);
-			videoNextPro.setVisibility(View.GONE);
+//			videoCurPro.setVisibility(View.GONE);
+//			videoNextPro.setVisibility(View.GONE);
+			curlinearLayout.setVisibility(View.GONE);
+			nextLinearLayout.setVisibility(View.GONE);
 			pfbackImageView.setVisibility(View.GONE);
 		}
 	};

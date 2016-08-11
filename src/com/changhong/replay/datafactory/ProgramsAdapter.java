@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ProgramsAdapter extends BaseAdapter {
@@ -57,6 +58,8 @@ public class ProgramsAdapter extends BaseAdapter {
 		timeView.setText(getTimes(epgEvent));
 		TextView eventView = (TextView) convertView.findViewById(R.id.epg_event_Tview_info);
 		eventView.setText(epgEvent.getEventName());
+		ImageView replayView = (ImageView) convertView.findViewById(R.id.replay_image);
+		replayView.setBackgroundResource(R.drawable.tv_loolback_icon);
 		// TextView bookView = (TextView) convertView
 		// .findViewById(R.id.epg_event_Tview_timer);
 		// Calendar c = Calendar.getInstance();
