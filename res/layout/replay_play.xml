@@ -77,20 +77,20 @@
 	     <LinearLayout
 	        android:id="@+id/up_dialog_cur" 
 		    android:layout_width="fill_parent"
-	    	android:layout_height="fill_parent"
+	    	android:layout_height="wrap_content"
 	    	android:layout_gravity="bottom"
 	    	android:orientation="horizontal">
 	    	<TextView
 	           android:id="@+id/curpro"
 	           android:layout_width="wrap_content"
-	           android:layout_height="50dip"
+	           android:layout_height="wrap_content"
 	           android:textSize="28sp" 
 	           android:textColor="@color/replay_curproinfo" 
 	           android:text="@string/cur_program"/>
 	    	<TextView
 	           android:id="@+id/curprotime"
 	           android:layout_width="wrap_content"
-	           android:layout_height="50dip"
+	           android:layout_height="wrap_content"
 	           android:textSize="28sp" 
 	           android:textColor="@color/replay_curproinfo" 
 	           android:layout_marginLeft="10dip"
@@ -98,7 +98,7 @@
 		    <com.changhong.gehua.widget.MarqueeText
 	           android:id="@+id/replay_current_program_info"
 	           android:layout_width="270dip"
-	           android:layout_height="50dip"
+	           android:layout_height="wrap_content"
 	           android:singleLine="true"
 	           android:ellipsize="marquee"
         	   android:focusableInTouchMode="true"
@@ -115,7 +115,8 @@
 	    	android:orientation="horizontal"
 	    	android:layout_gravity="bottom">
 	    	
-	    	 <SeekBar
+             
+	    	 <!-- <SeekBar
 	            android:id="@+id/skbProgress"
 	            android:layout_width="750dip"
 	            android:layout_height="wrap_content"
@@ -127,7 +128,13 @@
 	            android:paddingLeft="10dip"
 	            android:paddingRight="10dip" 
 	            android:progressDrawable="@drawable/bg_seekbar"
-	            android:thumb="@drawable/thumb_bar"/>
+	            android:thumb="@drawable/thumb_bar"/> -->
+	            
+	             <com.changhong.gehua.widget.MySeekbar
+			        android:id="@+id/mySeekBar"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:orientation="vertical" />
 	    	 <TextView
 	            android:id="@+id/video_currenttime"
 	            android:layout_width="wrap_content"

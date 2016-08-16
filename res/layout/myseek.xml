@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+        <com.changhong.gehua.widget.TextMoveLayout
+            android:id="@+id/textLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="20dp" />
+		
+      <SeekBar
+	            android:id="@+id/skbProgress"
+	            android:layout_width="750dip"
+	            android:layout_height="wrap_content"
+	            android:clickable="false"
+	            android:focusable="false"
+	            android:max="100"
+	            android:maxHeight="12dip"
+				android:minHeight="12dip"
+	            android:paddingLeft="10dip"
+	            android:paddingRight="10dip" 
+	            android:progressDrawable="@drawable/bg_seekbar"
+	            android:thumb="@drawable/thumb_bar"/> 
+</LinearLayout>

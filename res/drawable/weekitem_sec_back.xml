@@ -4,7 +4,7 @@
 <item 
     android:state_focused="false"
     android:state_pressed="false"
-    android:drawable="@color/touming"
+    android:drawable="@drawable/back_line"
     >  
 </item>
 
@@ -12,16 +12,16 @@
  <item 
      android:state_focused="true" 
      android:state_pressed="true" 
-     android:drawable= "@drawable/weekitem_sec"/>   
+     android:drawable= "@drawable/bottom_arrow"/>   
       
  <!--选中时的图片背景  -->   
  <item 
      android:state_selected="true" 
-     android:drawable="@drawable/weekitem_sec"/>   
+     android:drawable="@drawable/bottom_arrow"/>   
      
  <!--获得焦点时的图片背景  -->   
  <item 
      android:state_focused="true" 
-     android:drawable="@drawable/weekitem_sec"/>
+     android:drawable="@drawable/bottom_arrow"/>
 
 </selector>

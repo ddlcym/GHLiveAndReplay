@@ -88,7 +88,9 @@
                android:listSelector="@drawable/chanitem_sec_back"
               android:scrollbars="none"
               android:divider="@color/touming"  
-    			android:dividerHeight="1px" 812-->
+    			android:dividerHeight="1px" 812
+    			
+    			android:listSelector="@drawable/weekitem_sec_back"-->
         </LinearLayout>
     </LinearLayout>
 
