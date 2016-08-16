@@ -50,6 +50,7 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 
 	private static int desPositon = 0;
 	private static int duration = 0;
+	private float moveStep = 0;
 
 	/*
 	 * 直播时移的参数
@@ -64,6 +65,7 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 
 	private static int delayTime = 0;// 秒
 	private static boolean firstPlayInShift = true;// 直播中第一次进入时移
+	private int seekwidth;
 
 	public Player(Handler parentHandler, SurfaceView mySurfaceView, SeekBar skbProgress, TextView txvCurrent) {
 		Player.skbProgress = skbProgress;
@@ -86,11 +88,111 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 		processData = new ProcessData();
 		mReQueue = VolleyTool.getInstance().getRequestQueue();
 		curChannel = CacheData.getAllChannelMap().get(CacheData.getCurChannelNum());
+		
 		delayTime = 0;
 		firstPlayInShift = true;
-		// this.skbProgress.setOnSeekBarChangeListener(mySeekChangeLis);
+		
+		int maxTimes = (int) (CacheData.getCurProgram().getEndTime().getTime() - CacheData.getCurProgram().getBeginTime().getTime());
+		Log.i("xb", String.valueOf(maxTimes));
+		//Log.i("xb", "width = "+String.valueOf(skbProgress.getLayoutParams().width));
+		seekwidth = skbProgress.getLayoutParams().width;
+		Log.i("xb", "seekwidth is " + seekwidth);
+		moveStep = (float) (((float) seekwidth / (float) maxTimes ) * 1);
+		//Log.i("xb", "moveStep = "+String.valueOf(moveStep));
+		this.skbProgress.setOnSeekBarChangeListener(new mySeekChangeLis());
 	}
 
+	
+	
+	
+	private class mySeekChangeLis implements SeekBar.OnSeekBarChangeListener{
+
+		@Override
+		public void onProgressChanged(SeekBar arg0, int arg1, boolean arg2) {
+			videoCurrentTime.setText(Utils.millToLiveBackString(arg1));
+			videoCurrentTime.layout((int) (arg1 * moveStep), 0, (int) (arg1 * moveStep)+60, 20);
+			//long beginTime = CacheData.getCurProgram().getBeginTime().getTime();
+			//videoCurrentTime.setText(Utils.millToLiveBackString(arg1));
+		}
+
+		@Override
+		public void onStartTrackingTouch(SeekBar arg0) {
+			
+		}
+
+		@Override
+		public void onStopTrackingTouch(SeekBar arg0) {
+			
+		}
+		
+	}
+	
+	private static String getCheckTimeBySeconds(int progress, String startTime) {
+
+		String return_h = "", return_m = "", return_s = "";
+
+		String[] st = startTime.split(":");
+
+		int st_h = Integer.valueOf(st[0]);
+		int st_m = Integer.valueOf(st[1]);
+		int st_s = Integer.valueOf(st[2]);
+
+		int h = progress / 3600;
+
+		int m = (progress % 3600) / 60;
+
+		int s = progress % 60;
+
+		if ((s + st_s) >= 60) {
+
+			int tmpSecond = (s + st_s) % 60;
+
+			m = m + 1;
+
+			if (tmpSecond >= 10) {
+				return_s = tmpSecond + "";
+			} else {
+				return_s = "0" + (tmpSecond);
+			}
+
+		} else {
+			if ((s + st_s) >= 10) {
+				return_s = s + st_s + "";
+			} else {
+				return_s = "0" + (s + st_s);
+			}
+
+		}
+
+		if ((m + st_m) >= 60) {
+
+			int tmpMin = (m + st_m) % 60;
+
+			h = h + 1;
+
+			if (tmpMin >= 10) {
+				return_m = tmpMin + "";
+			} else {
+				return_m = "0" + (tmpMin);
+			}
+
+		} else {
+			if ((m + st_m) >= 10) {
+				return_m = (m + st_m) + "";
+			} else {
+				return_m = "0" + (m + st_m);
+			}
+
+		}
+
+		if ((st_h + h) < 10) {
+			return_h = "0" + (st_h + h);
+		} else {
+			return_h = st_h + h + "";
+		}
+
+		return return_h + ":" + return_m + ":" + return_s;
+	}
 	/*******************************************************
 	 * 通过handler更新seekbar
 	 ******************************************************/
@@ -253,6 +355,9 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 		mediaPlayer.start();
 	}
 
+	
+	
+	
 	public static void playUrl(String videoUrl) {
 		handlerFlag = true;
 		if (null == mediaPlayer || null == videoUrl)

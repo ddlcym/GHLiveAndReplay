@@ -63,7 +63,7 @@ public class DayMonthAdapter extends BaseAdapter{
 			convertView = LayoutInflater.from(mContext).inflate(R.layout.epg_main_weekitem, null);	
 			viewHolder.day=(TextView)convertView.findViewById(R.id.epg_week_Tview_date);
 			viewHolder.week=(TextView)convertView.findViewById(R.id.epg_week_Tview_week);
-			viewHolder.line=(ImageView)convertView.findViewById(R.id.epg_week_line);
+			//viewHolder.line=(ImageView)convertView.findViewById(R.id.epg_week_line);
 			convertView.setTag(viewHolder);
 		}else{
 			viewHolder=(ViewHolder) convertView.getTag();
@@ -86,7 +86,7 @@ public class DayMonthAdapter extends BaseAdapter{
 		}
 		String weekendString = week = "("+week+")";
 		viewHolder.week.setText(weekendString);
-		viewHolder.line.setBackgroundResource(R.color.gray);
+		//viewHolder.line.setBackgroundResource(R.color.touming);
 		return convertView;
 	}
 	
@@ -94,7 +94,7 @@ public class DayMonthAdapter extends BaseAdapter{
 		
 		TextView day;
 		TextView week;
-		ImageView line;
+		//ImageView line;
 	}
 
 }

@@ -14,6 +14,7 @@ import com.changhong.gehua.common.CommonMethod;
 import com.changhong.gehua.common.PlayVideo;
 import com.changhong.gehua.common.ProcessData;
 import com.changhong.gehua.common.ProgramInfo;
+import com.changhong.gehua.widget.MySeekbar;
 import com.changhong.gehua.widget.ReplayEndDialog;
 import com.changhong.ghlive.service.HttpService;
 import com.changhong.ghliveandreplay.R;
@@ -40,9 +41,16 @@ import android.widget.Toast;
 
 public class ReplayPlayActivity extends Activity {
 	private SurfaceView surfaceView;
-	private SeekBar skbProgress;
+
+	private MySeekbar seekbar;
+	//private SeekBar skbProgress;
 	private TextView CurPro,curProtime,videoCurPro , NextPro,NextProtime,videoNextPro , videoTimeLength, videoCurrentTime;
 	private LinearLayout curlinearLayout,nextLinearLayout;
+
+	//private SeekBar skbProgress;
+	//private TextView CurPro,curProtime,videoCurPro , NextPro,NextProtime,videoNextPro , videoTimeLength, videoCurrentTime;
+	//private LinearLayout curlinearLayout,nextLinearLayout;
+
 	private Player player;
 	private String replayChannelId = null;
 	private ReplayEndDialog replayEndDialog;
@@ -111,6 +119,7 @@ public class ReplayPlayActivity extends Activity {
 				Log.i("mmmm", "ReplayPlayActivity-RE_NEXT_PROGRAM:" + mprogram.getProgramId());
 				break;
 			case Class_Constant.REPLAY_DIALOG_END_CANCEL:
+
 				int curtype = msg.getData().getInt("dialogcanceltype",-1);
 				Log.i("xb", "CANCEL"+String.valueOf(curtype));
 				switch (curtype) {
@@ -139,6 +148,69 @@ public class ReplayPlayActivity extends Activity {
 					
 					break;
 				}
+				
+			/*case Class_Constant.REPLAY_DIALOG_END_OK:
+				int type = msg.getData().getInt("dialogoktype",-1);
+				Log.i("xb", "OK"+String.valueOf(type));
+				switch (type) {
+				case 0:
+					replayEndDialog.dismiss();
+					playNextProgram();
+					break;
+				case 1:
+					replayEndlastDialog.dismiss();
+					finish();
+					break;
+					
+				case 2:
+					firstreplayDialog.dismiss();
+					playLastProgram();
+					break;
+					
+				case 3:
+					if (replayfirstDialog != null) {
+						replayfirstDialog.dismiss();
+					}
+					finish();
+				case 4:
+					if (backreplaydialog != null) {
+						backreplaydialog.dismiss();
+					}
+					finish();
+					break;
+				default:
+					break;
+				}
+				
+
+				int curtype = msg.getData().getInt("dialogcanceltype",-1);
+				Log.i("xb", "CANCEL"+String.valueOf(curtype));
+				switch (curtype) {
+				case 0:
+					replayEndDialog.dismiss();
+					
+					playVideo(channel, mprogram);
+					break;
+				case 1:
+					replayEndlastDialog.dismiss();
+					playVideo(channel, mprogram);
+					break;
+				case 2:
+					firstreplayDialog.dismiss();
+					playVideo(channel, mprogram);
+					break;
+				case 3:
+					replayfirstDialog.dismiss();
+					playVideo(channel, mprogram);
+					break;
+				case 4:
+					backreplaydialog.dismiss();
+					//playVideo(channel, mprogram);
+					break;
+				default:
+					
+					break;
+				}*/
 				
 				
 			case Class_Constant.REPLAY_DIALOG_END_OK:
@@ -170,6 +242,7 @@ public class ReplayPlayActivity extends Activity {
 					break;
 				}
 				
+
 				// player.playUrl(replayurl);
 				
 				//break;
@@ -194,7 +267,11 @@ public class ReplayPlayActivity extends Activity {
 	}
 
 	public void initView() {
-		skbProgress = (SeekBar) this.findViewById(R.id.skbProgress);
+		//skbProgress = (SeekBar) this.findViewById(R.id.skbProgress);
+		seekbar = (MySeekbar) this.findViewById(R.id.mySeekBar);
+		//int screenWidth = seekbar.getLayoutParams().width;
+		//Log.i("xb", " MySeekbar screenWidth = "+screenWidth);
+		//seekbar.getSeekBar().setOnSeekBarChangeListener(new mySeekChangeLis());
 		surfaceView = (SurfaceView) this.findViewById(R.id.surfaceView1);
 		//add
 		CurPro = (TextView) this.findViewById(R.id.curpro);
@@ -210,8 +287,11 @@ public class ReplayPlayActivity extends Activity {
 		
 		videoTimeLength = (TextView) this.findViewById(R.id.video_timelength);
 		videoCurrentTime = (TextView) this.findViewById(R.id.video_currenttime);
-		skbProgress.setClickable(false);
-		skbProgress.setFocusable(false);
+		//skbProgress.setClickable(false);
+		//skbProgress.setFocusable(false);
+		seekbar.getSeekBar().setClickable(false);
+		seekbar.getSeekBar().setFocusable(false);
+		
 		palyButton = (ImageView) findViewById(R.id.play_btn);
 		pauseButton = (ImageView) findViewById(R.id.pause_btn);
 
@@ -233,7 +313,8 @@ public class ReplayPlayActivity extends Activity {
 
 	public void initData() {
 		mProcessData = new ProcessData();
-		player = new Player(replayHandler, surfaceView, skbProgress, videoCurrentTime);
+		//player = new Player(replayHandler, surfaceView, skbProgress, videoCurrentTime);
+		player = new Player(replayHandler, surfaceView, seekbar.getSeekBar(), seekbar.getCurText());
 		//replayEndDialog = new ReplayEndDialog(this,replayHandler,0,"TTTT");
 		
 		
@@ -243,6 +324,8 @@ public class ReplayPlayActivity extends Activity {
 		replayHandler.postDelayed(progressBarRunnable, 5000);
 	}
 
+	
+	
 	/* play net video */
 	private void playNetVideo() {
 		if (isNetConnected()) {
@@ -254,7 +337,8 @@ public class ReplayPlayActivity extends Activity {
 
 	/* thread to play video */
 	private void newThreadPlay() {
-		skbProgress.setProgress(0);
+		//skbProgress.setProgress(0);
+		seekbar.getSeekBar().setProgress(0);
 		new Thread(new Runnable() {
 
 			@Override
@@ -352,7 +436,8 @@ public class ReplayPlayActivity extends Activity {
 		int indexPro = 0;
 		int curIndexDay = 0;
 		if (null == player) {
-			player = new Player(replayHandler, surfaceView, skbProgress, videoCurrentTime);
+			//player = new Player(replayHandler, surfaceView, skbProgress, videoCurrentTime);
+			player = new Player(replayHandler, surfaceView, seekbar.getSeekBar(), seekbar.getCurText());
 		}
 		curDay = CacheData.getReplayCurDay();
 		curProgramList = (List<ProgramInfo>) CacheData.getAllProgramMap().get(curDay);
@@ -380,7 +465,8 @@ public class ReplayPlayActivity extends Activity {
 		int curIndexDay = 0;
 		ProgramInfo program = null;
 		if (null == player) {
-			player = new Player(replayHandler, surfaceView, skbProgress, videoCurrentTime);
+			//player = new Player(replayHandler, surfaceView, skbProgress, videoCurrentTime);
+			player = new Player(replayHandler, surfaceView, seekbar.getSeekBar(), seekbar.getCurText());
 		}
 		curDay = CacheData.getReplayCurDay();
 		curProgramList = (List<ProgramInfo>) CacheData.getAllProgramMap().get(curDay);
@@ -416,7 +502,8 @@ public class ReplayPlayActivity extends Activity {
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
 			Player.handleProgress.sendEmptyMessage(Class_Constant.RE_FAST_FORWARD_DOWN);
-			skbProgress.setVisibility(View.VISIBLE);
+			//skbProgress.setVisibility(View.VISIBLE);
+			seekbar.setVisibility(View.VISIBLE);
 			palyButton.setVisibility(View.GONE);
 			pauseButton.setVisibility(View.GONE);
 			videoTimeLength.setVisibility(View.VISIBLE);
@@ -437,7 +524,8 @@ public class ReplayPlayActivity extends Activity {
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
 			Player.handleProgress.sendEmptyMessage(Class_Constant.RE_FAST_REVERSE_DOWN);
-			skbProgress.setVisibility(View.VISIBLE);
+			//skbProgress.setVisibility(View.VISIBLE);
+			seekbar.setVisibility(View.VISIBLE);
 			palyButton.setVisibility(View.GONE);
 			pauseButton.setVisibility(View.GONE);
 			videoTimeLength.setVisibility(View.VISIBLE);
@@ -464,7 +552,8 @@ public class ReplayPlayActivity extends Activity {
 				player.pause();
 				palyButton.setVisibility(View.GONE);
 				pauseButton.setVisibility(View.VISIBLE);
-				skbProgress.setVisibility(View.VISIBLE);
+				//skbProgress.setVisibility(View.VISIBLE);
+				seekbar.setVisibility(View.VISIBLE);
 				videoTimeLength.setVisibility(View.VISIBLE);
 				videoCurrentTime.setVisibility(View.VISIBLE);
 				
@@ -518,7 +607,8 @@ public class ReplayPlayActivity extends Activity {
 			// finish();
 			break;
 		case Class_Constant.MENU_ID_DTV_ROOT:
-			skbProgress.setVisibility(View.VISIBLE);
+			//skbProgress.setVisibility(View.VISIBLE);
+			seekbar.setVisibility(View.VISIBLE);
 			videoTimeLength.setVisibility(View.VISIBLE);
 			videoCurrentTime.setVisibility(View.VISIBLE);
 			
@@ -565,7 +655,8 @@ public class ReplayPlayActivity extends Activity {
 		public void run() {
 			// TODO Auto-generated method stub
 			palyButton.setVisibility(View.GONE);
-			skbProgress.setVisibility(View.GONE);
+			//skbProgress.setVisibility(View.GONE);
+			seekbar.setVisibility(View.GONE);
 			videoTimeLength.setVisibility(View.GONE);
 			videoCurrentTime.setVisibility(View.GONE);
 			
@@ -585,7 +676,8 @@ public class ReplayPlayActivity extends Activity {
 			// palyButton.setVisibility(View.GONE);
 			// pauseButton.setVisibility(View.GONE);
 			// timeShiftIcon.setVisibility(View.GONE);
-			skbProgress.setVisibility(View.GONE);
+			//skbProgress.setVisibility(View.GONE);
+			seekbar.setVisibility(View.GONE);
 			videoTimeLength.setVisibility(View.GONE);
 			videoCurrentTime.setVisibility(View.GONE);
 			

@@ -65,7 +65,12 @@ public class Utils {
 		return df.format(date);
 	} 
 	
-	
+	public static String millToLiveBackString(long milliseconds){
+		Date date=new Date(milliseconds);
+		DateFormat df = new SimpleDateFormat("HH:mm");
+		df.setTimeZone(TimeZone.getTimeZone("GMT"));
+		return df.format(date);
+	}
 	/**
 	 * 日期变量转成对应的星期字符串
 	 * @param date
