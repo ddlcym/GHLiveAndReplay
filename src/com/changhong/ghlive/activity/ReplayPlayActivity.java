@@ -44,6 +44,7 @@ public class ReplayPlayActivity extends Activity {
 
 	private MySeekbar seekbar;
 	//private SeekBar skbProgress;
+	//private NumberSeekBar numberSeekBar;
 	private TextView CurPro,curProtime,videoCurPro , NextPro,NextProtime,videoNextPro , videoTimeLength, videoCurrentTime;
 	private LinearLayout curlinearLayout,nextLinearLayout;
 
@@ -148,69 +149,6 @@ public class ReplayPlayActivity extends Activity {
 					
 					break;
 				}
-				
-			/*case Class_Constant.REPLAY_DIALOG_END_OK:
-				int type = msg.getData().getInt("dialogoktype",-1);
-				Log.i("xb", "OK"+String.valueOf(type));
-				switch (type) {
-				case 0:
-					replayEndDialog.dismiss();
-					playNextProgram();
-					break;
-				case 1:
-					replayEndlastDialog.dismiss();
-					finish();
-					break;
-					
-				case 2:
-					firstreplayDialog.dismiss();
-					playLastProgram();
-					break;
-					
-				case 3:
-					if (replayfirstDialog != null) {
-						replayfirstDialog.dismiss();
-					}
-					finish();
-				case 4:
-					if (backreplaydialog != null) {
-						backreplaydialog.dismiss();
-					}
-					finish();
-					break;
-				default:
-					break;
-				}
-				
-
-				int curtype = msg.getData().getInt("dialogcanceltype",-1);
-				Log.i("xb", "CANCEL"+String.valueOf(curtype));
-				switch (curtype) {
-				case 0:
-					replayEndDialog.dismiss();
-					
-					playVideo(channel, mprogram);
-					break;
-				case 1:
-					replayEndlastDialog.dismiss();
-					playVideo(channel, mprogram);
-					break;
-				case 2:
-					firstreplayDialog.dismiss();
-					playVideo(channel, mprogram);
-					break;
-				case 3:
-					replayfirstDialog.dismiss();
-					playVideo(channel, mprogram);
-					break;
-				case 4:
-					backreplaydialog.dismiss();
-					//playVideo(channel, mprogram);
-					break;
-				default:
-					
-					break;
-				}*/
 				
 				
 			case Class_Constant.REPLAY_DIALOG_END_OK:
