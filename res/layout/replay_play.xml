@@ -130,11 +130,13 @@
 	            android:progressDrawable="@drawable/bg_seekbar"
 	            android:thumb="@drawable/thumb_bar"/> -->
 	            
-	             <com.changhong.gehua.widget.MySeekbar
+	           <com.changhong.gehua.widget.MySeekbar
 			        android:id="@+id/mySeekBar"
 			        android:layout_width="wrap_content"
 			        android:layout_height="wrap_content"
-			        android:orientation="vertical" />
+			        android:orientation="vertical" /> 
+			    
+			        
 	    	 <TextView
 	            android:id="@+id/video_currenttime"
 	            android:layout_width="wrap_content"
