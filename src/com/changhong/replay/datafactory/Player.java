@@ -110,12 +110,16 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 			if(null==videoCurrentTime){
 				return;
 			}
-			int maxTimes = (int) (CacheData.getCurProgram().getEndTime().getTime() - CacheData.getCurProgram().getBeginTime().getTime());
+//			int maxTimes = (int) (CacheData.getCurProgram().getEndTime().getTime() - CacheData.getCurProgram().getBeginTime().getTime());
+			int maxTimes=getDuration();
 			Log.i("xb", String.valueOf(maxTimes));
+			
 			moveStep = (float) (((float) seekwidth / (float) maxTimes ) * 1);
 			if (videoCurrentTime != null) {
-				videoCurrentTime.setText(Utils.millToLiveBackString(arg1));
-				videoCurrentTime.layout((int) (arg1 * moveStep), 0, (int) (arg1 * moveStep)+60, 20);
+				long beginTime = CacheData.getCurProgram().getBeginTime().getTime();
+				videoCurrentTime.setText(Utils.millToLiveBackString(beginTime+arg1));
+//				videoCurrentTime.layout((int) (arg1 * moveStep), 0, (int) (arg1 * moveStep)+60, 20);
+				videoCurrentTime.layout((int) (arg1 * moveStep), 0, seekwidth, 20);
 			}
 		}
 
@@ -237,7 +241,7 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 //						parentHandler.sendEmptyMessage(Class_Constant.BACK_TO_LIVE);
 					} else {
 						long beginTime = CacheData.getCurProgram().getBeginTime().getTime();
-						videoCurrentTime.setText(Utils.millToLiveBackStr(position + beginTime));
+						videoCurrentTime.setText(Utils.millToLiveBackString(position + beginTime));
 					}
 				} else {
 					position = mediaPlayer.getCurrentPosition();

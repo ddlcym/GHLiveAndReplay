@@ -182,6 +182,7 @@ public class BannerDialog extends Dialog {
 					long curTime=System.currentTimeMillis();
 					int delayTime=(int) (curTime-program.getBeginTime().getTime())/1000;
 					playLiveBack(curChannel, delayTime);
+					CacheData.setCurProgram(program);
 					programListInfo.remove(1);
 					programListInfo.add(1, program);
 					if(programListInfo.size()!=0&&(list.size()-1)!=position){
