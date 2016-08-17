@@ -91,17 +91,7 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 		curChannel = CacheData.getAllChannelMap().get(CacheData.getCurChannelNum());
 		
 		delayTime = 0;
-		firstPlayInShift = true;
 		
-		
-		
-		//int maxTimes = (int) (CacheData.getCurProgram().getEndTime().getTime() - CacheData.getCurProgram().getBeginTime().getTime());
-		//Log.i("xb", String.valueOf(maxTimes));
-		//Log.i("xb", "width = "+String.valueOf(skbProgress.getLayoutParams().width));
-		//seekwidth = skbProgress.getLayoutParams().width;
-		//Log.i("xb", "seekwidth is " + seekwidth);
-		//moveStep = (float) (((float) seekwidth / (float) maxTimes ) * 1);
-		//Log.i("xb", "moveStep = "+String.valueOf(moveStep));
 		
 		seekwidth = skbProgress.getLayoutParams().width;
 		this.skbProgress.setOnSeekBarChangeListener(new mySeekChangeLis());
@@ -117,18 +107,16 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 		@Override
 		public void onProgressChanged(SeekBar arg0, int arg1, boolean arg2) {
 			
+			if(null==videoCurrentTime){
+				return;
+			}
 			int maxTimes = (int) (CacheData.getCurProgram().getEndTime().getTime() - CacheData.getCurProgram().getBeginTime().getTime());
+			Log.i("xb", String.valueOf(maxTimes));
 			moveStep = (float) (((float) seekwidth / (float) maxTimes ) * 1);
-			//float proportion  = (float)arg0.getProgress() / (float)arg0.getMax();
-			//videoCurrentTime.setText(Utils.millToLiveBackString((int)proportion * maxTimes ));
 			if (videoCurrentTime != null) {
 				videoCurrentTime.setText(Utils.millToLiveBackString(arg1));
 				videoCurrentTime.layout((int) (arg1 * moveStep), 0, (int) (arg1 * moveStep)+60, 20);
 			}
-			
-			
-			//long beginTime = CacheData.getCurProgram().getBeginTime().getTime();
-			//videoCurrentTime.setText(Utils.millToLiveBackString(arg1));
 		}
 
 		@Override

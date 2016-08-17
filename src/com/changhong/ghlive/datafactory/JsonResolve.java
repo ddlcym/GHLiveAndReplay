@@ -198,6 +198,25 @@ public class JsonResolve {
 		
 		return proMaps;
 	}
+	
+	public List<ProgramInfo> timeShiftPrograms(JSONObject json) {
+		List<ProgramInfo> list = new ArrayList<ProgramInfo>();
+		JSONArray programs = getJsonObjectArray(json, "program");
+		for (int i = 0; i < programs.length(); i++) {
+			ProgramInfo program = null;
+			try {
+				JSONObject object = (JSONObject) programs.get(i);
+				program = jsonToProgram(object);
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			if (program != null) {
+				list.add(program);
+			}
+		}
+		return list;
+	}
 
 	public List<ProgramInfo> curJsonProToString(JSONObject json) {
 		JSONObject jsonDatas = null;

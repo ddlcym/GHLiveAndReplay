@@ -1,4 +1,4 @@
-package com.changhong.gehua.common;
+package com.changhong.gehua.widget;
 
 /*
  * HorizontalListView.java v1.5

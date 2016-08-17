@@ -92,6 +92,14 @@ public class ProcessData {
 
 		return strGETReturn(rawPlainStr);
 	}
+	/* generate 4hours channel's program info 获取4小时内节目信息 */
+	public String get4HoursProgramList(ChannelInfo outterchanInfo) {
+		String rawPlainStr = serverAdress + chPgmListPendingStr + "version=" + chPgmListVersion + "&resolution="
+				+ chPgmListResolution + "&channelResourceCode=" + outterchanInfo.getResourceCode() + "&beginTime="
+				+ get4HoursAgo()[1] + "&endTime=" + get4HoursAgo()[0] + "&terminalType=" + chPgmListTerminalType;
+
+		return strGETReturn(rawPlainStr);
+	}
 
 	/* generate current channel's program info 获取节目信息 */
 	public String getCurrentProgramInfo(ChannelInfo outterchanInfo) {
@@ -100,6 +108,8 @@ public class ProcessData {
 
 		return strPOSTReturn(rawPlainStr, "msis/getCurrentProgramInfo");
 	}
+	
+	
 
 	/* generate current channel's program list 获取频道的当前节目单 */
 	public String getCurrentChannelProgramList(ChannelInfo outterchanInfo) {
@@ -219,6 +229,20 @@ public class ProcessData {
 		backSevenDate.setHours(0);
 		backSevenDate.setMinutes(0);
 		backSevenDate.setSeconds(0);
+
+		twoDates[0] = sdfNew.format(curDate);
+		twoDates[1] = sdfNew.format(backSevenDate);
+		twoDates[0] = twoDates[0].replace(" ", "+").replace(":", "%3A");
+		twoDates[1] = twoDates[1].replace(" ", "+").replace(":", "%3A");
+		return twoDates;
+	}
+	
+	/* get Date seven days ago */
+	public static String[] get4HoursAgo() {
+		String twoDates[] = { "", "" };
+		SimpleDateFormat sdfNew = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date curDate = new Date(System.currentTimeMillis());
+		Date backSevenDate = new Date(curDate.getTime()-4*60*60*1000);
 
 		twoDates[0] = sdfNew.format(curDate);
 		twoDates[1] = sdfNew.format(backSevenDate);

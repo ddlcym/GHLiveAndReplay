@@ -295,7 +295,7 @@ public class MainActivity extends BaseActivity {
 		chListView.setAdapter(chLstAdapter);
 		chListView.setOnItemClickListener(myClickLis);
 		chListView.setOnItemSelectedListener(myItemSelectLis);
-		muteIconImage = (ImageView) findViewById(R.id.mute_icon);
+		muteIconImage = (ImageView) findViewById(R.id.live_mute_icon);
 
 		if (whetherMute) {
 			muteIconImage.setVisibility(View.VISIBLE);
