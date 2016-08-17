@@ -39,7 +39,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ReplayPlayActivity extends Activity {
+public class ReplayPlayActivity extends BaseActivity {
 	private SurfaceView surfaceView;
 
 	private MySeekbar seekbar;
@@ -192,19 +192,19 @@ public class ReplayPlayActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.replay_play);
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+		
 		// whetherMute = false;
 		if (mHttpService == null) {
 			mHttpService = new HttpService(getApplicationContext());
 		}
 		whetherMute = Boolean.valueOf(CommonMethod.getMuteState(MyApp.getContext()));
 
-		initView();
-		initData();
 	}
 
-	public void initView() {
+	@Override
+	protected void initView() {
+		setContentView(R.layout.replay_play);
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		//skbProgress = (SeekBar) this.findViewById(R.id.skbProgress);
 		seekbar = (MySeekbar) this.findViewById(R.id.mySeekBar);
 		//int screenWidth = seekbar.getLayoutParams().width;
@@ -249,7 +249,8 @@ public class ReplayPlayActivity extends Activity {
 		}
 	}
 
-	public void initData() {
+	@Override
+	protected void initData() {
 		mProcessData = new ProcessData();
 		//player = new Player(replayHandler, surfaceView, skbProgress, videoCurrentTime);
 		player = new Player(replayHandler, surfaceView, seekbar.getSeekBar(), seekbar.getCurText());

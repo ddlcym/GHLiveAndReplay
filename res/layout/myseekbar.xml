@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <com.changhong.gehua.widget.TextMoveLayout
+    <TextView
         android:id="@+id/textLayout"
-        android:layout_width="fill_parent"
-        android:layout_height="25dp" />
+        android:layout_width="80dp"
+        android:layout_height="35dp" 
+        android:background="@drawable/shift_curtime_back"
+        android:textSize="16sp"
+        android:textColor="@color/seekbar_curtext"
+        android:gravity="center"
+        />
 
     <SeekBar
         android:id="@+id/seekbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:layout_below="@id/textLayout"
         android:max="100"
         android:maxHeight="13dip"
         android:minHeight="13dip"
@@ -22,4 +28,4 @@
         android:progressDrawable="@drawable/bg_seekbar"
         android:thumb="@drawable/thumb_bar" />
 
-</LinearLayout>
+</RelativeLayout>

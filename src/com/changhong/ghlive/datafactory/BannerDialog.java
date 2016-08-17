@@ -230,6 +230,7 @@ public class BannerDialog extends Dialog {
 		player = new Player(parentHandler, surView,
 				programPlayBar.getSeekBar(), programPlayBar.getCurText());
 		player.setLiveFlag(true);
+		programPlayBar.getSeekBar().setProgress(0);
 		
 
 	}

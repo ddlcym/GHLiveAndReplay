@@ -23,7 +23,6 @@ public class MySeekbar extends LinearLayout{
 	private Context context;
 	
 	private SeekBar seekBar;
-	private TextMoveLayout textMoveLayout;
 	private TextView curText;
 	
 	/**
@@ -62,15 +61,9 @@ public class MySeekbar extends LinearLayout{
 		screenWidth = getWidth();
 		
 		seekBar=(SeekBar)findViewById(R.id.seekbar);
-		textMoveLayout=(TextMoveLayout)findViewById(R.id.textLayout);
+		curText=(TextView)findViewById(R.id.textLayout);
 		
-		curText = new TextView(context);
-		curText.setBackgroundDrawable(getResources().getDrawable(R.drawable.shift_curtime_back));
-		curText.setTextColor(Color.rgb(0, 161, 229));
-		curText.setTextSize(16);
 		layoutParams = new ViewGroup.LayoutParams(screenWidth, 50);
-		textMoveLayout = (TextMoveLayout) findViewById(R.id.textLayout);
-		textMoveLayout.addView(curText, layoutParams);
 		curText.layout(0, 20, screenWidth, 80);
 		
 	}
