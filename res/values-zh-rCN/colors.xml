@@ -29,5 +29,8 @@
     <color name="replay_curproinfo">#ffffff</color>
     <color name="replay_nextproinfo">#888888</color>
     <color name="seekbar_curtext">#001326</color>
+    <color name="epg_channel_list_default">#80b5bcc0</color>
+    <color name="epg_channel_list_lastselect">#ff1198ff</color>
+    <color name="epg_channel_list_select">#ffffffff</color>
 
 </resources>

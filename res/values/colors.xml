@@ -165,6 +165,10 @@
 
 	<color name="category_text_last">#9e9e9e</color><!--分类unfocus -->  
 	
+	 <color name="epg_channel_list_default">#80b5bcc0</color>
+    <color name="epg_channel_list_lastselect">#ff1198ff</color>
+    <color name="epg_channel_list_select">#ffffffff</color>
+	
 	
 	
 </resources>  

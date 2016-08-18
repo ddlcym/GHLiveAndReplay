@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-
-    <item android:state_focused="true" android:color="@color/white"></item>
-    <item android:state_selected="true" android:state_focused="false" android:color="#1198ff"></item>
-    <item  android:color="@color/gray"></item>
-
-
+    <item  android:state_focused="false" android:state_selected="true" android:color="@color/epg_channel_list_lastselect"></item>
+    <item android:color="@color/epg_channel_list_default"></item>
+    
 </selector>

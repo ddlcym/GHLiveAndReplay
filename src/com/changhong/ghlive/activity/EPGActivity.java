@@ -25,6 +25,7 @@ import com.changhong.replay.datafactory.ProgramsAdapter;
 import com.changhong.replay.datafactory.ResolveEPGInfoThread;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -42,6 +43,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class EPGActivity extends BaseActivity {
 
@@ -54,7 +56,15 @@ public class EPGActivity extends BaseActivity {
 	private static GridView epgWeekInfoView;
 	private static TextView chanListTitleButton;
 	private ImageView focusView;
-
+	
+	/*
+	 * 设置频道列表和epg字体颜色的显示
+	 */
+	private TextView lastCLSelectIndex,lastCLSelectName;
+	private TextView lastEPGSelectIndex,lastEPGSelectName;
+	private TextView lastWeekSelectIndex,lastWeekSelectName;
+	private boolean firstIn=true,firstInWeek=true; 
+	
 	private LinearLayout EventLastSelect = null;
 	private LinearLayout EventCurSelect = null;
 
@@ -181,7 +191,7 @@ public class EPGActivity extends BaseActivity {
 		
 		//channelListview.setFocusable(true);
 		//channelListview.setFocusableInTouchMode(true);
-		//channelListview.setOnFocusChangeListener(ChanListOnfocusChange);
+		channelListview.setOnFocusChangeListener(ChanListOnfocusChange);
 		channelListview.setOnItemSelectedListener(ChanListOnItemSelected);
 		//channelListview.setOnItemClickListener(ChanListOnItemClick);
 		
@@ -191,10 +201,11 @@ public class EPGActivity extends BaseActivity {
 		//epgWeekInfoView.
 		
 		epgWeekInfoView.setOnItemSelectedListener(WeekInfoItemSelected);
-
+		epgWeekInfoView.setOnFocusChangeListener(WeekInfoItemFocus);
+		
 		epgEventListview = (EpgListview) findViewById(R.id.EpgEventInfo);
-		//epgEventListview.setOnFocusChangeListener(epgEventChangeListener);
-		//epgEventListview.setOnItemSelectedListener(epgEventSelectedListener);
+		epgEventListview.setOnFocusChangeListener(epgEventChangeListener);
+		epgEventListview.setOnItemSelectedListener(epgEventSelectedListener);
 		epgEventListview.setOnItemClickListener(epgEventClickListener);
 
 		channelAdapter = new ChannelRepListAdapter(EPGActivity.this);
@@ -278,15 +289,48 @@ public class EPGActivity extends BaseActivity {
 		public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 			if (CacheData.dayMonths.isEmpty())
 				return;
+			if(firstInWeek){
+				firstInWeek=false;
+				return;
+			}
+			if (arg1 == null) {
+				return;
+			}
 			curDay = CacheData.dayMonths.get(arg2);
 			CacheData.setReplayCurDay(curDay);
 			uiHandler.sendEmptyMessage(MSG_WEEKDAY_CHANGE); // 更新下面的列表
+			
+			lastWeekSelectIndex = (TextView) arg1.findViewById(R.id.epg_week_Tview_date);
+			lastWeekSelectName = (TextView) arg1.findViewById(R.id.epg_week_Tview_week);
+			ColorStateList csl=(ColorStateList)getBaseContext().getResources().getColorStateList(R.color.replay_chanlist_whitegray);
+			lastWeekSelectIndex.setTextColor(csl);
+			lastWeekSelectName.setTextColor(csl);
 
 		}
 
 		@Override
 		public void onNothingSelected(AdapterView<?> arg0) {
 
+		}
+	};
+	private OnFocusChangeListener WeekInfoItemFocus =new OnFocusChangeListener() {
+		
+		@Override
+		public void onFocusChange(View v, boolean hasFocus) {
+			// TODO Auto-generated method stub
+			if (lastWeekSelectIndex != null) {
+				
+				if(hasFocus){
+					
+					ColorStateList csl=(ColorStateList)getBaseContext().getResources().getColorStateList(R.color.replay_chanlist_whitegray);
+					lastWeekSelectIndex.setTextColor(csl);
+					lastWeekSelectName.setTextColor(csl);
+				}else{
+					ColorStateList csl=(ColorStateList)getBaseContext().getResources().getColorStateList(R.color.replay_channellist_text);
+					lastWeekSelectIndex.setTextColor(csl);
+					lastWeekSelectName.setTextColor(csl);
+				}
+			}
 		}
 	};
 
@@ -327,9 +371,15 @@ public class EPGActivity extends BaseActivity {
 				return;
 			}
 			TextView channelIdText = (TextView) arg1.findViewById(R.id.channelId);
+			lastCLSelectIndex = (TextView) arg1.findViewById(R.id.epg_chan_Tview_chanindex);
+			lastCLSelectName = (TextView) arg1.findViewById(R.id.epg_chan_Tview_channame);
 			curChannelNum = channelIdText.getText().toString();
 			curChannel = (ChannelInfo) CacheData.getAllChannelMap().get(curChannelNum);
-
+			
+			ColorStateList csl=(ColorStateList)getBaseContext().getResources().getColorStateList(R.color.replay_chanlist_whitegray);
+			lastCLSelectIndex.setTextColor(csl);
+			lastCLSelectName.setTextColor(csl);
+			
 			//获取指定频道的节目信息
 			getPointProList(curChannel);
 
@@ -353,21 +403,27 @@ public class EPGActivity extends BaseActivity {
 
 		@Override
 		public void onNothingSelected(AdapterView<?> arg0) {
-
+			Toast.makeText(EPGActivity.this, "nothing select!!!", Toast.LENGTH_SHORT).show();
 		}
+		
+		
 	};
 
 	private OnFocusChangeListener ChanListOnfocusChange = new OnFocusChangeListener() {
-
 		@Override
 		public void onFocusChange(View arg0, boolean arg1) {
-			channelListFoucus = arg1;
 
-			if (arg0 != null) {
-				if (channelCurSelect != null) {
-					// ChannelItemScale(channelCurSelect, true,
-					// channelListFoucus);
-					channelLastSelect = channelListLinear;
+			if (lastCLSelectIndex != null) {
+				
+				if(arg1){
+					
+					ColorStateList csl=(ColorStateList)getBaseContext().getResources().getColorStateList(R.color.replay_chanlist_whitegray);
+					lastCLSelectIndex.setTextColor(csl);
+					lastCLSelectName.setTextColor(csl);
+				}else{
+					ColorStateList csl=(ColorStateList)getBaseContext().getResources().getColorStateList(R.color.replay_channellist_text);
+					lastCLSelectIndex.setTextColor(csl);
+					lastCLSelectName.setTextColor(csl);
 				}
 			}
 		}
@@ -378,22 +434,18 @@ public class EPGActivity extends BaseActivity {
 		@Override
 		public void onFocusChange(View arg0, boolean arg1) {
 
-			/*bEventFocus = arg1;
-			if (arg0.getId() == R.id.EpgEventInfo) {
-				// if (true == arg1) {
-				// bookButton.setFocusable(false);
-				// bookButton.setFocusableInTouchMode(false);
-				// } else if (false == arg1) {
-				// bookButton.setFocusable(true);
-				// bookButton.setFocusableInTouchMode(true);
-				// }
-			}
-			if (arg0 != null) {
-				if (EventCurSelect != null) {
-					// epgEventItemScale(EventCurSelect, bEventFocus);
-					EventLastSelect = EventCurSelect;
+				if (lastEPGSelectIndex != null) {
+				if(arg1){
+					
+					ColorStateList csl=(ColorStateList)getBaseContext().getResources().getColorStateList(R.color.replay_chanlist_whitegray);
+					lastEPGSelectIndex.setTextColor(csl);
+					lastEPGSelectName.setTextColor(csl);
+				}else{
+					ColorStateList csl=(ColorStateList)getBaseContext().getResources().getColorStateList(R.color.replay_channellist_text);
+					lastEPGSelectIndex.setTextColor(csl);
+					lastEPGSelectName.setTextColor(csl);
 				}
-			}*/
+			}
 		}
 	};
 
@@ -401,26 +453,20 @@ public class EPGActivity extends BaseActivity {
 
 		@Override
 		public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-
-			/*if (arg1 == null) {
+			
+			if(firstIn){
+				firstIn=false;
 				return;
 			}
-
-			EventCurSelect = (LinearLayout) arg1.findViewById(R.id.eventitem_Linearlayout);
-			if (bEventFocus == false) {
+			if (arg1 == null) {
 				return;
 			}
-
-			if (EventLastSelect != null) {
-				// epgEventItemScale(EventLastSelect, false);
-				EventLastSelect = null;
-			}
-
-			if (EventCurSelect != null) {
-				// epgEventItemScale(EventCurSelect, true);
-				EventLastSelect = EventCurSelect;
-				// EventlitItemindex = (int) arg3;
-			}*/
+			lastEPGSelectIndex = (TextView) arg1.findViewById(R.id.epg_event_Tview_time);
+			lastEPGSelectName = (TextView) arg1.findViewById(R.id.epg_event_Tview_info);
+			
+			ColorStateList csl=(ColorStateList)getBaseContext().getResources().getColorStateList(R.color.replay_chanlist_whitegray);
+			lastEPGSelectIndex.setTextColor(csl);
+			lastEPGSelectName.setTextColor(csl);
 		}
 
 		@Override

@@ -3,7 +3,6 @@
     android:id="@+id/epg_chan_itemlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    
     android:orientation="horizontal"
     
      >
@@ -17,7 +16,6 @@
         android:layout_width="60dip"
         android:layout_height="50dip"
         android:gravity="center"
-       
         android:textColor="@color/replay_channellist_text"
         android:textSize="24sp" />
 

@@ -362,6 +362,9 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 //				e.printStackTrace();
 //			}
 			mediaPlayer = null;
+			if(parentHandler!=null){
+				parentHandler.removeCallbacks(fastOperationRunnable);
+			}
 		}
 		if(mTimer!=null){
 		mTimer.cancel();
@@ -578,6 +581,7 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener, MediaPlaye
 		public void run() {
 			// TODO Auto-generated method stub
 			// Player.skbProgress.setProgress(desPositon);
+			if(null==mediaPlayer)return;
 			if (!liveFlag) {
 				mediaPlayer.seekTo(desPositon);
 				mediaPlayer.start();

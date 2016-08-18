@@ -62,7 +62,6 @@ public class ChannelRepListAdapter extends BaseAdapter {
 
 		viewHolder.channelIDView.setText(channel.getChannelNumber());
 
-		viewHolder.channelIDView.setTextColor(0xffffffff);
 
 		viewHolder.channelIndex.setText(channel.getChannelNumber());
 
