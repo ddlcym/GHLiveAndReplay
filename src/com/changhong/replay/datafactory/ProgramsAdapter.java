@@ -9,6 +9,7 @@ import com.changhong.gehua.common.ProgramInfo;
 import com.changhong.ghliveandreplay.R;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +61,12 @@ public class ProgramsAdapter extends BaseAdapter {
 		eventView.setText(epgEvent.getEventName());
 		ImageView replayView = (ImageView) convertView.findViewById(R.id.replay_image);
 		replayView.setBackgroundResource(R.drawable.tv_loolback_icon);
+		
+		
+		ColorStateList csl=(ColorStateList)context.getResources().getColorStateList(R.color.replay_channellist_text);
+		timeView.setTextColor(csl);
+		eventView.setTextColor(csl);
+		
 		// TextView bookView = (TextView) convertView
 		// .findViewById(R.id.epg_event_Tview_timer);
 		// Calendar c = Calendar.getInstance();

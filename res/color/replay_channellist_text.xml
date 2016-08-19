@@ -2,6 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item  android:state_focused="false" android:state_selected="true" android:color="@color/epg_channel_list_lastselect"></item>
+    <item  android:state_focused="true" android:state_selected="true" android:color="@color/white"></item>
     <item android:color="@color/epg_channel_list_default"></item>
     
 </selector>
