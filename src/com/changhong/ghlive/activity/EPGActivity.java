@@ -63,7 +63,7 @@ public class EPGActivity extends BaseActivity {
 	private TextView lastCLSelectIndex,lastCLSelectName;
 	private TextView lastEPGSelectIndex,lastEPGSelectName;
 	private TextView lastWeekSelectIndex,lastWeekSelectName;
-	private boolean firstIn=true,firstInWeek=true; 
+	private boolean firstInPro=true,firstInWeek=true; 
 	
 	private LinearLayout EventLastSelect = null;
 	private LinearLayout EventCurSelect = null;
@@ -289,10 +289,7 @@ public class EPGActivity extends BaseActivity {
 		public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 			if (CacheData.dayMonths.isEmpty())
 				return;
-			if(firstInWeek){
-				firstInWeek=false;
-				return;
-			}
+			
 			if (arg1 == null) {
 				return;
 			}
@@ -300,12 +297,16 @@ public class EPGActivity extends BaseActivity {
 			CacheData.setReplayCurDay(curDay);
 			uiHandler.sendEmptyMessage(MSG_WEEKDAY_CHANGE); // 更新下面的列表
 			
+			//下面都是 为了实现字体三色切换
+			if(firstInWeek){
+				firstInWeek=false;
+				return;
+			}
 			lastWeekSelectIndex = (TextView) arg1.findViewById(R.id.epg_week_Tview_date);
 			lastWeekSelectName = (TextView) arg1.findViewById(R.id.epg_week_Tview_week);
 			ColorStateList csl=(ColorStateList)getBaseContext().getResources().getColorStateList(R.color.replay_chanlist_whitegray);
 			lastWeekSelectIndex.setTextColor(csl);
 			lastWeekSelectName.setTextColor(csl);
-
 		}
 
 		@Override
@@ -318,10 +319,12 @@ public class EPGActivity extends BaseActivity {
 		@Override
 		public void onFocusChange(View v, boolean hasFocus) {
 			// TODO Auto-generated method stub
+			
+			//下面都是 为了实现字体三色切换
+			lastWeekSelectIndex=(TextView) ((GridView)v).getSelectedView().findViewById(R.id.epg_week_Tview_date);
+			lastWeekSelectName=(TextView) ((GridView)v).getSelectedView().findViewById(R.id.epg_week_Tview_week);
 			if (lastWeekSelectIndex != null) {
-				
 				if(hasFocus){
-					
 					ColorStateList csl=(ColorStateList)getBaseContext().getResources().getColorStateList(R.color.replay_chanlist_whitegray);
 					lastWeekSelectIndex.setTextColor(csl);
 					lastWeekSelectName.setTextColor(csl);
@@ -371,11 +374,13 @@ public class EPGActivity extends BaseActivity {
 				return;
 			}
 			TextView channelIdText = (TextView) arg1.findViewById(R.id.channelId);
-			lastCLSelectIndex = (TextView) arg1.findViewById(R.id.epg_chan_Tview_chanindex);
-			lastCLSelectName = (TextView) arg1.findViewById(R.id.epg_chan_Tview_channame);
+			
 			curChannelNum = channelIdText.getText().toString();
 			curChannel = (ChannelInfo) CacheData.getAllChannelMap().get(curChannelNum);
 			
+			//下面都是 为了实现字体三色切换
+			lastCLSelectIndex = (TextView) arg1.findViewById(R.id.epg_chan_Tview_chanindex);
+			lastCLSelectName = (TextView) arg1.findViewById(R.id.epg_chan_Tview_channame);
 			ColorStateList csl=(ColorStateList)getBaseContext().getResources().getColorStateList(R.color.replay_chanlist_whitegray);
 			lastCLSelectIndex.setTextColor(csl);
 			lastCLSelectName.setTextColor(csl);
@@ -413,10 +418,9 @@ public class EPGActivity extends BaseActivity {
 		@Override
 		public void onFocusChange(View arg0, boolean arg1) {
 
+			//下面都是 为了实现字体三色切换
 			if (lastCLSelectIndex != null) {
-				
 				if(arg1){
-					
 					ColorStateList csl=(ColorStateList)getBaseContext().getResources().getColorStateList(R.color.replay_chanlist_whitegray);
 					lastCLSelectIndex.setTextColor(csl);
 					lastCLSelectName.setTextColor(csl);
@@ -434,9 +438,11 @@ public class EPGActivity extends BaseActivity {
 		@Override
 		public void onFocusChange(View arg0, boolean arg1) {
 
+			//下面都是 为了实现字体三色切换
+			lastEPGSelectIndex=(TextView) ((EpgListview)arg0).getSelectedView().findViewById(R.id.epg_event_Tview_time);
+			lastEPGSelectName=(TextView) ((EpgListview)arg0).getSelectedView().findViewById(R.id.epg_event_Tview_info);
 				if (lastEPGSelectIndex != null) {
 				if(arg1){
-					
 					ColorStateList csl=(ColorStateList)getBaseContext().getResources().getColorStateList(R.color.replay_chanlist_whitegray);
 					lastEPGSelectIndex.setTextColor(csl);
 					lastEPGSelectName.setTextColor(csl);
@@ -454,16 +460,18 @@ public class EPGActivity extends BaseActivity {
 		@Override
 		public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 			
-			if(firstIn){
-				firstIn=false;
+			
+			if (arg1 == null) {
 				return;
 			}
-			if (arg1 == null) {
+			
+			//下面都是 为了实现字体三色切换
+			if(firstInPro){
+				firstInPro=false;
 				return;
 			}
 			lastEPGSelectIndex = (TextView) arg1.findViewById(R.id.epg_event_Tview_time);
 			lastEPGSelectName = (TextView) arg1.findViewById(R.id.epg_event_Tview_info);
-			
 			ColorStateList csl=(ColorStateList)getBaseContext().getResources().getColorStateList(R.color.replay_chanlist_whitegray);
 			lastEPGSelectIndex.setTextColor(csl);
 			lastEPGSelectName.setTextColor(csl);
@@ -522,6 +530,9 @@ public class EPGActivity extends BaseActivity {
 	};
 
 	public void EpgEventListRefresh(String curday) {
+		//第一次填充数据的时候，不执行select监听器
+		firstInPro=true;
+				
 		// 根据当前保存的数据刷新EventList
 		curProgramList = (List<ProgramInfo>) CacheData.getAllProgramMap().get(curday);
 		programsAdapter.setData(curProgramList);
@@ -529,6 +540,8 @@ public class EPGActivity extends BaseActivity {
 		View v = epgEventListview.getChildAt(0);
 		int top = (v == null) ? 0 : v.getTop();
 		epgEventListview.setSelectionFromTop(0, top);
+		
+		
 
 	}
 
