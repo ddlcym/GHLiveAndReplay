@@ -238,7 +238,7 @@ public class JsonResolve {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(jsonDatas!=null){
+		if(jsonDatas!=null&&list.size()>0){
 		list.add(1, jsonToProgram(jsonDatas));
 		}
 		try {
@@ -247,7 +247,7 @@ public class JsonResolve {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(jsonDatas!=null){
+		if(jsonDatas!=null&&list.size()>0){
 		list.add(2, jsonToProgram(jsonDatas));
 		}
 		CacheData.setCurPrograms(list);

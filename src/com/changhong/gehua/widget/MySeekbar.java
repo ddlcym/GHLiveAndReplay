@@ -58,14 +58,12 @@ public class MySeekbar extends LinearLayout{
 	private void initView(){
 		LayoutInflater.from(context).inflate(R.layout.myseekbar, this);
 		
-		screenWidth = getWidth();
-		
 		seekBar=(SeekBar)findViewById(R.id.seekbar);
 		curText=(TextView)findViewById(R.id.textLayout);
 		
-		layoutParams = new ViewGroup.LayoutParams(screenWidth, 50);
-		curText.layout(0, 20, screenWidth, 80);
-		
+//		float moveStep = (float) ((float) seekBar.getProgress() / (float) seekBar.getMax() ) ;
+//		int seekwidth=seekBar.getWidth();
+//		curText.layout((int) (seekwidth * moveStep), 0, (int)(seekwidth * moveStep)+curText.getWidth(), curText.getHeight());
 	}
 	
 	public void setMax(int max){

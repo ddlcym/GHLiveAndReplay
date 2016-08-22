@@ -1320,7 +1320,7 @@ public class MainActivity extends BaseActivity {
 		Log.i("mmmm", "mainactivity destroyed()");
 		whetherMute = false;
 		player.setLiveFlag(false);
-		Player.stop();
+		player.stop();
 		player=null;
 		if(programBannerDialog!=null){
 			programBannerDialog.dismiss();

@@ -33,6 +33,7 @@ import com.changhong.gehua.common.Utils;
 import com.changhong.gehua.common.VolleyTool;
 import com.changhong.gehua.widget.HorizontalListView;
 import com.changhong.gehua.widget.MySeekbar;
+import com.changhong.gehua.widget.PlayButton;
 import com.changhong.gehua.widget.TwoWayAdapterView;
 import com.changhong.gehua.widget.TwoWayAdapterView.OnItemClickListener;
 import com.changhong.gehua.widget.TwoWayGridView;
@@ -68,9 +69,8 @@ public class BannerDialog extends Dialog {
 	private RequestQueue mReQueue;
 	private ChannelInfo curChannel;
 	private LinearLayout timeShiftInfo;
-	private ImageView palyButton, pauseButton, timeShiftIcon, forwardIcon,
-			backwardIcon;
-	private ImageView muteIconImage;
+	private PlayButton palyButton;
+	private ImageView muteIconImage,timeShiftIcon;
 	private HttpService mHttpService;
 	private List<ProgramInfo> list;
 
@@ -122,8 +122,6 @@ public class BannerDialog extends Dialog {
 		window.setGravity(Gravity.BOTTOM);
 
 		/* 频道名称、频道ID 节目名称 */
-		forwardIcon = (ImageView) findViewById(R.id.fast_forward);
-		backwardIcon = (ImageView) findViewById(R.id.fast_backward);
 
 		// 时移节目列表
 		timeshiftProList = (TwoWayGridView) findViewById(R.id.timeshift_program_list);
@@ -138,9 +136,8 @@ public class BannerDialog extends Dialog {
 		bannerView = (LinearLayout) findViewById(R.id.live_back_banner);
 		timeLength = (TextView) findViewById(R.id.live_timelength);
 		// bannerView.getBackground().setAlpha(255);
-		palyButton = (ImageView) findViewById(R.id.play_btn);
-		pauseButton = (ImageView) findViewById(R.id.pause_btn);
-		pauseButton.setVisibility(View.VISIBLE);
+		palyButton = (PlayButton) findViewById(R.id.play_btn);
+		palyButton.setMyBG(PlayButton.Pause);
 		muteIconImage = (ImageView) findViewById(R.id.mute_icon);
 		whetherMute = Boolean.valueOf(CommonMethod.getMuteState(MyApp
 				.getContext()));
@@ -182,6 +179,7 @@ public class BannerDialog extends Dialog {
 					long curTime=System.currentTimeMillis();
 					int delayTime=(int) (curTime-program.getBeginTime().getTime())/1000;
 					playLiveBack(curChannel, delayTime);
+					palyButton.setMyBG(PlayButton.Play);
 					CacheData.setCurProgram(program);
 					programListInfo.remove(1);
 					programListInfo.add(1, program);
@@ -226,7 +224,6 @@ public class BannerDialog extends Dialog {
 		timeLength.setText(currentProgramEndTime);
 		programPlayBar.setMax((int) length);
 		player.setDuration((int) length);
-		palyButton.setVisibility(View.GONE);
 		
 		player = new Player(parentHandler, surView,
 				programPlayBar.getSeekBar(), programPlayBar.getCurText());
@@ -288,30 +285,22 @@ public class BannerDialog extends Dialog {
 
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
 			bannerView.setVisibility(View.VISIBLE);
-			palyButton.setVisibility(View.GONE);
-			pauseButton.setVisibility(View.GONE);
+			palyButton.setMyBG(PlayButton.Forward);
 			parentHandler.removeCallbacks(bannerRunnable);
 			parentHandler.postDelayed(bannerRunnable, 5000);
-			backwardIcon.setVisibility(View.GONE);
-			forwardIcon.setVisibility(View.VISIBLE);
 			Log.i("mmmm", "banner-handleProgress" + Player.handleProgress);
 			Player.handleProgress
 					.sendEmptyMessage(Class_Constant.LIVE_FAST_FORWARD);
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
 			bannerView.setVisibility(View.VISIBLE);
-			palyButton.setVisibility(View.GONE);
-			pauseButton.setVisibility(View.GONE);
+			palyButton.setMyBG(PlayButton.Backward);
 			parentHandler.removeCallbacks(bannerRunnable);
 			parentHandler.postDelayed(bannerRunnable, 5000);
-			forwardIcon.setVisibility(View.GONE);
-			backwardIcon.setVisibility(View.VISIBLE);
 			Player.handleProgress
 					.sendEmptyMessage(Class_Constant.LIVE_FAST_REVERSE);
 			break;
 		case Class_Constant.KEYCODE_OK_KEY:
-			forwardIcon.setVisibility(View.GONE);
-			backwardIcon.setVisibility(View.GONE);
 			
 			if(programListContainer.isShown()){
 				player.play();
@@ -319,20 +308,19 @@ public class BannerDialog extends Dialog {
 			}
 			if (player.isPlayerPlaying()) {
 				player.pause();
-				palyButton.setVisibility(View.GONE);
-				pauseButton.setVisibility(View.VISIBLE);
+				bannerView.setVisibility(View.VISIBLE);
+				palyButton.setMyBG(PlayButton.Pause);
 				if (bannerRunnable != null) {
 					parentHandler.removeCallbacks(bannerRunnable);
 				}
-				bannerView.setVisibility(View.VISIBLE);
 			} else {
 				player.play();
-				pauseButton.setVisibility(View.GONE);
-				palyButton.setVisibility(View.VISIBLE);
+				bannerView.setVisibility(View.VISIBLE);
+				palyButton.setMyBG(PlayButton.Play);
 				parentHandler.removeCallbacks(bannerRunnable);
 				parentHandler.postDelayed(bannerRunnable, 5000);
-				parentHandler.removeCallbacks(playBtnRunnable);
-				parentHandler.postDelayed(playBtnRunnable, 5000);
+//				parentHandler.removeCallbacks(playBtnRunnable);
+//				parentHandler.postDelayed(playBtnRunnable, 5000);
 			}
 
 			break;
@@ -386,12 +374,12 @@ public class BannerDialog extends Dialog {
 
 			Player.handleProgress
 					.sendEmptyMessage(Class_Constant.RE_FAST_FORWARD_UP);
-			forwardIcon.setVisibility(View.GONE);
+			palyButton.setMyBG(PlayButton.Play);
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
 			Player.handleProgress
 					.sendEmptyMessage(Class_Constant.RE_FAST_REVERSE_UP);
-			backwardIcon.setVisibility(View.GONE);
+			palyButton.setMyBG(PlayButton.Play);
 			break;
 		}
 
@@ -426,8 +414,10 @@ public class BannerDialog extends Dialog {
 							public void run() {
 								// TODO Auto-generated method stub
 								player.playUrl(url);
+								
 							}
 						}).start();
+						
 
 					}
 				}, errorListener);
@@ -456,7 +446,7 @@ public class BannerDialog extends Dialog {
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
-			palyButton.setVisibility(View.GONE);
+			palyButton.setVisibility(View.INVISIBLE);
 		}
 	};
 
@@ -481,6 +471,14 @@ public class BannerDialog extends Dialog {
 		jsonObjectRequest.setTag("program");// 设置tag,cancelAll的时候使用
 		mReQueue.add(jsonObjectRequest);
 	}
-	
 
+	@Override
+	public void dismiss() {
+		// TODO Auto-generated method stub
+		super.dismiss();
+		player.stopTimer();
+		
+	}
+	
+	
 }

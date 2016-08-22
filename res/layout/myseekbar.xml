@@ -20,6 +20,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_below="@id/textLayout"
+        android:layout_marginLeft="@dimen/seekbar_margin"
+        android:layout_marginRight="@dimen/seekbar_margin"
         android:max="100"
         android:maxHeight="13dip"
         android:minHeight="13dip"
