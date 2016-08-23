@@ -127,4 +127,9 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@drawable/dialog_back</item>
 	 </style>
+	 
+	 <style name="volumnDialog" >
+    	<item name="android:windowFullscreen">true</item>        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@drawable/pf_back</item>
+	 </style>
 </resources>

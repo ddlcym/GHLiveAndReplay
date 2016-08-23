@@ -131,17 +131,18 @@
 	            
 	           <com.changhong.gehua.widget.MySeekbar
 			        android:id="@+id/mySeekBar"
-			        android:layout_width="wrap_content"
+			        android:layout_width="750dip"
 			        android:layout_height="wrap_content"
 			        android:orientation="vertical" /> 
 			    
 			        
-	    	 <TextView
+	    	<!--  <TextView
 	            android:id="@+id/video_currenttime"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:text="00:00"
-	            android:textSize="25sp" />
+	            android:textSize="25sp" /> -->
+	    	 
 	   		 <TextView
 	            android:id="@+id/video_timelength"
 	            android:layout_width="wrap_content"
