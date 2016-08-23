@@ -935,6 +935,7 @@ public class MainActivity extends BaseActivity {
 			// audioMgr.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
 			whetherMute = !whetherMute;
 			// Log.i("zyt", "keycode mute is " + whetherMute);
+			
 			CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
 			if (muteIconImage.isShown()) {
 				muteIconImage.setVisibility(View.GONE);
@@ -942,15 +943,15 @@ public class MainActivity extends BaseActivity {
 				muteIconImage.setVisibility(View.VISIBLE);
 			}
 			break;
-		case Class_Constant.KEYCODE_VOICE_UP:
-		case Class_Constant.KEYCODE_VOICE_DOWN:
-			if (muteIconImage.isShown()) {
+		//case Class_Constant.KEYCODE_VOICE_UP:
+		//case Class_Constant.KEYCODE_VOICE_DOWN:
+			/*if (muteIconImage.isShown()) {
 				muteIconImage.setVisibility(View.GONE);
 			}
 			// audioMgr.setStreamMute(AudioManager.STREAM_MUSIC, true);
 			whetherMute = false;
-			CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
-			break;
+			CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());*/
+			//break;
 		default:
 			Log.i("zyt", "onkeydown default is " + keyCode);
 			break;

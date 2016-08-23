@@ -25,6 +25,7 @@ import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -45,7 +46,7 @@ public class ReplayPlayActivity extends BaseActivity {
 	private MySeekbar seekbar;
 	//private SeekBar skbProgress;
 	//private NumberSeekBar numberSeekBar;
-	private TextView CurPro,curProtime,videoCurPro , NextPro,NextProtime,videoNextPro , videoTimeLength, videoCurrentTime;
+	private TextView CurPro,curProtime,videoCurPro , NextPro,NextProtime,videoNextPro , videoTimeLength;//videoCurrentTime;
 	private LinearLayout curlinearLayout,nextLinearLayout;
 
 	//private SeekBar skbProgress;
@@ -57,7 +58,7 @@ public class ReplayPlayActivity extends BaseActivity {
 	private ReplayEndDialog replayEndDialog;
 	private ReplayEndDialog replayEndlastDialog,firstreplayDialog,replayfirstDialog,backreplaydialog;
 	private ImageView pfbackImageView , palyButton, pauseButton, forwardIcon, backwardIcon;
-	private ImageView muteIconImage;
+	//private ImageView muteIconImage;
 
 	private int maxTimes = 0;
 	ProcessData mProcessData;
@@ -65,9 +66,12 @@ public class ReplayPlayActivity extends BaseActivity {
 	ProgramInfo mprogram;
 	String replayurl = "";
 	private List<ProgramInfo> curProgramList = new ArrayList<ProgramInfo>();
-	private boolean whetherMute;
+	//private boolean whetherMute;
 	private HttpService mHttpService;
 	private String cotentString = null;
+	//add 
+	AudioManager mAudioManager;
+	int curvolumn;
 	
 
 	private Handler replayHandler = new Handler() {
@@ -197,7 +201,9 @@ public class ReplayPlayActivity extends BaseActivity {
 		if (mHttpService == null) {
 			mHttpService = new HttpService(getApplicationContext());
 		}
-		whetherMute = Boolean.valueOf(CommonMethod.getMuteState(MyApp.getContext()));
+		//whetherMute = Boolean.valueOf(CommonMethod.getMuteState(MyApp.getContext()));
+		mAudioManager = (AudioManager) getApplicationContext().getSystemService(AUDIO_SERVICE);
+		
 
 	}
 
@@ -224,7 +230,7 @@ public class ReplayPlayActivity extends BaseActivity {
 		
 		
 		videoTimeLength = (TextView) this.findViewById(R.id.video_timelength);
-		videoCurrentTime = (TextView) this.findViewById(R.id.video_currenttime);
+		//videoCurrentTime = (TextView) this.findViewById(R.id.video_currenttime);
 		//skbProgress.setClickable(false);
 		//skbProgress.setFocusable(false);
 		seekbar.getSeekBar().setClickable(false);
@@ -233,7 +239,7 @@ public class ReplayPlayActivity extends BaseActivity {
 		palyButton = (ImageView) findViewById(R.id.play_btn);
 		pauseButton = (ImageView) findViewById(R.id.pause_btn);
 
-		muteIconImage = (ImageView) findViewById(R.id.mute_icon);
+		//muteIconImage = (ImageView) findViewById(R.id.mute_icon);
 		//timeShiftIcon = (ImageView) findViewById(R.id.time_shift_icon);
 		forwardIcon = (ImageView) findViewById(R.id.fast_forward);
 		backwardIcon = (ImageView) findViewById(R.id.fast_backward);
@@ -242,11 +248,13 @@ public class ReplayPlayActivity extends BaseActivity {
 		//ps.width = 90;
 		//timeShiftIcon.setLayoutParams(ps);
 		// timeShiftIcon.setVisibility(View.VISIBLE);
-		if (whetherMute) {
+		/*if (whetherMute) {
 			muteIconImage.setVisibility(View.VISIBLE);
 		} else {
 			muteIconImage.setVisibility(View.GONE);
-		}
+		}*/
+		
+		
 	}
 
 	@Override
@@ -330,6 +338,14 @@ public class ReplayPlayActivity extends BaseActivity {
 		channel = CacheData.getCurChannel();
 		mprogram = CacheData.getCurProgram();
 		playVideo(channel, mprogram);
+		
+		curvolumn =  mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+		Log.i("test", "enter replay curvolumn is"+curvolumn);
+		//进到回看，先判断是否是静音，显示图标
+		/*if (curvolumn == 0) {
+			muteIconImage.setVisibility(View.VISIBLE);
+			Log.i("test", "muteIconImage muteIconImage");
+		}*/
 	}
 
 	private void playVideo(ChannelInfo channel, ProgramInfo program) {
@@ -339,7 +355,7 @@ public class ReplayPlayActivity extends BaseActivity {
 		// skbProgress.setMax(maxTimes);
 		SimpleDateFormat formatter1 = new SimpleDateFormat("HH:mm");
 		formatter1.setTimeZone(TimeZone.getTimeZone("GMT"));
-		videoTimeLength.setText("/" + formatter1.format(maxTimes));
+		videoTimeLength.setText( formatter1.format(maxTimes));
 		
 		SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
 		formatter.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
@@ -446,7 +462,7 @@ public class ReplayPlayActivity extends BaseActivity {
 			palyButton.setVisibility(View.GONE);
 			pauseButton.setVisibility(View.GONE);
 			videoTimeLength.setVisibility(View.VISIBLE);
-			videoCurrentTime.setVisibility(View.VISIBLE);
+			//videoCurrentTime.setVisibility(View.VISIBLE);
 			
 //			videoCurPro.setVisibility(View.VISIBLE);
 //			videoNextPro.setVisibility(View.VISIBLE);
@@ -468,7 +484,7 @@ public class ReplayPlayActivity extends BaseActivity {
 			palyButton.setVisibility(View.GONE);
 			pauseButton.setVisibility(View.GONE);
 			videoTimeLength.setVisibility(View.VISIBLE);
-			videoCurrentTime.setVisibility(View.VISIBLE);
+			//videoCurrentTime.setVisibility(View.VISIBLE);
 //			
 //			videoCurPro.setVisibility(View.VISIBLE);
 //			videoNextPro.setVisibility(View.VISIBLE);
@@ -494,7 +510,7 @@ public class ReplayPlayActivity extends BaseActivity {
 				//skbProgress.setVisibility(View.VISIBLE);
 				seekbar.setVisibility(View.VISIBLE);
 				videoTimeLength.setVisibility(View.VISIBLE);
-				videoCurrentTime.setVisibility(View.VISIBLE);
+				//videoCurrentTime.setVisibility(View.VISIBLE);
 				
 //				videoCurPro.setVisibility(View.VISIBLE);
 //				videoNextPro.setVisibility(View.VISIBLE);
@@ -513,26 +529,27 @@ public class ReplayPlayActivity extends BaseActivity {
 			}
 
 			break;
-		case Class_Constant.KEYCODE_MUTE:// mute
-			// int current =
-			// audioMgr.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
-			whetherMute = !whetherMute;
-			// Log.i("zyt", "keycode mute is " + whetherMute);
-			CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
-			if (muteIconImage.isShown()) {
+		case Class_Constant.KEYCODE_MUTE:
+			Log.i("test", "KEYCODE_MUTE is coming");
+			curvolumn =  mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+			Log.i("test", "KEYCODE_MUTE later curvolumn is"+curvolumn);
+			/*if (curvolumn == 0) {
+				mAudioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
 				muteIconImage.setVisibility(View.GONE);
-			} else {
+			}else {
+				mAudioManager.setStreamMute(AudioManager.STREAM_MUSIC, true);
 				muteIconImage.setVisibility(View.VISIBLE);
 			}
+			return true;*/
 			break;
 		case Class_Constant.KEYCODE_VOICE_UP:
 		case Class_Constant.KEYCODE_VOICE_DOWN:
-			if (muteIconImage.isShown()) {
-				muteIconImage.setVisibility(View.GONE);
-			}
+			//if (muteIconImage.isShown()) {
+			//	muteIconImage.setVisibility(View.GONE);
+			//}
 			// audioMgr.setStreamMute(AudioManager.STREAM_MUSIC, true);
-			whetherMute = false;
-			CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
+			//whetherMute = false;
+			//CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
 			break;
 		case Class_Constant.KEYCODE_MENU_KEY:
 			// Log.i("zyt", "onkeydown menukey is pressed " + keyCode);
@@ -549,7 +566,7 @@ public class ReplayPlayActivity extends BaseActivity {
 			//skbProgress.setVisibility(View.VISIBLE);
 			seekbar.setVisibility(View.VISIBLE);
 			videoTimeLength.setVisibility(View.VISIBLE);
-			videoCurrentTime.setVisibility(View.VISIBLE);
+			//videoCurrentTime.setVisibility(View.VISIBLE);
 			
 //			videoCurPro.setVisibility(View.VISIBLE);
 //			videoNextPro.setVisibility(View.VISIBLE);
@@ -597,7 +614,7 @@ public class ReplayPlayActivity extends BaseActivity {
 			//skbProgress.setVisibility(View.GONE);
 			seekbar.setVisibility(View.GONE);
 			videoTimeLength.setVisibility(View.GONE);
-			videoCurrentTime.setVisibility(View.GONE);
+		//	videoCurrentTime.setVisibility(View.GONE);
 			
 			/*videoCurPro.setVisibility(View.GONE);
 			videoNextPro.setVisibility(View.GONE);*/
@@ -618,7 +635,7 @@ public class ReplayPlayActivity extends BaseActivity {
 			//skbProgress.setVisibility(View.GONE);
 			seekbar.setVisibility(View.GONE);
 			videoTimeLength.setVisibility(View.GONE);
-			videoCurrentTime.setVisibility(View.GONE);
+			//videoCurrentTime.setVisibility(View.GONE);
 			
 //			videoCurPro.setVisibility(View.GONE);
 //			videoNextPro.setVisibility(View.GONE);
@@ -632,7 +649,7 @@ public class ReplayPlayActivity extends BaseActivity {
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		player.stop();
-		CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
+		//CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
 		super.onPause();
 	}
 
