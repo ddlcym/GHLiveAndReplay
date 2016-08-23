@@ -125,17 +125,16 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 			// CacheData.getCurProgram().getBeginTime().getTime());
 			int maxTimes = getDuration();
 			moveStep = (float) ((float) arg1 / (float) maxTimes);
-			Log.i("mmmm", "maxTimes:" + maxTimes + "--seekwidth:" + seekwidth
-					+ "--moveStep:" + moveStep + "--arg1:" + arg1);
 			if (videoCurrentTime != null) {
 				long beginTime = CacheData.getCurProgram().getBeginTime()
 						.getTime();
-				Log.i("mmmm", "maxTimes:" + maxTimes + "--seekwidth:" + seekwidth+ "--moveStep:" + moveStep + "--arg1:" + arg1+"--beginTime:"+beginTime);
-				videoCurrentTime.setText(Utils.millToLiveBackString(beginTime
-						+ arg1));
+				Log.i("mmmm", "player-maxTimes:" + maxTimes + "--seekwidth:" + seekwidth+ "--moveStep:" + moveStep + "--arg1:" + arg1);
+				videoCurrentTime.setText(Utils.millToLiveBackString(beginTime+ arg1));
+				Log.i("mmmm","playervideoCurrentTime:"+Utils.millToLiveBackString(beginTime+ arg1));
+				Log.i("mmmm","player-layout:"+"--L:"+(seekwidth * moveStep)+"--R:"+((seekwidth * moveStep) + videoCurrentTime.getWidth())+"--B:"+videoCurrentTime.getHeight());
 				videoCurrentTime.layout((int) (seekwidth * moveStep), 0,
-						(int) (seekwidth * moveStep) + curTextWidth,
-						curTextHeight);
+						(int) (seekwidth * moveStep) + videoCurrentTime.getWidth(),
+						videoCurrentTime.getHeight());
 			}
 		}
 
@@ -260,10 +259,10 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 						// liveFlag=false;
 						// parentHandler.sendEmptyMessage(Class_Constant.BACK_TO_LIVE);
 					} else {
-						long beginTime = CacheData.getCurProgram()
-								.getBeginTime().getTime();
-						videoCurrentTime.setText(Utils
-								.millToLiveBackString(position + beginTime));
+//						long beginTime = CacheData.getCurProgram()
+//								.getBeginTime().getTime();
+//						videoCurrentTime.setText(Utils
+//								.millToLiveBackString(position + beginTime));
 					}
 				} else {
 					position = mediaPlayer.getCurrentPosition();

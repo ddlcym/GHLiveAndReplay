@@ -3,6 +3,7 @@ package com.changhong.gehua.widget;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -64,6 +65,7 @@ public class MySeekbar extends LinearLayout{
 //		float moveStep = (float) ((float) seekBar.getProgress() / (float) seekBar.getMax() ) ;
 //		int seekwidth=seekBar.getWidth();
 //		curText.layout((int) (seekwidth * moveStep), 0, (int)(seekwidth * moveStep)+curText.getWidth(), curText.getHeight());
+//		Log.i("mmmm", "myseekbar--maxTimes:" + seekBar.getMax()  + "--seekwidth:" + seekwidth+ "--moveStep:" + moveStep + "--arg1:" + seekBar.getProgress()+"--curText.getWidth:"+curText.getWidth()+"--curText.getHeight:"+curText.getHeight());
 	}
 	
 	public void setMax(int max){
