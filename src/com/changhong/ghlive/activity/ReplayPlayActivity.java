@@ -3,26 +3,9 @@ package com.changhong.ghlive.activity;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.IllegalFormatCodePointException;
 import java.util.List;
 import java.util.TimeZone;
 
-import com.changhong.gehua.common.CacheData;
-import com.changhong.gehua.common.ChannelInfo;
-import com.changhong.gehua.common.Class_Constant;
-import com.changhong.gehua.common.CommonMethod;
-import com.changhong.gehua.common.PlayVideo;
-import com.changhong.gehua.common.ProcessData;
-import com.changhong.gehua.common.ProgramInfo;
-import com.changhong.gehua.widget.MySeekbar;
-import com.changhong.gehua.widget.ReplayEndDialog;
-import com.changhong.ghlive.service.HttpService;
-import com.changhong.ghliveandreplay.R;
-import com.changhong.ghliveandreplay.R.id;
-import com.changhong.replay.datafactory.Player;
-
-import android.app.ActionBar.LayoutParams;
-import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.media.AudioManager;
@@ -39,6 +22,20 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.changhong.gehua.common.CacheData;
+import com.changhong.gehua.common.ChannelInfo;
+import com.changhong.gehua.common.Class_Constant;
+import com.changhong.gehua.common.CommonMethod;
+import com.changhong.gehua.common.PlayVideo;
+import com.changhong.gehua.common.ProcessData;
+import com.changhong.gehua.common.ProgramInfo;
+import com.changhong.gehua.common.Utils;
+import com.changhong.gehua.widget.MySeekbar;
+import com.changhong.gehua.widget.ReplayEndDialog;
+import com.changhong.ghlive.service.HttpService;
+import com.changhong.ghliveandreplay.R;
+import com.changhong.replay.datafactory.Player;
 
 public class ReplayPlayActivity extends BaseActivity {
 	private SurfaceView surfaceView;
@@ -269,9 +266,9 @@ public class ReplayPlayActivity extends BaseActivity {
 			replayHandler.removeCallbacks(progressBarRunnable);
 		}
 		replayHandler.postDelayed(progressBarRunnable, 5000);
+		
 	}
 
-	
 	
 	/* play net video */
 	private void playNetVideo() {
@@ -390,10 +387,7 @@ public class ReplayPlayActivity extends BaseActivity {
 		String curDay = "";
 		int indexPro = 0;
 		int curIndexDay = 0;
-		if (null == player) {
-			//player = new Player(replayHandler, surfaceView, skbProgress, videoCurrentTime);
 			player = new Player(replayHandler, surfaceView, seekbar.getSeekBar(), seekbar.getCurText());
-		}
 		curDay = CacheData.getReplayCurDay();
 		curProgramList = (List<ProgramInfo>) CacheData.getAllProgramMap().get(curDay);
 		indexPro = curProgramList.indexOf(mprogram);
@@ -419,10 +413,8 @@ public class ReplayPlayActivity extends BaseActivity {
 		int indexPro = 0;
 		int curIndexDay = 0;
 		ProgramInfo program = null;
-		if (null == player) {
 			//player = new Player(replayHandler, surfaceView, skbProgress, videoCurrentTime);
 			player = new Player(replayHandler, surfaceView, seekbar.getSeekBar(), seekbar.getCurText());
-		}
 		curDay = CacheData.getReplayCurDay();
 		curProgramList = (List<ProgramInfo>) CacheData.getAllProgramMap().get(curDay);
 		for (int i = 0; i < curProgramList.size(); i++) {

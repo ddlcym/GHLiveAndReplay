@@ -8,14 +8,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
     </SurfaceView>
-    
-	 <ImageView
-	       android:id="@+id/PF_back"
-	       android:layout_width="fill_parent"
-	       android:layout_height="fill_parent"
-	       android:layout_gravity="center"
-	       android:visibility="gone" />
-	 
+
+    <ImageView
+        android:id="@+id/PF_back"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
     <ImageView
         android:id="@+id/mute_icon"
         android:layout_width="wrap_content"
@@ -25,97 +25,96 @@
         android:paddingTop="15dip"
         android:src="@drawable/mute_icon"
         android:visibility="gone" />
-	<FrameLayout
-	    android:layout_width="180dip"
-    	android:layout_height="150dip"
-    	android:layout_gravity="left|bottom"
-    	android:paddingLeft="60dip"
-    	android:paddingBottom="10dip" >
-	
-		   <ImageView
-		       android:id="@+id/play_btn"
-		       android:layout_width="fill_parent"
-		       android:layout_height="fill_parent"
-		       
-		       android:src="@drawable/play"
-		       android:visibility="gone" />
-		
-		   <ImageView
-		       android:id="@+id/pause_btn"
-		       android:layout_width="fill_parent"
-		       android:layout_height="fill_parent"
-		       android:src="@drawable/pause"
-		       android:visibility="gone" />
-		   
-		   <ImageView
-		       android:id="@+id/fast_forward"
-		       android:layout_width="fill_parent"
-		       android:layout_height="fill_parent"
-		       
-		       android:src="@drawable/fast_forward"
-		       android:visibility="gone" />
-		
-		   <ImageView
-		       android:id="@+id/fast_backward"
-		       android:layout_width="fill_parent"
-		       android:layout_height="fill_parent"
-		       
-		       android:src="@drawable/fast_backward"
-		       android:visibility="gone" />
+
+    <FrameLayout
+        android:layout_width="180dip"
+        android:layout_height="150dip"
+        android:layout_gravity="left|bottom"
+        android:paddingBottom="10dip"
+        android:paddingLeft="60dip" >
+
+        <ImageView
+            android:id="@+id/play_btn"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:src="@drawable/play"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/pause_btn"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:src="@drawable/pause"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/fast_forward"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:src="@drawable/fast_forward"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/fast_backward"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:src="@drawable/fast_backward"
+            android:visibility="gone" />
     </FrameLayout>
-    
+
     <LinearLayout
-        android:id="@+id/down_dialog" 
-	    android:layout_width="1000dip"
-    	android:layout_height="wrap_content"
-    	android:layout_gravity="bottom"
-    	android:layout_marginLeft="260dip"
-    	android:orientation="vertical">
-	    
-         
-	     <LinearLayout
-	        android:id="@+id/up_dialog_cur" 
-		    android:layout_width="fill_parent"
-	    	android:layout_height="wrap_content"
-	    	android:layout_gravity="bottom"
-	    	android:orientation="horizontal">
-	    	<TextView
-	           android:id="@+id/curpro"
-	           android:layout_width="wrap_content"
-	           android:layout_height="wrap_content"
-	           android:textSize="28sp" 
-	           android:textColor="@color/replay_curproinfo" 
-	           android:text="@string/cur_program"/>
-	    	<TextView
-	           android:id="@+id/curprotime"
-	           android:layout_width="wrap_content"
-	           android:layout_height="wrap_content"
-	           android:textSize="28sp" 
-	           android:textColor="@color/replay_curproinfo" 
-	           android:layout_marginLeft="10dip"
-	           android:text="current_program_time"/>
-		    <com.changhong.gehua.widget.MarqueeText
-	           android:id="@+id/replay_current_program_info"
-	           android:layout_width="270dip"
-	           android:layout_height="wrap_content"
-	           android:singleLine="true"
-	           android:ellipsize="marquee"
-        	   android:focusableInTouchMode="true"
-	           android:textSize="28sp" 
-	           android:textColor="@color/replay_curproinfo" 
-	           android:layout_marginLeft="10dip"
-	           android:text="current_program_info"/>
-          </LinearLayout>
-          
-	     
-         <LinearLayout
-		    android:layout_width="fill_parent"
-	    	android:layout_height="wrap_content"
-	    	android:orientation="horizontal"
-	    	android:layout_gravity="bottom">
-	    	
-             
-	    	 <!-- <SeekBar
+        android:id="@+id/down_dialog"
+        android:layout_width="1000dip"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="260dip"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/up_dialog_cur"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/curpro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cur_program"
+                android:textColor="@color/replay_curproinfo"
+                android:textSize="28sp" />
+
+            <TextView
+                android:id="@+id/curprotime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:text="current_program_time"
+                android:textColor="@color/replay_curproinfo"
+                android:textSize="28sp" />
+
+            <com.changhong.gehua.widget.MarqueeText
+                android:id="@+id/replay_current_program_info"
+                android:layout_width="270dip"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:ellipsize="marquee"
+                android:focusableInTouchMode="true"
+                android:singleLine="true"
+                android:text="current_program_info"
+                android:textColor="@color/replay_curproinfo"
+                android:textSize="28sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal" >
+
+            <!--
+                <SeekBar
 	            android:id="@+id/skbProgress"
 	            android:layout_width="750dip"
 	            android:layout_height="wrap_content"
@@ -127,77 +126,81 @@
 	            android:paddingLeft="10dip"
 	            android:paddingRight="10dip" 
 	            android:progressDrawable="@drawable/bg_seekbar"
-	            android:thumb="@drawable/thumb_bar"/> -->
-	            
-	           <com.changhong.gehua.widget.MySeekbar
-			        android:id="@+id/mySeekBar"
-			        android:layout_width="750dip"
-			        android:layout_height="wrap_content"
-			        android:orientation="vertical" /> 
-			    
-			        
-	    	<!--  <TextView
+	            android:thumb="@drawable/thumb_bar"/>
+            -->
+
+            <com.changhong.gehua.widget.MySeekbar
+                android:id="@+id/mySeekBar"
+                android:layout_width="750dip"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <!--
+                  <TextView
 	            android:id="@+id/video_currenttime"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:text="00:00"
-	            android:textSize="25sp" /> -->
-	    	 
-	   		 <TextView
-	            android:id="@+id/video_timelength"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:paddingRight="30dip"
-	            android:text="00:00"
 	            android:textSize="25sp" />
-	     </LinearLayout>	
-	     
-	     <LinearLayout
-	        android:id="@+id/down_dialog_next" 
-		    android:layout_width="fill_parent"
-	    	android:layout_height="fill_parent"
-	    	android:layout_gravity="bottom"
-	    	android:orientation="horizontal">
-	    	<TextView
-	           android:id="@+id/nextpro"
-	           android:layout_width="wrap_content"
-	           android:layout_height="50dip"
-	           android:textSize="28sp"
-	           android:textColor="@color/replay_nextproinfo" 
-	           android:text="@string/next_program"/>
-	    	<TextView
-	           android:id="@+id/nextprotime"
-	           android:layout_width="wrap_content"
-	           android:layout_height="50dip"
-	           android:textSize="28sp" 
-	           android:textColor="@color/replay_nextproinfo" 
-	           android:layout_marginLeft="10dip"
-	           android:text="next_program_time"/>
-	    	<com.changhong.gehua.widget.MarqueeText
+            -->
+
+            <TextView
+                android:id="@+id/video_timelength"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="30dip"
+                android:text="00:00"
+                android:textSize="25sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/down_dialog_next"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/nextpro"
+                android:layout_width="wrap_content"
+                android:layout_height="50dip"
+                android:text="@string/next_program"
+                android:textColor="@color/replay_nextproinfo"
+                android:textSize="28sp" />
+
+            <TextView
+                android:id="@+id/nextprotime"
+                android:layout_width="wrap_content"
+                android:layout_height="50dip"
+                android:layout_marginLeft="10dip"
+                android:text="next_program_time"
+                android:textColor="@color/replay_nextproinfo"
+                android:textSize="28sp" />
+
+            <com.changhong.gehua.widget.MarqueeText
                 android:id="@+id/replay_next_program_info"
                 android:layout_width="270dip"
                 android:layout_height="50dip"
-                android:singleLine="true"
-                android:textColor="@color/replay_nextproinfo" 
-                android:ellipsize="marquee"
-        	    android:focusableInTouchMode="true"
-                android:textSize="28sp" 
                 android:layout_marginLeft="10dip"
-                android:text="next_program_info"/>
-	    	
-	    	<ImageView 
-	    	    android:layout_width="wrap_content"
+                android:ellipsize="marquee"
+                android:focusableInTouchMode="true"
+                android:singleLine="true"
+                android:text="next_program_info"
+                android:textColor="@color/replay_nextproinfo"
+                android:textSize="28sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
                 android:layout_height="30dip"
                 android:layout_marginLeft="140dip"
-                android:background="@drawable/tishione"/>
-	    	<ImageView 
-	    	    android:layout_width="wrap_content"
+                android:background="@drawable/tishione" />
+
+            <ImageView
+                android:layout_width="wrap_content"
                 android:layout_height="30dip"
                 android:layout_marginLeft="10dip"
-                android:background="@drawable/tishitwo"/>
-	    	
-	    </LinearLayout>
-         
-	</LinearLayout>
+                android:background="@drawable/tishitwo" />
+        </LinearLayout>
+    </LinearLayout>
 
 </FrameLayout>

@@ -87,7 +87,7 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 			curTextWidth = videoCurrentTime.getWidth();
 			curTextHeight = videoCurrentTime.getHeight();
 		}
-		seekwidth = skbProgress.getWidth();
+		
 
 		surfaceHolder = surfaceView.getHolder();
 		surfaceHolder.addCallback(this);
@@ -125,6 +125,7 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 			// CacheData.getCurProgram().getBeginTime().getTime());
 			int maxTimes = getDuration();
 			moveStep = (float) ((float) arg1 / (float) maxTimes);
+			seekwidth = skbProgress.getWidth();
 			if (videoCurrentTime != null) {
 				long beginTime = CacheData.getCurProgram().getBeginTime()
 						.getTime();
