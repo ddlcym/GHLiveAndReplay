@@ -110,9 +110,12 @@ public class MainActivity extends BaseActivity {
 
 	private ChannelListAdapter chLstAdapter;
 	private Player player;
-	private AudioManager audioMgr = null; // Audio管理器，用了控制音量
+	private AudioManager mAudioManager = null; // Audio管理器，用了控制音量
+	
 	private boolean whetherMute;// mute flag
 	private HttpService mHttpService;
+	
+	private int curvolumn;
 
 	private Handler mhandler = new Handler() {
 		ChannelInfo curChannel;
@@ -136,6 +139,8 @@ public class MainActivity extends BaseActivity {
 				break;
 			case Class_Constant.TOAST_BANNER_PROGRAM_PASS:
 				int curIndex = -1;
+				int curtype = msg.getData().getInt("type",0);
+				Log.i("live", "curtype = "+curtype);
 				curChannelPrograms = CacheData.getCurPrograms();
 				curChannel = channelsAll.get(curListIndex);
 				curIndex = mCurChannels.indexOf(curChannel);
@@ -150,7 +155,7 @@ public class MainActivity extends BaseActivity {
 				}
 				if (curChannelPrograms.size() > 0) {
 					curProgram = curChannelPrograms.get(1);
-					showToastBanner(CacheData.getCurChannel());
+					showToastBanner(CacheData.getCurChannel(),curtype);
 				}
 				break;
 
@@ -210,7 +215,8 @@ public class MainActivity extends BaseActivity {
 				PlayVideo.getInstance().playLiveProgram(mhandler, CacheData.getCurChannel());
 				break;
 			/* play state is back from time shift mode */
-			case Class_Constant.PLAY_BACKFROM_SHIFT: {
+			case Class_Constant.PLAY_BACKFROM_SHIFT: 
+			/*{
 				whetherMute = Boolean.valueOf(CommonMethod.getMuteState(MyApp.getContext()));
 				if (whetherMute) {
 					muteIconImage.setVisibility(View.VISIBLE);
@@ -218,7 +224,7 @@ public class MainActivity extends BaseActivity {
 					muteIconImage.setVisibility(View.GONE);
 				}
 				break;
-			}
+			}*/
 			case Class_Constant.DIALOG_ONKEY_DOWN: {
 				dealOnKeyDown(msg.arg1);
 				break;
@@ -260,7 +266,8 @@ public class MainActivity extends BaseActivity {
 		// chListView.setOnItemSelectedListener(myItemSelectLis);
 		chListView.setOnItemClickListener(myClickLis);
 
-		audioMgr = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+		//audioMgr = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+		mAudioManager = (AudioManager) getApplicationContext().getSystemService(AUDIO_SERVICE);
 		// audioMgr.setStreamMute(AudioManager.STREAM_MUSIC, false);
 		// int max = audioMgr.getStreamMaxVolume( AudioManager.STREAM_VOICE_CALL
 		// );
@@ -297,11 +304,11 @@ public class MainActivity extends BaseActivity {
 		chListView.setOnItemSelectedListener(myItemSelectLis);
 		muteIconImage = (ImageView) findViewById(R.id.live_mute_icon);
 
-		if (whetherMute) {
+		/*if (whetherMute) {
 			muteIconImage.setVisibility(View.VISIBLE);
 		} else {
 			muteIconImage.setVisibility(View.GONE);
-		}
+		}*/
 	}
 
 	private void startHttpSer() {
@@ -660,6 +667,37 @@ public class MainActivity extends BaseActivity {
 			}
 
 		}
+		if (keyCode == Class_Constant.KEYCODE_VOICE_UP || keyCode == Class_Constant.KEYCODE_VOICE_DOWN ) {
+			Message msg = new Message();
+			msg.what = Class_Constant.TOAST_BANNER_PROGRAM_PASS;
+			Bundle bundle = new Bundle();
+			bundle.putInt("type", 1);
+			msg.setData(bundle);
+			mhandler.sendMessage(msg);
+			return true;
+		}
+		
+		if (keyCode == Class_Constant.KEYCODE_MUTE) {
+			curvolumn =  mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+			Log.i("test", "live KEYCODE_MUTE later curvolumn is"+curvolumn);
+			if (curvolumn == 0) {
+				mAudioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
+				Log.i("test", "setStreamMute false");
+				muteIconImage.setVisibility(View.GONE);
+			}else {
+				mAudioManager.setStreamMute(AudioManager.STREAM_MUSIC, true);
+				Log.i("test", "setStreamMute true");
+				muteIconImage.setVisibility(View.VISIBLE);
+			}
+			Message msg = new Message();
+			msg.what = Class_Constant.TOAST_BANNER_PROGRAM_PASS;
+			Bundle bundle = new Bundle();
+			bundle.putInt("type", 2);
+			msg.setData(bundle);
+			mhandler.sendMessage(msg);
+			return true;
+		}
+		
 		dealOnKeyDown(keyCode);
 		return super.onKeyDown(keyCode, event);
 	}
@@ -837,9 +875,9 @@ public class MainActivity extends BaseActivity {
 			if (tvRootDigitalkey.isShown()) {
 				mhandler.sendEmptyMessage(Class_Constant.MESSAGE_HANDLER_DIGITALKEY);
 			} else {
-				CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
+				//CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
 				showDialogBanner(curChannelNO);
-				muteIconImage.setVisibility(View.GONE);
+				//muteIconImage.setVisibility(View.GONE);
 			}
 			break;
 		case Class_Constant.KEYCODE_UP_ARROW_KEY:
@@ -930,10 +968,10 @@ public class MainActivity extends BaseActivity {
 			CommonMethod.startSettingPage(MyApp.getContext());
 			break;
 
-		case Class_Constant.KEYCODE_MUTE:// mute
+		/*case Class_Constant.KEYCODE_MUTE:// mute
 			// int current =
 			// audioMgr.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
-			whetherMute = !whetherMute;
+			//whetherMute = !whetherMute;
 			// Log.i("zyt", "keycode mute is " + whetherMute);
 			
 			CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
@@ -943,16 +981,21 @@ public class MainActivity extends BaseActivity {
 				muteIconImage.setVisibility(View.VISIBLE);
 			}
 			break;
-		//case Class_Constant.KEYCODE_VOICE_UP:
-		//case Class_Constant.KEYCODE_VOICE_DOWN:
-			/*if (muteIconImage.isShown()) {
+			Log.i("test", "live KEYCODE_MUTE is coming");
+			curvolumn =  mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+			Log.i("test", "live KEYCODE_MUTE later curvolumn is"+curvolumn);
+			if (curvolumn == 0) {
+				mAudioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
+				Log.i("test", "setStreamMute false");
 				muteIconImage.setVisibility(View.GONE);
+			}else {
+				mAudioManager.setStreamMute(AudioManager.STREAM_MUSIC, true);
+				Log.i("test", "setStreamMute true");
+				muteIconImage.setVisibility(View.VISIBLE);
 			}
-			// audioMgr.setStreamMute(AudioManager.STREAM_MUSIC, true);
-			whetherMute = false;
-			CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());*/
-			//break;
+			return true;*/
 		default:
+			
 			Log.i("zyt", "onkeydown default is " + keyCode);
 			break;
 		// next key down call
@@ -1143,7 +1186,7 @@ public class MainActivity extends BaseActivity {
 	}
 
 	/* show live banner toast */
-	public void showToastBanner(ChannelInfo channel) {
+	public void showToastBanner(ChannelInfo channel, int type) {
 
 		// if(ban!=null){
 		// ban.cancelBanner();
@@ -1153,10 +1196,18 @@ public class MainActivity extends BaseActivity {
 		// }
 		// ban.setData(channel, curChannelPrograms);
 		// ban.show();
+		
+		int volumn = mAudioManager.getStreamVolume( AudioManager.STREAM_MUSIC );
+		Log.i("live", "volumn : "+ volumn);
 		if (null == livePlayBanner) {
-			livePlayBanner = new LivePlayBannerDialog(this, channel, curChannelPrograms, mhandler);
+			Log.i("live", "----> ");
+			livePlayBanner = new LivePlayBannerDialog(this, channel, curChannelPrograms, mhandler,mAudioManager,muteIconImage);
+			//livePlayBanner.setMuteicon(muteIconImage);
 		}
-		livePlayBanner.setData(channel, curChannelPrograms);
+		
+		
+		
+		livePlayBanner.setData(channel, curChannelPrograms,volumn,type);
 		livePlayBanner.show();
 		if (liveBannerInfoRunnable != null) {
 			mhandler.removeCallbacks(liveBannerInfoRunnable);
@@ -1287,6 +1338,15 @@ public class MainActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		// Log.i("zyt", "resume mute is " + whetherMute);
 		curChannelNO = String.valueOf(CommonMethod.getChannelLastTime(MyApp.getContext()));
+		
+		curvolumn =  mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+		Log.i("test", "enter live curvolumn is"+curvolumn);
+		if (curvolumn == 0) {
+			muteIconImage.setVisibility(View.VISIBLE);
+			Log.i("test", "muteIconImage muteIconImage");
+		}else {
+			muteIconImage.setVisibility(View.GONE);
+		}
 		super.onResume();
 	}
 
@@ -1342,7 +1402,9 @@ public class MainActivity extends BaseActivity {
 		public void run() {
 			// TODO Auto-generated method stub
 			if(livePlayBanner!=null)
-			livePlayBanner.dismiss();
+			/*livePlayBanner.getLivebannerLayout().setVisibility(View.INVISIBLE);
+			livePlayBanner.getBackImageView().setVisibility(View.INVISIBLE);*/
+		    livePlayBanner.dismiss();	
 		}
 	};
 	

@@ -19,6 +19,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,7 +45,7 @@ public class ReplayPlayActivity extends BaseActivity {
 	//private SeekBar skbProgress;
 	//private NumberSeekBar numberSeekBar;
 	private TextView CurPro,curProtime,videoCurPro , NextPro,NextProtime,videoNextPro , videoTimeLength;//videoCurrentTime;
-	private LinearLayout curlinearLayout,nextLinearLayout;
+	private RelativeLayout curlinearLayout,nextLinearLayout;
 
 	//private SeekBar skbProgress;
 	//private TextView CurPro,curProtime,videoCurPro , NextPro,NextProtime,videoNextPro , videoTimeLength, videoCurrentTime;
@@ -221,8 +222,8 @@ public class ReplayPlayActivity extends BaseActivity {
 		NextPro = (TextView) this.findViewById(R.id.nextpro);
 		NextProtime = (TextView) this.findViewById(R.id.nextprotime);
 		videoNextPro = (TextView) this.findViewById(R.id.replay_next_program_info);
-		curlinearLayout = (LinearLayout) this.findViewById(R.id.up_dialog_cur);
-		nextLinearLayout = (LinearLayout) this.findViewById(R.id.down_dialog_next);
+		curlinearLayout = (RelativeLayout) this.findViewById(R.id.up_dialog_cur);
+		nextLinearLayout = (RelativeLayout) this.findViewById(R.id.down_dialog_next);
 		pfbackImageView = (ImageView) findViewById(R.id.PF_back);
 		
 		
@@ -347,6 +348,8 @@ public class ReplayPlayActivity extends BaseActivity {
 
 	private void playVideo(ChannelInfo channel, ProgramInfo program) {
 		ProgramInfo nextmprogram;
+		
+		pfbackImageView.setBackgroundResource(R.drawable.pf_back);
 		replayChannelId = channel.getChannelID();
 		maxTimes = (int) (mprogram.getEndTime().getTime() - mprogram.getBeginTime().getTime());
 		// skbProgress.setMax(maxTimes);
@@ -376,7 +379,7 @@ public class ReplayPlayActivity extends BaseActivity {
 			videoNextPro.setText(nextmprogram.getEventName());
 		}
 		
-		pfbackImageView.setBackgroundResource(R.drawable.pf_back);
+		
 		
 		String requestURL = mProcessData.getReplayPlayUrlString(channel, mprogram, 0);
 		// Log.i("mmmm", "ReplayPlayActivity-requestURL:" + requestURL);
@@ -508,8 +511,12 @@ public class ReplayPlayActivity extends BaseActivity {
 //				videoNextPro.setVisibility(View.VISIBLE);
 				curlinearLayout.setVisibility(View.VISIBLE);
 				nextLinearLayout.setVisibility(View.VISIBLE);
-				
 				pfbackImageView.setVisibility(View.VISIBLE);
+				if (pfrunnable != null) {
+					replayHandler.removeCallbacks(pfrunnable);
+				}
+				replayHandler.postDelayed(pfrunnable, 3000);
+				
 			} else {
 				player.play();
 				pauseButton.setVisibility(View.GONE);
@@ -617,6 +624,15 @@ public class ReplayPlayActivity extends BaseActivity {
 		}
 	};
 
+	
+	Runnable pfrunnable = new Runnable() {
+		@Override
+		public void run() {
+			//seekbar.getCurText().setVisibility(View.GONE);
+		}
+	};
+	
+	
 	Runnable progressBarRunnable = new Runnable() {
 		@Override
 		public void run() {

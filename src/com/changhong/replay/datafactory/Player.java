@@ -116,7 +116,6 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 
 		@Override
 		public void onProgressChanged(SeekBar arg0, int arg1, boolean arg2) {
-
 			if (null == videoCurrentTime) {
 				return;
 			}
@@ -126,27 +125,35 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 			int maxTimes = getDuration();
 			moveStep = (float) ((float) arg1 / (float) maxTimes);
 			seekwidth = skbProgress.getWidth();
+			Log.i("mmmm", "**seekwidth:" + seekwidth);
 			if (videoCurrentTime != null) {
 				long beginTime = CacheData.getCurProgram().getBeginTime()
 						.getTime();
 				Log.i("mmmm", "player-maxTimes:" + maxTimes + "--seekwidth:" + seekwidth+ "--moveStep:" + moveStep + "--arg1:" + arg1);
-				videoCurrentTime.setText(Utils.millToLiveBackString(beginTime+ arg1));
+				if (liveFlag) {
+					videoCurrentTime.setText(Utils.millToLiveBackString(beginTime+ arg1));//shiyi
+				}else {
+					videoCurrentTime.setText(Utils.millToLiveBackStringEx(arg1));//huikan
+				}
+				//videoCurrentTime.setText(Utils.millToLiveBackString(beginTime+ arg1));
 				Log.i("mmmm","playervideoCurrentTime:"+Utils.millToLiveBackString(beginTime+ arg1));
 				Log.i("mmmm","player-layout:"+"--L:"+(seekwidth * moveStep)+"--R:"+((seekwidth * moveStep) + videoCurrentTime.getWidth())+"--B:"+videoCurrentTime.getHeight());
 				videoCurrentTime.layout((int) (seekwidth * moveStep), 0,
 						(int) (seekwidth * moveStep) + videoCurrentTime.getWidth(),
 						videoCurrentTime.getHeight());
 			}
+			
+			
 		}
 
 		@Override
 		public void onStartTrackingTouch(SeekBar arg0) {
-
+			
 		}
 
 		@Override
 		public void onStopTrackingTouch(SeekBar arg0) {
-
+			
 		}
 
 	}
@@ -300,7 +307,9 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 					mediaPlayer.pause();
 				}
 				keyFlag = true;
+				Log.i("mmmm", "**Player.skbProgress.getProgress():" + Player.skbProgress.getProgress());
 				desPositon = Player.skbProgress.getProgress() - 30000;
+				Log.i("mmmm", "**desPositon:" + desPositon);
 				if (desPositon < 0) {
 					// 提示已经到开始位置了
 
@@ -615,6 +624,7 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 			if (null == mediaPlayer)
 				return;
 			if (!liveFlag) {
+				Log.i("mmmm", "**desPositon:" + desPositon);
 				mediaPlayer.seekTo(desPositon);
 				mediaPlayer.start();
 			} else {

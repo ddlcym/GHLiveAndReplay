@@ -61,9 +61,13 @@ public class BannerDialog extends Dialog {
 	// private TextView channel_number = null;// 频道ID
 	private TextView currentProgramName = null;
 	private TextView nextProgramName = null;
+	private TextView currentProgramTime = null;
+	private TextView nextProgramTime = null;
 	private TextView timeLength;
 	private SurfaceView surView;
 	private LinearLayout bannerView;
+	
+	private ImageView timeshiftback;
 
 	private ProcessData processData = null;
 	private RequestQueue mReQueue;
@@ -132,7 +136,12 @@ public class BannerDialog extends Dialog {
 		// channel_number = (TextView) findViewById(R.id.banner_service_id);
 		currentProgramName = (TextView) findViewById(R.id.current_program_info);
 		nextProgramName = (TextView) findViewById(R.id.next_program_info);
+		
+	    currentProgramTime = (TextView) findViewById(R.id.shiyicurprotime);
+		nextProgramTime = (TextView) findViewById(R.id.shiyinextprotime);
+		
 		programPlayBar = (MySeekbar) findViewById(R.id.bannernew_program_progress);
+		timeshiftback = (ImageView)findViewById(R.id.timeshift_back);
 		bannerView = (LinearLayout) findViewById(R.id.live_back_banner);
 		timeLength = (TextView) findViewById(R.id.live_timelength);
 		// bannerView.getBackground().setAlpha(255);
@@ -215,12 +224,20 @@ public class BannerDialog extends Dialog {
 		// 设置频道号和频道名称
 		// channel_name.setText(channelInfo.getChannelName());
 		// channel_number.setText(channelInfo.getChannelNumber());
-		currentProgramName.setText("当前节目       " + currentProgramBginTime + "-"
+		
+		/*currentProgramName.setText("当前节目       " + currentProgramBginTime + "-"
 				+ currentProgramEndTime + "       "
-				+ programListInfo.get(1).getEventName());
-		nextProgramName.setText("下一节目       " + nextProgramBeginTime + "-"
+				+ programListInfo.get(1).getEventName());*/
+		/*nextProgramName.setText("下一节目       " + nextProgramBeginTime + "-"
 				+ nextProgramEndTime + "       "
-				+ programListInfo.get(2).getEventName());
+				+ programListInfo.get(2).getEventName());*/
+		
+		currentProgramTime.setText(currentProgramBginTime + "-"+ currentProgramEndTime);
+		currentProgramName.setText(programListInfo.get(1).getEventName());
+		
+		nextProgramTime.setText(nextProgramBeginTime + "-"+ nextProgramEndTime);
+		nextProgramName.setText(programListInfo.get(2).getEventName());
+		
 		timeLength.setText(currentProgramEndTime);
 		programPlayBar.setMax((int) length);
 		player.setDuration((int) length);
@@ -258,6 +275,8 @@ public class BannerDialog extends Dialog {
 		case KeyEvent.KEYCODE_BACK:
 			if (bannerView.isShown()) {
 				bannerView.setVisibility(View.INVISIBLE);
+				
+				timeshiftback.setVisibility(View.INVISIBLE);
 				return false;
 			} else {
 				player.setLiveFlag(false);
@@ -285,6 +304,7 @@ public class BannerDialog extends Dialog {
 
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
 			bannerView.setVisibility(View.VISIBLE);
+			timeshiftback.setVisibility(View.VISIBLE);
 			palyButton.setMyBG(PlayButton.Forward);
 			parentHandler.removeCallbacks(bannerRunnable);
 			parentHandler.postDelayed(bannerRunnable, 5000);
@@ -294,6 +314,7 @@ public class BannerDialog extends Dialog {
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
 			bannerView.setVisibility(View.VISIBLE);
+			timeshiftback.setVisibility(View.VISIBLE);
 			palyButton.setMyBG(PlayButton.Backward);
 			parentHandler.removeCallbacks(bannerRunnable);
 			parentHandler.postDelayed(bannerRunnable, 5000);
@@ -309,6 +330,7 @@ public class BannerDialog extends Dialog {
 			if (player.isPlayerPlaying()) {
 				player.pause();
 				bannerView.setVisibility(View.VISIBLE);
+				timeshiftback.setVisibility(View.VISIBLE);
 				palyButton.setMyBG(PlayButton.Pause);
 				if (bannerRunnable != null) {
 					parentHandler.removeCallbacks(bannerRunnable);
@@ -316,6 +338,7 @@ public class BannerDialog extends Dialog {
 			} else {
 				player.play();
 				bannerView.setVisibility(View.VISIBLE);
+				timeshiftback.setVisibility(View.VISIBLE);
 				palyButton.setMyBG(PlayButton.Play);
 				parentHandler.removeCallbacks(bannerRunnable);
 				parentHandler.postDelayed(bannerRunnable, 5000);
@@ -352,6 +375,7 @@ public class BannerDialog extends Dialog {
 			break;
 		case Class_Constant.MENU_ID_DTV_ROOT:
 			bannerView.setVisibility(View.VISIBLE);
+			timeshiftback.setVisibility(View.VISIBLE);
 			if (bannerRunnable != null) {
 				parentHandler.removeCallbacks(bannerRunnable);
 				parentHandler.postDelayed(bannerRunnable, 5000);
@@ -438,6 +462,7 @@ public class BannerDialog extends Dialog {
 		public void run() {
 			// TODO Auto-generated method stub
 			bannerView.setVisibility(View.GONE);
+			timeshiftback.setVisibility(View.GONE);
 		}
 	};
 
