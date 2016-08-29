@@ -2,20 +2,39 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="bottom" >
-
+   >
+    
+    <ImageView
+        android:id="@+id/back"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:background="@drawable/pf_background"
+        />
+    
+	<!-- <ImageView
+        android:id="@+id/livebanner_mute_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="120dip"
+        android:paddingTop="15dip"
+        android:src="@drawable/mute_icon"
+        android:visibility="invisible" /> -->
+	
     <LinearLayout
+        android:id="@+id/banner_live"
         android:layout_width="match_parent"
         android:layout_height="230dip"
-        android:background="@drawable/pf_background"
         android:paddingLeft="80dip"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:paddingBottom="20dip" >
 
         <LinearLayout
             android:id="@+id/id_dtv_banner"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
+           
             android:layout_weight="5"
             android:orientation="vertical" >
 
@@ -66,78 +85,163 @@
         		android:maxHeight="13dip"
   				android:minHeight="13dip"
                 android:max="100" />
+			
+			    	
+			
+           <RelativeLayout
+               android:id="@+id/banner_curproinfo"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:gravity="center_vertical"
+               android:layout_marginTop="5dp"
+               android:orientation="horizontal" >
 
-            <RelativeLayout
-                android:layout_width="match_parent"
+              <!--  <TextView
+                   android:id="@+id/current_program_info"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:singleLine="true"
+                   android:textColor="@color/live_cur_program"
+                   android:textSize="30sp" /> -->
+			  <TextView
+                android:id="@+id/livecurproname"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:layout_marginTop="5dp"
-                android:orientation="horizontal" >
+                android:text="@string/cur_program"
+                android:textColor="@color/live_cur_program"
+                android:textSize="30sp" />
 
-                <TextView
-                    android:id="@+id/current_program_info"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:textColor="@color/live_cur_program"
-                    android:textSize="30sp" />
-
-                <TextView
-                    android:id="@+id/live_banner_channelist"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginLeft="10dp"
-                    android:gravity="center_vertical"
-                    android:text="频道列表"
-                    android:textColor="#e7ecef"
-                    android:textSize="30sp" />
-
-                <ImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:scaleType="fitCenter"
-                    android:layout_toLeftOf="@id/live_banner_channelist"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginTop="5dp"
-                    android:src="@drawable/banner_play_icon" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
+              <TextView
+                android:id="@+id/livecurprotime"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:gravity="center_vertical"
-                >
+                android:layout_marginLeft="25dip"
+                android:layout_toRightOf="@id/livecurproname"
+                android:textColor="@color/live_cur_program"
+                android:textSize="30sp" />
 
-                <TextView
-                    android:id="@+id/next_program_info"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:textColor="@color/live_next_program"
-                    android:textSize="30sp" />
+               <com.changhong.gehua.widget.MarqueeText
+                android:id="@+id/current_program_info"
+                android:layout_width="270dip"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dip"
+                android:ellipsize="marquee"
+                android:focusableInTouchMode="true"
+                android:singleLine="true"
+                android:layout_toRightOf="@id/livecurprotime"
+                android:textColor="@color/live_cur_program"
+                android:textSize="30sp" />
+               
+               <TextView
+                   android:id="@+id/live_banner_channelist"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_alignParentRight="true"
+                   android:layout_marginLeft="10dp"
+                   android:gravity="center_vertical"
+                   android:text="频道列表"
+                   android:textColor="#e7ecef"
+                   android:textSize="30sp" />
 
-                <TextView
-                    android:id="@+id/live_banner_exit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:gravity="center_vertical"
-                    android:text="退出"
-                    android:textColor="@color/live_next_program"
-                    android:textSize="30sp" />
+               <ImageView
+                   android:layout_width="35dp"
+                   android:layout_height="35dp"
+                   android:scaleType="fitCenter"
+                   android:layout_toLeftOf="@id/live_banner_channelist"
+                   android:layout_marginRight="5dp"
+                   android:layout_marginTop="5dp"
+                   android:src="@drawable/banner_play_icon" />
+           </RelativeLayout>
+			
+           <RelativeLayout
+               android:id="@+id/banner_nextproinfo"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="5dp"
+               android:gravity="center_vertical">
 
-                <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="32dp"
-                    android:scaleType="fitCenter"
-                    android:gravity="center_vertical"
-                    android:layout_toLeftOf="@id/live_banner_exit"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
-                    android:src="@drawable/banner_exit_icon" />
-            </RelativeLayout>
+              <!--  <TextView
+                   android:id="@+id/next_program_info"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:singleLine="true"
+                   android:textColor="@color/live_next_program"
+                   android:textSize="30sp" /> -->
+			    <TextView
+	                android:id="@+id/livenextproname"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:text="@string/next_program"
+	                android:textColor="@color/live_next_program"
+	                android:textSize="30sp" />
+
+	            <TextView
+	                android:id="@+id/livenextprotime"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_marginLeft="25dip"
+	                android:layout_toRightOf="@id/livenextproname"
+	                android:textColor="@color/live_next_program"
+	                android:textSize="30sp" />
+
+	            <com.changhong.gehua.widget.MarqueeText
+	                android:id="@+id/next_program_info"
+	                android:layout_width="270dip"
+	                android:layout_height="wrap_content"
+	                android:layout_marginLeft="25dip"
+	                android:ellipsize="marquee"
+	                android:focusableInTouchMode="true"
+	                android:singleLine="true"
+	                android:layout_toRightOf="@id/livenextprotime"
+	                android:textColor="@color/live_next_program"
+	                android:textSize="30sp" />
+	            
+               <TextView
+                   android:id="@+id/live_banner_exit"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_alignParentRight="true"
+                   android:gravity="center_vertical"
+                   android:text="退出"
+                   android:textColor="@color/live_next_program"
+                   android:textSize="30sp" />
+
+               <ImageView
+                   android:layout_width="60dp"
+                   android:layout_height="32dp"
+                   android:scaleType="fitCenter"
+                   android:gravity="center_vertical"
+                   android:layout_toLeftOf="@id/live_banner_exit"
+                   android:layout_marginRight="10dp"
+                   android:layout_marginTop="5dp"
+                   android:src="@drawable/banner_exit_icon" />
+           </RelativeLayout>
+		           
+           <RelativeLayout
+               android:id="@+id/banner_volumn"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="5dp"
+               android:gravity="center_vertical"
+               android:visibility="invisible">
+               <ImageView 
+			        android:id="@+id/bannervolumn_icon"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_marginRight="10dp"
+                   	android:layout_marginTop="15dp"
+                   	android:scaleType="fitCenter"
+			        />
+               <ImageView
+                   android:id="@+id/volumn_background"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:scaleType="fitCenter"
+                   android:layout_toRightOf="@+id/bannervolumn_icon"
+                   android:layout_marginTop="15dp"
+                   />
+           </RelativeLayout>
+          
         </LinearLayout>
 
         <ImageView

@@ -14,7 +14,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_gravity="center"
-        android:visibility="gone" />
+       />
 
     <ImageView
         android:id="@+id/mute_icon"
@@ -62,20 +62,18 @@
             android:visibility="gone" />
     </FrameLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/down_dialog"
-        android:layout_width="1000dip"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginLeft="260dip"
-        android:orientation="vertical" >
+        android:layout_marginTop="570dip"
+        android:layout_marginLeft="260dip">
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/up_dialog_cur"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:orientation="horizontal" >
+            android:layout_marginLeft="35dip" >
 
             <TextView
                 android:id="@+id/curpro"
@@ -89,8 +87,8 @@
                 android:id="@+id/curprotime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dip"
-                android:text="current_program_time"
+                android:layout_marginLeft="15dip"
+                android:layout_toRightOf="@id/curpro"
                 android:textColor="@color/replay_curproinfo"
                 android:textSize="28sp" />
 
@@ -98,36 +96,20 @@
                 android:id="@+id/replay_current_program_info"
                 android:layout_width="270dip"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dip"
+                android:layout_marginLeft="15dip"
                 android:ellipsize="marquee"
                 android:focusableInTouchMode="true"
                 android:singleLine="true"
-                android:text="current_program_info"
+                android:layout_toRightOf="@id/curprotime"
                 android:textColor="@color/replay_curproinfo"
                 android:textSize="28sp" />
-        </LinearLayout>
+        </RelativeLayout>
 
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/sk"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:orientation="horizontal" >
-
-            <!--
-                <SeekBar
-	            android:id="@+id/skbProgress"
-	            android:layout_width="750dip"
-	            android:layout_height="wrap_content"
-	            android:clickable="false"
-	            android:focusable="false"
-	            android:max="100"
-	            android:maxHeight="12dip"
-				android:minHeight="12dip"
-	            android:paddingLeft="10dip"
-	            android:paddingRight="10dip" 
-	            android:progressDrawable="@drawable/bg_seekbar"
-	            android:thumb="@drawable/thumb_bar"/>
-            -->
+            android:paddingTop="18dip">
 
             <com.changhong.gehua.widget.MySeekbar
                 android:id="@+id/mySeekBar"
@@ -135,30 +117,22 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />
 
-            <!--
-                  <TextView
-	            android:id="@+id/video_currenttime"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="00:00"
-	            android:textSize="25sp" />
-            -->
-
             <TextView
                 android:id="@+id/video_timelength"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingRight="30dip"
-                android:text="00:00"
-                android:textSize="25sp" />
-        </LinearLayout>
+                android:layout_marginLeft="15dip"
+                android:layout_toRightOf="@id/mySeekBar"
+                android:textSize="25sp"
+                android:paddingTop="24dip" />
+        </RelativeLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/down_dialog_next"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_gravity="bottom"
-            android:orientation="horizontal" >
+            android:layout_marginTop="85dip" 
+            android:layout_marginLeft="35dip">
 
             <TextView
                 android:id="@+id/nextpro"
@@ -172,8 +146,8 @@
                 android:id="@+id/nextprotime"
                 android:layout_width="wrap_content"
                 android:layout_height="50dip"
-                android:layout_marginLeft="10dip"
-                android:text="next_program_time"
+                android:layout_marginLeft="15dip"
+                android:layout_toRightOf="@id/nextpro"
                 android:textColor="@color/replay_nextproinfo"
                 android:textSize="28sp" />
 
@@ -181,26 +155,27 @@
                 android:id="@+id/replay_next_program_info"
                 android:layout_width="270dip"
                 android:layout_height="50dip"
-                android:layout_marginLeft="10dip"
+                android:layout_marginLeft="15dip"
                 android:ellipsize="marquee"
                 android:focusableInTouchMode="true"
                 android:singleLine="true"
-                android:text="next_program_info"
+                android:layout_toRightOf="@id/nextprotime"
                 android:textColor="@color/replay_nextproinfo"
                 android:textSize="28sp" />
 
             <ImageView
+                android:id="@+id/tishi1"
                 android:layout_width="wrap_content"
                 android:layout_height="30dip"
-                android:layout_marginLeft="140dip"
+                android:layout_toRightOf="@id/replay_next_program_info"
                 android:background="@drawable/tishione" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="30dip"
-                android:layout_marginLeft="10dip"
+                android:layout_toRightOf="@id/tishi1"
                 android:background="@drawable/tishitwo" />
-        </LinearLayout>
-    </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
 
 </FrameLayout>
