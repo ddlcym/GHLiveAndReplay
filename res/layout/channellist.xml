@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/black" >
+     >
 
     <SurfaceView
         android:id="@+id/surfaceview_live"
@@ -30,12 +30,18 @@
         android:scaleType="fitXY"
         android:src="@drawable/chanselect"
         android:visibility="invisible" />
-
+    
+	<ImageView
+        android:id="@+id/prolistback"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:src="@drawable/channel_list_back"
+        android:visibility="invisible" />
+   
     <LinearLayout
         android:id="@+id/chlist_back"
         android:layout_width="500dip"
         android:layout_height="match_parent"
-        android:background="@drawable/channel_list_back"
         android:layout_marginBottom="200dp"
         android:clickable="true"
         android:orientation="vertical"

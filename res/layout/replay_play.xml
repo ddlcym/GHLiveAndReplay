@@ -113,7 +113,7 @@
 
             <com.changhong.gehua.widget.MySeekbar
                 android:id="@+id/mySeekBar"
-                android:layout_width="750dip"
+                android:layout_width="780dip"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />
 
