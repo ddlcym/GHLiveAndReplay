@@ -253,6 +253,8 @@ public class LivePlayBannerDialog extends Dialog {
 			banner_cur.setVisibility(View.GONE);
 			banner_next.setVisibility(View.GONE);
 			banner_volumn.setVisibility(View.VISIBLE);
+			parentHandler.sendEmptyMessage(Class_Constant.VOLUMN_KEY_END);
+			
 			return true;
 		}
 		if (keyCode == Class_Constant.KEYCODE_VOICE_DOWN) {
@@ -271,6 +273,8 @@ public class LivePlayBannerDialog extends Dialog {
 			banner_cur.setVisibility(View.GONE);
 			banner_next.setVisibility(View.GONE);
 			banner_volumn.setVisibility(View.VISIBLE);
+			parentHandler.sendEmptyMessage(Class_Constant.VOLUMN_KEY_END);
+			
 			return true;
 		}
 		
@@ -300,8 +304,8 @@ public class LivePlayBannerDialog extends Dialog {
 				banner_next.setVisibility(View.GONE);
 				banner_volumn.setVisibility(View.VISIBLE);
 			}
+			parentHandler.sendEmptyMessage(Class_Constant.VOLUMN_KEY_END);
 			
-		
 			return true;
 		}
 		
@@ -312,6 +316,7 @@ public class LivePlayBannerDialog extends Dialog {
 			parentHandler.sendMessage(msg);
 			return false;
 		}
+		
 		
 		return super.onKeyDown(keyCode, event);
 	}
@@ -342,6 +347,10 @@ public class LivePlayBannerDialog extends Dialog {
 	/*public void setMuteicon(ImageView muteicon) {
 		this.muteicon = muteicon;
 	}*/
-
-
+	/*Runnable volumnrunnable = new Runnable() {
+		public void run() {
+			parentHandler.sendEmptyMessage(Class_Constant.VOLUMN_KEY_END);
+		}
+	};
+*/
 }

@@ -61,8 +61,9 @@ public class MainActivity extends BaseActivity {
 	private String[] TVtype;// all tv type
 	private SurfaceView surfaceView;
 	private LinearLayout channelListLinear;// channellist layout
+	
 	private LinearLayout linear_vertical_line;// straight line right of
-												// channellist layout
+	private ImageView fullscrBack;											// channellist layout
 	private ListView chListView;
 	private SeekBar liveSeekBar;
 	private TextView tvRootDigitalKeyInvalid;
@@ -236,6 +237,14 @@ public class MainActivity extends BaseActivity {
 				showDialogBanner(curChannelNO);
 				break;
 			// next message
+			case Class_Constant.VOLUMN_KEY_END:
+				if (liveBannerInfoRunnable != null) {
+					mhandler.removeCallbacks(liveBannerInfoRunnable);
+			    }
+				mhandler.postDelayed(liveBannerInfoRunnable, 5000);
+				break;	
+				
+				
 			}
 		}
 	};
@@ -289,6 +298,8 @@ public class MainActivity extends BaseActivity {
 		nextCategory = (TextView) findViewById(R.id.next_category);
 		surfaceView = (SurfaceView) findViewById(R.id.surfaceview_live);
 		channelListLinear = (LinearLayout) findViewById(R.id.chlist_back);
+		
+		fullscrBack = (ImageView) findViewById(R.id.prolistback); 
 		linear_vertical_line = (LinearLayout) findViewById(R.id.linear_vertical_line);
 		liveSeekBar = (SeekBar) findViewById(R.id.liveskbProgress);
 
@@ -390,7 +401,7 @@ public class MainActivity extends BaseActivity {
 					public void onResponse(org.json.JSONObject arg0) {
 						// TODO Auto-generated method stub
 						// 相应成功
-//						 Log.i(TAG, "MainActivity=channle:" + arg0);
+						//Log.i(TAG, "MainActivity=channle:" + arg0);
 						channelsAll = HandleLiveData.getInstance().dealChannelJson(arg0);
 						// first set adapter
 						curType = 0;
@@ -401,6 +412,7 @@ public class MainActivity extends BaseActivity {
 						// "HttpService=channelsAll:" + channelsAll.size());
 						if (channelsAll.size() <= 0) {
 							channelListLinear.setVisibility(View.INVISIBLE);
+							fullscrBack.setVisibility(View.INVISIBLE);
 						}
 					}
 				}, errorListener);
@@ -1111,6 +1123,7 @@ public class MainActivity extends BaseActivity {
 
 	private void showChannelListView() {
 		channelListLinear.setVisibility(View.VISIBLE);
+		fullscrBack.setVisibility(View.VISIBLE);
 //		focusView.setVisibility(View.VISIBLE);
 		linear_vertical_line.setVisibility(View.VISIBLE);
 		chListView.setVisibility(View.VISIBLE);
@@ -1209,10 +1222,13 @@ public class MainActivity extends BaseActivity {
 		
 		livePlayBanner.setData(channel, curChannelPrograms,volumn,type);
 		livePlayBanner.show();
-		if (liveBannerInfoRunnable != null) {
+		
+		mhandler.sendEmptyMessage(Class_Constant.VOLUMN_KEY_END);
+		
+		/*if (liveBannerInfoRunnable != null) {
 			mhandler.removeCallbacks(liveBannerInfoRunnable);
 			mhandler.postDelayed(liveBannerInfoRunnable, 5000);
-		}
+	    }*/
 		// ChannelInfo curChannel = (ChannelInfo)
 		// CacheData.allChannelMap.get(channelno);
 		// if (programBannerDialog != null) {
@@ -1267,6 +1283,7 @@ public class MainActivity extends BaseActivity {
 			curType = 0;
 			mCurChannels = channelsAll;
 			channelListLinear.setVisibility(View.INVISIBLE);
+			fullscrBack.setVisibility(View.INVISIBLE);
 			focusView.setVisibility(View.INVISIBLE);
 			linear_vertical_line.setVisibility(View.INVISIBLE);
 			liveSeekBar.setVisibility(View.INVISIBLE);
@@ -1312,6 +1329,7 @@ public class MainActivity extends BaseActivity {
 			}
 		}).start();
 		channelListLinear.setVisibility(View.GONE);
+		fullscrBack.setVisibility(View.GONE);
 	}
 
 	/* whether net is connected */

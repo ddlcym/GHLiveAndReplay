@@ -77,115 +77,120 @@ public class ReplayPlayActivity extends BaseActivity {
 		public void handleMessage(android.os.Message msg) {
 
 			switch (msg.what) {
-			case Class_Constant.REPLAY_CHANNEL_DETAIL:
-				break;
-
-			case Class_Constant.PLAY_URL:
-				replayurl = (String) msg.obj;
-				playNetVideo();
-				break;
-
-			case Class_Constant.RE_NEXT_PROGRAM:
-				String dialogcurDay = CacheData.getReplayCurDay();
-				List<ProgramInfo> dialogcurProgramList = (List<ProgramInfo>) CacheData.getAllProgramMap().get(dialogcurDay);
-				int curindex = dialogcurProgramList.indexOf(mprogram);
-				Log.i("xb", String.valueOf(curindex));
-				Log.i("xb", mprogram.getEventName());
-				if (curindex == (dialogcurProgramList.size() - 1)) {
-					//最后一个节目
-					replayEndlastDialog = new ReplayEndDialog(ReplayPlayActivity.this,replayHandler,1,"<"+mprogram.getEventName()+">"+"播放结束");
-					replayEndlastDialog.show();
-				}else{
-					ProgramInfo dialognextprogram = dialogcurProgramList.get(curindex + 1);
-					replayEndDialog = new ReplayEndDialog(ReplayPlayActivity.this,replayHandler,0,"<"+dialognextprogram.getEventName()+">"+"即将开始");
-					replayEndDialog.show();
-				}
-
-				break;
-			case Class_Constant.RE_LAST_PROGRAM:
-				Log.i("xb", "replay*********");
-				String lastdialogcurDay = CacheData.getReplayCurDay();
-				List<ProgramInfo> lastdialogcurProgramList = (List<ProgramInfo>) CacheData.getAllProgramMap().get(lastdialogcurDay);
-				int lastcurindex = lastdialogcurProgramList.indexOf(mprogram);
-				Log.i("xb", "last"+String.valueOf(lastcurindex));
-				Log.i("xb", "last"+mprogram.getEventName());
-				if (0 == lastcurindex) {
-					//di一个节目
-					replayfirstDialog = new ReplayEndDialog(ReplayPlayActivity.this,replayHandler,3,"<"+mprogram.getEventName()+">"+"即将开始");
-					replayfirstDialog.show();
-				}else{
-					ProgramInfo lastdialognextprogram = lastdialogcurProgramList.get(lastcurindex - 1);
-					firstreplayDialog = new ReplayEndDialog(ReplayPlayActivity.this,replayHandler,2,"<"+lastdialognextprogram.getEventName()+">"+"即将开始");
-					firstreplayDialog.show();
-				}
-				// playLastProgram();
-				Log.i("mmmm", "ReplayPlayActivity-RE_NEXT_PROGRAM:" + mprogram.getProgramId());
-				break;
-			case Class_Constant.REPLAY_DIALOG_END_CANCEL:
-
-				int curtype = msg.getData().getInt("dialogcanceltype",-1);
-				Log.i("xb", "CANCEL"+String.valueOf(curtype));
-				switch (curtype) {
-				case 0:
-					replayEndDialog.dismiss();
+				case Class_Constant.REPLAY_CHANNEL_DETAIL:
+					break;
+	
+				case Class_Constant.PLAY_URL:
+					replayurl = (String) msg.obj;
+					playNetVideo();
+					break;
+	
+				case Class_Constant.RE_NEXT_PROGRAM:
+					String dialogcurDay = CacheData.getReplayCurDay();
+					List<ProgramInfo> dialogcurProgramList = (List<ProgramInfo>) CacheData.getAllProgramMap().get(dialogcurDay);
+					int curindex = dialogcurProgramList.indexOf(mprogram);
+					Log.i("xb", String.valueOf(curindex));
+					Log.i("xb", mprogram.getEventName());
+					if (curindex == (dialogcurProgramList.size() - 1)) {
+						//最后一个节目
+						replayEndlastDialog = new ReplayEndDialog(ReplayPlayActivity.this,replayHandler,1,"<"+mprogram.getEventName()+">"+"播放结束");
+						replayEndlastDialog.show();
+					}else{
+						ProgramInfo dialognextprogram = dialogcurProgramList.get(curindex + 1);
+						replayEndDialog = new ReplayEndDialog(ReplayPlayActivity.this,replayHandler,0,"<"+dialognextprogram.getEventName()+">"+"即将开始");
+						replayEndDialog.show();
+					}
+	
+					break;
+				case Class_Constant.RE_LAST_PROGRAM:
+					Log.i("xb", "replay*********");
+					String lastdialogcurDay = CacheData.getReplayCurDay();
+					List<ProgramInfo> lastdialogcurProgramList = (List<ProgramInfo>) CacheData.getAllProgramMap().get(lastdialogcurDay);
+					int lastcurindex = lastdialogcurProgramList.indexOf(mprogram);
+					Log.i("xb", "last"+String.valueOf(lastcurindex));
+					Log.i("xb", "last"+mprogram.getEventName());
+					if (0 == lastcurindex) {
+						//di一个节目
+						replayfirstDialog = new ReplayEndDialog(ReplayPlayActivity.this,replayHandler,3,"<"+mprogram.getEventName()+">"+"即将开始");
+						replayfirstDialog.show();
+					}else{
+						ProgramInfo lastdialognextprogram = lastdialogcurProgramList.get(lastcurindex - 1);
+						firstreplayDialog = new ReplayEndDialog(ReplayPlayActivity.this,replayHandler,2,"<"+lastdialognextprogram.getEventName()+">"+"即将开始");
+						firstreplayDialog.show();
+					}
+					// playLastProgram();
+					Log.i("mmmm", "ReplayPlayActivity-RE_NEXT_PROGRAM:" + mprogram.getProgramId());
+					break;
+				case Class_Constant.REPLAY_DIALOG_END_CANCEL:
+	
+					int curtype = msg.getData().getInt("dialogcanceltype",-1);
+					Log.i("xb", "CANCEL"+String.valueOf(curtype));
+					switch (curtype) {
+					case 0:
+						replayEndDialog.dismiss();
+						
+						playVideo(channel, mprogram);
+						break;
+					case 1:
+						replayEndlastDialog.dismiss();
+						playVideo(channel, mprogram);
+						break;
+					case 2:
+						firstreplayDialog.dismiss();
+						playVideo(channel, mprogram);
+						break;
+					case 3:
+						replayfirstDialog.dismiss();
+						playVideo(channel, mprogram);
+						break;
+					case 4:
+						backreplaydialog.dismiss();
+						//playVideo(channel, mprogram);
+						break;
+					default:
+						
+						break;
+					}
 					
-					playVideo(channel, mprogram);
-					break;
-				case 1:
-					replayEndlastDialog.dismiss();
-					playVideo(channel, mprogram);
-					break;
-				case 2:
-					firstreplayDialog.dismiss();
-					playVideo(channel, mprogram);
-					break;
-				case 3:
-					replayfirstDialog.dismiss();
-					playVideo(channel, mprogram);
-					break;
-				case 4:
-					backreplaydialog.dismiss();
-					//playVideo(channel, mprogram);
-					break;
-				default:
 					
-					break;
-				}
-				
-				
-			case Class_Constant.REPLAY_DIALOG_END_OK:
-				int type = msg.getData().getInt("dialogoktype",-1);
-				Log.i("xb", "OK"+String.valueOf(type));
-				switch (type) {
-				case 0:
-					replayEndDialog.dismiss();
-					playNextProgram();
-					break;
-				case 1:
-					replayEndlastDialog.dismiss();
-					finish();
-					break;
+				case Class_Constant.REPLAY_DIALOG_END_OK:
+					int type = msg.getData().getInt("dialogoktype",-1);
+					Log.i("xb", "OK"+String.valueOf(type));
+					switch (type) {
+					case 0:
+						replayEndDialog.dismiss();
+						playNextProgram();
+						break;
+					case 1:
+						replayEndlastDialog.dismiss();
+						finish();
+						break;
+						
+					case 2:
+						firstreplayDialog.dismiss();
+						playLastProgram();
+						break;
+						
+					case 3:
+						replayfirstDialog.dismiss();
+						finish();
+					case 4:
+						backreplaydialog.dismiss();
+						finish();
+						break;
+					default:
+						break;
+					}
 					
-				case 2:
-					firstreplayDialog.dismiss();
-					playLastProgram();
-					break;
+	
+					// player.playUrl(replayurl);
 					
-				case 3:
-					replayfirstDialog.dismiss();
-					finish();
-				case 4:
-					backreplaydialog.dismiss();
-					finish();
-					break;
-				default:
-					break;
-				}
-				
-
-				// player.playUrl(replayurl);
-				
-				//break;
+					//break;
+				case Class_Constant.REPLAY_BANNER:
+					if (progressBarRunnable != null) {
+						replayHandler.removeCallbacks(progressBarRunnable);
+					}
+					replayHandler.postDelayed(progressBarRunnable, 5000);
 			}
 		}
 	};
@@ -263,10 +268,11 @@ public class ReplayPlayActivity extends BaseActivity {
 		//replayEndDialog = new ReplayEndDialog(this,replayHandler,0,"TTTT");
 		
 		
-		if (progressBarRunnable != null) {
+		/*if (progressBarRunnable != null) {
 			replayHandler.removeCallbacks(progressBarRunnable);
 		}
-		replayHandler.postDelayed(progressBarRunnable, 5000);
+		replayHandler.postDelayed(progressBarRunnable, 5000);*/
+		replayHandler.sendEmptyMessage(Class_Constant.REPLAY_BANNER);
 		
 	}
 
@@ -465,10 +471,13 @@ public class ReplayPlayActivity extends BaseActivity {
 			nextLinearLayout.setVisibility(View.VISIBLE);
 			pfbackImageView.setVisibility(View.VISIBLE);
 			
-			if (progressBarRunnable != null) {
+			/*if (progressBarRunnable != null) {
 				replayHandler.removeCallbacks(progressBarRunnable);
 			}
-			replayHandler.postDelayed(progressBarRunnable, 5000);
+			replayHandler.postDelayed(progressBarRunnable, 5000);*/
+			
+			replayHandler.sendEmptyMessage(Class_Constant.REPLAY_BANNER);
+			
 			backwardIcon.setVisibility(View.GONE);
 			forwardIcon.setVisibility(View.VISIBLE);
 			break;
@@ -488,10 +497,12 @@ public class ReplayPlayActivity extends BaseActivity {
 			
 			pfbackImageView.setVisibility(View.VISIBLE);
 			
-			if (progressBarRunnable != null) {
+			/*if (progressBarRunnable != null) {
 				replayHandler.removeCallbacks(progressBarRunnable);
 			}
-			replayHandler.postDelayed(progressBarRunnable, 5000);
+			replayHandler.postDelayed(progressBarRunnable, 5000);*/
+			
+			replayHandler.sendEmptyMessage(Class_Constant.REPLAY_BANNER);
 			forwardIcon.setVisibility(View.GONE);
 			backwardIcon.setVisibility(View.VISIBLE);
 			break;
@@ -512,19 +523,25 @@ public class ReplayPlayActivity extends BaseActivity {
 				curlinearLayout.setVisibility(View.VISIBLE);
 				nextLinearLayout.setVisibility(View.VISIBLE);
 				pfbackImageView.setVisibility(View.VISIBLE);
+				
+				//处理banner还在的时候，按暂停，banner消失
 				if (pfrunnable != null) {
 					replayHandler.removeCallbacks(pfrunnable);
 				}
-				replayHandler.postDelayed(pfrunnable, 3000);
+				
+				if (progressBarRunnable != null) {
+					replayHandler.removeCallbacks(progressBarRunnable);
+				}
 				
 			} else {
 				player.play();
 				pauseButton.setVisibility(View.GONE);
 				palyButton.setVisibility(View.VISIBLE);
-				if (runnable != null) {
-					replayHandler.removeCallbacks(runnable);
+				if (pfrunnable != null) {
+					replayHandler.removeCallbacks(pfrunnable);
 				}
-				replayHandler.postDelayed(runnable, 5000);
+				replayHandler.postDelayed(pfrunnable, 5000);
+				
 			}
 
 			break;
@@ -605,32 +622,26 @@ public class ReplayPlayActivity extends BaseActivity {
 		return super.onKeyUp(keyCode, event);
 	}
 
-	Runnable runnable = new Runnable() {
+	Runnable pfrunnable = new Runnable() {
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
-			palyButton.setVisibility(View.GONE);
+			palyButton.setVisibility(View.INVISIBLE);
 			//skbProgress.setVisibility(View.GONE);
-			seekbar.setVisibility(View.GONE);
-			videoTimeLength.setVisibility(View.GONE);
+			seekbar.setVisibility(View.INVISIBLE);
+			videoTimeLength.setVisibility(View.INVISIBLE);
 		//	videoCurrentTime.setVisibility(View.GONE);
 			
-			/*videoCurPro.setVisibility(View.GONE);
-			videoNextPro.setVisibility(View.GONE);*/
-			curlinearLayout.setVisibility(View.GONE);
-			nextLinearLayout.setVisibility(View.GONE);
-			pfbackImageView.setVisibility(View.GONE);
+		//	videoCurPro.setVisibility(View.INVISIBLE);
+		//	videoNextPro.setVisibility(View.INVISIBLE);
+			curlinearLayout.setVisibility(View.INVISIBLE);
+			nextLinearLayout.setVisibility(View.INVISIBLE);
+			pfbackImageView.setVisibility(View.INVISIBLE);
 			// pauseButton.setVisibility(View.GONE);
 		}
 	};
 
 	
-	Runnable pfrunnable = new Runnable() {
-		@Override
-		public void run() {
-			//seekbar.getCurText().setVisibility(View.GONE);
-		}
-	};
 	
 	
 	Runnable progressBarRunnable = new Runnable() {
@@ -641,15 +652,15 @@ public class ReplayPlayActivity extends BaseActivity {
 			// pauseButton.setVisibility(View.GONE);
 			// timeShiftIcon.setVisibility(View.GONE);
 			//skbProgress.setVisibility(View.GONE);
-			seekbar.setVisibility(View.GONE);
-			videoTimeLength.setVisibility(View.GONE);
+			seekbar.setVisibility(View.INVISIBLE);
+			videoTimeLength.setVisibility(View.INVISIBLE);
 			//videoCurrentTime.setVisibility(View.GONE);
 			
 //			videoCurPro.setVisibility(View.GONE);
 //			videoNextPro.setVisibility(View.GONE);
-			curlinearLayout.setVisibility(View.GONE);
-			nextLinearLayout.setVisibility(View.GONE);
-			pfbackImageView.setVisibility(View.GONE);
+			curlinearLayout.setVisibility(View.INVISIBLE);
+			nextLinearLayout.setVisibility(View.INVISIBLE);
+			pfbackImageView.setVisibility(View.INVISIBLE);
 		}
 	};
 
