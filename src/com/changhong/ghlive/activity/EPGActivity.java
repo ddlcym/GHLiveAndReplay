@@ -1,6 +1,7 @@
 package com.changhong.ghlive.activity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.json.JSONObject;
@@ -14,6 +15,7 @@ import com.changhong.gehua.common.ChannelInfo;
 import com.changhong.gehua.common.Class_Constant;
 import com.changhong.gehua.common.ProcessData;
 import com.changhong.gehua.common.ProgramInfo;
+import com.changhong.gehua.common.Utils;
 import com.changhong.gehua.common.VolleyTool;
 import com.changhong.ghlive.datafactory.HandleLiveData;
 import com.changhong.ghlive.service.HttpService;
@@ -56,6 +58,7 @@ public class EPGActivity extends BaseActivity {
 	private static GridView epgWeekInfoView;
 	private static TextView chanListTitleButton;
 	private ImageView focusView;
+	private TextView curtime;
 	
 	/*
 	 * 设置频道列表和epg字体颜色的显示
@@ -215,6 +218,18 @@ public class EPGActivity extends BaseActivity {
 		programsAdapter = new ProgramsAdapter(EPGActivity.this);
 		epgEventListview.setAdapter(programsAdapter);
 		epgWeekInfoView.setFocusable(false);
+		
+		curtime = (TextView)findViewById(R.id.epg_curtime);
+		Date date=new Date();
+		//Log.i("test", "date:"+date.toString());
+		String curdate = Utils.dateToString(date);
+		//Log.i("test", "curdate:"+curdate);
+		String time = Utils.hourAndMinute(date);
+		//Log.i("test", "time:"+time);
+		String week=Utils.DateToWeek(date);
+		//Log.i("test", "week:"+week);
+		curtime.setText(curdate.substring(5) + "    " + week + "    " + time);
+		
 	}
 
 	@Override

@@ -624,11 +624,14 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 			if (null == mediaPlayer)
 				return;
 			if (!liveFlag) {
-				Log.i("mmmm", "**desPositon:" + desPositon);
+				Log.i("mmmm", "%%%%"+liveFlag);
 				mediaPlayer.seekTo(desPositon);
 				mediaPlayer.start();
 			} else {
+				Log.i("mmmm", "#####"+liveFlag);
+				Log.i("mmmm", "####desPositon:"+desPositon);
 				if (desPositon >= 0) {
+					
 					delayTime = getPlayDelayTimes();
 					playLiveBack(curChannel, delayTime);
 				}

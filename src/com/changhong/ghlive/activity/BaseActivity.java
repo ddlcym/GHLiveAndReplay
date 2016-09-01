@@ -2,7 +2,6 @@ package com.changhong.ghlive.activity;
 
 import com.changhong.gehua.common.Class_Constant;
 import com.changhong.gehua.common.CommonMethod;
-import com.changhong.gehua.widget.VolumnDialog;
 import android.app.Activity;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.view.KeyEvent;
 
 public abstract class BaseActivity extends Activity{
 	private int currentindex = 0;
-	private VolumnDialog dialog;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

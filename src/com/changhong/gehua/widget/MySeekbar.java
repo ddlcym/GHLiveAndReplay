@@ -58,14 +58,15 @@ public class MySeekbar extends LinearLayout{
 	
 	private void initView(){
 		LayoutInflater.from(context).inflate(R.layout.myseekbar, this);
-		
 		seekBar=(SeekBar)findViewById(R.id.seekbar);
 		curText=(TextView)findViewById(R.id.textLayout);
 		
-//		float moveStep = (float) ((float) seekBar.getProgress() / (float) seekBar.getMax() ) ;
-//		int seekwidth=seekBar.getWidth();
-//		curText.layout((int) (seekwidth * moveStep), 0, (int)(seekwidth * moveStep)+curText.getWidth(), curText.getHeight());
-//		Log.i("mmmm", "myseekbar--maxTimes:" + seekBar.getMax()  + "--seekwidth:" + seekwidth+ "--moveStep:" + moveStep + "--arg1:" + seekBar.getProgress()+"--curText.getWidth:"+curText.getWidth()+"--curText.getHeight:"+curText.getHeight());
+		//String curtime = curText.getText().toString();
+		/*float moveStep = (float) ((float) seekBar.getProgress() / (float) seekBar.getMax() ) ;
+		int seekwidth=seekBar.getLayoutParams().width;
+		Log.i("test", "seekwidth:" + seekwidth);
+		curText.layout((int) (seekwidth * moveStep), 0, (int)(seekwidth * moveStep)+curText.getWidth(), curText.getHeight());
+		Log.i("test", "myseekbar--maxTimes:" + seekBar.getMax()  + "--seekwidth:" + seekwidth+ "--moveStep:" + moveStep + "--arg1:" + seekBar.getProgress()+"--curText.getWidth:"+curText.getWidth()+"--curText.getHeight:"+curText.getHeight());*/
 	}
 	
 	public void setMax(int max){
