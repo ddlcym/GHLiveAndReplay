@@ -12,7 +12,16 @@
         android:scaleType="fitXY"
         android:src="@drawable/item_sec"
         android:visibility="invisible" />
-    
+    	
+     <TextView
+        android:id="@+id/epg_curtime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|right"
+        android:layout_marginTop="20dip"
+        android:layout_marginRight="45dip"
+        android:textColor="@color/gray"
+        android:textSize="22sp" />
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
