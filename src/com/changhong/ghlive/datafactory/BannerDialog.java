@@ -27,6 +27,7 @@ import com.changhong.gehua.common.CacheData;
 import com.changhong.gehua.common.ChannelInfo;
 import com.changhong.gehua.common.Class_Constant;
 import com.changhong.gehua.common.CommonMethod;
+import com.changhong.gehua.common.PlayVideo;
 import com.changhong.gehua.common.ProcessData;
 import com.changhong.gehua.common.ProgramInfo;
 import com.changhong.gehua.common.Utils;
@@ -187,9 +188,10 @@ public class BannerDialog extends Dialog {
 					
 					long curTime=System.currentTimeMillis();
 					int delayTime=(int) (curTime-program.getBeginTime().getTime())/1000;
-					playLiveBack(curChannel, delayTime);
+//					playLiveBack(curChannel, delayTime);
+//					CacheData.setCurProgram(program);
+					PlayVideo.getInstance().playLiveBack(player, curChannel, program);
 					palyButton.setMyBG(PlayButton.Play);
-					CacheData.setCurProgram(program);
 					programListInfo.remove(1);
 					programListInfo.add(1, program);
 					if(programListInfo.size()!=0&&(list.size()-1)!=position){
@@ -247,7 +249,6 @@ public class BannerDialog extends Dialog {
 		player.setLiveFlag(true);
 		programPlayBar.getSeekBar().setProgress(0);
 		
-
 	}
 
 	@Override
@@ -415,39 +416,39 @@ public class BannerDialog extends Dialog {
 		// String equestURL=processData.getReplayPlayUrlString(channel,
 		// programListInfo.get(1), 0);
 
-		playLiveBack(curChannel, 0);
+		PlayVideo.getInstance().playLiveBack(player, curChannel, programListInfo.get(1));
 	}
 
-	private void playLiveBack(ChannelInfo channel, int delay) {
-		mReQueue.cancelAll("bannerDialog");
-		String requestURL = processData.getLiveBackPlayUrl(channel, delay);
-		CacheData.setCurProgram(programListInfo.get(1));
-		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-				Request.Method.POST, requestURL, null,
-				new Response.Listener<org.json.JSONObject>() {
-
-					@Override
-					public void onResponse(org.json.JSONObject arg0) {
-						// TODO Auto-generated method stub
-						// Log.i(TAG, "MainActivity=dvbBack:" + arg0);
-						final String url = JsonResolve.getInstance()
-								.getLivePlayURL(arg0);
-						new Thread(new Runnable() {
-
-							@Override
-							public void run() {
-								// TODO Auto-generated method stub
-								player.playUrl(url);
-								
-							}
-						}).start();
-						
-
-					}
-				}, errorListener);
-		jsonObjectRequest.setTag("bannerDialog");// 设置tag,cancelAll的时候使用
-		mReQueue.add(jsonObjectRequest);
-	}
+//	private void playLiveBack(ChannelInfo channel, int delay) {
+//		mReQueue.cancelAll("bannerDialog");
+//		String requestURL = processData.getLiveBackPlayUrl(channel, delay);
+//		CacheData.setCurProgram(programListInfo.get(1));
+//		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+//				Request.Method.POST, requestURL, null,
+//				new Response.Listener<org.json.JSONObject>() {
+//
+//					@Override
+//					public void onResponse(org.json.JSONObject arg0) {
+//						// TODO Auto-generated method stub
+//						// Log.i(TAG, "MainActivity=dvbBack:" + arg0);
+//						final String url = JsonResolve.getInstance()
+//								.getLivePlayURL(arg0);
+//						new Thread(new Runnable() {
+//
+//							@Override
+//							public void run() {
+//								// TODO Auto-generated method stub
+//								player.playUrl(url);
+//								
+//							}
+//						}).start();
+//						
+//
+//					}
+//				}, errorListener);
+//		jsonObjectRequest.setTag("bannerDialog");// 设置tag,cancelAll的时候使用
+//		mReQueue.add(jsonObjectRequest);
+//	}
 
 	private Response.ErrorListener errorListener = new Response.ErrorListener() {
 		@Override
