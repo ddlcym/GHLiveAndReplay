@@ -23,7 +23,7 @@ public class CacheData {
 	public static List<ChannelInfo> allChannelExtraInfo=new ArrayList<ChannelInfo>();
 
 	public static ChannelInfo curChannel;
-	public static ProgramInfo curProgram;
+	public static ProgramInfo curProgram;//时移下正在播放的节目
 	public static List<ProgramInfo> curPrograms=new ArrayList<ProgramInfo>();//当前频道的3个节目
 	
 	public static List<ProgramInfo> timeshiftPrograms=new ArrayList<ProgramInfo>();//时移下的节目列表
