@@ -261,4 +261,38 @@ public class PlayVideo {
 		}
 	};
 
+	/*
+	 * player:当前播放类
+	 * 
+	 */
+	public void playLiveBack(final Player player,ChannelInfo curChannel,ProgramInfo curProgram, int delay) {
+		mReQueue.cancelAll("bannerDialog");
+		String requestURL = processData.getLiveBackPlayUrl(curChannel, delay);
+		CacheData.setCurProgram(curProgram);
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+				Request.Method.POST, requestURL, null,
+				new Response.Listener<org.json.JSONObject>() {
+
+					@Override
+					public void onResponse(org.json.JSONObject arg0) {
+						// TODO Auto-generated method stub
+						// Log.i(TAG, "MainActivity=dvbBack:" + arg0);
+						final String url = JsonResolve.getInstance()
+								.getLivePlayURL(arg0);
+						new Thread(new Runnable() {
+
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								player.playUrl(url);
+								
+							}
+						}).start();
+						
+
+					}
+				}, errorListener);
+		jsonObjectRequest.setTag("bannerDialog");// 设置tag,cancelAll的时候使用
+		mReQueue.add(jsonObjectRequest);
+	}
 }
