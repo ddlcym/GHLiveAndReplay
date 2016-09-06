@@ -268,10 +268,17 @@ public class PlayVideo {
 	 * curProgram：时移节目
 	 * delay:延迟秒数，单位是秒
 	 */
-	public void playLiveBack(final Player player,ChannelInfo curChannel,ProgramInfo curProgram, int delay) {
-		mReQueue.cancelAll("bannerDialog");
-		String requestURL = processData.getLiveBackPlayUrl(curChannel, delay);
+	public void playLiveBack(final Player player,ChannelInfo curChannel,ProgramInfo curProgram) {
+		
+		long curTime=System.currentTimeMillis();
+		int delayTime=(int) (curTime-curProgram.getBeginTime().getTime())/1000;
 		CacheData.setCurProgram(curProgram);
+		playTSDelayTime(player,curChannel,delayTime);
+	}
+	
+	public void playTSDelayTime(final Player player,ChannelInfo curChannel,int delayTime){
+		mReQueue.cancelAll("bannerDialog");
+		String requestURL = processData.getLiveBackPlayUrl(curChannel, delayTime);
 		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
 				Request.Method.POST, requestURL, null,
 				new Response.Listener<org.json.JSONObject>() {
