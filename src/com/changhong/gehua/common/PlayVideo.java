@@ -262,8 +262,11 @@ public class PlayVideo {
 	};
 
 	/*
+	 * 播放时移节目
 	 * player:当前播放类
-	 * 
+	 * curChannel:当前频道
+	 * curProgram：时移节目
+	 * delay:延迟秒数，单位是秒
 	 */
 	public void playLiveBack(final Player player,ChannelInfo curChannel,ProgramInfo curProgram, int delay) {
 		mReQueue.cancelAll("bannerDialog");
