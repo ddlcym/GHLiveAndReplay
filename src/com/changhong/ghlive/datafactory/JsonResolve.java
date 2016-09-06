@@ -215,6 +215,7 @@ public class JsonResolve {
 				list.add(program);
 			}
 		}
+		CacheData.setTimeshiftPrograms(list);
 		return list;
 	}
 
