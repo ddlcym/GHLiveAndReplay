@@ -13,6 +13,7 @@ import com.changhong.gehua.common.ChannelInfo;
 import com.changhong.gehua.common.Class_Constant;
 import com.changhong.gehua.common.CommonMethod;
 import com.changhong.gehua.common.PlayVideo;
+import com.changhong.gehua.common.PosterInfo;
 import com.changhong.gehua.common.ProcessData;
 import com.changhong.gehua.common.ProgramInfo;
 import com.changhong.gehua.common.VolleyTool;
@@ -64,7 +65,7 @@ public class MainActivity extends BaseActivity {
 	
 	private LinearLayout linear_vertical_line;// straight line right of
 	private ImageView fullscrBack;											// channellist layout
-	private ListView chListView;
+	private ListView chListView;//频道列表
 	private SeekBar liveSeekBar;
 	private TextView tvRootDigitalKeyInvalid;
 	private DigitalRoot tvRootDigitalkey;
@@ -161,22 +162,11 @@ public class MainActivity extends BaseActivity {
 				break;
 
 			case Class_Constant.MESSAGE_HANDLER_DIGITALKEY: {
-				String succ = playChannel(String.valueOf(iKey), true);
-				// int succ = objApplication.playChannelKeyInput(iKey,true);
-				if (null == succ) {
-					tvRootDigitalkey.setVisibility(View.INVISIBLE);
-					tvRootDigitalKeyInvalid.setVisibility(View.VISIBLE);
-				} else {
-					Message msg2 = new Message();
-					msg2.what = Class_Constant.MESSAGE_SHOW_DIGITALKEY;
-					msg2.arg1 = iKey;
-					sendMessage(msg2);
-				}
-				iKeyNum = 0;
-				iKey = 0;
-				mhandler.removeMessages(Class_Constant.MESSAGE_HANDLER_DIGITALKEY);
-				mhandler.sendEmptyMessageDelayed(Class_Constant.MESSAGE_DISAPPEAR_DIGITAL, 2000);
+				playDigitalChannel();
 			}
+				break;
+			case Class_Constant.MESSAGE_CHANNELIST_DIGITAL:
+				selectChannelListDigital();
 				break;
 			case Class_Constant.MESSAGE_SHOW_DIGITALKEY:
 				int channelId = msg.arg1;
@@ -1107,11 +1097,17 @@ public class MainActivity extends BaseActivity {
 				// } else {
 				tvRootDigitalkey.setData(iKey);
 				// }
-
-				if (iKey >= 100) {
-					mhandler.sendEmptyMessageDelayed(Class_Constant.MESSAGE_HANDLER_DIGITALKEY, 2000);
-				} else {
-					mhandler.sendEmptyMessageDelayed(Class_Constant.MESSAGE_HANDLER_DIGITALKEY, 5000);
+				if(chListView.isShown()){
+					mhandler.removeMessages(Class_Constant.MESSAGE_CHANNELIST_DIGITAL);
+					mhandler.sendEmptyMessageDelayed(Class_Constant.MESSAGE_CHANNELIST_DIGITAL, 1500);
+				}else{
+					mhandler.removeMessages(Class_Constant.MESSAGE_HANDLER_DIGITALKEY);
+					if (iKey >= 100) {
+						mhandler.sendEmptyMessageDelayed(Class_Constant.MESSAGE_HANDLER_DIGITALKEY, 2000);
+					} else {
+						
+						mhandler.sendEmptyMessageDelayed(Class_Constant.MESSAGE_HANDLER_DIGITALKEY, 5000);
+					}
 				}
 			}
 
@@ -1240,6 +1236,9 @@ public class MainActivity extends BaseActivity {
 	}
 
 	// ============play video=========================================
+	/*
+	 * 
+	 */
 	public String playChannel(String channelno, boolean isCheckPlaying) {
 
 		if (channelno.equals(curChannelNO) && isCheckPlaying) {
@@ -1273,6 +1272,50 @@ public class MainActivity extends BaseActivity {
 		CommonMethod.saveChannelLastTime(Integer.parseInt(curChannelNO), MyApp.getContext());
 
 		return curChannelNO;
+	}
+	
+	//根据数字键播放对应频道
+	private void playDigitalChannel(){
+		String succ = playChannel(String.valueOf(iKey), true);
+		// int succ = objApplication.playChannelKeyInput(iKey,true);
+		if (null == succ) {
+			tvRootDigitalkey.setVisibility(View.INVISIBLE);
+			tvRootDigitalKeyInvalid.setVisibility(View.VISIBLE);
+		} else {
+			Message msg2 = new Message();
+			msg2.what = Class_Constant.MESSAGE_SHOW_DIGITALKEY;
+			msg2.arg1 = iKey;
+			mhandler.sendMessage(msg2);
+		}
+		iKeyNum = 0;
+		iKey = 0;
+		mhandler.removeMessages(Class_Constant.MESSAGE_HANDLER_DIGITALKEY);
+		mhandler.sendEmptyMessageDelayed(Class_Constant.MESSAGE_DISAPPEAR_DIGITAL, 2000);
+	}
+	
+	private void selectChannelListDigital(){
+		int position=-1;
+		if(curType!=0){
+			curType=0;
+			showChannelList();
+		}
+		for(int i=0;i<channelsAll.size();i++){
+			String channelNO=channelsAll.get(i).getChannelNumber();
+			if(Integer.parseInt(channelNO)==iKey){
+				position=i;
+				break;
+			}
+		}
+		if(position!=-1){
+			chListView.setSelection(position);
+		}else{
+			tvRootDigitalkey.setVisibility(View.INVISIBLE);
+			tvRootDigitalKeyInvalid.setVisibility(View.VISIBLE);
+		}
+		iKeyNum = 0;
+		iKey = 0;
+		mhandler.removeMessages(Class_Constant.MESSAGE_HANDLER_DIGITALKEY);
+		mhandler.sendEmptyMessageDelayed(Class_Constant.MESSAGE_DISAPPEAR_DIGITAL, 2000);
 	}
 
 	/* timer for channel listview hide */
