@@ -46,7 +46,7 @@ public class Class_Constant {
 	public final static int MAX_NO_OF_PROGRAMS = 500; // ����Ŀ��
 	public final static int MAX_NO_OF_CARRIERS = 40; // ���Ƶ����
 	public final static int MAX_NO_OF_TIMERS = 32; // ���ʱ����
-	public final static int MAX_NO_OF_NVOD = 40; // ���NVOD��
+	public final static int MAX_NO_OF_NVOD = 40; // ���NVOD��1
 
 	// PID
 	public final static short PAT_PID = 0x00;
