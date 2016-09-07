@@ -161,11 +161,11 @@ public class MainActivity extends BaseActivity {
 				}
 				break;
 
-			case Class_Constant.MESSAGE_HANDLER_DIGITALKEY: {
+			case Class_Constant.MESSAGE_HANDLER_DIGITALKEY: 
 				playDigitalChannel();
-			}
+			
 				break;
-			case Class_Constant.MESSAGE_CHANNELIST_DIGITAL:
+			case Class_Constant.MESSAGE_CHANNELIST_SELECT_DIGITAL:
 				selectChannelListDigital();
 				break;
 			case Class_Constant.MESSAGE_SHOW_DIGITALKEY:
@@ -187,7 +187,6 @@ public class MainActivity extends BaseActivity {
 				break;
 
 			case Class_Constant.MESSAGE_DISAPPEAR_DIGITAL:
-				iKey = 0;
 				if (tvRootDigitalKeyInvalid != null) {
 					tvRootDigitalKeyInvalid.setVisibility(View.INVISIBLE);
 				}
@@ -710,6 +709,9 @@ public class MainActivity extends BaseActivity {
 			// if (ban != null && ban.isToastShow()) {
 			// ban.cancelBanner();
 			// }
+			//当按了数字键后，立刻按右键，需要取消发送数字延迟发送的消息，不然会出现逻辑混乱的情况
+			mhandler.removeMessages(Class_Constant.MESSAGE_HANDLER_DIGITALKEY);
+			
 			if (livePlayBanner != null && livePlayBanner.isToastShow()) {
 				livePlayBanner.dismiss();
 			}
@@ -1043,8 +1045,7 @@ public class MainActivity extends BaseActivity {
 		case Class_Constant.KEYCODE_KEY_DIGIT8:
 		case Class_Constant.KEYCODE_KEY_DIGIT9: {
 
-			mhandler.removeMessages(Class_Constant.MESSAGE_SHOW_DIGITALKEY);
-			mhandler.removeMessages(Class_Constant.MESSAGE_DISAPPEAR_DIGITAL);
+			
 			iKeyNum++;
 			if (iKeyNum > 0 && iKeyNum <= 4) {
 				if (ri_KeyCode == Class_Constant.KEYCODE_KEY_DIGIT0) {
@@ -1096,10 +1097,13 @@ public class MainActivity extends BaseActivity {
 				// }
 				// } else {
 				tvRootDigitalkey.setData(iKey);
+				mhandler.removeMessages(Class_Constant.MESSAGE_DISAPPEAR_DIGITAL);
+				mhandler.sendEmptyMessageDelayed(Class_Constant.MESSAGE_DISAPPEAR_DIGITAL, 6000);
 				// }
 				if(chListView.isShown()){
-					mhandler.removeMessages(Class_Constant.MESSAGE_CHANNELIST_DIGITAL);
-					mhandler.sendEmptyMessageDelayed(Class_Constant.MESSAGE_CHANNELIST_DIGITAL, 1500);
+					mhandler.removeMessages(Class_Constant.MESSAGE_HANDLER_DIGITALKEY);
+					mhandler.removeMessages(Class_Constant.MESSAGE_CHANNELIST_SELECT_DIGITAL);
+					mhandler.sendEmptyMessageDelayed(Class_Constant.MESSAGE_CHANNELIST_SELECT_DIGITAL, 1500);
 				}else{
 					mhandler.removeMessages(Class_Constant.MESSAGE_HANDLER_DIGITALKEY);
 					if (iKey >= 100) {
@@ -1276,7 +1280,9 @@ public class MainActivity extends BaseActivity {
 	
 	//根据数字键播放对应频道
 	private void playDigitalChannel(){
-		String succ = playChannel(String.valueOf(iKey), true);
+		String NO;
+		NO=""+tvRootDigitalkey.getCurNO();
+		String succ = playChannel(String.valueOf(NO), true);
 		// int succ = objApplication.playChannelKeyInput(iKey,true);
 		if (null == succ) {
 			tvRootDigitalkey.setVisibility(View.INVISIBLE);
@@ -1284,13 +1290,14 @@ public class MainActivity extends BaseActivity {
 		} else {
 			Message msg2 = new Message();
 			msg2.what = Class_Constant.MESSAGE_SHOW_DIGITALKEY;
-			msg2.arg1 = iKey;
+			msg2.arg1 = tvRootDigitalkey.getCurNO();
 			mhandler.sendMessage(msg2);
+			iKeyNum=0;
+			iKey=0;
+			return;
 		}
 		iKeyNum = 0;
-		iKey = 0;
-		mhandler.removeMessages(Class_Constant.MESSAGE_HANDLER_DIGITALKEY);
-		mhandler.sendEmptyMessageDelayed(Class_Constant.MESSAGE_DISAPPEAR_DIGITAL, 2000);
+		iKey=0;
 	}
 	
 	private void selectChannelListDigital(){
@@ -1314,8 +1321,7 @@ public class MainActivity extends BaseActivity {
 		}
 		iKeyNum = 0;
 		iKey = 0;
-		mhandler.removeMessages(Class_Constant.MESSAGE_HANDLER_DIGITALKEY);
-		mhandler.sendEmptyMessageDelayed(Class_Constant.MESSAGE_DISAPPEAR_DIGITAL, 2000);
+		
 	}
 
 	/* timer for channel listview hide */

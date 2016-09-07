@@ -24,6 +24,8 @@ public class DigitalRoot extends LinearLayout {
 	private ArrayList<Drawable> digitalList;
 
 	private Context context;
+	
+	private int curNO;
 
 	public DigitalRoot(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -68,6 +70,7 @@ public class DigitalRoot extends LinearLayout {
 	}
 
 	public void setData(int no) {
+		this.curNO=no;
 		if (no < 0&&no>999)
 			return;
 		if (no < 10) {
@@ -91,4 +94,9 @@ public class DigitalRoot extends LinearLayout {
 		}
 	}
 
+	public int getCurNO() {
+		return curNO;
+	}
+
+	
 }
