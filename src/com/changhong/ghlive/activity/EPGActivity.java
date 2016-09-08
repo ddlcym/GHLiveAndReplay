@@ -461,6 +461,7 @@ public class EPGActivity extends BaseActivity {
 					ColorStateList csl=(ColorStateList)getBaseContext().getResources().getColorStateList(R.color.replay_chanlist_whitegray);
 					lastEPGSelectIndex.setTextColor(csl);
 					lastEPGSelectName.setTextColor(csl);
+					firstInPro=false;//解决第一次进入时，第二行焦点颜色变化错误
 				}else{
 					ColorStateList csl=(ColorStateList)getBaseContext().getResources().getColorStateList(R.color.replay_channellist_text);
 					lastEPGSelectIndex.setTextColor(csl);
