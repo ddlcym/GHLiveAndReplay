@@ -67,7 +67,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="570dip"
-        android:layout_marginLeft="260dip">
+        android:layout_marginLeft="230dip">
 
         <RelativeLayout
             android:id="@+id/up_dialog_cur"
@@ -113,7 +113,7 @@
 
             <com.changhong.gehua.widget.MySeekbar
                 android:id="@+id/mySeekBar"
-                android:layout_width="780dip"
+                android:layout_width="880dip"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />
 
@@ -121,7 +121,7 @@
                 android:id="@+id/video_timelength"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dip"
+                android:layout_marginLeft="5dip"
                 android:layout_toRightOf="@id/mySeekBar"
                 android:textSize="25sp"
                 android:paddingTop="24dip" />
@@ -166,14 +166,16 @@
             <ImageView
                 android:id="@+id/tishi1"
                 android:layout_width="wrap_content"
-                android:layout_height="30dip"
+                android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/replay_next_program_info"
+                android:layout_marginLeft="50dip"
                 android:background="@drawable/tishione" />
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="30dip"
+                android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/tishi1"
+                android:layout_marginLeft="18dip"
                 android:background="@drawable/tishitwo" />
         </RelativeLayout>
     </RelativeLayout>

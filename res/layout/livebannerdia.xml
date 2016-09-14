@@ -25,7 +25,7 @@
         android:id="@+id/banner_live"
         android:layout_width="match_parent"
         android:layout_height="230dip"
-        android:paddingLeft="80dip"
+        android:paddingLeft="30dip"
         android:orientation="horizontal"
         android:layout_alignParentBottom="true"
         android:paddingBottom="20dip" >
@@ -248,8 +248,10 @@
             android:id="@+id/live_banner_adv"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="2" />
+            android:layout_marginLeft="5dp"
+            android:paddingRight="30dip"
+            android:layout_weight="2" 
+            android:src="@drawable/adv"/>
     </LinearLayout>
 
 </RelativeLayout>
