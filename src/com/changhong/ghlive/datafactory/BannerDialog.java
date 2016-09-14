@@ -83,7 +83,14 @@ public class BannerDialog extends Dialog {
 	private TimeShiftProgramAdapter programListAdapter;
 	private RelativeLayout nextProgramContainer;
 	private RelativeLayout programListContainer;
-
+	
+	/*
+	 * 显示隐藏容器
+	 */
+	private static final int PROGRAM_LIST=1100;
+	private static final int NEXT_PROGRAM=1101;
+	private static final int NOTHING=1102;
+	
 	public BannerDialog(Context context, ChannelInfo outterChannelInfo,
 			List<ProgramInfo> outterListProgramInfo, Handler outterHandler,
 			SurfaceView surView, HttpService outterHttpService) {
@@ -278,11 +285,11 @@ public class BannerDialog extends Dialog {
 		/* 返回--取消 */
 		case KeyEvent.KEYCODE_BACK:
 			if (bannerView.isShown()) {
-				nextProgramContainer.setVisibility(View.VISIBLE);
-				programListContainer.setVisibility(View.GONE);
-				bannerView.setVisibility(View.INVISIBLE);
-				timeshiftback.setVisibility(View.INVISIBLE);
-				
+				if(programListContainer.isShown()){
+					showViewVisibility(NEXT_PROGRAM);
+				}else{
+					showViewVisibility(NOTHING);
+				}
 				return false;
 			} else {
 				player.setLiveFlag(false);
@@ -310,34 +317,33 @@ public class BannerDialog extends Dialog {
 			break;
 		case Class_Constant.KEYCODE_UP_ARROW_KEY:
 			Log.i("zyt", "dialog up key is pressed");
-			if(!bannerView.isShown()){
-				bannerView.setVisibility(View.VISIBLE);
-				if (bannerRunnable != null) {
-					parentHandler.removeCallbacks(bannerRunnable);
-					parentHandler.postDelayed(bannerRunnable, 5000);
-				}
-			}
-			nextProgramContainer.setVisibility(View.GONE);
-			programListContainer.setVisibility(View.VISIBLE);
+//			if(!bannerView.isShown()){
+//				bannerView.setVisibility(View.VISIBLE);
+//				if (bannerRunnable != null) {
+//					parentHandler.removeCallbacks(bannerRunnable);
+//					parentHandler.postDelayed(bannerRunnable, 5000);
+//				}
+//			}
+			showViewVisibility(PROGRAM_LIST);
 
 			break;
 
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
-			bannerView.setVisibility(View.VISIBLE);
-			timeshiftback.setVisibility(View.VISIBLE);
+//			bannerView.setVisibility(View.VISIBLE);
+//			timeshiftback.setVisibility(View.VISIBLE);
+//			parentHandler.removeCallbacks(bannerRunnable);
+//			parentHandler.postDelayed(bannerRunnable, 5000);
 			palyButton.setMyBG(PlayButton.Forward);
-			parentHandler.removeCallbacks(bannerRunnable);
-			parentHandler.postDelayed(bannerRunnable, 5000);
 			Log.i("mmmm", "banner-handleProgress" + Player.handleProgress);
 			Player.handleProgress
 					.sendEmptyMessage(Class_Constant.LIVE_FAST_FORWARD);
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
-			bannerView.setVisibility(View.VISIBLE);
-			timeshiftback.setVisibility(View.VISIBLE);
+//			bannerView.setVisibility(View.VISIBLE);
+//			timeshiftback.setVisibility(View.VISIBLE);
+//			parentHandler.removeCallbacks(bannerRunnable);
+//			parentHandler.postDelayed(bannerRunnable, 5000);
 			palyButton.setMyBG(PlayButton.Backward);
-			parentHandler.removeCallbacks(bannerRunnable);
-			parentHandler.postDelayed(bannerRunnable, 5000);
 			Player.handleProgress
 					.sendEmptyMessage(Class_Constant.LIVE_FAST_REVERSE);
 			break;
@@ -358,9 +364,10 @@ public class BannerDialog extends Dialog {
 				}
 			} else {
 				player.play();
+				palyButton.setMyBG(PlayButton.Play);
+				
 				bannerView.setVisibility(View.VISIBLE);
 				timeshiftback.setVisibility(View.VISIBLE);
-				palyButton.setMyBG(PlayButton.Play);
 				parentHandler.removeCallbacks(bannerRunnable);
 				parentHandler.postDelayed(bannerRunnable, 5000);
 //				parentHandler.removeCallbacks(playBtnRunnable);
@@ -502,5 +509,30 @@ public class BannerDialog extends Dialog {
 		player.stopTimer();
 	}
 	
-	
+	private void showViewVisibility(int ID){
+		
+		switch (ID){
+		case NEXT_PROGRAM:
+			nextProgramContainer.setVisibility(View.VISIBLE);
+			programListContainer.setVisibility(View.GONE);
+			bannerView.setVisibility(View.VISIBLE);
+			timeshiftback.setVisibility(View.VISIBLE);
+		break;
+		
+		case PROGRAM_LIST:
+			
+			nextProgramContainer.setVisibility(View.INVISIBLE);
+			programListContainer.setVisibility(View.VISIBLE);
+			bannerView.setVisibility(View.VISIBLE);
+			timeshiftback.setVisibility(View.VISIBLE);
+			break;
+			
+		case NOTHING:
+			nextProgramContainer.setVisibility(View.VISIBLE);
+			programListContainer.setVisibility(View.GONE);
+			bannerView.setVisibility(View.GONE);
+			timeshiftback.setVisibility(View.GONE);
+			break;
+		}
+	}
 }
