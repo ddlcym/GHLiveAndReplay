@@ -822,6 +822,7 @@ public class EPGActivity extends BaseActivity {
 						// 相应成功
 						// Log.i(TAG, "HttpService=channle:" + arg0);
 						for (ChannelInfo channel : HandleLiveData.getInstance().dealChannelJson(arg0)) {
+							
 							allTvList.add(channel);
 						}
 

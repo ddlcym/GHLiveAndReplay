@@ -42,7 +42,9 @@ public class Class_Constant {
 	public static final int VOLUMN_KEY_END = 3028;
 	public static final int REPLAY_BANNER = 3029;
 	public static final int MESSAGE_CHANNELIST_SELECT_DIGITAL = 3030;
-
+	public static final int SHIFT_LAST_PROGRAM = 3031;
+	
+	public static final int SHIFT_NEXT_PROGRAM = 3032;
 	public final static int MAX_NO_OF_PROGRAMS = 500; // ����Ŀ��
 	public final static int MAX_NO_OF_CARRIERS = 40; // ���Ƶ����
 	public final static int MAX_NO_OF_TIMERS = 32; // ���ʱ����

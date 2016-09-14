@@ -79,8 +79,14 @@ public class ProcessData {
 	public String getChannelList() {
 //		String rawPlainStr = serverAdress + chListPendingStr + "version=" + chListVersion + "&channelVersion="
 //				+ chListChannelVersion + "&resolution=" + chListResolution + "&terminalType=" + chListTerminalType;
+		
+		
 		String rawPlainStr = "http://hd.ott.yun.gehua.net.cn/getChannels?" + "version=" + chListVersion + "&channelVersion="
 				+ chListChannelVersion + "&resolution=" + chListResolution + "&terminalType=" + chListTerminalType;
+		
+		/*String rawPlainStr = "http://api.ott.yun.gehua.net.cn:8080/msis/getChannels?" + "version=" + chListVersion + "&channelVersion="
+				+ chListChannelVersion + "&resolution=" + chListResolution + "&terminalType=" + chListTerminalType;*/
+		
 		return strGETReturn(rawPlainStr);
 	}
 

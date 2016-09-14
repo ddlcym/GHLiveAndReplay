@@ -141,7 +141,15 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 						(int) (seekwidth * moveStep) + videoCurrentTime.getWidth(),
 						videoCurrentTime.getHeight());
 			}
-			
+			//进度条移到末尾
+			if (liveFlag && arg1 == arg0.getMax()) {
+				if (handlerFlag) {
+					handlerFlag = false;
+					Log.i("test", "parentHandler.sendEmptyMessage:SHIFT_NEXT_PROGRAM");
+					 parentHandler
+					 .sendEmptyMessage(Class_Constant.SHIFT_NEXT_PROGRAM);
+				}
+			}
 			
 		}
 
@@ -227,7 +235,7 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 				keyFlag = true;
 				desPositon = Player.skbProgress.getProgress() - 30000;
 
-				if (desPositon < 0) {
+				/*if (desPositon < 0) {
 					if (handlerFlag) {
 						handlerFlag = false;
 						parentHandler
@@ -235,7 +243,7 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 						Log.i("xb", "Player*********");
 					}
 					desPositon = 0;
-				}
+				}*/
 
 				Player.skbProgress.setProgress(desPositon);
 				//
@@ -310,8 +318,13 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 				desPositon = Player.skbProgress.getProgress() - 30000;
 				Log.i("mmmm", "**desPositon:" + desPositon);
 				if (desPositon < 0) {
-					// 提示已经到开始位置了
-
+					Log.i("mmmm", "parentHandler.sendEmptyMessage:SHIFT_LAST_PROGRAM");
+					// 提示已经到开始位置了   回退到最开始
+					if (handlerFlag) {
+						handlerFlag = false;
+						parentHandler
+						.sendEmptyMessage(Class_Constant.SHIFT_LAST_PROGRAM);// 回退到最开始
+					}
 					desPositon = 0;
 				}
 
@@ -629,6 +642,17 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 				return;
 			if (!liveFlag) {
 				Log.i("mmmm", "%%%%"+liveFlag);
+				
+				if (desPositon < 0) {
+					if (handlerFlag) {
+						handlerFlag = false;
+						parentHandler
+								.sendEmptyMessage(Class_Constant.RE_LAST_PROGRAM);// 回退到最开始
+						Log.i("xb", "Player*********");
+					}
+					desPositon = 0;
+				}
+					
 				mediaPlayer.seekTo(desPositon);
 				mediaPlayer.start();
 			} else {

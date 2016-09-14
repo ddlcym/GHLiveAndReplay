@@ -174,9 +174,11 @@ public class ReplayPlayActivity extends BaseActivity {
 					case 3:
 						replayfirstDialog.dismiss();
 						finish();
+						break;
 					case 4:
 						backreplaydialog.dismiss();
 						finish();
+						
 						break;
 					default:
 						break;
@@ -385,7 +387,7 @@ public class ReplayPlayActivity extends BaseActivity {
 			videoNextPro.setText(nextmprogram.getEventName());
 		}
 		
-		
+		pauseButton.setVisibility(View.VISIBLE);
 		
 		String requestURL = mProcessData.getReplayPlayUrlString(channel, mprogram, 0);
 		// Log.i("mmmm", "ReplayPlayActivity-requestURL:" + requestURL);
@@ -511,8 +513,8 @@ public class ReplayPlayActivity extends BaseActivity {
 			backwardIcon.setVisibility(View.GONE);
 			if (player.isPlayerPlaying()) {
 				player.pause();
-				palyButton.setVisibility(View.GONE);
-				pauseButton.setVisibility(View.VISIBLE);
+				palyButton.setVisibility(View.VISIBLE);
+				pauseButton.setVisibility(View.GONE);
 				//skbProgress.setVisibility(View.VISIBLE);
 				seekbar.setVisibility(View.VISIBLE);
 				videoTimeLength.setVisibility(View.VISIBLE);
@@ -535,8 +537,8 @@ public class ReplayPlayActivity extends BaseActivity {
 				
 			} else {
 				player.play();
-				pauseButton.setVisibility(View.GONE);
-				palyButton.setVisibility(View.VISIBLE);
+				pauseButton.setVisibility(View.VISIBLE);
+				palyButton.setVisibility(View.GONE);
 				if (pfrunnable != null) {
 					replayHandler.removeCallbacks(pfrunnable);
 				}
@@ -611,10 +613,12 @@ public class ReplayPlayActivity extends BaseActivity {
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
 			forwardIcon.setVisibility(View.GONE);
+			pauseButton.setVisibility(View.VISIBLE);
 			player.handleProgress.sendEmptyMessage(Class_Constant.RE_FAST_FORWARD_UP);
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
 			backwardIcon.setVisibility(View.GONE);
+			pauseButton.setVisibility(View.VISIBLE);
 			player.handleProgress.sendEmptyMessage(Class_Constant.RE_FAST_REVERSE_UP);
 			break;
 		}
@@ -626,7 +630,8 @@ public class ReplayPlayActivity extends BaseActivity {
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
-			palyButton.setVisibility(View.INVISIBLE);
+			//palyButton.setVisibility(View.INVISIBLE);
+			pauseButton.setVisibility(View.INVISIBLE);
 			//skbProgress.setVisibility(View.GONE);
 			seekbar.setVisibility(View.INVISIBLE);
 			videoTimeLength.setVisibility(View.INVISIBLE);
@@ -649,7 +654,7 @@ public class ReplayPlayActivity extends BaseActivity {
 		public void run() {
 			// TODO Auto-generated method stub
 			// palyButton.setVisibility(View.GONE);
-			// pauseButton.setVisibility(View.GONE);
+			pauseButton.setVisibility(View.GONE);
 			// timeShiftIcon.setVisibility(View.GONE);
 			//skbProgress.setVisibility(View.GONE);
 			seekbar.setVisibility(View.INVISIBLE);

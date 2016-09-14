@@ -205,7 +205,7 @@ public class MainActivity extends BaseActivity {
 				PlayVideo.getInstance().playLiveProgram(mhandler, CacheData.getCurChannel());
 				break;
 			/* play state is back from time shift mode */
-			case Class_Constant.PLAY_BACKFROM_SHIFT: 
+			/*case Class_Constant.PLAY_BACKFROM_SHIFT: 
 			/*{
 				whetherMute = Boolean.valueOf(CommonMethod.getMuteState(MyApp.getContext()));
 				if (whetherMute) {
@@ -252,20 +252,26 @@ public class MainActivity extends BaseActivity {
 
 	@Override
 	protected void initData() {
-		// TODO Auto-generated method stub
 		volleyTool = VolleyTool.getInstance();
 		mReQueue = volleyTool.getRequestQueue();
 		if (null == processData) {
 			processData = new ProcessData();
 		}
+		Log.i("test", "initData--getChannelList");
+		
 		getChannelList();
+		
 		player = new Player(mhandler, surfaceView, liveSeekBar, null);
+		
+		
 //		Player.setFirstPlayInShift(false);
 		// chListView.setOnItemSelectedListener(myItemSelectLis);
 		chListView.setOnItemClickListener(myClickLis);
 
 		//audioMgr = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 		mAudioManager = (AudioManager) getApplicationContext().getSystemService(AUDIO_SERVICE);
+		
+		
 		// audioMgr.setStreamMute(AudioManager.STREAM_MUSIC, false);
 		// int max = audioMgr.getStreamMaxVolume( AudioManager.STREAM_VOICE_CALL
 		// );
@@ -383,6 +389,7 @@ public class MainActivity extends BaseActivity {
 	private void getChannelList() {
 		// 传入URL请求链接
 		String URL = processData.getChannelList();
+		Log.i("test", "MainActivity");
 		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null,
 				new Response.Listener<org.json.JSONObject>() {
 
@@ -390,7 +397,7 @@ public class MainActivity extends BaseActivity {
 					public void onResponse(org.json.JSONObject arg0) {
 						// TODO Auto-generated method stub
 						// 相应成功
-						//Log.i(TAG, "MainActivity=channle:" + arg0);
+						Log.i("test", "MainActivity***" + arg0);
 						channelsAll = HandleLiveData.getInstance().dealChannelJson(arg0);
 						// first set adapter
 						curType = 0;

@@ -67,7 +67,7 @@ public class PlayVideo {
 						// msg.obj=jsonResolve.getHDPlayURL(arg0);
 						// handler.sendMessage(msg);
 						final String playurl = jsonResolve.getLivePlayURL(arg0);
-						// Log.i("mmmm", "play url is " + playurl);
+						Log.i("test", "play url is " + playurl);
 
 						Message msg = new Message();
 						msg.what = Class_Constant.PLAY_LIVE;
