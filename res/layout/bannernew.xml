@@ -205,7 +205,7 @@
                     android:id="@+id/timeshift_program_list_container"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
-                    android:visibility="invisible" >
+                    android:visibility="gone" >
 
                     <ImageView
                         android:id="@+id/timeshift_left_arrows"

@@ -274,6 +274,8 @@ public class PlayVideo {
 		int delayTime=(int) (curTime-curProgram.getBeginTime().getTime())/1000;
 		CacheData.setCurProgram(curProgram);
 		playTSDelayTime(player,curChannel,delayTime);
+		
+		player.initSeekbar();
 	}
 	
 	/*
@@ -282,6 +284,7 @@ public class PlayVideo {
 	public void playTSDelayTime(final Player player,ChannelInfo curChannel,int delayTime){
 		mReQueue.cancelAll("bannerDialog");
 		String requestURL = processData.getLiveBackPlayUrl(curChannel, delayTime);
+		Player.setDelayTime(delayTime);
 		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
 				Request.Method.POST, requestURL, null,
 				new Response.Listener<org.json.JSONObject>() {

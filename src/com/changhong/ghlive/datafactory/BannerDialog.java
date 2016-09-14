@@ -183,22 +183,23 @@ public class BannerDialog extends Dialog {
 			public void onItemClick(TwoWayAdapterView<?> parent, View view,
 					int position, long id) {
 				// TODO Auto-generated method stub
-				if (list != null&&programListInfo.size()!=0) {
+				if (list != null&&programListInfo.size()!=0&&timeshiftProList.isShown()) {
 					ProgramInfo program = list.get(position);
 					
-					long curTime=System.currentTimeMillis();
-					int delayTime=(int) (curTime-program.getBeginTime().getTime())/1000;
-//					playLiveBack(curChannel, delayTime);
-//					CacheData.setCurProgram(program);
-					PlayVideo.getInstance().playLiveBack(player, curChannel, program);
-					palyButton.setMyBG(PlayButton.Play);
+//					long curTime=System.currentTimeMillis();
+//					int delayTime=(int) (curTime-program.getBeginTime().getTime())/1000;
+					CacheData.setCurProgram(program);
 					programListInfo.remove(1);
 					programListInfo.add(1, program);
+					initData();
+					PlayVideo.getInstance().playLiveBack(player, curChannel, program);
+					
+					palyButton.setMyBG(PlayButton.Play);
 					if(programListInfo.size()!=0&&(list.size()-1)!=position){
 						programListInfo.remove(2);
 						programListInfo.add(2, list.get(position+1));
 					}
-					initData();
+					
 					nextProgramContainer.setVisibility(View.VISIBLE);
 					programListContainer.setVisibility(View.GONE);
 				}
@@ -247,8 +248,10 @@ public class BannerDialog extends Dialog {
 		player = new Player(parentHandler, surView,
 				programPlayBar.getSeekBar(), programPlayBar.getCurText());
 		player.setLiveFlag(true);
-		programPlayBar.getSeekBar().setProgress(0);
+		player.initSeekbar();
 		
+		parentHandler.removeCallbacks(bannerRunnable);
+		parentHandler.postDelayed(bannerRunnable, 5000);
 	}
 
 	@Override
@@ -275,9 +278,11 @@ public class BannerDialog extends Dialog {
 		/* 返回--取消 */
 		case KeyEvent.KEYCODE_BACK:
 			if (bannerView.isShown()) {
+				nextProgramContainer.setVisibility(View.VISIBLE);
+				programListContainer.setVisibility(View.GONE);
 				bannerView.setVisibility(View.INVISIBLE);
-				
 				timeshiftback.setVisibility(View.INVISIBLE);
+				
 				return false;
 			} else {
 				player.setLiveFlag(false);
@@ -292,12 +297,26 @@ public class BannerDialog extends Dialog {
 			break;
 		case Class_Constant.KEYCODE_DOWN_ARROW_KEY:
 			Log.i("zyt", "dialog down key is pressed");
+			if(!bannerView.isShown()){
+				bannerView.setVisibility(View.VISIBLE);
+				if (bannerRunnable != null) {
+					parentHandler.removeCallbacks(bannerRunnable);
+					parentHandler.postDelayed(bannerRunnable, 5000);
+				}
+			}
 			timeshiftProList.setFocusable(true);
 			timeshiftProList.requestFocus();
 
 			break;
 		case Class_Constant.KEYCODE_UP_ARROW_KEY:
 			Log.i("zyt", "dialog up key is pressed");
+			if(!bannerView.isShown()){
+				bannerView.setVisibility(View.VISIBLE);
+				if (bannerRunnable != null) {
+					parentHandler.removeCallbacks(bannerRunnable);
+					parentHandler.postDelayed(bannerRunnable, 5000);
+				}
+			}
 			nextProgramContainer.setVisibility(View.GONE);
 			programListContainer.setVisibility(View.VISIBLE);
 
@@ -335,6 +354,7 @@ public class BannerDialog extends Dialog {
 				palyButton.setMyBG(PlayButton.Pause);
 				if (bannerRunnable != null) {
 					parentHandler.removeCallbacks(bannerRunnable);
+					parentHandler.postDelayed(bannerRunnable, 5000);
 				}
 			} else {
 				player.play();
@@ -374,7 +394,7 @@ public class BannerDialog extends Dialog {
 			// Log.i("zyt", "onkeydown menukey is pressed " + keyCode);
 			CommonMethod.startSettingPage(MyApp.getContext());
 			break;
-		case Class_Constant.MENU_ID_DTV_ROOT:
+		case Class_Constant.MENU_ID_DTV_ROOT://信息按键
 			bannerView.setVisibility(View.VISIBLE);
 			timeshiftback.setVisibility(View.VISIBLE);
 			if (bannerRunnable != null) {
@@ -397,17 +417,23 @@ public class BannerDialog extends Dialog {
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
 
+			if(!programListContainer.isShown()){
 			Player.handleProgress
 					.sendEmptyMessage(Class_Constant.RE_FAST_FORWARD_UP);
 			palyButton.setMyBG(PlayButton.Play);
+			}
+			
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
+			if(!programListContainer.isShown()){
 			Player.handleProgress
 					.sendEmptyMessage(Class_Constant.RE_FAST_REVERSE_UP);
 			palyButton.setMyBG(PlayButton.Play);
+			}
 			break;
 		}
-
+		parentHandler.removeCallbacks(bannerRunnable);
+		parentHandler.postDelayed(bannerRunnable, 5000);
 		return super.onKeyUp(keyCode, event);
 	}
 
@@ -415,40 +441,10 @@ public class BannerDialog extends Dialog {
 
 		// String equestURL=processData.getReplayPlayUrlString(channel,
 		// programListInfo.get(1), 0);
-
-		PlayVideo.getInstance().playLiveBack(player, curChannel, programListInfo.get(1));
+		CacheData.setCurProgram(programListInfo.get(1));
+		PlayVideo.getInstance().playTSDelayTime(player, curChannel, 0);
 	}
 
-//	private void playLiveBack(ChannelInfo channel, int delay) {
-//		mReQueue.cancelAll("bannerDialog");
-//		String requestURL = processData.getLiveBackPlayUrl(channel, delay);
-//		CacheData.setCurProgram(programListInfo.get(1));
-//		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-//				Request.Method.POST, requestURL, null,
-//				new Response.Listener<org.json.JSONObject>() {
-//
-//					@Override
-//					public void onResponse(org.json.JSONObject arg0) {
-//						// TODO Auto-generated method stub
-//						// Log.i(TAG, "MainActivity=dvbBack:" + arg0);
-//						final String url = JsonResolve.getInstance()
-//								.getLivePlayURL(arg0);
-//						new Thread(new Runnable() {
-//
-//							@Override
-//							public void run() {
-//								// TODO Auto-generated method stub
-//								player.playUrl(url);
-//								
-//							}
-//						}).start();
-//						
-//
-//					}
-//				}, errorListener);
-//		jsonObjectRequest.setTag("bannerDialog");// 设置tag,cancelAll的时候使用
-//		mReQueue.add(jsonObjectRequest);
-//	}
 
 	private Response.ErrorListener errorListener = new Response.ErrorListener() {
 		@Override
@@ -463,7 +459,8 @@ public class BannerDialog extends Dialog {
 		public void run() {
 			// TODO Auto-generated method stub
 			bannerView.setVisibility(View.GONE);
-			timeshiftback.setVisibility(View.GONE);
+			nextProgramContainer.setVisibility(View.VISIBLE);
+			programListContainer.setVisibility(View.GONE);
 		}
 	};
 
@@ -503,7 +500,6 @@ public class BannerDialog extends Dialog {
 		// TODO Auto-generated method stub
 		super.dismiss();
 		player.stopTimer();
-		
 	}
 	
 	

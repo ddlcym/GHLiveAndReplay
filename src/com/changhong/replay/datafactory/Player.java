@@ -125,7 +125,6 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 			int maxTimes = getDuration();
 			moveStep = (float) ((float) arg1 / (float) maxTimes);
 			seekwidth = skbProgress.getWidth();
-			Log.i("mmmm", "**seekwidth:" + seekwidth);
 			if (videoCurrentTime != null) {
 				long beginTime = CacheData.getCurProgram().getBeginTime()
 						.getTime();
@@ -136,8 +135,8 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 					videoCurrentTime.setText(Utils.millToLiveBackStringEx(arg1));//huikan
 				}
 				//videoCurrentTime.setText(Utils.millToLiveBackString(beginTime+ arg1));
-				Log.i("mmmm","playervideoCurrentTime:"+Utils.millToLiveBackString(beginTime+ arg1));
-				Log.i("mmmm","player-layout:"+"--L:"+(seekwidth * moveStep)+"--R:"+((seekwidth * moveStep) + videoCurrentTime.getWidth())+"--B:"+videoCurrentTime.getHeight());
+//				Log.i("mmmm","playervideoCurrentTime:"+Utils.millToLiveBackString(beginTime+ arg1));
+//				Log.i("mmmm","player-layout:"+"--L:"+(seekwidth * moveStep)+"--R:"+((seekwidth * moveStep) + videoCurrentTime.getWidth())+"--B:"+videoCurrentTime.getHeight());
 				videoCurrentTime.layout((int) (seekwidth * moveStep), 0,
 						(int) (seekwidth * moveStep) + videoCurrentTime.getWidth(),
 						videoCurrentTime.getHeight());
@@ -190,7 +189,6 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 	public static Handler handleProgress = new Handler() {
 		public void handleMessage(Message msg) {
 			int skPos = 0;
-			int position = 0;
 			switch (msg.what) {
 			case Class_Constant.REPLAY_SEEK_TO:
 				skPos = msg.arg1;
@@ -260,8 +258,9 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 				}
 				if (liveFlag) {
 					int curmedPos = mediaPlayer.getCurrentPosition();
-					position = curmedPos + curBeginTime - delayTime * 1000;
-					if (position >= curProlength) {
+//					Log.i("mmmm", "curmedPos:"+curmedPos+"curmedPos:"+curmedPos+"delayTime:"+delayTime);
+					desPositon = curmedPos + curBeginTime - delayTime * 1000;
+					if (desPositon >= curProlength) {
 						// 通知更新banner条
 						// parentHandler.sendEmptyMessage(Class_Constant.LIVE_BACK_PROGRAM_OVER);
 						// liveFlag=false;
@@ -270,15 +269,15 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 //						long beginTime = CacheData.getCurProgram()
 //								.getBeginTime().getTime();
 //						videoCurrentTime.setText(Utils
-//								.millToLiveBackString(position + beginTime));
+//								.millToLiveBackString(desPositon + beginTime));
 					}
 				} else {
-					position = mediaPlayer.getCurrentPosition();
-					videoCurrentTime.setText(Utils.millToDateStr(position));
+					desPositon = mediaPlayer.getCurrentPosition();
+					videoCurrentTime.setText(Utils.millToDateStr(desPositon));
 
 				}
-				if (duration > 0) {
-					Player.skbProgress.setProgress(position);
+				if (duration > 0&&desPositon<duration) {
+					Player.skbProgress.setProgress(desPositon);
 				}
 				break;
 
@@ -334,7 +333,6 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 		handlerFlag = true;
 		if (null == mediaPlayer || null == videoUrl)
 			return;
-
 		try {
 			// mediaPlayer.stop();
 			mediaPlayer.reset();
@@ -604,6 +602,12 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 	public static void setDuration(int duration) {
 		Player.duration = duration;
 	}
+	
+	
+
+	public static void setDelayTime(int delayTime) {
+		Player.delayTime = delayTime;
+	}
 
 	private static int getStartTime() {
 		long time = 0;
@@ -640,5 +644,11 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 			keyFlag = false;
 		}
 	};
+	
+	
+	public void initSeekbar(){
+		skbProgress.setProgress(0);
+		desPositon=0;
+	}
 
 }

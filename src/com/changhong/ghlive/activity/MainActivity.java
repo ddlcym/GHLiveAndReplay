@@ -82,7 +82,7 @@ public class MainActivity extends BaseActivity {
 	private int iKeyNum = 0;
 	private int iKey = 0;
 
-	// private Banner programBan;
+	// private time_shift Banner programBan;
 	private BannerDialog programBannerDialog;
 	/*
 	 * 直播banner信息条
