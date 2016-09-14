@@ -16,7 +16,13 @@ public class ProcessData {
 //	private static final String serverAdress = "http://172.28.3.68:8080/";
 	private String MD5Key = "aidufei";
 	private String conStr = "&authKey=";
-
+	
+	/*
+	 * 获取频道列表参数
+	 * 
+	 */
+	private String getCatalog="msis/getCatalog?";
+	
 	/* chnList:频道列表 param of must */
 	private String chListPendingStr = "msis/getChannels?";
 	private String chListVersion = "V001";
@@ -74,6 +80,15 @@ public class ProcessData {
 	/*   获取用户注册信息 */
 	private String sendRegValidCode="msis/sendRegValidCode?";
 	
+	
+	/*
+	 * 获取频道分类信息
+	 */
+	public String getCatalog(){
+		String catalogURL=serverAdress+getCatalog+"version=V001&catalogType=2&userCode=&parentId=&accessSource=&resolution=&terminalType=";
+				
+		return catalogURL;
+	}
 
 	/* generate channel list ： 获取频道列表 */
 	public String getChannelList() {

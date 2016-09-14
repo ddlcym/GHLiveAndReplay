@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -32,9 +33,9 @@ import com.changhong.gehua.common.ProcessData;
 import com.changhong.gehua.common.ProgramInfo;
 import com.changhong.gehua.common.Utils;
 import com.changhong.gehua.common.VolleyTool;
-import com.changhong.gehua.widget.HorizontalListView;
 import com.changhong.gehua.widget.MySeekbar;
 import com.changhong.gehua.widget.PlayButton;
+import com.changhong.gehua.widget.ShiftDialog;
 import com.changhong.gehua.widget.TwoWayAdapterView;
 import com.changhong.gehua.widget.TwoWayAdapterView.OnItemClickListener;
 import com.changhong.gehua.widget.TwoWayGridView;
@@ -42,7 +43,6 @@ import com.changhong.ghlive.activity.MyApp;
 import com.changhong.ghlive.service.HttpService;
 import com.changhong.ghliveandreplay.R;
 import com.changhong.replay.datafactory.Player;
-import com.changhong.replay.datafactory.ResolveEPGInfoThread;
 
 /**
  * @author OscarChang 时移信息条
@@ -68,7 +68,7 @@ public class BannerDialog extends Dialog {
 	private SurfaceView surView;
 	private LinearLayout bannerView;
 	
-	private ImageView timeshiftback;
+	private ImageView left_arrows,right_arrows,timeshiftback;
 
 	private ProcessData processData = null;
 	private RequestQueue mReQueue;
@@ -82,8 +82,12 @@ public class BannerDialog extends Dialog {
 	private TwoWayGridView timeshiftProList;
 	private TimeShiftProgramAdapter programListAdapter;
 	private RelativeLayout nextProgramContainer;
+	private RelativeLayout curProgramContainer;
 	private RelativeLayout programListContainer;
+	private boolean IsFocusList = false;
 	
+	int shiftcurindex;
+	ProgramInfo curshiftpro;
 	/*
 	 * 显示隐藏容器
 	 */
@@ -91,13 +95,190 @@ public class BannerDialog extends Dialog {
 	private static final int NEXT_PROGRAM=1101;
 	private static final int NOTHING=1102;
 	
+	private Handler mHandler = new Handler(){
+
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case Class_Constant.BACK_TO_LIVE:
+				{
+					//拖动的时间大于当前系统时间
+					curshiftpro = CacheData.getCurProgram();
+					Log.i("test", "curshiftpro.getEventName()"+curshiftpro.getEventName()+curshiftpro.getBeginTime());
+					ShiftDialog.Builder builder = new ShiftDialog.Builder(mContext);
+					builder.setMessage("<" + curshiftpro.getEventName()+">"+"播放结束");
+					builder.setTitle("温馨提示");
+					builder.setPositiveButton("退出时移", new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								dismiss();
+								dialog.dismiss();
+								parentHandler.sendEmptyMessage(Class_Constant.BACK_TO_LIVE);
+						}
+					});
+		
+					builder.setNegativeButton("重新播放",new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								dialog.dismiss();
+								PlayVideo.getInstance().playLiveBack(player,curChannel,curshiftpro);
+						}
+					});
+		
+					builder.create().show();
+					
+				}
+				break;	
+
+			case Class_Constant.SHIFT_LAST_PROGRAM:
+				//时移回退到最开始
+				{
+					int len = list.size();
+					ShiftDialog.Builder builder = new ShiftDialog.Builder(mContext);
+					curshiftpro = CacheData.getCurProgram();
+					Log.i("test", "curshiftpro.getEventName()"+curshiftpro.getEventName()+curshiftpro.getBeginTime());
+					//shiftlist = CacheData.getTimeshiftPrograms();
+					if(curshiftpro.getEventName().equals(list.get(len-1).getEventName())){
+						shiftcurindex = len-1;
+					}else{
+						shiftcurindex = list.indexOf(curshiftpro);
+					}
+					
+					Log.i("test", "curindex"+shiftcurindex);
+					for (ProgramInfo p : list) {
+					   Log.i("test","EventName"+ p.getEventName());
+				    }
+					
+					
+					if (0 == shiftcurindex) {
+						builder.setMessage("<" + list.get(shiftcurindex).getEventName()+">"+"即将开始");
+						builder.setTitle("温馨提示");
+						builder.setPositiveButton("退出时移", new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int which) {
+									dismiss();
+									dialog.dismiss();
+									parentHandler.sendEmptyMessage(Class_Constant.BACK_TO_LIVE);
+							}
+						});
+	
+						builder.setNegativeButton("确定播放",new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int which) {
+									dialog.dismiss();
+									PlayVideo.getInstance().playLiveBack(player,curChannel,list.get(shiftcurindex));
+									palyButton.setMyBG(PlayButton.Pause);
+									programListInfo.remove(1);
+									programListInfo.add(1,list.get(shiftcurindex));
+								    programListInfo.remove(2);
+								    programListInfo.add(2, list.get(shiftcurindex+1));
+									initData();
+									nextProgramContainer.setVisibility(View.VISIBLE);
+									programListContainer.setVisibility(View.GONE);
+									
+							}
+						});
+					}else {
+						builder.setMessage("<" + list.get(shiftcurindex-1).getEventName()+">"+"即将开始");
+						builder.setTitle("温馨提示");
+						builder.setPositiveButton("观看上一个节目", new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int which) {
+									dialog.dismiss();
+									Log.i("test", "PositiveButton"+list.get(shiftcurindex-1).getEventName());
+									PlayVideo.getInstance().playLiveBack(player,curChannel,list.get(shiftcurindex-1));
+									palyButton.setMyBG(PlayButton.Pause);
+									programListInfo.remove(1);
+									programListInfo.add(1,list.get(shiftcurindex-1));
+									programListInfo.remove(2);
+									programListInfo.add(2, list.get(shiftcurindex));
+									initData();
+									nextProgramContainer.setVisibility(View.VISIBLE);
+									programListContainer.setVisibility(View.GONE);
+							}
+						});
+	
+						builder.setNegativeButton("重新播放",new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int which) {
+									dialog.dismiss();
+									PlayVideo.getInstance().playLiveBack(player,curChannel,list.get(shiftcurindex));
+									palyButton.setMyBG(PlayButton.Pause);
+									programListInfo.remove(1);
+									programListInfo.add(1,list.get(shiftcurindex));
+									if(shiftcurindex != list.size()-1){
+										programListInfo.remove(2);
+										programListInfo.add(2, list.get(shiftcurindex+1));
+									}
+									
+									initData();
+									nextProgramContainer.setVisibility(View.VISIBLE);
+									programListContainer.setVisibility(View.GONE);
+									
+							}
+						});
+					}
+					builder.create().show();
+				}
+				break;
+				
+			 case Class_Constant.SHIFT_NEXT_PROGRAM:
+				 {
+					int len = list.size();
+					ShiftDialog.Builder builder = new ShiftDialog.Builder(mContext);
+					curshiftpro = CacheData.getCurProgram();
+					Log.i("test", "curshiftpro.getEventName()"+curshiftpro.getEventName()+curshiftpro.getBeginTime());
+					//shiftlist = CacheData.getTimeshiftPrograms();
+					shiftcurindex = list.indexOf(curshiftpro);
+					Log.i("test", "shiftcurindex"+shiftcurindex);
+					for (ProgramInfo p : list) {
+					   Log.i("test","EventName"+ p.getEventName());
+				    }
+					builder.setMessage("<" + list.get(shiftcurindex+1).getEventName()+">"+"即将开始");
+					builder.setTitle("温馨提示");
+					builder.setPositiveButton("观看下一个节目", new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								dialog.dismiss();
+								Log.i("test", "PositiveButton"+list.get(shiftcurindex+1).getEventName());
+								PlayVideo.getInstance().playLiveBack(player,curChannel,list.get(shiftcurindex+1));
+								palyButton.setMyBG(PlayButton.Pause);
+								programListInfo.remove(1);
+								programListInfo.add(1,list.get(shiftcurindex+1));
+								//有一个问题，当前播放的节目是倒数第二个，然后点下一个节目播放，此时banner条上的信息更新有问题，下一个节目不知道是什么
+								if(shiftcurindex != list.size()-2){
+									programListInfo.remove(2);
+									programListInfo.add(2, list.get(shiftcurindex+2));
+								}
+								
+								initData();
+								nextProgramContainer.setVisibility(View.VISIBLE);
+								programListContainer.setVisibility(View.GONE);
+						}
+					});
+
+					builder.setNegativeButton("重新播放",new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								dialog.dismiss();
+								PlayVideo.getInstance().playLiveBack(player,curChannel,list.get(shiftcurindex));
+								palyButton.setMyBG(PlayButton.Pause);
+								programListInfo.remove(1);
+								programListInfo.add(1,list.get(shiftcurindex));
+								programListInfo.add(2, list.get(shiftcurindex+1));
+								initData();
+								nextProgramContainer.setVisibility(View.VISIBLE);
+								programListContainer.setVisibility(View.GONE);
+								
+						}
+					});
+				
+				 builder.create().show(); 
+				}
+			    break;
+			}
+		}
+		
+	};
 	public BannerDialog(Context context, ChannelInfo outterChannelInfo,
 			List<ProgramInfo> outterListProgramInfo, Handler outterHandler,
 			SurfaceView surView, HttpService outterHttpService) {
 		super(context, R.style.Translucent_NoTitle);
 		setContentView(R.layout.bannernew);
 
-		mContext = context.getApplicationContext();
+		mContext = context;//.getApplicationContext();
 		channelInfo = outterChannelInfo;
 		programListInfo = outterListProgramInfo;
 		parentHandler = outterHandler;
@@ -137,8 +318,11 @@ public class BannerDialog extends Dialog {
 
 		// 时移节目列表
 		timeshiftProList = (TwoWayGridView) findViewById(R.id.timeshift_program_list);
+		curProgramContainer=(RelativeLayout)findViewById(R.id.timeshift_seekbar_container);
 		nextProgramContainer=(RelativeLayout)findViewById(R.id.timeshift_nextpro_container);
 		programListContainer=(RelativeLayout)findViewById(R.id.timeshift_program_list_container);
+		left_arrows = (ImageView)findViewById(R.id.timeshift_left_arrows);
+		right_arrows = (ImageView)findViewById(R.id.timeshift_right_arrows);
 
 		// channel_name = (TextView) findViewById(R.id.banner_channel_name_id);
 		// channel_number = (TextView) findViewById(R.id.banner_service_id);
@@ -154,7 +338,8 @@ public class BannerDialog extends Dialog {
 		timeLength = (TextView) findViewById(R.id.live_timelength);
 		// bannerView.getBackground().setAlpha(255);
 		palyButton = (PlayButton) findViewById(R.id.play_btn);
-		palyButton.setMyBG(PlayButton.Pause);
+		//palyButton.setMyBG(PlayButton.Pause);
+		palyButton.setMyBG(PlayButton.Play);
 		muteIconImage = (ImageView) findViewById(R.id.mute_icon);
 		whetherMute = Boolean.valueOf(CommonMethod.getMuteState(MyApp
 				.getContext()));
@@ -209,6 +394,7 @@ public class BannerDialog extends Dialog {
 					
 					nextProgramContainer.setVisibility(View.VISIBLE);
 					programListContainer.setVisibility(View.GONE);
+					IsFocusList = false;
 				}
 			}
 		});
@@ -252,13 +438,15 @@ public class BannerDialog extends Dialog {
 		programPlayBar.setMax((int) length);
 		player.setDuration((int) length);
 		
-		player = new Player(parentHandler, surView,
+		/*player = new Player(parentHandler, surView,
+				programPlayBar.getSeekBar(), programPlayBar.getCurText());		*/		
+		
+		player = new Player(mHandler, surView,
 				programPlayBar.getSeekBar(), programPlayBar.getCurText());
 		player.setLiveFlag(true);
 		player.initSeekbar();
 		
-		parentHandler.removeCallbacks(bannerRunnable);
-		parentHandler.postDelayed(bannerRunnable, 5000);
+		
 	}
 
 	@Override
@@ -287,6 +475,7 @@ public class BannerDialog extends Dialog {
 			if (bannerView.isShown()) {
 				if(programListContainer.isShown()){
 					showViewVisibility(NEXT_PROGRAM);
+					IsFocusList = false;
 				}else{
 					showViewVisibility(NOTHING);
 				}
@@ -298,54 +487,75 @@ public class BannerDialog extends Dialog {
 				Message msg = new Message();
 				msg.what = Class_Constant.PLAY_BACKFROM_SHIFT;
 				parentHandler.sendMessage(msg);
-				dismiss();
-				parentHandler.sendEmptyMessage(Class_Constant.BACK_TO_LIVE);
+				
+				ShiftDialog.Builder builder = new ShiftDialog.Builder(mContext);
+				builder.setMessage("你确定退出时移电视？");
+				builder.setTitle("温馨提示");
+				builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							dismiss();
+							dialog.dismiss();
+							parentHandler.sendEmptyMessage(Class_Constant.BACK_TO_LIVE);
+					}
+				});
+
+				builder.setNegativeButton("取消",new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+					}
+				});
+
+				builder.create().show();
+				
 			}
 			break;
 		case Class_Constant.KEYCODE_DOWN_ARROW_KEY:
 			Log.i("zyt", "dialog down key is pressed");
-			if(!bannerView.isShown()){
-				bannerView.setVisibility(View.VISIBLE);
-				if (bannerRunnable != null) {
-					parentHandler.removeCallbacks(bannerRunnable);
-					parentHandler.postDelayed(bannerRunnable, 5000);
-				}
-			}
+			showViewVisibility(NEXT_PROGRAM);
+			IsFocusList = false;
 			timeshiftProList.setFocusable(true);
 			timeshiftProList.requestFocus();
 
 			break;
 		case Class_Constant.KEYCODE_UP_ARROW_KEY:
 			Log.i("zyt", "dialog up key is pressed");
-//			if(!bannerView.isShown()){
-//				bannerView.setVisibility(View.VISIBLE);
-//				if (bannerRunnable != null) {
-//					parentHandler.removeCallbacks(bannerRunnable);
-//					parentHandler.postDelayed(bannerRunnable, 5000);
-//				}
-//			}
-			showViewVisibility(PROGRAM_LIST);
+			if (bannerView.isShown()){
+				timeshiftProList.setFocusable(true);
+				timeshiftProList.requestFocus();
+				showViewVisibility(PROGRAM_LIST);
+				IsFocusList = true;
+			}else {
+				showViewVisibility(NEXT_PROGRAM);
+				IsFocusList = false;
+			}
+
 
 			break;
 
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
-//			bannerView.setVisibility(View.VISIBLE);
-//			timeshiftback.setVisibility(View.VISIBLE);
-//			parentHandler.removeCallbacks(bannerRunnable);
-//			parentHandler.postDelayed(bannerRunnable, 5000);
-			palyButton.setMyBG(PlayButton.Forward);
-			Log.i("mmmm", "banner-handleProgress" + Player.handleProgress);
-			Player.handleProgress
-					.sendEmptyMessage(Class_Constant.LIVE_FAST_FORWARD);
+			if (!IsFocusList) {
+				bannerView.setVisibility(View.VISIBLE);
+				timeshiftback.setVisibility(View.VISIBLE);
+				palyButton.setMyBG(PlayButton.Forward);
+				parentHandler.removeCallbacks(bannerRunnable);
+				parentHandler.postDelayed(bannerRunnable, 5000);
+				Player.handleProgress
+						.sendEmptyMessage(Class_Constant.LIVE_FAST_FORWARD);
+			}
+
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
-//			bannerView.setVisibility(View.VISIBLE);
-//			timeshiftback.setVisibility(View.VISIBLE);
-//			parentHandler.removeCallbacks(bannerRunnable);
-//			parentHandler.postDelayed(bannerRunnable, 5000);
-			palyButton.setMyBG(PlayButton.Backward);
-			Player.handleProgress
-					.sendEmptyMessage(Class_Constant.LIVE_FAST_REVERSE);
+			if (!IsFocusList) {
+				bannerView.setVisibility(View.VISIBLE);
+				timeshiftback.setVisibility(View.VISIBLE);
+				palyButton.setMyBG(PlayButton.Backward);
+				parentHandler.removeCallbacks(bannerRunnable);
+				parentHandler.postDelayed(bannerRunnable, 5000);
+				Player.handleProgress
+						.sendEmptyMessage(Class_Constant.LIVE_FAST_REVERSE);
+			}
+		
+
 			break;
 		case Class_Constant.KEYCODE_OK_KEY:
 			
@@ -357,19 +567,17 @@ public class BannerDialog extends Dialog {
 				player.pause();
 				bannerView.setVisibility(View.VISIBLE);
 				timeshiftback.setVisibility(View.VISIBLE);
-				palyButton.setMyBG(PlayButton.Pause);
-				if (bannerRunnable != null) {
-					parentHandler.removeCallbacks(bannerRunnable);
-					parentHandler.postDelayed(bannerRunnable, 5000);
-				}
+				palyButton.setMyBG(PlayButton.Play);
+				
 			} else {
 				player.play();
 				palyButton.setMyBG(PlayButton.Play);
 				
 				bannerView.setVisibility(View.VISIBLE);
 				timeshiftback.setVisibility(View.VISIBLE);
-				parentHandler.removeCallbacks(bannerRunnable);
-				parentHandler.postDelayed(bannerRunnable, 5000);
+				palyButton.setMyBG(PlayButton.Pause);
+				//parentHandler.removeCallbacks(bannerRunnable);
+				//parentHandler.postDelayed(bannerRunnable, 5000);
 //				parentHandler.removeCallbacks(playBtnRunnable);
 //				parentHandler.postDelayed(playBtnRunnable, 5000);
 			}
@@ -424,23 +632,27 @@ public class BannerDialog extends Dialog {
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
 
-			if(!programListContainer.isShown()){
+			if (!IsFocusList) {
 			Player.handleProgress
 					.sendEmptyMessage(Class_Constant.RE_FAST_FORWARD_UP);
-			palyButton.setMyBG(PlayButton.Play);
+				palyButton.setMyBG(PlayButton.Pause);
 			}
 			
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
-			if(!programListContainer.isShown()){
+
+			if(!IsFocusList){
 			Player.handleProgress
 					.sendEmptyMessage(Class_Constant.RE_FAST_REVERSE_UP);
-			palyButton.setMyBG(PlayButton.Play);
+				palyButton.setMyBG(PlayButton.Pause);
 			}
 			break;
 		}
+		if (player.isPlayerPlaying()) {
+			Log.i("test", "player.isPlayerPlaying()"+player.isPlayerPlaying());
 		parentHandler.removeCallbacks(bannerRunnable);
 		parentHandler.postDelayed(bannerRunnable, 5000);
+		}
 		return super.onKeyUp(keyCode, event);
 	}
 
@@ -465,9 +677,11 @@ public class BannerDialog extends Dialog {
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
-			bannerView.setVisibility(View.GONE);
-			nextProgramContainer.setVisibility(View.VISIBLE);
-			programListContainer.setVisibility(View.GONE);
+			//bannerView.setVisibility(View.GONE);
+//			nextProgramContainer.setVisibility(View.VISIBLE);
+//			programListContainer.setVisibility(View.GONE);
+			showViewVisibility(NOTHING);
+			IsFocusList = false;
 		}
 	};
 
