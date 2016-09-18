@@ -181,7 +181,10 @@ public class BannerDialog extends Dialog {
 								public void onClick(DialogInterface dialog, int which) {
 									dialog.dismiss();
 									Log.i("test", "PositiveButton"+list.get(shiftcurindex-1).getEventName());
+									
 									PlayVideo.getInstance().playLiveBack(player,curChannel,list.get(shiftcurindex-1));
+									CacheData.setCurProgram(list.get(shiftcurindex-1));
+									
 									palyButton.setMyBG(PlayButton.Pause);
 									programListInfo.remove(1);
 									programListInfo.add(1,list.get(shiftcurindex-1));
@@ -380,18 +383,20 @@ public class BannerDialog extends Dialog {
 					
 //					long curTime=System.currentTimeMillis();
 //					int delayTime=(int) (curTime-program.getBeginTime().getTime())/1000;
+					
 					CacheData.setCurProgram(program);
 					programListInfo.remove(1);
 					programListInfo.add(1, program);
-					initData();
+					
 					PlayVideo.getInstance().playLiveBack(player, curChannel, program);
+					
 					
 					palyButton.setMyBG(PlayButton.Play);
 					if(programListInfo.size()!=0&&(list.size()-1)!=position){
 						programListInfo.remove(2);
 						programListInfo.add(2, list.get(position+1));
 					}
-					
+					initData();
 					nextProgramContainer.setVisibility(View.VISIBLE);
 					programListContainer.setVisibility(View.GONE);
 					IsFocusList = false;
