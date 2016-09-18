@@ -387,7 +387,7 @@ public class BannerDialog extends Dialog {
 					CacheData.setCurProgram(program);
 					programListInfo.remove(1);
 					programListInfo.add(1, program);
-					
+					player.initSeekbar();
 					PlayVideo.getInstance().playLiveBack(player, curChannel, program);
 					
 					

@@ -85,9 +85,9 @@ public class ProcessData {
 	 * 获取频道分类信息
 	 */
 	public String getCatalog(){
-		String catalogURL=serverAdress+getCatalog+"version=V001&catalogType=2&userCode=&parentId=&accessSource=&resolution=&terminalType=";
+		String catalogURL=serverAdress+"msis/getPram?version=V001&PramName=ChannelType&terminalType=3";
 				
-		return catalogURL;
+		return strGETReturn(catalogURL);
 	}
 
 	/* generate channel list ： 获取频道列表 */
@@ -202,6 +202,15 @@ public class ProcessData {
 	public String getChannelsInfo(){
 		String requestURL=null;
 		requestURL=serverAdress+getChannelsInfo+"version="+version1+"&userCode="+userCode+"&terminalType="+3;
+		
+		return strGETReturn(requestURL);
+	}
+	
+	
+	//获取系统时间
+	public String getSystemTime(){
+		String requestURL=null;
+		requestURL="http://ip:port/msis/getSystemTime?";
 		
 		return strGETReturn(requestURL);
 	}
