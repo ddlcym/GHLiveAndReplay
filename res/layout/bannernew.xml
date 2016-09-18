@@ -109,7 +109,7 @@
 	                    android:layout_marginRight="100dp"
 	                    android:text="00:00:00"
 	                    android:textSize="25sp" />
-	
+					
 	                <com.changhong.gehua.widget.MySeekbar
 	                    android:id="@+id/bannernew_program_progress"
 	                    android:layout_width="1030dip"
