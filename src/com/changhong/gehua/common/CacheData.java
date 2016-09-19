@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import android.util.Log;
+
 public class CacheData {
 
 	public static boolean ab=true;
@@ -95,6 +97,7 @@ public class CacheData {
 	}
 
 	public static void setCurProgram(ProgramInfo curProgram) {
+		Log.i("mmmm","setCurProgram:"+Utils.millToLiveBackString(curProgram.getBeginTime().getTime()));
 		CacheData.curProgram = curProgram;
 	}
 

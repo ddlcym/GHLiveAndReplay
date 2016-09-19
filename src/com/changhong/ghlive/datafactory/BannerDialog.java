@@ -445,9 +445,9 @@ public class BannerDialog extends Dialog {
 		
 		/*player = new Player(parentHandler, surView,
 				programPlayBar.getSeekBar(), programPlayBar.getCurText());		*/		
-		
+		if(null==player){
 		player = new Player(mHandler, surView,
-				programPlayBar.getSeekBar(), programPlayBar.getCurText());
+				programPlayBar.getSeekBar(), programPlayBar.getCurText());}
 		player.setLiveFlag(true);
 		player.initSeekbar();
 		
@@ -691,7 +691,6 @@ public class BannerDialog extends Dialog {
 	};
 
 	Runnable playBtnRunnable = new Runnable() {
-
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
@@ -704,12 +703,11 @@ public class BannerDialog extends Dialog {
 		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
 				Request.Method.GET, URL, null,
 				new Response.Listener<org.json.JSONObject>() {
-
 					@Override
 					public void onResponse(org.json.JSONObject arg0) {
 						// TODO Auto-generated method stub
 						// 相应成功
-						// Log.i(TAG, "getPointProList:" + arg0);
+//						 Log.i(TAG, "player-getPointProList:" + arg0);
 						list = JsonResolve.getInstance()
 								.timeShiftPrograms(arg0);
 						programListAdapter.setData(list);
@@ -725,7 +723,10 @@ public class BannerDialog extends Dialog {
 	public void dismiss() {
 		// TODO Auto-generated method stub
 		super.dismiss();
-		player.stopTimer();
+		if(player!=null){
+			player.stopTimer();
+			player=null;
+		}
 	}
 	
 	private void showViewVisibility(int ID){
