@@ -1,5 +1,8 @@
 package com.changhong.ghlive.datafactory;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import android.app.Dialog;
@@ -52,6 +55,7 @@ public class BannerDialog extends Dialog {
 	private Context mContext;
 	private ChannelInfo channelInfo; //当前频道
 	private List<ProgramInfo> programListInfo;
+	private List<ProgramInfo> programListInfo_back=new ArrayList<ProgramInfo>();//备份一次当前频道的节目信息
 	private Handler parentHandler;
 	private Player player;
 	private String TAG = "mmmm";
@@ -291,6 +295,10 @@ public class BannerDialog extends Dialog {
 		whetherMute = false;
 		this.surView = surView;
 
+		//备份当前频道的节目信息
+		if(outterListProgramInfo!=null&&outterListProgramInfo.size()>0){
+			Collections.copy(programListInfo_back, outterListProgramInfo);
+		}
 		initView();
 		// 获取时移节目列表数据，并填充
 		setTimeShiftProgramList();
