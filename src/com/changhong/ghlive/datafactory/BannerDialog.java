@@ -297,7 +297,7 @@ public class BannerDialog extends Dialog {
 
 		//备份当前频道的节目信息
 		if(outterListProgramInfo!=null&&outterListProgramInfo.size()>0){
-			Collections.copy(programListInfo_back, outterListProgramInfo);
+			programListInfo_back=new ArrayList<ProgramInfo>(outterListProgramInfo);
 		}
 		initView();
 		// 获取时移节目列表数据，并填充
