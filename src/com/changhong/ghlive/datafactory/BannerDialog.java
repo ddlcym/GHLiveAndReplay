@@ -251,6 +251,11 @@ public class BannerDialog extends Dialog {
 								if(shiftcurindex != list.size()-2){
 									programListInfo.remove(2);
 									programListInfo.add(2, list.get(shiftcurindex+2));
+								}else{
+									programListInfo.remove(2);
+									if(programListInfo_back!=null&&programListInfo_back.size()>2){
+										programListInfo.add(2, programListInfo_back.get(2));
+									}
 								}
 								
 								initData();
