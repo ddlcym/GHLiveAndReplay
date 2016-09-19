@@ -573,18 +573,19 @@ public class BannerDialog extends Dialog {
 				bannerView.setVisibility(View.VISIBLE);
 				timeshiftback.setVisibility(View.VISIBLE);
 				palyButton.setMyBG(PlayButton.Play);
-				
+				//处理banner还在的时候，按暂停，banner消失
+				if (bannerRunnable != null) {
+					parentHandler.removeCallbacks(bannerRunnable);
+				}
 			} else {
 				player.play();
-				palyButton.setMyBG(PlayButton.Play);
-				
+				//palyButton.setMyBG(PlayButton.Play);
 				bannerView.setVisibility(View.VISIBLE);
 				timeshiftback.setVisibility(View.VISIBLE);
 				palyButton.setMyBG(PlayButton.Pause);
 				//parentHandler.removeCallbacks(bannerRunnable);
 				//parentHandler.postDelayed(bannerRunnable, 5000);
-//				parentHandler.removeCallbacks(playBtnRunnable);
-//				parentHandler.postDelayed(playBtnRunnable, 5000);
+
 			}
 
 			break;
@@ -655,8 +656,8 @@ public class BannerDialog extends Dialog {
 		}
 		if (player.isPlayerPlaying()) {
 			Log.i("test", "player.isPlayerPlaying()"+player.isPlayerPlaying());
-		parentHandler.removeCallbacks(bannerRunnable);
-		parentHandler.postDelayed(bannerRunnable, 5000);
+			parentHandler.removeCallbacks(bannerRunnable);
+			parentHandler.postDelayed(bannerRunnable, 5000);
 		}
 		return super.onKeyUp(keyCode, event);
 	}

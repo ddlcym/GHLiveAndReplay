@@ -33,6 +33,7 @@ import com.changhong.gehua.common.ProcessData;
 import com.changhong.gehua.common.ProgramInfo;
 import com.changhong.gehua.common.Utils;
 import com.changhong.gehua.widget.MySeekbar;
+import com.changhong.gehua.widget.PlayButton;
 import com.changhong.gehua.widget.ReplayEndDialog;
 import com.changhong.ghlive.service.HttpService;
 import com.changhong.ghliveandreplay.R;
@@ -42,21 +43,16 @@ public class ReplayPlayActivity extends BaseActivity {
 	private SurfaceView surfaceView;
 
 	private MySeekbar seekbar;
-	//private SeekBar skbProgress;
-	//private NumberSeekBar numberSeekBar;
 	private TextView CurPro,curProtime,videoCurPro , NextPro,NextProtime,videoNextPro , videoTimeLength;//videoCurrentTime;
-	private RelativeLayout curlinearLayout,nextLinearLayout;
-
-	//private SeekBar skbProgress;
-	//private TextView CurPro,curProtime,videoCurPro , NextPro,NextProtime,videoNextPro , videoTimeLength, videoCurrentTime;
-	//private LinearLayout curlinearLayout,nextLinearLayout;
-
+	private RelativeLayout play_button_con,curlinearLayout,nextLinearLayout;
+	
 	private Player player;
 	private String replayChannelId = null;
 	private ReplayEndDialog replayEndDialog;
 	private ReplayEndDialog replayEndlastDialog,firstreplayDialog,replayfirstDialog,backreplaydialog;
-	private ImageView pfbackImageView , palyButton, pauseButton, forwardIcon, backwardIcon;
-	//private ImageView muteIconImage;
+	private ImageView pfbackImageView;
+	private PlayButton playbtn; 
+	//private LinearLayout replay_banner;
 
 	private int maxTimes = 0;
 	ProcessData mProcessData;
@@ -202,11 +198,10 @@ public class ReplayPlayActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		
-		// whetherMute = false;
+		
 		if (mHttpService == null) {
 			mHttpService = new HttpService(getApplicationContext());
 		}
-		//whetherMute = Boolean.valueOf(CommonMethod.getMuteState(MyApp.getContext()));
 		mAudioManager = (AudioManager) getApplicationContext().getSystemService(AUDIO_SERVICE);
 		
 
@@ -216,11 +211,7 @@ public class ReplayPlayActivity extends BaseActivity {
 	protected void initView() {
 		setContentView(R.layout.replay_play);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-		//skbProgress = (SeekBar) this.findViewById(R.id.skbProgress);
 		seekbar = (MySeekbar) this.findViewById(R.id.mySeekBar);
-		//int screenWidth = seekbar.getLayoutParams().width;
-		//Log.i("xb", " MySeekbar screenWidth = "+screenWidth);
-		//seekbar.getSeekBar().setOnSeekBarChangeListener(new mySeekChangeLis());
 		surfaceView = (SurfaceView) this.findViewById(R.id.surfaceView1);
 		//add
 		CurPro = (TextView) this.findViewById(R.id.curpro);
@@ -231,33 +222,18 @@ public class ReplayPlayActivity extends BaseActivity {
 		videoNextPro = (TextView) this.findViewById(R.id.replay_next_program_info);
 		curlinearLayout = (RelativeLayout) this.findViewById(R.id.up_dialog_cur);
 		nextLinearLayout = (RelativeLayout) this.findViewById(R.id.down_dialog_next);
+		play_button_con = (RelativeLayout) this.findViewById(R.id.play_button_con);
+		
+		
 		pfbackImageView = (ImageView) findViewById(R.id.PF_back);
+		
+		playbtn = (PlayButton) findViewById(R.id.replay_play_btn);
 		
 		
 		videoTimeLength = (TextView) this.findViewById(R.id.video_timelength);
-		//videoCurrentTime = (TextView) this.findViewById(R.id.video_currenttime);
-		//skbProgress.setClickable(false);
-		//skbProgress.setFocusable(false);
+		
 		seekbar.getSeekBar().setClickable(false);
 		seekbar.getSeekBar().setFocusable(false);
-		
-		palyButton = (ImageView) findViewById(R.id.play_btn);
-		pauseButton = (ImageView) findViewById(R.id.pause_btn);
-
-		//muteIconImage = (ImageView) findViewById(R.id.mute_icon);
-		//timeShiftIcon = (ImageView) findViewById(R.id.time_shift_icon);
-		forwardIcon = (ImageView) findViewById(R.id.fast_forward);
-		backwardIcon = (ImageView) findViewById(R.id.fast_backward);
-		//android.view.ViewGroup.LayoutParams ps = timeShiftIcon.getLayoutParams();
-		//ps.height = 90;
-		//ps.width = 90;
-		//timeShiftIcon.setLayoutParams(ps);
-		// timeShiftIcon.setVisibility(View.VISIBLE);
-		/*if (whetherMute) {
-			muteIconImage.setVisibility(View.VISIBLE);
-		} else {
-			muteIconImage.setVisibility(View.GONE);
-		}*/
 		
 		
 	}
@@ -265,15 +241,7 @@ public class ReplayPlayActivity extends BaseActivity {
 	@Override
 	protected void initData() {
 		mProcessData = new ProcessData();
-		//player = new Player(replayHandler, surfaceView, skbProgress, videoCurrentTime);
 		player = new Player(replayHandler, surfaceView, seekbar.getSeekBar(), seekbar.getCurText());
-		//replayEndDialog = new ReplayEndDialog(this,replayHandler,0,"TTTT");
-		
-		
-		/*if (progressBarRunnable != null) {
-			replayHandler.removeCallbacks(progressBarRunnable);
-		}
-		replayHandler.postDelayed(progressBarRunnable, 5000);*/
 		replayHandler.sendEmptyMessage(Class_Constant.REPLAY_BANNER);
 		
 	}
@@ -347,15 +315,13 @@ public class ReplayPlayActivity extends BaseActivity {
 		
 		curvolumn =  mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 		Log.i("test", "enter replay curvolumn is"+curvolumn);
-		//进到回看，先判断是否是静音，显示图标
-		/*if (curvolumn == 0) {
-			muteIconImage.setVisibility(View.VISIBLE);
-			Log.i("test", "muteIconImage muteIconImage");
-		}*/
+		
 	}
 
 	private void playVideo(ChannelInfo channel, ProgramInfo program) {
 		ProgramInfo nextmprogram;
+		
+		playbtn.setMyBG(PlayButton.Pause);
 		
 		pfbackImageView.setBackgroundResource(R.drawable.pf_back);
 		replayChannelId = channel.getChannelID();
@@ -367,8 +333,7 @@ public class ReplayPlayActivity extends BaseActivity {
 		
 		SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
 		formatter.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
-//		String text = getString(R.string.replay_cur_program)+formatter.format(mprogram.getBeginTime().getTime())+"-"+formatter.format(mprogram.getEndTime().getTime())
-//						+getString(R.string.space)+ mprogram.getEventName();
+
 		curProtime.setText(formatter.format(mprogram.getBeginTime().getTime())+"-"+formatter.format(mprogram.getEndTime().getTime()));
 		videoCurPro.setText(mprogram.getEventName());
 		
@@ -381,13 +346,13 @@ public class ReplayPlayActivity extends BaseActivity {
 			videoNextPro.setText("");
 		} else {
 			nextmprogram = curProgramList.get(curProgramList.indexOf(mprogram) + 1);
-//			String textex = getString(R.string.replay_next_program)+formatter.format(nextmprogram.getBeginTime().getTime())+"-"+formatter.format(nextmprogram.getEndTime().getTime())
-//					+getString(R.string.space)+ nextmprogram.getEventName();
 			NextProtime.setText(formatter.format(nextmprogram.getBeginTime().getTime())+"-"+formatter.format(nextmprogram.getEndTime().getTime()));
 			videoNextPro.setText(nextmprogram.getEventName());
 		}
 		
-		pauseButton.setVisibility(View.VISIBLE);
+		//pauseButton.setVisibility(View.VISIBLE);
+		
+		
 		
 		String requestURL = mProcessData.getReplayPlayUrlString(channel, mprogram, 0);
 		// Log.i("mmmm", "ReplayPlayActivity-requestURL:" + requestURL);
@@ -460,89 +425,52 @@ public class ReplayPlayActivity extends BaseActivity {
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
 			Player.handleProgress.sendEmptyMessage(Class_Constant.RE_FAST_FORWARD_DOWN);
-			//skbProgress.setVisibility(View.VISIBLE);
 			seekbar.setVisibility(View.VISIBLE);
-			palyButton.setVisibility(View.GONE);
-			pauseButton.setVisibility(View.GONE);
+			play_button_con.setVisibility(View.VISIBLE);
+			playbtn.setMyBG(PlayButton.Forward);
 			videoTimeLength.setVisibility(View.VISIBLE);
-			//videoCurrentTime.setVisibility(View.VISIBLE);
-			
-//			videoCurPro.setVisibility(View.VISIBLE);
-//			videoNextPro.setVisibility(View.VISIBLE);
+
 			curlinearLayout.setVisibility(View.VISIBLE);
 			nextLinearLayout.setVisibility(View.VISIBLE);
 			pfbackImageView.setVisibility(View.VISIBLE);
-			
-			/*if (progressBarRunnable != null) {
-				replayHandler.removeCallbacks(progressBarRunnable);
-			}
-			replayHandler.postDelayed(progressBarRunnable, 5000);*/
-			
 			replayHandler.sendEmptyMessage(Class_Constant.REPLAY_BANNER);
 			
-			backwardIcon.setVisibility(View.GONE);
-			forwardIcon.setVisibility(View.VISIBLE);
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
 			Player.handleProgress.sendEmptyMessage(Class_Constant.RE_FAST_REVERSE_DOWN);
-			//skbProgress.setVisibility(View.VISIBLE);
 			seekbar.setVisibility(View.VISIBLE);
-			palyButton.setVisibility(View.GONE);
-			pauseButton.setVisibility(View.GONE);
+			play_button_con.setVisibility(View.VISIBLE);
+			playbtn.setMyBG(PlayButton.Backward);
 			videoTimeLength.setVisibility(View.VISIBLE);
-			//videoCurrentTime.setVisibility(View.VISIBLE);
-//			
-//			videoCurPro.setVisibility(View.VISIBLE);
-//			videoNextPro.setVisibility(View.VISIBLE);
 			curlinearLayout.setVisibility(View.VISIBLE);
 			nextLinearLayout.setVisibility(View.VISIBLE);
 			
 			pfbackImageView.setVisibility(View.VISIBLE);
 			
-			/*if (progressBarRunnable != null) {
-				replayHandler.removeCallbacks(progressBarRunnable);
-			}
-			replayHandler.postDelayed(progressBarRunnable, 5000);*/
-			
 			replayHandler.sendEmptyMessage(Class_Constant.REPLAY_BANNER);
-			forwardIcon.setVisibility(View.GONE);
-			backwardIcon.setVisibility(View.VISIBLE);
+		
 			break;
 		case Class_Constant.KEYCODE_OK_KEY:
-			forwardIcon.setVisibility(View.GONE);
-			backwardIcon.setVisibility(View.GONE);
 			if (player.isPlayerPlaying()) {
 				player.pause();
-				palyButton.setVisibility(View.VISIBLE);
-				pauseButton.setVisibility(View.GONE);
-				//skbProgress.setVisibility(View.VISIBLE);
+				play_button_con.setVisibility(View.VISIBLE);
+				playbtn.setMyBG(PlayButton.Play);
 				seekbar.setVisibility(View.VISIBLE);
 				videoTimeLength.setVisibility(View.VISIBLE);
-				//videoCurrentTime.setVisibility(View.VISIBLE);
-				
-//				videoCurPro.setVisibility(View.VISIBLE);
-//				videoNextPro.setVisibility(View.VISIBLE);
+
 				curlinearLayout.setVisibility(View.VISIBLE);
 				nextLinearLayout.setVisibility(View.VISIBLE);
 				pfbackImageView.setVisibility(View.VISIBLE);
 				
 				//处理banner还在的时候，按暂停，banner消失
-				if (pfrunnable != null) {
-					replayHandler.removeCallbacks(pfrunnable);
-				}
-				
 				if (progressBarRunnable != null) {
 					replayHandler.removeCallbacks(progressBarRunnable);
 				}
 				
 			} else {
 				player.play();
-				pauseButton.setVisibility(View.VISIBLE);
-				palyButton.setVisibility(View.GONE);
-				if (pfrunnable != null) {
-					replayHandler.removeCallbacks(pfrunnable);
-				}
-				replayHandler.postDelayed(pfrunnable, 5000);
+				playbtn.setMyBG(PlayButton.Pause);
+				replayHandler.sendEmptyMessage(Class_Constant.REPLAY_BANNER);
 				
 			}
 
@@ -574,21 +502,24 @@ public class ReplayPlayActivity extends BaseActivity {
 			CommonMethod.startSettingPage(MyApp.getContext());
 			break;
 		case Class_Constant.KEYCODE_BACK_KEY:
-			
-			Log.i("xb", "onkeydown back key is pressed " + keyCode);
-			backreplaydialog = new ReplayEndDialog(this,replayHandler,4,"你确定退出电视回看");
-			backreplaydialog.show();
-			// finish();
+			if (pfbackImageView.isShown()) {
+				seekbar.setVisibility(View.INVISIBLE);
+				videoTimeLength.setVisibility(View.INVISIBLE);
+				curlinearLayout.setVisibility(View.INVISIBLE);
+				nextLinearLayout.setVisibility(View.INVISIBLE);
+				pfbackImageView.setVisibility(View.INVISIBLE);
+				play_button_con.setVisibility(View.INVISIBLE);
+				return false;
+			}else {
+				Log.i("xb", "onkeydown back key is pressed " + keyCode);
+				backreplaydialog = new ReplayEndDialog(this,replayHandler,4,"你确定退出电视回看");
+				backreplaydialog.show();
+			}
 			break;
-		case Class_Constant.MENU_ID_DTV_ROOT:
-			//skbProgress.setVisibility(View.VISIBLE);
+		case Class_Constant.MENU_ID_DTV_ROOT://xinxijian
 			seekbar.setVisibility(View.VISIBLE);
 			videoTimeLength.setVisibility(View.VISIBLE);
-			//videoCurrentTime.setVisibility(View.VISIBLE);
-			
-//			videoCurPro.setVisibility(View.VISIBLE);
-//			videoNextPro.setVisibility(View.VISIBLE);
-			
+			play_button_con.setVisibility(View.VISIBLE);
 			curlinearLayout.setVisibility(View.VISIBLE);
 			nextLinearLayout.setVisibility(View.VISIBLE);
 			pfbackImageView.setVisibility(View.VISIBLE);
@@ -597,7 +528,7 @@ public class ReplayPlayActivity extends BaseActivity {
 			}
 			replayHandler.postDelayed(progressBarRunnable, 5000);
 			break;
-		// next process
+		
 		default:
 			// Log.i("zyt", "default onkeydown back key is pressed " + keyCode);
 			break;
@@ -612,13 +543,11 @@ public class ReplayPlayActivity extends BaseActivity {
 
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
-			forwardIcon.setVisibility(View.GONE);
-			pauseButton.setVisibility(View.VISIBLE);
+			playbtn.setMyBG(PlayButton.Pause);
 			player.handleProgress.sendEmptyMessage(Class_Constant.RE_FAST_FORWARD_UP);
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
-			backwardIcon.setVisibility(View.GONE);
-			pauseButton.setVisibility(View.VISIBLE);
+			playbtn.setMyBG(PlayButton.Pause);
 			player.handleProgress.sendEmptyMessage(Class_Constant.RE_FAST_REVERSE_UP);
 			break;
 		}
@@ -626,46 +555,16 @@ public class ReplayPlayActivity extends BaseActivity {
 		return super.onKeyUp(keyCode, event);
 	}
 
-	Runnable pfrunnable = new Runnable() {
-		@Override
-		public void run() {
-			// TODO Auto-generated method stub
-			//palyButton.setVisibility(View.INVISIBLE);
-			pauseButton.setVisibility(View.INVISIBLE);
-			//skbProgress.setVisibility(View.GONE);
-			seekbar.setVisibility(View.INVISIBLE);
-			videoTimeLength.setVisibility(View.INVISIBLE);
-		//	videoCurrentTime.setVisibility(View.GONE);
-			
-		//	videoCurPro.setVisibility(View.INVISIBLE);
-		//	videoNextPro.setVisibility(View.INVISIBLE);
-			curlinearLayout.setVisibility(View.INVISIBLE);
-			nextLinearLayout.setVisibility(View.INVISIBLE);
-			pfbackImageView.setVisibility(View.INVISIBLE);
-			// pauseButton.setVisibility(View.GONE);
-		}
-	};
-
-	
-	
-	
 	Runnable progressBarRunnable = new Runnable() {
 		@Override
 		public void run() {
-			// TODO Auto-generated method stub
-			// palyButton.setVisibility(View.GONE);
-			pauseButton.setVisibility(View.GONE);
-			// timeShiftIcon.setVisibility(View.GONE);
-			//skbProgress.setVisibility(View.GONE);
 			seekbar.setVisibility(View.INVISIBLE);
 			videoTimeLength.setVisibility(View.INVISIBLE);
-			//videoCurrentTime.setVisibility(View.GONE);
-			
-//			videoCurPro.setVisibility(View.GONE);
-//			videoNextPro.setVisibility(View.GONE);
 			curlinearLayout.setVisibility(View.INVISIBLE);
 			nextLinearLayout.setVisibility(View.INVISIBLE);
 			pfbackImageView.setVisibility(View.INVISIBLE);
+			play_button_con.setVisibility(View.INVISIBLE);
+			
 		}
 	};
 
@@ -673,7 +572,6 @@ public class ReplayPlayActivity extends BaseActivity {
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		player.stop();
-		//CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
 		super.onPause();
 	}
 
