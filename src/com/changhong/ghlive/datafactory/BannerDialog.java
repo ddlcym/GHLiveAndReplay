@@ -86,6 +86,8 @@ public class BannerDialog extends Dialog {
 	private RelativeLayout programListContainer;
 	private boolean IsFocusList = false;
 	
+	private boolean firstInShift = true;
+	
 	int shiftcurindex;
 	ProgramInfo curshiftpro;
 	/*
@@ -658,6 +660,14 @@ public class BannerDialog extends Dialog {
 			Log.i("test", "player.isPlayerPlaying()"+player.isPlayerPlaying());
 			parentHandler.removeCallbacks(bannerRunnable);
 			parentHandler.postDelayed(bannerRunnable, 5000);
+		}
+
+		if (firstInShift) {
+			Log.i("test", "firstInShift"+firstInShift);
+			if (bannerRunnable != null) {
+				parentHandler.removeCallbacks(bannerRunnable);
+			}
+			firstInShift = false;
 		}
 		return super.onKeyUp(keyCode, event);
 	}
