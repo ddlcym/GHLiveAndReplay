@@ -959,5 +959,6 @@
     <string name="cur_program">当前节目</string>
     <string name="next_program">下一节目</string>
    	<string name="replay_dialog_title">温馨提示</string>
+   	<string name="back_shiftlist">退出时移列表</string>
     
 </resources>

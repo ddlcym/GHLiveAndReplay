@@ -251,7 +251,7 @@
             android:layout_marginLeft="5dp"
             android:paddingRight="30dip"
             android:layout_weight="2" 
-            android:src="@drawable/adv"/>
+            android:src="@drawable/advgehua"/>
     </LinearLayout>
 
 </RelativeLayout>

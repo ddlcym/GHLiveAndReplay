@@ -15,169 +15,145 @@
         android:layout_height="fill_parent"
         android:layout_gravity="center"
        />
-
-    <ImageView
-        android:id="@+id/mute_icon"
+ 	<LinearLayout
+        android:id="@+id/replay_back_banner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginRight="120dip"
-        android:paddingTop="15dip"
-        android:src="@drawable/mute_icon"
-        android:visibility="gone" />
-
-    <FrameLayout
-        android:layout_width="180dip"
-        android:layout_height="150dip"
-        android:layout_gravity="left|bottom"
-        android:paddingBottom="10dip"
-        android:paddingLeft="60dip" >
-
-        <ImageView
-            android:id="@+id/play_btn"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:src="@drawable/play"
-            android:visibility="gone" />
-
-        <ImageView
-            android:id="@+id/pause_btn"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:src="@drawable/pause"
-            android:visibility="gone" />
-
-        <ImageView
-            android:id="@+id/fast_forward"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:src="@drawable/fast_forward"
-            android:visibility="gone" />
-
-        <ImageView
-            android:id="@+id/fast_backward"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:src="@drawable/fast_backward"
-            android:visibility="gone" />
-    </FrameLayout>
-
-    <RelativeLayout
-        android:id="@+id/down_dialog"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="570dip"
-        android:layout_marginLeft="230dip">
-
-        <RelativeLayout
-            android:id="@+id/up_dialog_cur"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="35dip" >
-
-            <TextView
-                android:id="@+id/curpro"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/cur_program"
-                android:textColor="@color/replay_curproinfo"
-                android:textSize="28sp" />
-
-            <TextView
-                android:id="@+id/curprotime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dip"
-                android:layout_toRightOf="@id/curpro"
-                android:textColor="@color/replay_curproinfo"
-                android:textSize="28sp" />
-
-            <com.changhong.gehua.widget.MarqueeText
-                android:id="@+id/replay_current_program_info"
-                android:layout_width="270dip"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dip"
-                android:ellipsize="marquee"
-                android:focusableInTouchMode="true"
-                android:singleLine="true"
-                android:layout_toRightOf="@id/curprotime"
-                android:textColor="@color/replay_curproinfo"
-                android:textSize="28sp" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/sk"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="18dip">
-
-            <com.changhong.gehua.widget.MySeekbar
-                android:id="@+id/mySeekBar"
-                android:layout_width="880dip"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
-
-            <TextView
-                android:id="@+id/video_timelength"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dip"
-                android:layout_toRightOf="@id/mySeekBar"
-                android:textSize="25sp"
-                android:paddingTop="24dip" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/down_dialog_next"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_marginTop="85dip" 
-            android:layout_marginLeft="35dip">
-
-            <TextView
-                android:id="@+id/nextpro"
-                android:layout_width="wrap_content"
-                android:layout_height="50dip"
-                android:text="@string/next_program"
-                android:textColor="@color/replay_nextproinfo"
-                android:textSize="28sp" />
-
-            <TextView
-                android:id="@+id/nextprotime"
-                android:layout_width="wrap_content"
-                android:layout_height="50dip"
-                android:layout_marginLeft="15dip"
-                android:layout_toRightOf="@id/nextpro"
-                android:textColor="@color/replay_nextproinfo"
-                android:textSize="28sp" />
-
-            <com.changhong.gehua.widget.MarqueeText
-                android:id="@+id/replay_next_program_info"
-                android:layout_width="270dip"
-                android:layout_height="50dip"
-                android:layout_marginLeft="15dip"
-                android:ellipsize="marquee"
-                android:focusableInTouchMode="true"
-                android:singleLine="true"
-                android:layout_toRightOf="@id/nextprotime"
-                android:textColor="@color/replay_nextproinfo"
-                android:textSize="28sp" />
-
-            <ImageView
-                android:id="@+id/tishi1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/replay_next_program_info"
-                android:layout_marginLeft="50dip"
-                android:background="@drawable/tishione" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/tishi1"
-                android:layout_marginLeft="18dip"
-                android:background="@drawable/tishitwo" />
-        </RelativeLayout>
-    </RelativeLayout>
-
+        android:orientation="horizontal" >
+		    <RelativeLayout
+		        android:id="@+id/play_button_con"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="570dip"
+		        android:layout_marginLeft="65dip">
+		
+		        <com.changhong.gehua.widget.PlayButton
+		            android:id="@+id/replay_play_btn"
+		            android:layout_width="120dip"
+		            android:layout_height="120dip"
+		            android:layout_centerHorizontal="true"
+		            android:layout_centerVertical="true"
+		            android:focusable="false"
+		            android:scaleType="fitCenter"
+		            android:visibility="visible" />
+		    </RelativeLayout>
+		
+		    <RelativeLayout
+		        android:id="@+id/down_dialog"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="570dip"
+		        android:layout_marginLeft="40dip" >
+		
+		        <RelativeLayout
+		            android:id="@+id/up_dialog_cur"
+		            android:layout_width="fill_parent"
+		            android:layout_height="wrap_content"
+		            android:layout_marginLeft="35dip" >
+		
+		            <TextView
+		                android:id="@+id/curpro"
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:text="@string/cur_program"
+		                android:textColor="@color/replay_curproinfo"
+		                android:textSize="28sp" />
+		
+		            <TextView
+		                android:id="@+id/curprotime"
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:layout_marginLeft="15dip"
+		                android:layout_toRightOf="@id/curpro"
+		                android:textColor="@color/replay_curproinfo"
+		                android:textSize="28sp" />
+		
+		            <com.changhong.gehua.widget.MarqueeText
+		                android:id="@+id/replay_current_program_info"
+		                android:layout_width="270dip"
+		                android:layout_height="wrap_content"
+		                android:layout_marginLeft="15dip"
+		                android:ellipsize="marquee"
+		                android:focusableInTouchMode="true"
+		                android:singleLine="true"
+		                android:layout_toRightOf="@id/curprotime"
+		                android:textColor="@color/replay_curproinfo"
+		                android:textSize="28sp" />
+		        </RelativeLayout>
+		
+		        <RelativeLayout
+		            android:id="@+id/sk"
+		            android:layout_width="fill_parent"
+		            android:layout_height="wrap_content"
+		            android:paddingTop="18dip">
+		
+		            <com.changhong.gehua.widget.MySeekbar
+		                android:id="@+id/mySeekBar"
+		                android:layout_width="880dip"
+		                android:layout_height="wrap_content"
+		                android:orientation="vertical" />
+		
+		            <TextView
+		                android:id="@+id/video_timelength"
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:layout_marginLeft="5dip"
+		                android:layout_toRightOf="@id/mySeekBar"
+		                android:textSize="25sp"
+		                android:paddingTop="24dip" />
+		        </RelativeLayout>
+		
+		        <RelativeLayout
+		            android:id="@+id/down_dialog_next"
+		            android:layout_width="fill_parent"
+		            android:layout_height="fill_parent"
+		            android:layout_marginTop="85dip" 
+		            android:layout_marginLeft="35dip">
+		
+		            <TextView
+		                android:id="@+id/nextpro"
+		                android:layout_width="wrap_content"
+		                android:layout_height="50dip"
+		                android:text="@string/next_program"
+		                android:textColor="@color/replay_nextproinfo"
+		                android:textSize="28sp" />
+		
+		            <TextView
+		                android:id="@+id/nextprotime"
+		                android:layout_width="wrap_content"
+		                android:layout_height="50dip"
+		                android:layout_marginLeft="15dip"
+		                android:layout_toRightOf="@id/nextpro"
+		                android:textColor="@color/replay_nextproinfo"
+		                android:textSize="28sp" />
+		
+		            <com.changhong.gehua.widget.MarqueeText
+		                android:id="@+id/replay_next_program_info"
+		                android:layout_width="270dip"
+		                android:layout_height="50dip"
+		                android:layout_marginLeft="15dip"
+		                android:ellipsize="marquee"
+		                android:focusableInTouchMode="true"
+		                android:singleLine="true"
+		                android:layout_toRightOf="@id/nextprotime"
+		                android:textColor="@color/replay_nextproinfo"
+		                android:textSize="28sp" />
+		
+		            <ImageView
+		                android:id="@+id/tishi1"
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:layout_toRightOf="@id/replay_next_program_info"
+		                android:layout_marginLeft="50dip"
+		                android:background="@drawable/tishione" />
+		
+		            <ImageView
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:layout_toRightOf="@id/tishi1"
+		                android:layout_marginLeft="18dip"
+		                android:background="@drawable/tishitwo" />
+		        </RelativeLayout>
+		    </RelativeLayout>
+	 </LinearLayout>
 </FrameLayout>
