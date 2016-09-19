@@ -405,6 +405,11 @@ public class BannerDialog extends Dialog {
 					if(programListInfo.size()!=0&&(list.size()-1)!=position){
 						programListInfo.remove(2);
 						programListInfo.add(2, list.get(position+1));
+					}else{
+						programListInfo.remove(2);
+						if(programListInfo_back!=null&&programListInfo_back.size()>2){
+							programListInfo.add(2, programListInfo_back.get(2));
+						}
 					}
 					initData();
 					nextProgramContainer.setVisibility(View.VISIBLE);
