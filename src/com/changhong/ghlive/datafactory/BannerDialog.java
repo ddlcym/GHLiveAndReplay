@@ -182,7 +182,7 @@ public class BannerDialog extends Dialog {
 						builder.setPositiveButton("观看上一个节目", new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog, int which) {
 									dialog.dismiss();
-									Log.i("test", "PositiveButton"+list.get(shiftcurindex-1).getEventName());
+//									Log.i("mmmm", "PositiveButton"+list.get(shiftcurindex-1).getEventName());
 									
 									PlayVideo.getInstance().playLiveBack(player,curChannel,list.get(shiftcurindex-1));
 									CacheData.setCurProgram(list.get(shiftcurindex-1));
@@ -386,7 +386,7 @@ public class BannerDialog extends Dialog {
 //					long curTime=System.currentTimeMillis();
 //					int delayTime=(int) (curTime-program.getBeginTime().getTime())/1000;
 					
-					CacheData.setCurProgram(program);
+//					CacheData.setCurProgram(program);
 					programListInfo.remove(1);
 					programListInfo.add(1, program);
 					player.initSeekbar();
@@ -677,6 +677,7 @@ public class BannerDialog extends Dialog {
 		// String equestURL=processData.getReplayPlayUrlString(channel,
 		// programListInfo.get(1), 0);
 		CacheData.setCurProgram(programListInfo.get(1));
+//		Log.i(TAG, "bannerdialog=dvbBack：");
 		PlayVideo.getInstance().playTSDelayTime(player, curChannel, 0);
 	}
 

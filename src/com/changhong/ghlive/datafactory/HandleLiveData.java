@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import com.changhong.gehua.common.CacheData;
 import com.changhong.gehua.common.ChannelInfo;
+import com.changhong.gehua.common.ChannelType;
 import com.changhong.ghlive.activity.MyApp;
 
 import android.content.Context;
@@ -36,6 +37,13 @@ public class HandleLiveData {
 		if (null == con) {
 			con = MyApp.getContext();
 		}
+	}
+	
+	public List<ChannelType> dealChannelTypes(JSONObject json){
+		List<ChannelType> list=JsonResolve.jsonToTypes(json);
+		
+		
+		return list;
 	}
 
 	public List<ChannelInfo> dealChannelJson(JSONObject json) {

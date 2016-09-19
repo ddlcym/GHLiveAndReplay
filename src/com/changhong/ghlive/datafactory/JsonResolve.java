@@ -19,6 +19,7 @@ import org.json.JSONObject;
 
 import com.changhong.gehua.common.CacheData;
 import com.changhong.gehua.common.ChannelInfo;
+import com.changhong.gehua.common.ChannelType;
 import com.changhong.gehua.common.PosterInfo;
 import com.changhong.gehua.common.ProgramInfo;
 import com.changhong.gehua.common.Utils;
@@ -71,7 +72,35 @@ public class JsonResolve {
 
 		return channel;
 	}
-
+	
+	public ChannelType jsonToType(JSONObject json){
+		ChannelType type=new ChannelType();
+		type.setPramKey(getJsonObjectString(json, "pramKey"));
+		type.setPramValue(getJsonObjectString(json, "pramValue"));
+		type.setRank(getJsonObjInt(json, "rank"));
+		return type;
+	}
+	
+	//get channel type
+	public  List<ChannelType> jsonToTypes(JSONObject json){
+		List<ChannelType> list=new ArrayList<ChannelType>();
+		JSONArray types = getJsonObjectArray(json, "datas");
+		for (int i = 0; i < types.length(); i++) {
+			ChannelType type=null;
+			try {
+				JSONObject obj=(JSONObject) types.get(i);
+				type=jsonToType(obj);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if(type!=null){
+				list.add(type);
+			}
+		}
+		return list;
+	}
+	
 	// get all channel info
 	public List<ChannelInfo> jsonToChannels(JSONObject jsonObject) {
 		List<ChannelInfo> list = new ArrayList<ChannelInfo>();

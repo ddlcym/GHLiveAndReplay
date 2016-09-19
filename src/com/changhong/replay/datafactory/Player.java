@@ -128,7 +128,7 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 			if (videoCurrentTime != null) {
 				long beginTime = CacheData.getCurProgram().getBeginTime()
 						.getTime();
-				Log.i("mmmm", "player-maxTimes:" + maxTimes + "--beginTime:"+Utils.millToLiveBackString(beginTime)+"--seekwidth:" + seekwidth+ "--moveStep:" + moveStep + "--arg1:" + arg1);
+//				Log.i("mmmm", "player-maxTimes:" + maxTimes + "--beginTime:"+Utils.millToLiveBackString(beginTime)+"--seekwidth:" + seekwidth+ "--moveStep:" + moveStep + "--arg1:" + arg1);
 				if (liveFlag) {
 					videoCurrentTime.setText(Utils.millToLiveBackString(beginTime+ arg1));//shiyi
 				}else {
@@ -266,7 +266,7 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 				}
 				if (liveFlag) {
 					int curmedPos = mediaPlayer.getCurrentPosition();
-					Log.i("mmmm", "curmedPos:"+curmedPos+"curmedPos:"+curmedPos+"delayTime:"+delayTime);
+//					Log.i("mmmm", "curmedPos:"+curmedPos+"curmedPos:"+curmedPos+"delayTime:"+delayTime);
 					desPositon = curmedPos + curBeginTime - delayTime * 1000;
 					if (desPositon >= curProlength) {
 						// 通知更新banner条

@@ -10,6 +10,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.changhong.gehua.common.CacheData;
 import com.changhong.gehua.common.ChannelInfo;
+import com.changhong.gehua.common.ChannelType;
 import com.changhong.gehua.common.Class_Constant;
 import com.changhong.gehua.common.CommonMethod;
 import com.changhong.gehua.common.PlayVideo;
@@ -92,6 +93,8 @@ public class MainActivity extends BaseActivity {
 	private RequestQueue mReQueue;
 	private ProcessData processData;
 
+	private List<ChannelType> channelTypes;
+	
 	// kinds of channel list
 	private List<ChannelInfo> mCurChannels = new ArrayList<ChannelInfo>();// 当前频道列表清单
 	private List<ChannelInfo> channelsAll = new ArrayList<ChannelInfo>();
@@ -257,8 +260,7 @@ public class MainActivity extends BaseActivity {
 		if (null == processData) {
 			processData = new ProcessData();
 		}
-		Log.i("test", "initData--getChannelList");
-		
+		getChannelTypes();
 		getChannelList();
 		
 		player = new Player(mhandler, surfaceView, liveSeekBar, null);
@@ -385,6 +387,22 @@ public class MainActivity extends BaseActivity {
 		}
 
 	};
+	
+	private void getChannelTypes(){
+		String URL = processData.getTypes();
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null,
+				new Response.Listener<org.json.JSONObject>() {
+
+					@Override
+					public void onResponse(org.json.JSONObject arg0) {
+						// TODO Auto-generated method stub
+						Log.i("test", "MainActivity***getChannelTypes:" + arg0);
+						channelTypes=HandleLiveData.getInstance().dealChannelTypes(arg0);
+						}
+					}, errorListener);
+		jsonObjectRequest.setTag(MainActivity.class.getSimpleName());// 设置tag,cancelAll的时候使用
+		mReQueue.add(jsonObjectRequest);
+	}
 
 	private void getChannelList() {
 		// 传入URL请求链接
@@ -397,7 +415,7 @@ public class MainActivity extends BaseActivity {
 					public void onResponse(org.json.JSONObject arg0) {
 						// TODO Auto-generated method stub
 						// 相应成功
-						Log.i("test", "MainActivity***" + arg0);
+//						Log.i("test", "MainActivity***" + arg0);
 						channelsAll = HandleLiveData.getInstance().dealChannelJson(arg0);
 						// first set adapter
 						curType = 0;
@@ -1194,6 +1212,7 @@ public class MainActivity extends BaseActivity {
 			return;
 		}
 		if (livePlayBanner != null) {
+			livePlayBanner.stopTimer();
 			livePlayBanner.dismiss();
 		}
 		ChannelInfo curChannel = (ChannelInfo) CacheData.allChannelMap.get(channelno);

@@ -68,7 +68,8 @@ public class LivePlayBannerDialog extends Dialog {
 			R.drawable.h,R.drawable.i,R.drawable.j,R.drawable.k,R.drawable.l,R.drawable.m,R.drawable.n,R.drawable.o,R.drawable.p}; 
 	
 	//自动更新
-	private Timer mTimer = new Timer();
+	private Timer mTimer;
+	private MyTimerTask mTimerTask;
 
 	public LivePlayBannerDialog(Context context, ChannelInfo outterChannelInfo, List<ProgramInfo> outterListProgramInfo,
 			Handler outterHandler, AudioManager audioManager, ImageView muteIconImage) {
@@ -82,17 +83,29 @@ public class LivePlayBannerDialog extends Dialog {
 		mAudioManager = audioManager; 
 		muteicon = muteIconImage;
 		initView();
-		try{
-			mTimer.schedule(mTimerTask, 0, 1000);
-		}catch (IllegalStateException e){
-			e.printStackTrace();
-		}
+		
 	}
 
 	/*******************************************************
 	 * 通过handler更新seekbar
 	 ******************************************************/
-	TimerTask mTimerTask = new TimerTask() {
+//	TimerTask mTimerTask = new TimerTask() {
+//		@Override
+//		public void run() {
+//			int position=getPosition();
+//			if(position>=timeLength){
+//				//通知更新直播banner条
+////				PlayVideo.getInstance().getProgramInfo(mHandler, CacheData.getCurChannel());
+//				PlayVideo.getInstance().getProgramInfo(mhanlder, channelInfo);
+//				Log.i("mmmm", "LivePlayBannerDialog--mTimerTask"+"-position:"+position+"-timeLength:"+timeLength);
+//			}else{
+//					programPlayBar.setProgress(position);
+//			}
+//			Log.i("mmmm", "LivePlayBannerDialog--mTimerTask");
+//			mhanlder.sendEmptyMessage(Class_Constant.LIVE_BANNER_CURTIME);
+//		}
+//	};
+	private class MyTimerTask extends TimerTask{
 		@Override
 		public void run() {
 			int position=getPosition();
@@ -100,9 +113,11 @@ public class LivePlayBannerDialog extends Dialog {
 				//通知更新直播banner条
 //				PlayVideo.getInstance().getProgramInfo(mHandler, CacheData.getCurChannel());
 				PlayVideo.getInstance().getProgramInfo(mhanlder, channelInfo);
+				Log.i("mmmm", "LivePlayBannerDialog--mTimerTask-position>=timeLength");
 			}else{
 					programPlayBar.setProgress(position);
 			}
+//			Log.i("mmmm", "LivePlayBannerDialog--mTimerTask");
 			mhanlder.sendEmptyMessage(Class_Constant.LIVE_BANNER_CURTIME);
 		}
 	};
@@ -137,6 +152,15 @@ public class LivePlayBannerDialog extends Dialog {
 		// TODO Auto-generated method stub
 		super.show();
 		initData();
+		if(null==mTimer){
+			mTimer= new Timer();
+		}
+		mTimerTask=new MyTimerTask();
+		try{
+			mTimer.schedule(mTimerTask, 0, 1000);
+		}catch (IllegalStateException e){
+			e.printStackTrace();
+		}
 	}
 
 	public void initView() {
@@ -353,4 +377,17 @@ public class LivePlayBannerDialog extends Dialog {
 		}
 	};
 */
+	
+	public void stopTimer(){
+		if(mTimerTask!=null){
+			mTimerTask.cancel();
+		}
+		
+		if(mTimer!=null){
+			mTimer.cancel();
+			mTimer=null;
+		}
+	}
+	
+
 }

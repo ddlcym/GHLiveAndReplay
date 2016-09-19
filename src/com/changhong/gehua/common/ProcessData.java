@@ -84,7 +84,7 @@ public class ProcessData {
 	/*
 	 * 获取频道分类信息
 	 */
-	public String getCatalog(){
+	public String getTypes(){
 		String catalogURL=serverAdress+"msis/getPram?version=V001&PramName=ChannelType&terminalType=3";
 				
 		return strGETReturn(catalogURL);

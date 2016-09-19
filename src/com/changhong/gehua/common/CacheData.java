@@ -109,6 +109,7 @@ public class CacheData {
 		CacheData.curPrograms = curPrograms;
 		if(curPrograms!=null&&curPrograms.size()>1){
 		setCurProgram(curPrograms.get(1));
+		Log.i("mmmm","setCurPrograms:");
 		}
 	}
 
