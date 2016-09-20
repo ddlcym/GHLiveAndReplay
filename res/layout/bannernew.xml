@@ -112,7 +112,7 @@
 					
 	                <com.changhong.gehua.widget.MySeekbar
 	                    android:id="@+id/bannernew_program_progress"
-	                    android:layout_width="1030dip"
+	                    android:layout_width="1020dip"
 	                    android:layout_height="wrap_content"
 	                    android:layout_alignParentBottom="true"
 	                    android:focusable="false" />
