@@ -137,12 +137,15 @@ public class BannerDialog extends Dialog {
 			case Class_Constant.SHIFT_LAST_PROGRAM:
 				//时移回退到最开始
 				{
+					
 					int len = list.size();
 					ShiftDialog.Builder builder = new ShiftDialog.Builder(mContext);
 					curshiftpro = CacheData.getCurProgram();
 					Log.i("test", "curshiftpro.getEventName()"+curshiftpro.getEventName()+curshiftpro.getBeginTime());
 					//shiftlist = CacheData.getTimeshiftPrograms();
-					if(curshiftpro.getEventName().equals(list.get(len-1).getEventName())){
+					int i = curshiftpro.getBeginTime().compareTo(list.get(len-1).getBeginTime());
+					Log.i("test","i"+ i);
+					if(i==0){
 						shiftcurindex = len-1;
 					}else{
 						shiftcurindex = list.indexOf(curshiftpro);
@@ -230,6 +233,7 @@ public class BannerDialog extends Dialog {
 				
 			 case Class_Constant.SHIFT_NEXT_PROGRAM:
 				 {
+					player.pause();//处理时移自动播放完一个节目，暂停节目，弹出对话框
 					int len = list.size();
 					ShiftDialog.Builder builder = new ShiftDialog.Builder(mContext);
 					curshiftpro = CacheData.getCurProgram();
@@ -664,18 +668,18 @@ public class BannerDialog extends Dialog {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
 
 			if (!IsFocusList) {
-			Player.handleProgress
-					.sendEmptyMessage(Class_Constant.RE_FAST_FORWARD_UP);
-				palyButton.setMyBG(PlayButton.Pause);
+				Player.handleProgress
+						.sendEmptyMessage(Class_Constant.RE_FAST_FORWARD_UP);
+					palyButton.setMyBG(PlayButton.Pause);
 			}
 			
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
 
 			if(!IsFocusList){
-			Player.handleProgress
-					.sendEmptyMessage(Class_Constant.RE_FAST_REVERSE_UP);
-				palyButton.setMyBG(PlayButton.Pause);
+				Player.handleProgress
+						.sendEmptyMessage(Class_Constant.RE_FAST_REVERSE_UP);
+					palyButton.setMyBG(PlayButton.Pause);
 			}
 			break;
 		}

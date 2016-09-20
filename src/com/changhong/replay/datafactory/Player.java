@@ -642,9 +642,10 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 			if (null == mediaPlayer)
 				return;
 			if (!liveFlag) {
-				Log.i("mmmm", "%%%%"+liveFlag);
-				
+				Log.i("mmmm", "huikan"+liveFlag);
+				Log.i("mmmm", "huikan desPositon:"+desPositon);
 				if (desPositon < 0) {
+					mediaPlayer.pause();
 					if (handlerFlag) {
 						handlerFlag = false;
 						parentHandler
@@ -652,18 +653,26 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 						Log.i("xb", "Player*********");
 					}
 					desPositon = 0;
+				}else {
+					mediaPlayer.seekTo(desPositon);
+					mediaPlayer.start();
 				}
 					
-				mediaPlayer.seekTo(desPositon);
-				mediaPlayer.start();
+				
 			} else {
-				Log.i("mmmm", "#####"+liveFlag);
-				Log.i("mmmm", "####desPositon:"+desPositon);
-				if (desPositon >= 0) {
+				Log.i("mmmm", "shiyi");
+				Log.i("mmmm", "shiyi desPositon:"+desPositon);
+				Log.i("mmmm", "shiyi skbProgress.getMax():"+skbProgress.getMax());
+				if (desPositon > 0 && desPositon < skbProgress.getMax()) {
 					
 					delayTime = getPlayDelayTimes();
 					playLiveBack(curChannel, delayTime);
 				}
+				//时移快进和快退到最开始和最后，暂停视频播放
+				if (desPositon == 0 || desPositon >= skbProgress.getMax()) {
+					mediaPlayer.pause();
+				}
+				
 			}
 
 			keyFlag = false;
