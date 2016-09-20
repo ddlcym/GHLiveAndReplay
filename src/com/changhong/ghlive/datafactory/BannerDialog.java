@@ -175,8 +175,9 @@ public class BannerDialog extends Dialog {
 								    programListInfo.remove(2);
 								    programListInfo.add(2, list.get(shiftcurindex+1));
 									initData();
-									nextProgramContainer.setVisibility(View.VISIBLE);
-									programListContainer.setVisibility(View.GONE);
+									showViewVisibility(NEXT_PROGRAM);
+									//nextProgramContainer.setVisibility(View.VISIBLE);
+									//programListContainer.setVisibility(View.GONE);
 									
 							}
 						});
@@ -197,8 +198,9 @@ public class BannerDialog extends Dialog {
 									programListInfo.remove(2);
 									programListInfo.add(2, list.get(shiftcurindex));
 									initData();
-									nextProgramContainer.setVisibility(View.VISIBLE);
-									programListContainer.setVisibility(View.GONE);
+									showViewVisibility(NEXT_PROGRAM);
+									//nextProgramContainer.setVisibility(View.VISIBLE);
+									//programListContainer.setVisibility(View.GONE);
 							}
 						});
 	
@@ -215,8 +217,9 @@ public class BannerDialog extends Dialog {
 									}
 									
 									initData();
-									nextProgramContainer.setVisibility(View.VISIBLE);
-									programListContainer.setVisibility(View.GONE);
+									showViewVisibility(NEXT_PROGRAM);
+									//nextProgramContainer.setVisibility(View.VISIBLE);
+									//programListContainer.setVisibility(View.GONE);
 									
 							}
 						});
@@ -259,8 +262,9 @@ public class BannerDialog extends Dialog {
 								}
 								
 								initData();
-								nextProgramContainer.setVisibility(View.VISIBLE);
-								programListContainer.setVisibility(View.GONE);
+								showViewVisibility(NEXT_PROGRAM);
+								//nextProgramContainer.setVisibility(View.VISIBLE);
+								//programListContainer.setVisibility(View.GONE);
 						}
 					});
 
@@ -273,8 +277,9 @@ public class BannerDialog extends Dialog {
 								programListInfo.add(1,list.get(shiftcurindex));
 								programListInfo.add(2, list.get(shiftcurindex+1));
 								initData();
-								nextProgramContainer.setVisibility(View.VISIBLE);
-								programListContainer.setVisibility(View.GONE);
+								showViewVisibility(NEXT_PROGRAM);
+								//nextProgramContainer.setVisibility(View.VISIBLE);
+								//programListContainer.setVisibility(View.GONE);
 								
 						}
 					});

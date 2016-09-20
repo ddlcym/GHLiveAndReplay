@@ -321,6 +321,7 @@ public class ReplayPlayActivity extends BaseActivity {
 	private void playVideo(ChannelInfo channel, ProgramInfo program) {
 		ProgramInfo nextmprogram;
 		
+		
 		playbtn.setMyBG(PlayButton.Pause);
 		
 		pfbackImageView.setBackgroundResource(R.drawable.pf_back);
@@ -350,12 +351,15 @@ public class ReplayPlayActivity extends BaseActivity {
 			videoNextPro.setText(nextmprogram.getEventName());
 		}
 		
-		//pauseButton.setVisibility(View.VISIBLE);
-		
-		
+		seekbar.setVisibility(View.VISIBLE);
+		videoTimeLength.setVisibility(View.VISIBLE);
+		curlinearLayout.setVisibility(View.VISIBLE);
+		nextLinearLayout.setVisibility(View.VISIBLE);
+		pfbackImageView.setVisibility(View.VISIBLE);
+		play_button_con.setVisibility(View.VISIBLE);
 		
 		String requestURL = mProcessData.getReplayPlayUrlString(channel, mprogram, 0);
-		// Log.i("mmmm", "ReplayPlayActivity-requestURL:" + requestURL);
+		
 		PlayVideo.getInstance().getProgramPlayURL(replayHandler, requestURL);
 	}
 
