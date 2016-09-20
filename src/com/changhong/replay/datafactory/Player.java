@@ -284,7 +284,7 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 					videoCurrentTime.setText(Utils.millToDateStr(desPositon));
 
 				}
-				if (duration > 0&&desPositon<duration) {
+				if (duration > 0&&desPositon<(duration+2000)) {
 					Player.skbProgress.setProgress(desPositon);
 				}
 //				Log.i("mmmm", "player-desPositon:"+desPositon);
