@@ -403,7 +403,7 @@ public class MainActivity extends BaseActivity {
 					@Override
 					public void onResponse(org.json.JSONObject arg0) {
 						// TODO Auto-generated method stub
-						Log.i("mmmm", "MainActivity***getChannelTypes:" + arg0);
+//						Log.i("mmmm", "MainActivity***getChannelTypes:" + arg0);
 						channelTypes=HandleLiveData.getInstance().dealChannelTypes(arg0);
 						if(channelTypes!=null){
 							for(int i=0;i<channelTypes.size();i++){
@@ -432,6 +432,7 @@ public class MainActivity extends BaseActivity {
 						// 相应成功
 //						Log.i("test", "MainActivity***" + arg0);
 						channelsAll = HandleLiveData.getInstance().dealChannelJson(arg0);
+						Log.i("mmmm", "getChannelList-chLstAdapter"+channelsAll.size());
 						// first set adapter
 						curType = 0;
 						getAllTVtype();
@@ -506,66 +507,6 @@ public class MainActivity extends BaseActivity {
 				//高清频道
 				HDTvList.add(dvbChannel);
 			}
-			
-			
-			
-//			String regExCCTV;
-//			regExCCTV = getResources().getString(R.string.zhongyang);
-//			java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("CCTV|" + regExCCTV);
-//			java.util.regex.Matcher matcher = pattern.matcher(dvbChannel.getChannelName());
-//			boolean classBytype = matcher.find();
-//			if (classBytype) {
-//				CCTVList.add(dvbChannel);
-//			}
-//			
-//			String regExLocal = "BTV|" + getResources().getString(R.string.beijing_h);
-//			// + "|"+ getResources().getString(R.string.jingniu) + "|" +
-//			// getResources().getString(R.string.qingyang)
-//			// + "|" + getResources().getString(R.string.wuhou) + "|" +
-//			// getResources().getString(R.string.chenghua)
-//			// + "|" + getResources().getString(R.string.jinjiang) + "|"
-//			// + getResources().getString(R.string.chengdu) + "|" +
-//			// getResources().getString(R.string.sichuan);
-//			java.util.regex.Pattern patternLocal = java.util.regex.Pattern.compile(regExLocal);
-//			java.util.regex.Matcher matcherLocal = patternLocal.matcher(dvbChannel.getChannelName());
-//			boolean classBytypeLocal = matcherLocal.find();
-//			if (classBytypeLocal) {
-//				localTvList.add(dvbChannel);
-//			}
-//			
-//			String regExStar;
-//			regExStar = "CETV|"+"山东教育|"+"CHC|"+getResources().getString(R.string.weishi);
-//			java.util.regex.Pattern patternStar = java.util.regex.Pattern.compile(regExStar);
-//			java.util.regex.Matcher matcherStar = patternStar.matcher(dvbChannel.getChannelName());
-//			boolean classBytypeStar = matcherStar.find();
-//			if (classBytypeStar&&!classBytypeLocal) {
-//				starTvList.add(dvbChannel);
-//			}
-//			
-//			String regExHD = getResources().getString(R.string.hd_dtv) + "|"
-//					+ getResources().getString(R.string.xinyuan_hdtv1) + "|"
-//					+ getResources().getString(R.string.xinyuan_hdtv2) + "|"
-//					+ getResources().getString(R.string.xinyuan_hdtv3) + "|"
-//					+ getResources().getString(R.string.xinyuan_hdtv4);
-//			java.util.regex.Pattern patternHD = java.util.regex.Pattern.compile("3D|" + regExHD + "|.*HD$");
-//
-//			java.util.regex.Matcher matcherHD = patternHD.matcher(dvbChannel.getChannelName());
-//			boolean classBytypeHD = matcherHD.find();
-//			if (classBytypeHD) {
-//				HDTvList.add(dvbChannel);
-//			}
-//			String regExOther = "CDTV|SCTV|CCTV|" + getResources().getString(R.string.weishi) + "|"
-//					+ getResources().getString(R.string.rongcheng) + "|" + getResources().getString(R.string.jingniu)
-//					+ "|" + getResources().getString(R.string.qingyang) + "|" + getResources().getString(R.string.wuhou)
-//					+ "|" + getResources().getString(R.string.chenghua) + "|"
-//					+ getResources().getString(R.string.jinjiang) + "|" + getResources().getString(R.string.chengdu)
-//					+ "|" + getResources().getString(R.string.sichuan);
-//			java.util.regex.Pattern patternOther = java.util.regex.Pattern.compile(regExOther);
-//			java.util.regex.Matcher matcherOther = patternOther.matcher(dvbChannel.getChannelName());
-//			boolean classBytypeOther = matcherOther.find();
-//			if (!classBytypeOther) {
-//				otherTvList.add(dvbChannel);
-//			}
 		}
 	}
 
