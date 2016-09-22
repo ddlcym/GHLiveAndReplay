@@ -1,7 +1,9 @@
 package com.changhong.ghlive.activity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -93,17 +95,22 @@ public class MainActivity extends BaseActivity {
 	private RequestQueue mReQueue;
 	private ProcessData processData;
 
+	//频道类型缓存
 	private List<ChannelType> channelTypes;
 	
 	// kinds of channel list
 	private List<ChannelInfo> mCurChannels = new ArrayList<ChannelInfo>();// 当前频道列表清单
 	private List<ChannelInfo> channelsAll = new ArrayList<ChannelInfo>();
 	private List<ChannelInfo> CCTVList = new ArrayList<ChannelInfo>();
-	private List<ChannelInfo> starTvList = new ArrayList<ChannelInfo>();
+	private List<ChannelInfo> weishiTvList = new ArrayList<ChannelInfo>();
 	// private List<ChannelInfo> favTvList = new ArrayList<ChannelInfo>();
 	private List<ChannelInfo> localTvList = new ArrayList<ChannelInfo>();
 	private List<ChannelInfo> HDTvList = new ArrayList<ChannelInfo>();
 	private List<ChannelInfo> otherTvList = new ArrayList<ChannelInfo>();
+	
+	//将频道分类并创建集合
+	private List<List<ChannelInfo>> allCategeChanels=new ArrayList<List<ChannelInfo>>();//由于服务器下发数据有误（热门和高清rank都为0），暂无法使用本对象
+	private Map<String, List<ChannelInfo>> allChanelsMap=new HashMap<String, List<ChannelInfo>>();
 
 	private List<ProgramInfo> curChannelPrograms = new ArrayList<ProgramInfo>();// 当前频道下的上一个节目，当前节目，下一个节目信息
 	private int curListIndex = 0;// 当前list下正在播放的当前节目的index
@@ -396,8 +403,16 @@ public class MainActivity extends BaseActivity {
 					@Override
 					public void onResponse(org.json.JSONObject arg0) {
 						// TODO Auto-generated method stub
-						Log.i("test", "MainActivity***getChannelTypes:" + arg0);
+						Log.i("mmmm", "MainActivity***getChannelTypes:" + arg0);
 						channelTypes=HandleLiveData.getInstance().dealChannelTypes(arg0);
+						if(channelTypes!=null){
+							for(int i=0;i<channelTypes.size();i++){
+								ChannelType type=channelTypes.get(i);
+								List<ChannelInfo> list=new ArrayList<ChannelInfo>();
+								allCategeChanels.add(list);
+								allChanelsMap.put(type.getPramKey(), list);
+								}
+							}
 						}
 					}, errorListener);
 		jsonObjectRequest.setTag(MainActivity.class.getSimpleName());// 设置tag,cancelAll的时候使用
@@ -462,7 +477,7 @@ public class MainActivity extends BaseActivity {
 		// clear all tv type;
 		channelsAll.clear();
 		CCTVList.clear();
-		starTvList.clear();
+		weishiTvList.clear();
 		// favTvList.clear();
 		localTvList.clear();
 		HDTvList.clear();
@@ -475,181 +490,86 @@ public class MainActivity extends BaseActivity {
 			// if (dvbChannel.favorite == 1) {
 			// favTvList.add(dvbChannel);
 			// }
-			String regExCCTV;
-			regExCCTV = getResources().getString(R.string.zhongyang);
-			java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("CCTV|" + regExCCTV);
-			java.util.regex.Matcher matcher = pattern.matcher(dvbChannel.getChannelName());
-			boolean classBytype = matcher.find();
-			if (classBytype) {
+			if(dvbChannel.getChannelTypes().contains("4")){
+				//央视频道
 				CCTVList.add(dvbChannel);
 			}
-			
-			String regExLocal = "BTV|" + getResources().getString(R.string.beijing_h);
-			// + "|"+ getResources().getString(R.string.jingniu) + "|" +
-			// getResources().getString(R.string.qingyang)
-			// + "|" + getResources().getString(R.string.wuhou) + "|" +
-			// getResources().getString(R.string.chenghua)
-			// + "|" + getResources().getString(R.string.jinjiang) + "|"
-			// + getResources().getString(R.string.chengdu) + "|" +
-			// getResources().getString(R.string.sichuan);
-			java.util.regex.Pattern patternLocal = java.util.regex.Pattern.compile(regExLocal);
-			java.util.regex.Matcher matcherLocal = patternLocal.matcher(dvbChannel.getChannelName());
-			boolean classBytypeLocal = matcherLocal.find();
-			if (classBytypeLocal) {
+			if(dvbChannel.getChannelTypes().contains("1007")){
+				//北京频道
 				localTvList.add(dvbChannel);
 			}
-			
-			String regExStar;
-			regExStar = "CETV|"+"山东教育|"+"CHC|"+getResources().getString(R.string.weishi);
-			java.util.regex.Pattern patternStar = java.util.regex.Pattern.compile(regExStar);
-			java.util.regex.Matcher matcherStar = patternStar.matcher(dvbChannel.getChannelName());
-			boolean classBytypeStar = matcherStar.find();
-			if (classBytypeStar&&!classBytypeLocal) {
-				starTvList.add(dvbChannel);
+			if(dvbChannel.getChannelTypes().contains("9")){
+				//卫视频道
+				weishiTvList.add(dvbChannel);
 			}
-			
-			String regExHD = getResources().getString(R.string.hd_dtv) + "|"
-					+ getResources().getString(R.string.xinyuan_hdtv1) + "|"
-					+ getResources().getString(R.string.xinyuan_hdtv2) + "|"
-					+ getResources().getString(R.string.xinyuan_hdtv3) + "|"
-					+ getResources().getString(R.string.xinyuan_hdtv4);
-			java.util.regex.Pattern patternHD = java.util.regex.Pattern.compile("3D|" + regExHD + "|.*HD$");
-
-			java.util.regex.Matcher matcherHD = patternHD.matcher(dvbChannel.getChannelName());
-			boolean classBytypeHD = matcherHD.find();
-			if (classBytypeHD) {
+			if(dvbChannel.getChannelTypes().contains("1002")){
+				//高清频道
 				HDTvList.add(dvbChannel);
 			}
-			String regExOther = "CDTV|SCTV|CCTV|" + getResources().getString(R.string.weishi) + "|"
-					+ getResources().getString(R.string.rongcheng) + "|" + getResources().getString(R.string.jingniu)
-					+ "|" + getResources().getString(R.string.qingyang) + "|" + getResources().getString(R.string.wuhou)
-					+ "|" + getResources().getString(R.string.chenghua) + "|"
-					+ getResources().getString(R.string.jinjiang) + "|" + getResources().getString(R.string.chengdu)
-					+ "|" + getResources().getString(R.string.sichuan);
-			java.util.regex.Pattern patternOther = java.util.regex.Pattern.compile(regExOther);
-			java.util.regex.Matcher matcherOther = patternOther.matcher(dvbChannel.getChannelName());
-			boolean classBytypeOther = matcherOther.find();
-			if (!classBytypeOther) {
-				otherTvList.add(dvbChannel);
-			}
+			
+			
+			
+//			String regExCCTV;
+//			regExCCTV = getResources().getString(R.string.zhongyang);
+//			java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("CCTV|" + regExCCTV);
+//			java.util.regex.Matcher matcher = pattern.matcher(dvbChannel.getChannelName());
+//			boolean classBytype = matcher.find();
+//			if (classBytype) {
+//				CCTVList.add(dvbChannel);
+//			}
+//			
+//			String regExLocal = "BTV|" + getResources().getString(R.string.beijing_h);
+//			// + "|"+ getResources().getString(R.string.jingniu) + "|" +
+//			// getResources().getString(R.string.qingyang)
+//			// + "|" + getResources().getString(R.string.wuhou) + "|" +
+//			// getResources().getString(R.string.chenghua)
+//			// + "|" + getResources().getString(R.string.jinjiang) + "|"
+//			// + getResources().getString(R.string.chengdu) + "|" +
+//			// getResources().getString(R.string.sichuan);
+//			java.util.regex.Pattern patternLocal = java.util.regex.Pattern.compile(regExLocal);
+//			java.util.regex.Matcher matcherLocal = patternLocal.matcher(dvbChannel.getChannelName());
+//			boolean classBytypeLocal = matcherLocal.find();
+//			if (classBytypeLocal) {
+//				localTvList.add(dvbChannel);
+//			}
+//			
+//			String regExStar;
+//			regExStar = "CETV|"+"山东教育|"+"CHC|"+getResources().getString(R.string.weishi);
+//			java.util.regex.Pattern patternStar = java.util.regex.Pattern.compile(regExStar);
+//			java.util.regex.Matcher matcherStar = patternStar.matcher(dvbChannel.getChannelName());
+//			boolean classBytypeStar = matcherStar.find();
+//			if (classBytypeStar&&!classBytypeLocal) {
+//				starTvList.add(dvbChannel);
+//			}
+//			
+//			String regExHD = getResources().getString(R.string.hd_dtv) + "|"
+//					+ getResources().getString(R.string.xinyuan_hdtv1) + "|"
+//					+ getResources().getString(R.string.xinyuan_hdtv2) + "|"
+//					+ getResources().getString(R.string.xinyuan_hdtv3) + "|"
+//					+ getResources().getString(R.string.xinyuan_hdtv4);
+//			java.util.regex.Pattern patternHD = java.util.regex.Pattern.compile("3D|" + regExHD + "|.*HD$");
+//
+//			java.util.regex.Matcher matcherHD = patternHD.matcher(dvbChannel.getChannelName());
+//			boolean classBytypeHD = matcherHD.find();
+//			if (classBytypeHD) {
+//				HDTvList.add(dvbChannel);
+//			}
+//			String regExOther = "CDTV|SCTV|CCTV|" + getResources().getString(R.string.weishi) + "|"
+//					+ getResources().getString(R.string.rongcheng) + "|" + getResources().getString(R.string.jingniu)
+//					+ "|" + getResources().getString(R.string.qingyang) + "|" + getResources().getString(R.string.wuhou)
+//					+ "|" + getResources().getString(R.string.chenghua) + "|"
+//					+ getResources().getString(R.string.jinjiang) + "|" + getResources().getString(R.string.chengdu)
+//					+ "|" + getResources().getString(R.string.sichuan);
+//			java.util.regex.Pattern patternOther = java.util.regex.Pattern.compile(regExOther);
+//			java.util.regex.Matcher matcherOther = patternOther.matcher(dvbChannel.getChannelName());
+//			boolean classBytypeOther = matcherOther.find();
+//			if (!classBytypeOther) {
+//				otherTvList.add(dvbChannel);
+//			}
 		}
 	}
 
-	// private void getAllTVtype(int index) {
-	// // fill all type tv
-	// // Channel[] Channels =
-	// // objApplication.dvbDatabase.getChannelsAllSC();//Only get channels
-	// // type=1(TV)
-	// // clear all tv type;
-	// switch (index) {
-	// case 0:
-	// break;
-	//
-	// case 1:
-	// CCTVList.clear();
-	// String regExCCTV;
-	// regExCCTV = getResources().getString(R.string.zhongyang);
-	// java.util.regex.Pattern pattern = java.util.regex.Pattern
-	// .compile("CCTV|" + regExCCTV);
-	// for (ChannelInfo Channel : channelsAll) {
-	// java.util.regex.Matcher matcher = pattern.matcher(Channel
-	// .getChannelName());
-	// boolean classBytype = matcher.find();
-	// if (classBytype) {
-	// CCTVList.add(Channel);
-	// }
-	// }
-	// break;
-	// case 2:
-	// starTvList.clear();
-	// String regExStar;
-	// regExStar = getResources().getString(R.string.weishi);
-	// java.util.regex.Pattern patternStar = java.util.regex.Pattern
-	// .compile(".*" + regExStar + "$");
-	// for (ChannelInfo Channel : channelsAll) {
-	// java.util.regex.Matcher matcherStar = patternStar
-	// .matcher(Channel.getChannelName());
-	// boolean classBytypeStar = matcherStar.matches();
-	// if (classBytypeStar) {
-	// starTvList.add(Channel);
-	// }
-	// }
-	// break;
-	// case 3:
-	// localTvList.clear();
-	// String regExLocal = "CDTV|SCTV|"
-	// + getResources().getString(R.string.rongcheng) + "|"
-	// + getResources().getString(R.string.jingniu) + "|"
-	// + getResources().getString(R.string.qingyang) + "|"
-	// + getResources().getString(R.string.wuhou) + "|"
-	// + getResources().getString(R.string.chenghua) + "|"
-	// + getResources().getString(R.string.jinjiang) + "|"
-	// + getResources().getString(R.string.chengdu) + "|"
-	// + getResources().getString(R.string.sichuan);
-	// java.util.regex.Pattern patternLocal = java.util.regex.Pattern
-	// .compile(regExLocal);
-	// for (ChannelInfo Channel : channelsAll) {
-	// java.util.regex.Matcher matcherLocal = patternLocal
-	// .matcher(Channel.getChannelName());
-	// boolean classBytypeLocal = matcherLocal.find();
-	// if (classBytypeLocal) {
-	// localTvList.add(Channel);
-	// }
-	// }
-	// break;
-	// case 4:
-	// HDTvList.clear();
-	// String regExHD = getResources().getString(R.string.hd_dtv) + "|"
-	// + getResources().getString(R.string.xinyuan_hdtv1) + "|"
-	// + getResources().getString(R.string.xinyuan_hdtv2) + "|"
-	// + getResources().getString(R.string.xinyuan_hdtv3) + "|"
-	// + getResources().getString(R.string.xinyuan_hdtv4);
-	// java.util.regex.Pattern patternHD = java.util.regex.Pattern
-	// .compile("3D|" + regExHD + "|.*HD$");
-	// for (ChannelInfo Channel : channelsAll) {
-	// java.util.regex.Matcher matcherHD = patternHD.matcher(Channel
-	// .getChannelName());
-	// boolean classBytypeHD = matcherHD.find();
-	// if (classBytypeHD) {
-	// HDTvList.add(Channel);
-	// }
-	// }
-	// break;
-	// case 5:
-	// // favTvList.clear();
-	// // for (ChannelInfo Channel : Channels) {
-	// // if (Channel.favorite == 1) {
-	// // favTvList.add(Channel);
-	// // }
-	// //
-	// // }
-	// break;
-	// case 6:
-	// otherTvList.clear();
-	// String regExOther = "CDTV|SCTV|CCTV|"
-	// + getResources().getString(R.string.weishi) + "|"
-	// + getResources().getString(R.string.rongcheng) + "|"
-	// + getResources().getString(R.string.jingniu) + "|"
-	// + getResources().getString(R.string.qingyang) + "|"
-	// + getResources().getString(R.string.wuhou) + "|"
-	// + getResources().getString(R.string.chenghua) + "|"
-	// + getResources().getString(R.string.jinjiang) + "|"
-	// + getResources().getString(R.string.chengdu) + "|"
-	// + getResources().getString(R.string.sichuan);
-	// java.util.regex.Pattern patternOther = java.util.regex.Pattern
-	// .compile(regExOther);
-	// for (ChannelInfo Channel : channelsAll) {
-	// java.util.regex.Matcher matcherOther = patternOther
-	// .matcher(Channel.getChannelName());
-	// boolean classBytypeOther = matcherOther.find();
-	// if (!classBytypeOther) {
-	// otherTvList.add(Channel);
-	// }
-	// }
-	// break;
-	// }
-	//
-	// }
+
 
 	private void showChannelList() {
 		// TODO show channellist
@@ -661,7 +581,7 @@ public class MainActivity extends BaseActivity {
 			mCurChannels = CCTVList;
 			break;
 		case 2:
-			mCurChannels = starTvList;
+			mCurChannels = weishiTvList;
 			break;
 		case 3:
 			mCurChannels = localTvList;

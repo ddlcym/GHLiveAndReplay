@@ -43,7 +43,7 @@ public class HandleLiveData {
 		List<ChannelType> list=JsonResolve.jsonToTypes(json);
 		
 		
-		return list;
+		return sortChannels(list);
 	}
 
 	public List<ChannelInfo> dealChannelJson(JSONObject json) {
@@ -72,4 +72,20 @@ public class HandleLiveData {
 		CacheData.setAllChannelExtraInfo(JsonResolve.jsonToChannelExtra(json));
 	}
 
+	
+	public List<ChannelType> sortChannels(List<ChannelType> outterList) {
+
+		Collections.sort(outterList, new Comparator<ChannelType>() {
+
+			public int compare(ChannelType o1, ChannelType o2) {
+				int result = o1.getRank() - o2.getRank();
+//				if (result == 0) {
+//					result = o1.getChannelName().compareTo(o2.getChannelName());
+//				}
+				return result;
+			}
+		});
+
+		return outterList;
+	}
 }
