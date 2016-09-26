@@ -763,7 +763,14 @@ public class MainActivity extends BaseActivity {
 			// PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
 
 			if (tvRootDigitalkey.isShown()) {
-				mhandler.sendEmptyMessage(Class_Constant.MESSAGE_HANDLER_DIGITALKEY);
+				if (chListView.isShown()) {
+					mhandler.removeMessages(Class_Constant.MESSAGE_CHANNELIST_SELECT_DIGITAL);
+					selectChannelListDigital();
+					tvRootDigitalkey.setVisibility(View.INVISIBLE);
+					chListView.setFocusable(true);
+				}else{
+					mhandler.sendEmptyMessage(Class_Constant.MESSAGE_HANDLER_DIGITALKEY);
+				}
 			} else {
 				//CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
 				showDialogBanner(curChannelNO);
@@ -965,6 +972,7 @@ public class MainActivity extends BaseActivity {
 
 				}
 
+				chListView.setFocusable(false);
 				tvRootDigitalKeyInvalid.setVisibility(View.GONE);
 				tvRootDigitalkey.setVisibility(View.VISIBLE);
 				// if (iKey < 10) {
