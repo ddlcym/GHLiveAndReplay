@@ -767,7 +767,6 @@ public class MainActivity extends BaseActivity {
 					mhandler.removeMessages(Class_Constant.MESSAGE_CHANNELIST_SELECT_DIGITAL);
 					selectChannelListDigital();
 					tvRootDigitalkey.setVisibility(View.INVISIBLE);
-					chListView.setFocusable(true);
 				}else{
 					mhandler.sendEmptyMessage(Class_Constant.MESSAGE_HANDLER_DIGITALKEY);
 				}
@@ -1216,7 +1215,7 @@ public class MainActivity extends BaseActivity {
 		}
 		iKeyNum = 0;
 		iKey = 0;
-		
+		chListView.setFocusable(true);
 	}
 
 	/* timer for channel listview hide */
