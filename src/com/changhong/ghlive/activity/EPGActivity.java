@@ -147,7 +147,11 @@ public class EPGActivity extends BaseActivity {
 				break;
 			case MSG_SHOW_WEEKDAY:
 
-				curDay = CacheData.getDayMonths().get(0);
+				List<String> dayMonths=CacheData.getDayMonths();
+				if(null==dayMonths||dayMonths.size()==0){
+					return;
+				}
+				curDay = dayMonths.get(0);
 				CacheData.setReplayCurDay(curDay);
 				EventlitItemindex = 0;
 				showWeekDay();
