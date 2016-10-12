@@ -12,8 +12,9 @@ import java.util.GregorianCalendar;
 public class ProcessData {
 
 	private MD5Encrypt MD5;
-	private static final String serverAdress = "http://ott.yun.gehua.net.cn:8080/";
-	private static final String serverInspurAdress = "http://hd.ott.yun.gehua.net.cn/";
+//	private static final String serverAdress = "http://ott.yun.gehua.net.cn:8080/";
+	private static final String serverAdress = "http://api.ott.yun.gehua.net.cn:8080/";
+	
 	private String MD5Key = "aidufei";
 	private String conStr = "&authKey=";
 	
@@ -96,11 +97,10 @@ public class ProcessData {
 //				+ chListChannelVersion + "&resolution=" + chListResolution + "&terminalType=" + chListTerminalType;
 		
 		
-		String rawPlainStr = "http://hd.ott.yun.gehua.net.cn/getChannels?" + "version=" + chListVersion + "&channelVersion="
+//		String rawPlainStr = "http://hd.ott.yun.gehua.net.cn/getChannels?" + "version=" + chListVersion + "&channelVersion="
+//				+ chListChannelVersion + "&resolution=" + chListResolution + "&terminalType=" + chListTerminalType;
+		String rawPlainStr = serverAdress+"msis/getChannels?" + "version=" + chListVersion + "&channelVersion="
 				+ chListChannelVersion + "&resolution=" + chListResolution + "&terminalType=" + chListTerminalType;
-		
-		/*String rawPlainStr = "http://api.ott.yun.gehua.net.cn:8080/msis/getChannels?" + "version=" + chListVersion + "&channelVersion="
-				+ chListChannelVersion + "&resolution=" + chListResolution + "&terminalType=" + chListTerminalType;*/
 		
 		return strGETReturn(rawPlainStr);
 	}
