@@ -852,7 +852,14 @@ public class MainActivity extends BaseActivity {
 			// ban.show();
 			// }
 			if (livePlayBanner != null && !(livePlayBanner.isToastShow())) {
-				livePlayBanner.show();
+				//livePlayBanner.show();
+				//修复直播下按音量键 ，之后再按信息键  ，出来的是音量条
+				Message msg = new Message();
+				msg.what = Class_Constant.TOAST_BANNER_PROGRAM_PASS;
+				Bundle bundle = new Bundle();
+				bundle.putInt("type", 0);
+				msg.setData(bundle);
+				mhandler.sendMessage(msg);
 				if (liveBannerInfoRunnable != null) {
 					mhandler.postDelayed(liveBannerInfoRunnable, 5000);
 				}
