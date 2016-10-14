@@ -50,7 +50,7 @@ public class LivePlayBannerDialog extends Dialog {
 	
 	
 	private int postion;
-	private int timeLength;
+	private int timeLength=0;
 	
 	private int mtype;
 	private int mvolumn;
@@ -108,6 +108,8 @@ public class LivePlayBannerDialog extends Dialog {
 	private class MyTimerTask extends TimerTask{
 		@Override
 		public void run() {
+			if(null==programListInfo||programListInfo.size()<3)
+				return;
 			int position=getPosition();
 			if(position>=timeLength){
 				//通知更新直播banner条
@@ -152,6 +154,10 @@ public class LivePlayBannerDialog extends Dialog {
 		// TODO Auto-generated method stub
 		super.show();
 		initData();
+		
+		if(null==programListInfo||programListInfo.size()<2){
+			return;
+		}
 		if(null==mTimer){
 			mTimer= new Timer();
 		}
@@ -196,15 +202,17 @@ public class LivePlayBannerDialog extends Dialog {
 		String currentProgramEndTime = null;
 		String nextProgramBeginTime = null;
 		String nextProgramEndTime = null;
+		channel_name.setText(channelInfo.getChannelName());
+		channel_number.setText(channelInfo.getChannelNumber());
+		
 		if (programListInfo != null && programListInfo.size() == 3) {
 			currentProgramBginTime = Utils.hourAndMinute(programListInfo.get(1).getBeginTime());
 			currentProgramEndTime = Utils.hourAndMinute(programListInfo.get(1).getEndTime());
 			nextProgramBeginTime = Utils.hourAndMinute(programListInfo.get(2).getBeginTime());
 			nextProgramEndTime = Utils.hourAndMinute(programListInfo.get(2).getEndTime());
 			timeLength=(int)(programListInfo.get(1).getEndTime().getTime()-programListInfo.get(1).getBeginTime().getTime());
+			
 		}
-		channel_name.setText(channelInfo.getChannelName());
-		channel_number.setText(channelInfo.getChannelNumber());
 		programPlayBar.setMax(timeLength);
 		// currentProgramName.setText(programListInfo.get(1).getEventName());
 		// nextProgramName.setText(programListInfo.get(2).getEventName());
@@ -217,10 +225,10 @@ public class LivePlayBannerDialog extends Dialog {
 			curprotime.setText(currentProgramBginTime + "-" + currentProgramEndTime);
 			nextProgramName.setText(programListInfo.get(2).getEventName());
 			nextprotime.setText(nextProgramBeginTime + "-" + nextProgramEndTime);
-		} /*else {
-			currentProgramName.setText("正在播放：");
-			nextProgramName.setText("即将播放：");
-		}*/
+		} else {
+			currentProgramName.setText("暂无节目信息");
+			nextProgramName.setText("暂无节目信息");
+		}
 		
 		if(mvolumn == 0){
 			volumnicon.setBackgroundResource(R.drawable.ismuteicon);

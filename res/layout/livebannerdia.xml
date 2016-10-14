@@ -129,6 +129,7 @@
                 android:focusableInTouchMode="true"
                 android:singleLine="true"
                 android:layout_toRightOf="@id/livecurprotime"
+                android:text="暂无节目信息"
                 android:textColor="@color/live_cur_program"
                 android:textSize="30sp" />
                
@@ -194,6 +195,7 @@
 	                android:singleLine="true"
 	                android:layout_toRightOf="@id/livenextprotime"
 	                android:textColor="@color/live_next_program"
+	                android:text="暂无节目信息"
 	                android:textSize="30sp" />
 	            
                <TextView

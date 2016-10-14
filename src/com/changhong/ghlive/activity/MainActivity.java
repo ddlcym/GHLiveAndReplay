@@ -167,8 +167,10 @@ public class MainActivity extends BaseActivity {
 				}
 				if (curChannelPrograms.size() > 0) {
 					curProgram = curChannelPrograms.get(1);
-					showToastBanner(CacheData.getCurChannel(),curtype);
+				}else{
+					curProgram=null;
 				}
+				showToastBanner(CacheData.getCurChannel(),curtype);
 				break;
 
 			case Class_Constant.MESSAGE_HANDLER_DIGITALKEY: 
