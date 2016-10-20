@@ -39,7 +39,7 @@ public class ProcessData {
 	private String chPgmListVersion = "V001";
 	private String chPgmListResolution = "1280*768";
 	private String chPgmListChannelResourceCode = "8061"; // not known
-	private String chPgmListTerminalType = "3";
+	private String chPgmListTerminalType = "1";
 
 	/*********************************************************************************/
 	/* pgmInfo:节目信息 : param of must */
@@ -59,7 +59,7 @@ public class ProcessData {
 	private String playUrlResolution = "1280*768";
 	private String liveUrlPlayType = "2";
 	private String replayUrlPlayType = "3";
-	private String playUrlTerminalType = "4";
+	private String playUrlTerminalType = "7";
 	/*********************************************************************************/
 	/* livePgmInfo：直播节目详情 param of must */
 	private String livePgmInfoPendingStr = "msis/getPorgramInfo?";
@@ -86,7 +86,7 @@ public class ProcessData {
 	 * 获取频道分类信息
 	 */
 	public String getTypes(){
-		String catalogURL=serverAdress+"msis/getPram?version=V001&PramName=ChannelType&terminalType=3";
+		String catalogURL=serverAdress+"msis/getPram?version=V001&PramName=ChannelType&terminalType=1";
 				
 		return strGETReturn(catalogURL);
 	}
@@ -160,7 +160,7 @@ public class ProcessData {
 	}
 	
 	public String getLiveBackPlayUrl(ChannelInfo channel,int delay){
-		String rawPlainStr="http://ott.yun.gehua.net.cn:8080/msis/getPlayURL?version=V001&userCode=15914018212&userName=15914018212&resourceCode="+channel.getResourceCode()+"&resolution=1280*720&terminalType=4&playType=4&delay="+delay;
+		String rawPlainStr="http://ott.yun.gehua.net.cn:8080/msis/getPlayURL?version=V001&userCode=15914018212&userName=15914018212&resourceCode="+channel.getResourceCode()+"&resolution=1280*720&terminalType=7&playType=4&delay="+delay;
 				
 		return strPOSTReturn(rawPlainStr, "msis/getPlayURL");
 	}
@@ -201,7 +201,7 @@ public class ProcessData {
 	//获取用户频道信息
 	public String getChannelsInfo(){
 		String requestURL=null;
-		requestURL=serverAdress+getChannelsInfo+"version="+version1+"&userCode="+userCode+"&terminalType="+3;
+		requestURL=serverAdress+getChannelsInfo+"version="+version1+"&userCode="+userCode+"&terminalType="+1;
 		
 		return strGETReturn(requestURL);
 	}
