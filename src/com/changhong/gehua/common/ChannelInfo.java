@@ -1,6 +1,7 @@
 package com.changhong.gehua.common;
 
 import java.io.Serializable;
+import java.util.List;
 
 /*Channel Infomation*/
 /*Author: OscarChang*/
@@ -25,7 +26,7 @@ public class ChannelInfo implements Serializable{
 	private String assetID;
 	private String providerID;
 	private PosterInfo posterInfo;
-	private String channelTypes;
+	private List<String> channelTypes;
 	private String channelNumber;
 	private String frequency;
 	private String symbolRate;
@@ -205,11 +206,11 @@ public class ChannelInfo implements Serializable{
 		this.posterInfo = posterInfo;
 	}
 
-	public String getChannelTypes() {
+	public List<String> getChannelTypes() {
 		return channelTypes;
 	}
 
-	public void setChannelTypes(String channelTypes) {
+	public void setChannelTypes(List<String> channelTypes) {
 		this.channelTypes = channelTypes;
 	}
 

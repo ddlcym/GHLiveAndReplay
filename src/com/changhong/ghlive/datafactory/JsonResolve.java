@@ -62,7 +62,7 @@ public class JsonResolve {
 		channel.setProviderID(getJsonObjectString(jsonObject, "providerID"));
 		// channel.setPosterInfo(getJsonObjectString(jsonObject,
 		// "posterInfo"));//待完成
-		channel.setChannelTypes(getJsonObjectString(jsonObject, "channelTypes"));
+		channel.setChannelTypes(splitTypes(getJsonObjectString(jsonObject, "channelTypes")));
 		channel.setChannelNumber(getJsonObjectString(jsonObject, "channelNumber"));
 		// channel.setFrequency(getJsonObjectString(jsonObject, "frequency"));
 		// channel.setServiceid(getJsonObjectString(jsonObject, "serviceid"));
@@ -397,5 +397,14 @@ public class JsonResolve {
 		flag=date.after(program.getEndTime());
 		
 		return flag;
+	}
+	
+	public List<String> splitTypes(String types){
+		List<String> list=new ArrayList<String>();
+		String[] typeStr=types.split(",");
+		for(int i=0;i<typeStr.length;i++){
+			list.add(typeStr[i]);
+		}
+		return list;
 	}
 }
