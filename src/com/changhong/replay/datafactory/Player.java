@@ -44,7 +44,7 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 	private Timer mTimer;
 	private static boolean playingFlag = false;
 	private static Handler parentHandler;
-	public static boolean handlerFlag = true;
+	private static boolean handlerFlag = true;
 	public static boolean keyFlag = false;
 
 	private static TextView videoCurrentTime;
@@ -150,7 +150,14 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 					 .sendEmptyMessage(Class_Constant.SHIFT_NEXT_PROGRAM);
 				}
 			}
-			
+			//Log.i("debug", "sendEmptyMessage:RE_NEXT_PROGRAM：arg1："+arg1+"getMax"+arg0.getMax());
+			if (!liveFlag && arg1 > (arg0.getMax()-1000)) {
+				if (handlerFlag) {
+					handlerFlag = false;
+					Log.i("debug", "sendEmptyMessage:RE_NEXT_PROGRAM");
+					parentHandler.sendEmptyMessage(Class_Constant.RE_NEXT_PROGRAM);
+				}
+			}
 		}
 
 		@Override
@@ -213,15 +220,16 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 				keyFlag = true;
 				desPositon = Player.skbProgress.getProgress() + 30000;
 
-				if (desPositon >= duration) {
+				/*if (desPositon >= duration) {
 					if (handlerFlag) {
 						handlerFlag = false;
-						// parentHandler
-						// .sendEmptyMessage(Class_Constant.RE_NEXT_PROGRAM);
+						Log.i("debug", "FAST_FORWARD sendEmptyMessage:RE_NEXT_PROGRAM");
+						 parentHandler
+						 .sendEmptyMessage(Class_Constant.RE_NEXT_PROGRAM);
 
 					}
 					desPositon = duration;
-				}
+				}*/
 				Player.skbProgress.setProgress(desPositon);
 				break;
 			case Class_Constant.RE_FAST_REVERSE_DOWN:
@@ -483,7 +491,14 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 	@Override
 	public void onCompletion(MediaPlayer arg0) {
 		// TODO Auto-generated method stub
-		parentHandler.sendEmptyMessage(Class_Constant.RE_NEXT_PROGRAM);
+//		if (handlerFlag) {
+//			handlerFlag = false;
+//			Log.i("debug", "onCompletion sendEmptyMessage:RE_NEXT_PROGRAM");
+//			Log.i("debug", "MediaPlayer" + arg0);
+//			parentHandler.sendEmptyMessage(Class_Constant.RE_NEXT_PROGRAM);
+//		}
+		//Log.i("xb", "parentHandler sendEmptyMessage ---->");
+		//parentHandler.sendEmptyMessage(Class_Constant.RE_NEXT_PROGRAM);
 	}
 
 	// 播放视频准备好播放后调用此方法
