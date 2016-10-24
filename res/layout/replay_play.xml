@@ -8,7 +8,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
     </SurfaceView>
-
+    
+ 	<ImageView
+        android:id="@+id/time_replay_icon"
+        android:layout_width="100dip"
+        android:layout_height="60dip"
+        android:layout_marginLeft="1150dip"
+        android:layout_marginTop="15dip"
+        android:focusable="false"
+        android:background="@drawable/replay_icon"
+        android:visibility="visible" />
+ 	
     <ImageView
         android:id="@+id/PF_back"
         android:layout_width="fill_parent"
