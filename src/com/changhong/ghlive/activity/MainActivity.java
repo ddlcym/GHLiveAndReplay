@@ -257,9 +257,13 @@ public class MainActivity extends BaseActivity {
 		startHttpSer();
 		whetherMute = Boolean.valueOf(CommonMethod.getMuteState(MyApp.getContext()));
 		curChannelNO = String.valueOf(CommonMethod.getChannelLastTime(MyApp.getContext()));
-		// Log.i("zyt", "current volume state is " + whetherMute);
-		Log.i("zyt", "current channel number is " + curChannelNO);
 		
+		//当启动界面的intent里带有需要播放频道的参数时，播放指定频道
+		String startChannel=getIntent().getStringExtra("channel");
+		if(StringUtils.hasLength(startChannel)){
+			curChannelNO=startChannel;
+		}
+		Log.i("zyt", "current channel number is " + curChannelNO);
 	}
 
 	@Override
