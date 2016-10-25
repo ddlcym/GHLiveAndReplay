@@ -656,12 +656,12 @@ public class MainActivity extends BaseActivity {
 					curListIndex = mCurChannels.indexOf(CacheData.getCurChannel());
 
 					// int pageUpIndex = curListIndex + 8;
-					int pageUpIndex = chListView.getSelectedItemPosition() + 8;
+					int pageUpIndex = chListView.getSelectedItemPosition() + 7;
 					if (pageUpIndex > (mCurChannels.size() - 1)) {
 						pageUpIndex = pageUpIndex - (mCurChannels.size());
 					}
-					if ((pageUpIndex > (mCurChannels.size() - 8)) && (pageUpIndex <= (mCurChannels.size() - 1))) {
-						pageUpIndex = mCurChannels.size() - 8;
+					if ((pageUpIndex > (mCurChannels.size() - 7)) && (pageUpIndex <= (mCurChannels.size() - 1))) {
+						pageUpIndex = mCurChannels.size() - 7;
 					}
 					if ((pageUpIndex > 0) && (pageUpIndex < 7)) {
 						pageUpIndex = 0;
@@ -714,12 +714,12 @@ public class MainActivity extends BaseActivity {
 				if (chListView.hasFocus()) {
 					curListIndex = mCurChannels.indexOf(CacheData.getCurChannel());
 
-					int pageDownIndex = chListView.getSelectedItemPosition() - 8;
+					int pageDownIndex = chListView.getSelectedItemPosition() - 7;
 					if (pageDownIndex < 0) {
 						pageDownIndex = mCurChannels.size() + pageDownIndex;
 					}
-					if ((pageDownIndex > (mCurChannels.size() - 8)) && (pageDownIndex <= (mCurChannels.size() - 1))) {
-						pageDownIndex = mCurChannels.size() - 8;
+					if ((pageDownIndex > (mCurChannels.size() - 7)) && (pageDownIndex <= (mCurChannels.size() - 1))) {
+						pageDownIndex = mCurChannels.size() - 7;
 					}
 					if ((pageDownIndex > 0) && (pageDownIndex < 7)) {
 						pageDownIndex = 0;
