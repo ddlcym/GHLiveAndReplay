@@ -320,7 +320,9 @@ public class ReplayPlayActivity extends BaseActivity {
 
 	private void playVideo(ChannelInfo channel, ProgramInfo program) {
 		ProgramInfo nextmprogram;
-		
+		Log.i("debug", "set***playingFlag false");
+		Player.setLiveFlag(false);
+		Player.setPlayingFlag(false);
 		
 		playbtn.setMyBG(PlayButton.Pause);
 		
@@ -428,6 +430,10 @@ public class ReplayPlayActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
+			Log.i("debug", "isPlayingFlag"+Player.isPlayingFlag());
+			if (!Player.isPlayingFlag()) {
+				return true;
+			}
 			Player.handleProgress.sendEmptyMessage(Class_Constant.RE_FAST_FORWARD_DOWN);
 			seekbar.setVisibility(View.VISIBLE);
 			play_button_con.setVisibility(View.VISIBLE);

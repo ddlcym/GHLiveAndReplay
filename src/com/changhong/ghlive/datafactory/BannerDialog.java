@@ -79,7 +79,8 @@ public class BannerDialog extends Dialog {
 	private ChannelInfo curChannel;
 	private LinearLayout timeShiftInfo;
 	private PlayButton palyButton;
-	private ImageView muteIconImage,timeShiftIcon;
+	private ImageView timeShiftIcon;
+	//private ImageView muteIconImage;
 	private HttpService mHttpService;
 	private List<ProgramInfo> list;
 
@@ -367,14 +368,14 @@ public class BannerDialog extends Dialog {
 		palyButton = (PlayButton) findViewById(R.id.play_btn);
 		//palyButton.setMyBG(PlayButton.Pause);
 		palyButton.setMyBG(PlayButton.Play);
-		muteIconImage = (ImageView) findViewById(R.id.mute_icon);
+		//muteIconImage = (ImageView) findViewById(R.id.mute_icon);
 		whetherMute = Boolean.valueOf(CommonMethod.getMuteState(MyApp
 				.getContext()));
-		if (whetherMute) {
-			muteIconImage.setVisibility(View.VISIBLE);
-		} else {
-			muteIconImage.setVisibility(View.GONE);
-		}
+//		if (whetherMute) {
+//			muteIconImage.setVisibility(View.VISIBLE);
+//		} else {
+//			muteIconImage.setVisibility(View.GONE);
+//		}
 		timeShiftInfo = (LinearLayout) findViewById(R.id.id_dtv_banner);
 		timeShiftIcon = (ImageView) findViewById(R.id.time_shift_icon);
 		// android.view.ViewGroup.LayoutParams ps =
@@ -625,17 +626,17 @@ public class BannerDialog extends Dialog {
 			whetherMute = !whetherMute;
 			CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
 			// Log.i("zyt", "keycode mute is " + whetherMute);
-			if (muteIconImage.isShown()) {
+			/*if (muteIconImage.isShown()) {
 				muteIconImage.setVisibility(View.GONE);
 			} else {
 				muteIconImage.setVisibility(View.VISIBLE);
-			}
+			}*/
 			break;
 		case Class_Constant.KEYCODE_VOICE_UP:
 		case Class_Constant.KEYCODE_VOICE_DOWN:
-			if (muteIconImage.isShown()) {
+			/*if (muteIconImage.isShown()) {
 				muteIconImage.setVisibility(View.GONE);
-			}
+			}*/
 			// audioMgr.setStreamMute(AudioManager.STREAM_MUSIC, true);
 			whetherMute = false;
 			CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
