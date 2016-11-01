@@ -258,12 +258,7 @@ public class MainActivity extends BaseActivity {
 		whetherMute = Boolean.valueOf(CommonMethod.getMuteState(MyApp.getContext()));
 		curChannelNO = String.valueOf(CommonMethod.getChannelLastTime(MyApp.getContext()));
 		
-		//当启动界面的intent里带有需要播放频道的参数时，播放指定频道
-		String startChannel=getIntent().getStringExtra("channel");
-		if(StringUtils.hasLength(startChannel)){
-			curChannelNO=startChannel;
-		}
-		Log.i("zyt", "current channel number is " + curChannelNO);
+		
 	}
 
 	@Override
@@ -330,6 +325,17 @@ public class MainActivity extends BaseActivity {
 		} else {
 			muteIconImage.setVisibility(View.GONE);
 		}*/
+		
+		//当启动界面的intent里带有需要播放频道的参数时，播放指定频道
+				Intent intent=getIntent();
+				int startChannel=intent.getIntExtra("serviceId", -1);
+				if(startChannel!=-1){
+					curChannelNO=startChannel+"";
+					CommonMethod.saveChannelLastTime(Integer.parseInt(curChannelNO), MainActivity.this);
+				}
+				
+				
+				Log.i("zyt", "current channel number is " + curChannelNO);
 	}
 
 	private void startHttpSer() {
@@ -438,7 +444,7 @@ public class MainActivity extends BaseActivity {
 						// 相应成功
 //						Log.i("test", "MainActivity***" + arg0);
 						channelsAll = HandleLiveData.getInstance().dealChannelJson(arg0);
-						Log.i("mmmm", "getChannelList-chLstAdapter"+channelsAll.size());
+						Log.i("mmmm", "getChannelList-chLstAdapter"+channelsAll.size()+"curchannelNo"+curChannelNO);
 						// first set adapter
 						curType = 0;
 						getAllTVtype();
