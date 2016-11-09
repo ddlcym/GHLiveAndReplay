@@ -66,7 +66,9 @@ public class ReplayPlayActivity extends BaseActivity {
 	//add 
 	AudioManager mAudioManager;
 	int curvolumn;
-	
+	private ImageView revolumnback;
+	private int[] vols = new int[]{R.drawable.rea,R.drawable.reb,R.drawable.rec,R.drawable.red,R.drawable.ree,R.drawable.ref,R.drawable.reg,
+			R.drawable.reh,R.drawable.rei,R.drawable.rej,R.drawable.rek,R.drawable.rel,R.drawable.rem,R.drawable.ren,R.drawable.reo,R.drawable.rep};
 
 	private Handler replayHandler = new Handler() {
 		
@@ -189,6 +191,9 @@ public class ReplayPlayActivity extends BaseActivity {
 						replayHandler.removeCallbacks(progressBarRunnable);
 					}
 					replayHandler.postDelayed(progressBarRunnable, 5000);
+					break;
+					
+				
 			}
 		}
 	};
@@ -229,8 +234,9 @@ public class ReplayPlayActivity extends BaseActivity {
 		
 		playbtn = (PlayButton) findViewById(R.id.replay_play_btn);
 		
-		
 		videoTimeLength = (TextView) this.findViewById(R.id.video_timelength);
+		
+		revolumnback = (ImageView) findViewById(R.id.replay_volumn_background);
 		
 		seekbar.getSeekBar().setClickable(false);
 		seekbar.getSeekBar().setFocusable(false);
@@ -314,7 +320,10 @@ public class ReplayPlayActivity extends BaseActivity {
 		playVideo(channel, mprogram);
 		
 		curvolumn =  mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-		Log.i("test", "enter replay curvolumn is"+curvolumn);
+		Log.i("volumn", "enter replay curvolumn is"+curvolumn);
+		if (curvolumn == 0) {
+			revolumnback.setBackgroundResource(vols[curvolumn]);
+		}
 		
 	}
 
@@ -428,6 +437,58 @@ public class ReplayPlayActivity extends BaseActivity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
+		if (keyCode == Class_Constant.KEYCODE_VOICE_UP) {
+			mAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0);
+			curvolumn = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+			Log.i("volumn", "KEYCODE_VOICE_UP curvolumn is"+curvolumn);
+			revolumnback.setBackgroundResource(vols[curvolumn]);
+			revolumnback.setVisibility(View.VISIBLE);
+			if (curvolumn != 0) {
+				replayHandler.removeCallbacks(VolumnbackRunnable);
+				replayHandler.postDelayed(VolumnbackRunnable, 5000);
+			}else {
+				replayHandler.removeCallbacks(VolumnbackRunnable);
+			}
+			return true;
+		}
+		if (keyCode == Class_Constant.KEYCODE_VOICE_DOWN) {
+			mAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0);
+			curvolumn = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+			Log.i("volumn", "KEYCODE_VOICE_DOWN curvolumn is"+curvolumn);
+			revolumnback.setBackgroundResource(vols[curvolumn]);
+			revolumnback.setVisibility(View.VISIBLE);
+			if (curvolumn != 0) {
+				replayHandler.removeCallbacks(VolumnbackRunnable);
+				replayHandler.postDelayed(VolumnbackRunnable, 5000);
+			}else {
+				replayHandler.removeCallbacks(VolumnbackRunnable);
+			}
+			return true;
+		}
+		
+		if (keyCode == Class_Constant.KEYCODE_MUTE){
+			curvolumn = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+			if (curvolumn == 0) {
+				mAudioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
+				curvolumn = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+				Log.i("volumn", "huifu");
+				revolumnback.setBackgroundResource(vols[curvolumn]);
+				revolumnback.setVisibility(View.VISIBLE);
+				replayHandler.removeCallbacks(VolumnbackRunnable);
+				replayHandler.postDelayed(VolumnbackRunnable, 5000);
+			}else {
+				mAudioManager.setStreamMute(AudioManager.STREAM_MUSIC, true);
+				curvolumn = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+				Log.i("volumn", "set mute");
+				revolumnback.setBackgroundResource(vols[curvolumn]);
+				revolumnback.setVisibility(View.VISIBLE);
+				if (VolumnbackRunnable != null) {
+					replayHandler.removeCallbacks(VolumnbackRunnable);
+				}
+			}
+			return true;
+		}
+		
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
 			Log.i("debug", "isPlayingFlag"+Player.isPlayingFlag());
@@ -485,28 +546,33 @@ public class ReplayPlayActivity extends BaseActivity {
 			}
 
 			break;
-		case Class_Constant.KEYCODE_MUTE:
+		/*case Class_Constant.KEYCODE_MUTE:
 			Log.i("test", "KEYCODE_MUTE is coming");
 			curvolumn =  mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 			Log.i("test", "KEYCODE_MUTE later curvolumn is"+curvolumn);
-			/*if (curvolumn == 0) {
+			if (curvolumn == 0) {
 				mAudioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
 				muteIconImage.setVisibility(View.GONE);
 			}else {
 				mAudioManager.setStreamMute(AudioManager.STREAM_MUSIC, true);
 				muteIconImage.setVisibility(View.VISIBLE);
 			}
-			return true;*/
-			break;
-		case Class_Constant.KEYCODE_VOICE_UP:
+			return true;
+			break;*/
+		/*case Class_Constant.KEYCODE_VOICE_UP:
+			mAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0);
+			curvolumn = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+			revolumnback.setBackgroundResource(vols[curvolumn]);
+			replayHandler.sendEmptyMessage(Class_Constant.VOLUMN_KEY_END);
+			return true;
+			
 		case Class_Constant.KEYCODE_VOICE_DOWN:
-			//if (muteIconImage.isShown()) {
-			//	muteIconImage.setVisibility(View.GONE);
-			//}
-			// audioMgr.setStreamMute(AudioManager.STREAM_MUSIC, true);
-			//whetherMute = false;
-			//CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
-			break;
+			mAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0);
+			curvolumn = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+			revolumnback.setBackgroundResource(vols[curvolumn]);
+			replayHandler.sendEmptyMessage(Class_Constant.VOLUMN_KEY_END);
+			return true;*/
+			
 		case Class_Constant.KEYCODE_MENU_KEY:
 			// Log.i("zyt", "onkeydown menukey is pressed " + keyCode);
 			CommonMethod.startSettingPage(MyApp.getContext());
@@ -577,7 +643,13 @@ public class ReplayPlayActivity extends BaseActivity {
 			
 		}
 	};
-
+	
+	Runnable VolumnbackRunnable = new Runnable() {
+		@Override
+		public void run() {
+			revolumnback.setVisibility(View.INVISIBLE);
+		}
+	};
 	@Override
 	protected void onPause() {
 		// TODO Auto-generated method stub

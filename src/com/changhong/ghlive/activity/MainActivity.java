@@ -788,7 +788,7 @@ public class MainActivity extends BaseActivity {
 			} else {
 				//CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
 				showDialogBanner(curChannelNO);
-				//muteIconImage.setVisibility(View.GONE);
+				muteIconImage.setVisibility(View.GONE);
 			}
 			break;
 		case Class_Constant.KEYCODE_UP_ARROW_KEY:
@@ -1110,7 +1110,7 @@ public class MainActivity extends BaseActivity {
 			programBannerDialog.cancel();
 		}
 		programBannerDialog = new BannerDialog(this, curChannel, curChannelPrograms, mhandler, surfaceView,
-				mHttpService);
+				mHttpService ,mAudioManager);
 		programBannerDialog.show();
 	}
 

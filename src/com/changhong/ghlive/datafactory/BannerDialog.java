@@ -8,6 +8,7 @@ import java.util.List;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.media.AudioManager;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -101,6 +102,13 @@ public class BannerDialog extends Dialog {
 	private static final int PROGRAM_LIST=1100;
 	private static final int NEXT_PROGRAM=1101;
 	private static final int NOTHING=1102;
+	
+	AudioManager mAudioManager;
+	int curvolumn;
+	private ImageView revolumnback;
+	private int[] vols = new int[]{R.drawable.rea,R.drawable.reb,R.drawable.rec,R.drawable.red,R.drawable.ree,R.drawable.ref,R.drawable.reg,
+			R.drawable.reh,R.drawable.rei,R.drawable.rej,R.drawable.rek,R.drawable.rel,R.drawable.rem,R.drawable.ren,R.drawable.reo,R.drawable.rep};
+
 	
 	private Handler mHandler = new Handler(){
 
@@ -298,7 +306,7 @@ public class BannerDialog extends Dialog {
 	};
 	public BannerDialog(Context context, ChannelInfo outterChannelInfo,
 			List<ProgramInfo> outterListProgramInfo, Handler outterHandler,
-			SurfaceView surView, HttpService outterHttpService) {
+			SurfaceView surView, HttpService outterHttpService, AudioManager audioManager) {
 		super(context, R.style.Translucent_NoTitle);
 		setContentView(R.layout.bannernew);
 
@@ -307,6 +315,7 @@ public class BannerDialog extends Dialog {
 		programListInfo = outterListProgramInfo;
 		parentHandler = outterHandler;
 		mHttpService = outterHttpService;
+		mAudioManager = audioManager;
 		whetherMute = false;
 		this.surView = surView;
 
@@ -378,6 +387,8 @@ public class BannerDialog extends Dialog {
 //		}
 		timeShiftInfo = (LinearLayout) findViewById(R.id.id_dtv_banner);
 		timeShiftIcon = (ImageView) findViewById(R.id.time_shift_icon);
+		
+		revolumnback = (ImageView)findViewById(R.id.shift_volumn_background);
 		// android.view.ViewGroup.LayoutParams ps =
 		// timeShiftIcon.getLayoutParams();
 		// ps.height = 90;
@@ -433,6 +444,13 @@ public class BannerDialog extends Dialog {
 				}
 			}
 		});
+		
+		curvolumn =  mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+		Log.i("volumn", "enter shift curvolumn is"+curvolumn);
+		if (curvolumn == 0) {
+			revolumnback.setBackgroundResource(vols[curvolumn]);
+			revolumnback.setVisibility(View.VISIBLE);
+		}
 
 	}
 
@@ -503,7 +521,59 @@ public class BannerDialog extends Dialog {
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
+		
+		if (keyCode == Class_Constant.KEYCODE_VOICE_UP) {
+			mAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0);
+			curvolumn = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+			Log.i("volumn", "KEYCODE_VOICE_UP curvolumn is"+curvolumn);
+			revolumnback.setBackgroundResource(vols[curvolumn]);
+			revolumnback.setVisibility(View.VISIBLE);
+			if (curvolumn != 0) {
+				parentHandler.removeCallbacks(VolumnbackRunnable);
+				parentHandler.postDelayed(VolumnbackRunnable, 5000);
+			}else {
+				parentHandler.removeCallbacks(VolumnbackRunnable);
+			}
+			return true;
+		}
+		if (keyCode == Class_Constant.KEYCODE_VOICE_DOWN) {
+			mAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0);
+			curvolumn = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+			Log.i("volumn", "KEYCODE_VOICE_DOWN curvolumn is"+curvolumn);
+			revolumnback.setBackgroundResource(vols[curvolumn]);
+			revolumnback.setVisibility(View.VISIBLE);
+			if (curvolumn != 0) {
+				parentHandler.removeCallbacks(VolumnbackRunnable);
+				parentHandler.postDelayed(VolumnbackRunnable, 5000);
+			}else {
+				parentHandler.removeCallbacks(VolumnbackRunnable);
+			}
+			return true;
+		}
+		
+		if (keyCode == Class_Constant.KEYCODE_MUTE){
+			curvolumn = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+			if (curvolumn == 0) {
+				mAudioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
+				curvolumn = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+				Log.i("volumn", "huifu");
+				revolumnback.setBackgroundResource(vols[curvolumn]);
+				revolumnback.setVisibility(View.VISIBLE);
+				parentHandler.removeCallbacks(VolumnbackRunnable);
+				parentHandler.postDelayed(VolumnbackRunnable, 5000);
+			}else {
+				mAudioManager.setStreamMute(AudioManager.STREAM_MUSIC, true);
+				curvolumn = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+				Log.i("volumn", "set mute");
+				revolumnback.setBackgroundResource(vols[curvolumn]);
+				revolumnback.setVisibility(View.VISIBLE);
+				if (VolumnbackRunnable != null) {
+					parentHandler.removeCallbacks(VolumnbackRunnable);
+				}
+			}
+			return true;
+		}
+		
 		switch (keyCode) {
 		/* 返回--取消 */
 		case KeyEvent.KEYCODE_BACK:
@@ -531,6 +601,7 @@ public class BannerDialog extends Dialog {
 							dismiss();
 							dialog.dismiss();
 							parentHandler.sendEmptyMessage(Class_Constant.BACK_TO_LIVE);
+							revolumnback.setVisibility(View.INVISIBLE);
 					}
 				});
 
@@ -620,27 +691,27 @@ public class BannerDialog extends Dialog {
 
 			break;
 
-		case Class_Constant.KEYCODE_MUTE:// mute
+		/*case Class_Constant.KEYCODE_MUTE:// mute
 			// int current =
 			// audioMgr.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
 			whetherMute = !whetherMute;
 			CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
 			// Log.i("zyt", "keycode mute is " + whetherMute);
-			/*if (muteIconImage.isShown()) {
+			if (muteIconImage.isShown()) {
 				muteIconImage.setVisibility(View.GONE);
 			} else {
 				muteIconImage.setVisibility(View.VISIBLE);
-			}*/
+			}
 			break;
 		case Class_Constant.KEYCODE_VOICE_UP:
 		case Class_Constant.KEYCODE_VOICE_DOWN:
-			/*if (muteIconImage.isShown()) {
+			if (muteIconImage.isShown()) {
 				muteIconImage.setVisibility(View.GONE);
-			}*/
+			}
 			// audioMgr.setStreamMute(AudioManager.STREAM_MUSIC, true);
 			whetherMute = false;
 			CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
-			break;
+			break;*/
 		case Class_Constant.KEYCODE_MENU_KEY:
 			// Log.i("zyt", "onkeydown menukey is pressed " + keyCode);
 			CommonMethod.startSettingPage(MyApp.getContext());
@@ -735,6 +806,13 @@ public class BannerDialog extends Dialog {
 		public void run() {
 			// TODO Auto-generated method stub
 			palyButton.setVisibility(View.INVISIBLE);
+		}
+	};
+	
+	Runnable VolumnbackRunnable = new Runnable() {
+		@Override
+		public void run() {
+			revolumnback.setVisibility(View.INVISIBLE);
 		}
 	};
 
