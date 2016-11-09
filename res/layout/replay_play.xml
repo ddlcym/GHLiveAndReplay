@@ -19,12 +19,22 @@
         android:background="@drawable/replay_icon"
         android:visibility="visible" />
  	
+ 	
+ 	<ImageView
+        android:id="@+id/replay_volumn_background"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitCenter"
+        android:layout_marginTop="15dip"/>
+ 	
+ 	
     <ImageView
         android:id="@+id/PF_back"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_gravity="center"
        />
+    
  	<LinearLayout
         android:id="@+id/replay_back_banner"
         android:layout_width="wrap_content"
