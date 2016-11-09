@@ -935,5 +935,10 @@
     <string name="MESSAGE_FREE_PREVIEWING">用户您好，此节目您尚未购买，正在免费预览中</string>
     <string name="notify_information">信息提示</string>
     <string name="return_button">返    回</string>
+	<string name="replay">电视回看</string>
 
+    <string name="cur_program">当前节目</string>
+    <string name="next_program">下一节目</string>
+   	<string name="replay_dialog_title">温馨提示</string>
+   	<string name="back_shiftlist">退出时移列表</string>
 </resources>

@@ -564,6 +564,9 @@ public class MainActivity extends BaseActivity {
 				mhandler.post(runnable);
 				return false;
 			}
+			if (livePlayBanner != null && livePlayBanner.isToastShow()) {
+				mhandler.post(liveBannerInfoRunnable);
+			}
 
 		}
 		if (keyCode == Class_Constant.KEYCODE_VOICE_UP || keyCode == Class_Constant.KEYCODE_VOICE_DOWN ) {
@@ -872,9 +875,9 @@ public class MainActivity extends BaseActivity {
 				bundle.putInt("type", 0);
 				msg.setData(bundle);
 				mhandler.sendMessage(msg);
-				if (liveBannerInfoRunnable != null) {
-					mhandler.postDelayed(liveBannerInfoRunnable, 5000);
-				}
+//				if (liveBannerInfoRunnable != null) {
+//					mhandler.postDelayed(liveBannerInfoRunnable, 5000);
+//				}
 			}
 			break;
 
