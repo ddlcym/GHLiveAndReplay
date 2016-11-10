@@ -13,7 +13,7 @@
         android:id="@+id/time_replay_icon"
         android:layout_width="100dip"
         android:layout_height="60dip"
-        android:layout_marginLeft="1150dip"
+        android:layout_marginLeft="1160dip"
         android:layout_marginTop="15dip"
         android:focusable="false"
         android:background="@drawable/replay_icon"
@@ -22,10 +22,11 @@
  	
  	<ImageView
         android:id="@+id/replay_volumn_background"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="300dip"
+        android:layout_height="60dip"
         android:scaleType="fitCenter"
-        android:layout_marginTop="15dip"/>
+        android:layout_marginLeft="965dip"
+        android:layout_marginTop="80dip"/>
  	
  	
     <ImageView

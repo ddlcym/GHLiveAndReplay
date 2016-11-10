@@ -17,16 +17,19 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_marginRight="10dip"
+        android:layout_marginRight="20dip"
         android:focusable="false"
         android:paddingTop="15dip"
         android:src="@drawable/timeshift_icon"
         android:visibility="visible" />
 	<ImageView
         android:id="@+id/shift_volumn_background"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="300dip"
+        android:layout_height="60dip"
         android:scaleType="fitCenter"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+       	android:layout_marginTop="90dip"
         android:layout_marginRight="10dip"
         android:layout_below="@id/time_shift_icon"/>
 	
