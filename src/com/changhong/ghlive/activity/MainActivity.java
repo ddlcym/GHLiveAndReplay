@@ -146,14 +146,16 @@ public class MainActivity extends BaseActivity {
 				curChannel = CacheData.getAllChannelMap().get(curChannelNO);
 				PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
 
-				// show toast banner
-				// showToastBanner();
 				break;
 			case Class_Constant.TOAST_BANNER_PROGRAM_PASS:
 				int curIndex = -1;
 				int curtype = msg.getData().getInt("type",0);
 				Log.i("live", "curtype = "+curtype);
 				curChannelPrograms = CacheData.getCurPrograms();
+				if(null==channelsAll||channelsAll.isEmpty()){
+					Toast.makeText(MainActivity.this, "获取节目信息失败!", Toast.LENGTH_SHORT).show();
+					return;
+				}
 				curChannel = channelsAll.get(curListIndex);
 				curIndex = mCurChannels.indexOf(curChannel);
 				if (curIndex >= 0 && chListView.isShown()) {
@@ -238,7 +240,7 @@ public class MainActivity extends BaseActivity {
 				showDialogBanner(curChannelNO);
 				break;
 			// next message
-			case Class_Constant.VOLUMN_KEY_END:
+			case Class_Constant.BANNER_DELAY_DISMISS:
 				if (liveBannerInfoRunnable != null) {
 					mhandler.removeCallbacks(liveBannerInfoRunnable);
 			    }
@@ -576,6 +578,7 @@ public class MainActivity extends BaseActivity {
 			bundle.putInt("type", 1);
 			msg.setData(bundle);
 			mhandler.sendMessage(msg);
+			mhandler.sendEmptyMessage(Class_Constant.BANNER_DELAY_DISMISS);//歌华要求与信息按键区别处理
 			return true;
 		}
 		
@@ -597,6 +600,7 @@ public class MainActivity extends BaseActivity {
 			bundle.putInt("type", 2);
 			msg.setData(bundle);
 			mhandler.sendMessage(msg);
+			mhandler.sendEmptyMessage(Class_Constant.BANNER_DELAY_DISMISS);
 			return true;
 		}
 		
@@ -605,6 +609,7 @@ public class MainActivity extends BaseActivity {
 	}
 
 	private boolean dealOnKeyDown(int keyCode) {
+		Log.i("mmmm", "dealOnKeyDown-keyCode:"+keyCode);
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
 			// if (ban != null && ban.isToastShow()) {
@@ -875,9 +880,6 @@ public class MainActivity extends BaseActivity {
 				bundle.putInt("type", 0);
 				msg.setData(bundle);
 				mhandler.sendMessage(msg);
-//				if (liveBannerInfoRunnable != null) {
-//					mhandler.postDelayed(liveBannerInfoRunnable, 5000);
-//				}
 			}
 			break;
 
@@ -1139,7 +1141,7 @@ public class MainActivity extends BaseActivity {
 		livePlayBanner.setData(channel, curChannelPrograms,volumn,type);
 		livePlayBanner.show();
 		
-		mhandler.sendEmptyMessage(Class_Constant.VOLUMN_KEY_END);
+		
 		
 		/*if (liveBannerInfoRunnable != null) {
 			mhandler.removeCallbacks(liveBannerInfoRunnable);

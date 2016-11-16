@@ -285,7 +285,7 @@ public class LivePlayBannerDialog extends Dialog {
 			banner_cur.setVisibility(View.GONE);
 			banner_next.setVisibility(View.GONE);
 			banner_volumn.setVisibility(View.VISIBLE);
-			parentHandler.sendEmptyMessage(Class_Constant.VOLUMN_KEY_END);
+			parentHandler.sendEmptyMessage(Class_Constant.BANNER_DELAY_DISMISS);
 			
 			return true;
 		}
@@ -305,7 +305,7 @@ public class LivePlayBannerDialog extends Dialog {
 			banner_cur.setVisibility(View.GONE);
 			banner_next.setVisibility(View.GONE);
 			banner_volumn.setVisibility(View.VISIBLE);
-			parentHandler.sendEmptyMessage(Class_Constant.VOLUMN_KEY_END);
+			parentHandler.sendEmptyMessage(Class_Constant.BANNER_DELAY_DISMISS);
 			
 			return true;
 		}
@@ -336,7 +336,7 @@ public class LivePlayBannerDialog extends Dialog {
 				banner_next.setVisibility(View.GONE);
 				banner_volumn.setVisibility(View.VISIBLE);
 			}
-			parentHandler.sendEmptyMessage(Class_Constant.VOLUMN_KEY_END);
+			parentHandler.sendEmptyMessage(Class_Constant.BANNER_DELAY_DISMISS);
 			
 			return true;
 		}

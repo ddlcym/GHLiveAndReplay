@@ -15,10 +15,11 @@
         android:id="@+id/livebanner_mute_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
+        android:layout_alignParentRight="true"
         android:layout_marginRight="50dip"
+        android:layout_marginTop="30dp"
         android:paddingTop="30dip"
-        android:src="@drawable/timeshift_entrance"
+        android:background="@drawable/timeshift_entrance"
         android:visibility="visible" /> 
 	
     <LinearLayout
