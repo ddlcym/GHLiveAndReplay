@@ -79,7 +79,12 @@ public class DayMonthAdapter extends BaseAdapter{
 		Log.i(TAG, daystring.substring(5));
 		viewHolder.day.setText(daystring.substring(5));
 		try {
-			week=Utils.DateToWeek(Utils.strToDate(day));
+			Date date=Utils.strToDate(day);
+			if(Utils.isToday(date)){
+				week="今天";
+			}else{
+				week=Utils.DateToWeek(date);
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

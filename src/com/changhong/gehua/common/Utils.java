@@ -87,14 +87,25 @@ public class Utils {
 	 * @return
 	 */
 	public static String DateToWeek(Date date) {
+		String str=null;
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		int dayIndex = calendar.get(Calendar.DAY_OF_WEEK);
 		if (dayIndex < 1 || dayIndex > WEEKDAYS) {
 			return null;
 		}
-		
-		return WEEK[dayIndex - 1];
+		str= WEEK[dayIndex - 1];
+		return str;
+	}
+	
+	public static boolean isToday(Date date){
+		int today=-1;
+		int curDay=-2;
+		Calendar calendar = Calendar.getInstance();
+		today=calendar.get(Calendar.DAY_OF_MONTH);
+		calendar.setTime(date);
+		curDay=calendar.get(Calendar.DAY_OF_MONTH);
+		return curDay==today;
 	}
 	
 	/* truncate date string length */
