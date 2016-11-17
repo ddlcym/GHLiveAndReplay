@@ -5,32 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.changhong.gehua.common.CacheData;
-import com.changhong.gehua.common.ChannelInfo;
-import com.changhong.gehua.common.ChannelType;
-import com.changhong.gehua.common.Class_Constant;
-import com.changhong.gehua.common.CommonMethod;
-import com.changhong.gehua.common.PlayVideo;
-import com.changhong.gehua.common.PosterInfo;
-import com.changhong.gehua.common.ProcessData;
-import com.changhong.gehua.common.ProgramInfo;
-import com.changhong.gehua.common.VolleyTool;
-import com.changhong.gehua.update.StringUtils;
-import com.changhong.gehua.widget.DigitalRoot;
-import com.changhong.ghlive.datafactory.Banner;
-import com.changhong.ghlive.datafactory.BannerDialog;
-import com.changhong.ghlive.datafactory.ChannelListAdapter;
-import com.changhong.ghlive.datafactory.HandleLiveData;
-import com.changhong.ghlive.datafactory.LivePlayBannerDialog;
-import com.changhong.ghlive.service.HttpService;
-import com.changhong.ghliveandreplay.R;
-import com.changhong.replay.datafactory.Player;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
@@ -54,6 +28,30 @@ import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.changhong.gehua.common.CacheData;
+import com.changhong.gehua.common.ChannelInfo;
+import com.changhong.gehua.common.ChannelType;
+import com.changhong.gehua.common.Class_Constant;
+import com.changhong.gehua.common.CommonMethod;
+import com.changhong.gehua.common.PlayVideo;
+import com.changhong.gehua.common.ProcessData;
+import com.changhong.gehua.common.ProgramInfo;
+import com.changhong.gehua.common.VolleyTool;
+import com.changhong.gehua.update.StringUtils;
+import com.changhong.gehua.widget.DigitalRoot;
+import com.changhong.ghlive.datafactory.BannerDialog;
+import com.changhong.ghlive.datafactory.ChannelListAdapter;
+import com.changhong.ghlive.datafactory.HandleLiveData;
+import com.changhong.ghlive.datafactory.LivePlayBannerDialog;
+import com.changhong.ghlive.service.HttpService;
+import com.changhong.ghliveandreplay.R;
+import com.changhong.replay.datafactory.Player;
 
 public class MainActivity extends BaseActivity {
 
