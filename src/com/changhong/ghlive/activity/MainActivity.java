@@ -171,6 +171,7 @@ public class MainActivity extends BaseActivity {
 					curProgram=null;
 				}
 				showToastBanner(CacheData.getCurChannel(),curtype);
+				mhandler.sendEmptyMessage(Class_Constant.BANNER_DELAY_DISMISS);
 				break;
 
 			case Class_Constant.MESSAGE_HANDLER_DIGITALKEY: 
@@ -183,7 +184,7 @@ public class MainActivity extends BaseActivity {
 			case Class_Constant.MESSAGE_SHOW_DIGITALKEY:
 				int channelId = msg.arg1;
 				tvRootDigitalKeyInvalid.setVisibility(View.GONE);
-				tvRootDigitalkey.setVisibility(View.VISIBLE);
+//				tvRootDigitalkey.setVisibility(View.VISIBLE);
 				int digitalText = 0;
 //				if (channelId < 10) {
 //					digitalText = "00" + channelId;
@@ -242,6 +243,8 @@ public class MainActivity extends BaseActivity {
 				if (liveBannerInfoRunnable != null) {
 					mhandler.removeCallbacks(liveBannerInfoRunnable);
 			    }
+				mhandler.removeMessages(Class_Constant.MESSAGE_DISAPPEAR_DIGITAL);
+				mhandler.sendEmptyMessageDelayed(Class_Constant.MESSAGE_DISAPPEAR_DIGITAL, 5000);//让数字键与banner同时出
 				mhandler.postDelayed(liveBannerInfoRunnable, 5000);
 				break;	
 				
@@ -616,8 +619,15 @@ public class MainActivity extends BaseActivity {
 			//当按了数字键后，立刻按右键，需要取消发送数字延迟发送的消息，不然会出现逻辑混乱的情况
 			mhandler.removeMessages(Class_Constant.MESSAGE_HANDLER_DIGITALKEY);
 			
-			if (livePlayBanner != null && livePlayBanner.isToastShow()) {
-				livePlayBanner.dismiss();
+			//要求频道列表和banner同显
+			if (livePlayBanner != null ){
+				if(livePlayBanner.isToastShow()) {
+					if (liveBannerInfoRunnable != null) {
+						mhandler.removeCallbacks(liveBannerInfoRunnable);
+				    }
+				}else{
+					livePlayBanner.show();
+				}
 			}
 
 			// 切换频道类型，更新频道列表的数据
@@ -663,8 +673,8 @@ public class MainActivity extends BaseActivity {
 		case Class_Constant.KEYCODE_CHANNEL_UP:
 
 			if (chListView.isShown()) {// 呼出频道列表，进行翻页+
-				if (chListView.hasFocus()) {
-					Log.i("zyt press page +", "page + is pressed");
+				if (chListView.isShown()) {
+					Log.i("mmmm", "page + is pressed");
 					curListIndex = mCurChannels.indexOf(CacheData.getCurChannel());
 
 					// int pageUpIndex = curListIndex + 8;
@@ -691,7 +701,7 @@ public class MainActivity extends BaseActivity {
 			} else {
 				curListIndex = channelsAll.indexOf(CacheData.getCurChannel());
 				if (curListIndex == (channelsAll.size() - 1)) {
-					chListView.setSelection(0);
+//					chListView.setSelection(0);
 					curListIndex = 0;
 				} else {
 					curListIndex = curListIndex + 1;
@@ -723,7 +733,7 @@ public class MainActivity extends BaseActivity {
 			break;
 		case Class_Constant.KEYCODE_CHANNEL_DOWN:
 			if (chListView.isShown()) {
-				if (chListView.hasFocus()) {
+				if (chListView.isShown()) {
 					curListIndex = mCurChannels.indexOf(CacheData.getCurChannel());
 
 					int pageDownIndex = chListView.getSelectedItemPosition() - 7;
@@ -789,9 +799,21 @@ public class MainActivity extends BaseActivity {
 					mhandler.sendEmptyMessage(Class_Constant.MESSAGE_HANDLER_DIGITALKEY);
 				}
 			} else {
-				//CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
-				showDialogBanner(curChannelNO);
-				muteIconImage.setVisibility(View.GONE);
+				if (chListView.isShown()) {
+					
+					
+					curListIndex = chListView.getSelectedItemPosition();
+					String channelNO = mCurChannels.get(curListIndex).getChannelNumber();
+					// Log.i(TAG, "myClickLis"+position);
+					playChannel(channelNO, true);
+					curChannelNO = channelNO;
+					mhandler.post(runnable);
+					
+				}else{
+					//CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
+					showDialogBanner(curChannelNO);
+					muteIconImage.setVisibility(View.GONE);
+				}
 			}
 			break;
 		case Class_Constant.KEYCODE_UP_ARROW_KEY:
@@ -800,6 +822,8 @@ public class MainActivity extends BaseActivity {
 				chListView.requestFocus();
 				if (0 == chListView.getSelectedItemPosition()) {
 					chListView.setSelection(chLstAdapter.getCount() - 1);
+				}else{
+					chListView.setSelection(chListView.getSelectedItemPosition() - 1);
 				}
 			} else {
 				// 播放之后的一个频道
@@ -828,6 +852,8 @@ public class MainActivity extends BaseActivity {
 				chListView.requestFocus();
 				if ((chLstAdapter.getCount() - 1) == chListView.getSelectedItemPosition()) {
 					chListView.setSelection(0);
+				}else{
+					chListView.setSelection(chListView.getSelectedItemPosition() + 1);
 				}
 			} else {
 				// 播放之前一个频道
@@ -1013,7 +1039,7 @@ public class MainActivity extends BaseActivity {
 				// } else {
 				tvRootDigitalkey.setData(iKey);
 				mhandler.removeMessages(Class_Constant.MESSAGE_DISAPPEAR_DIGITAL);
-				mhandler.sendEmptyMessageDelayed(Class_Constant.MESSAGE_DISAPPEAR_DIGITAL, 6000);
+				mhandler.sendEmptyMessageDelayed(Class_Constant.MESSAGE_DISAPPEAR_DIGITAL, 5000);
 				// }
 				if(chListView.isShown()){
 					mhandler.removeMessages(Class_Constant.MESSAGE_HANDLER_DIGITALKEY);
@@ -1114,7 +1140,12 @@ public class MainActivity extends BaseActivity {
 		programBannerDialog.show();
 	}
 
-	/* show live banner toast */
+	/* 
+	 * show live banner toast 
+	 * 
+	 * type:0为,显示banner;1为音量加减;2为静音
+	 * 
+	 * */
 	public void showToastBanner(ChannelInfo channel, int type) {
 
 		// if(ban!=null){
@@ -1138,7 +1169,10 @@ public class MainActivity extends BaseActivity {
 		
 		livePlayBanner.setData(channel, curChannelPrograms,volumn,type);
 		livePlayBanner.show();
-		
+		tvRootDigitalkey.setVisibility(View.VISIBLE);
+		tvRootDigitalkey.setData(Integer.parseInt(channel.getChannelNumber()));
+		mhandler.removeMessages(Class_Constant.MESSAGE_DISAPPEAR_DIGITAL);
+		mhandler.sendEmptyMessageDelayed(Class_Constant.MESSAGE_DISAPPEAR_DIGITAL, 5000);//数字键延迟消失
 		
 		
 		/*if (liveBannerInfoRunnable != null) {
@@ -1203,15 +1237,9 @@ public class MainActivity extends BaseActivity {
 		if (null == succ) {
 			tvRootDigitalkey.setVisibility(View.INVISIBLE);
 			tvRootDigitalKeyInvalid.setVisibility(View.VISIBLE);
-		} else {
-			Message msg2 = new Message();
-			msg2.what = Class_Constant.MESSAGE_SHOW_DIGITALKEY;
-			msg2.arg1 = tvRootDigitalkey.getCurNO();
-			mhandler.sendMessage(msg2);
-			iKeyNum=0;
-			iKey=0;
-			return;
-		}
+			mhandler.removeMessages(Class_Constant.MESSAGE_DISAPPEAR_DIGITAL);
+			mhandler.sendEmptyMessageDelayed(Class_Constant.MESSAGE_DISAPPEAR_DIGITAL, 5000);
+		} 
 		iKeyNum = 0;
 		iKey=0;
 	}
@@ -1231,6 +1259,7 @@ public class MainActivity extends BaseActivity {
 		}
 		if(position!=-1){
 			chListView.setSelection(position);
+			tvRootDigitalkey.setVisibility(View.INVISIBLE);
 		}else{
 			tvRootDigitalkey.setVisibility(View.INVISIBLE);
 			tvRootDigitalKeyInvalid.setVisibility(View.VISIBLE);
