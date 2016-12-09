@@ -6,14 +6,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import android.util.Log;
+
 /*return encrypt url adress*/
 /*Author:OscarChang*/
 
 public class ProcessData {
 
 	private MD5Encrypt MD5;
-//	private static final String serverAdress = "http://ott.yun.gehua.net.cn:8080/";
-	private static final String serverAdress = "http://api.ott.yun.gehua.net.cn:8080/";
+	private static final String serverAdress = "http://ott.yun.gehua.net.cn:8080/";
+//	private static final String serverAdress = "http://api.ott.yun.gehua.net.cn:8080/";
 	
 	private String MD5Key = "aidufei";
 	private String conStr = "&authKey=";
@@ -27,8 +29,8 @@ public class ProcessData {
 	/* chnList:频道列表 param of must */
 	private String chListPendingStr = "msis/getChannels?";
 	private String chListVersion = "V001";
-	private String chListChannelVersion = "0";
-	private String chListResolution = "1280*768";
+	private String chListChannelVersion = "1";
+	private String chListResolution = "1280*720";
 	private String chListTerminalType = "1";
 	/* for test */
 	// private String chListpgSize = "&pageSize=20";
@@ -201,8 +203,9 @@ public class ProcessData {
 	//获取用户频道信息
 	public String getChannelsInfo(){
 		String requestURL=null;
+//		requestURL=serverAdress+getChannelsInfo+"version="+version1+"&userCode="+userCode+"&terminalType="+1;
 		requestURL=serverAdress+getChannelsInfo+"version="+version1+"&userCode="+userCode+"&terminalType="+1;
-		
+		Log.i("mmmm", "processdata-isttv:"+strGETReturn(requestURL));
 		return strGETReturn(requestURL);
 	}
 	
