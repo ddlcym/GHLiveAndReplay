@@ -257,6 +257,7 @@ public class MainActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		whetherMute = false;
+//		getUserChannel();
 		startHttpSer();
 		whetherMute = Boolean.valueOf(CommonMethod.getMuteState(MyApp.getContext()));
 		curChannelNO = String.valueOf(CommonMethod.getChannelLastTime(MyApp.getContext()));
@@ -333,7 +334,7 @@ public class MainActivity extends BaseActivity {
 				Intent intent=getIntent();
 				int startChannel=intent.getIntExtra("serviceId", -1);
 				if(startChannel!=-1){
-					curChannelNO=startChannel+"";
+					curChannelNO="18";
 					CommonMethod.saveChannelLastTime(Integer.parseInt(curChannelNO), MainActivity.this);
 				}
 				
@@ -437,7 +438,7 @@ public class MainActivity extends BaseActivity {
 	private void getChannelList() {
 		// 传入URL请求链接
 		String URL = processData.getChannelList();
-		Log.i("test", "MainActivity");
+		Log.i("mmmm", "MainActivity_getChannelList_url:"+URL);
 		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null,
 				new Response.Listener<org.json.JSONObject>() {
 
@@ -445,7 +446,7 @@ public class MainActivity extends BaseActivity {
 					public void onResponse(org.json.JSONObject arg0) {
 						// TODO Auto-generated method stub
 						// 相应成功
-//						Log.i("test", "MainActivity***" + arg0);
+						Log.i("mmmm", "MainActivity**getChannelList*" + arg0);
 						channelsAll = HandleLiveData.getInstance().dealChannelJson(arg0);
 						Log.i("mmmm", "getChannelList-chLstAdapter"+channelsAll.size()+"curchannelNo"+curChannelNO);
 						// first set adapter

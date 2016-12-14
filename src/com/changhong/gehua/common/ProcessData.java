@@ -16,6 +16,8 @@ public class ProcessData {
 	private MD5Encrypt MD5;
 	private static final String serverAdress = "http://ott.yun.gehua.net.cn:8080/";
 //	private static final String serverAdress = "http://api.ott.yun.gehua.net.cn:8080/";
+	private String chListTerminalType = "1";
+	
 	
 	private String MD5Key = "aidufei";
 	private String conStr = "&authKey=";
@@ -31,7 +33,7 @@ public class ProcessData {
 	private String chListVersion = "V001";
 	private String chListChannelVersion = "1";
 	private String chListResolution = "1280*720";
-	private String chListTerminalType = "1";
+	
 	/* for test */
 	// private String chListpgSize = "&pageSize=20";
 

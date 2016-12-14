@@ -62,7 +62,6 @@ public class ProgramsAdapter extends BaseAdapter {
 		ImageView replayView = (ImageView) convertView.findViewById(R.id.replay_image);
 		replayView.setBackgroundResource(R.drawable.tv_loolback_icon);
 		
-		
 		ColorStateList csl=(ColorStateList)context.getResources().getColorStateList(R.color.replay_channellist_text);
 		timeView.setTextColor(csl);
 		eventView.setTextColor(csl);
