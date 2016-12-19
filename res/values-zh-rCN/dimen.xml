@@ -15,4 +15,7 @@
     <dimen name="dialog_title_height">30dp</dimen>
     <dimen name="seekbar_margin">42dp</dimen>
 
+    
+    <dimen name="living_pf_textsize">42dp</dimen>
+
 </resources>

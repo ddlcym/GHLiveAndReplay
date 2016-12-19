@@ -81,10 +81,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:progressDrawable="@drawable/bg_seekbar"  
-        		android:thumb="@drawable/thumb_bar" 
-        		android:maxHeight="13dip"
-  				android:minHeight="13dip"
+                android:progressDrawable="@drawable/bg_seekbar"
+        		android:thumb="@drawable/thumb_bar"
+        		android:maxHeight="8dip"
+  				android:minHeight="8dip"
+  				android:thumbOffset="0dp" 
                 android:max="100" />
 			
 			    	

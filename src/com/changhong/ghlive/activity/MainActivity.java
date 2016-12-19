@@ -1170,7 +1170,7 @@ public class MainActivity extends BaseActivity {
 		
 		livePlayBanner.setData(channel, curChannelPrograms,volumn,type);
 		livePlayBanner.show();
-		tvRootDigitalkey.setVisibility(View.VISIBLE);
+//		tvRootDigitalkey.setVisibility(View.VISIBLE);
 		tvRootDigitalkey.setData(Integer.parseInt(channel.getChannelNumber()));
 		mhandler.removeMessages(Class_Constant.MESSAGE_DISAPPEAR_DIGITAL);
 		mhandler.sendEmptyMessageDelayed(Class_Constant.MESSAGE_DISAPPEAR_DIGITAL, 5000);//数字键延迟消失

@@ -23,10 +23,11 @@
         android:layout_marginLeft="@dimen/seekbar_margin"
         android:layout_marginRight="@dimen/seekbar_margin"
         android:max="100"
-        android:maxHeight="13dip"
-        android:minHeight="13dip"
+        android:maxHeight="8dip"
+        android:minHeight="8dip"
         android:focusable="false"
         android:clickable="false"
+        android:thumbOffset="0dp"    
         android:progressDrawable="@drawable/bg_seekbar"
         android:thumb="@drawable/thumb_bar" />
 
