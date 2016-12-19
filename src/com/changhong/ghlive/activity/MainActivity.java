@@ -212,7 +212,7 @@ public class MainActivity extends BaseActivity {
 			case Class_Constant.BACK_TO_LIVE:
 				if (programBannerDialog != null) {
 					programBannerDialog.dismiss();
-					Toast.makeText(MainActivity.this, "退回到直播模式", Toast.LENGTH_SHORT).show();
+//					Toast.makeText(MainActivity.this, "退回到直播模式", Toast.LENGTH_SHORT).show();
 					Log.i(TAG, "退回到直播模式");
 				}
 				PlayVideo.getInstance().playLiveProgram(mhandler, CacheData.getCurChannel());

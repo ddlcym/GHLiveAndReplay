@@ -42,6 +42,7 @@ import com.changhong.gehua.widget.PlayButton;
 import com.changhong.gehua.widget.ShiftDialog;
 import com.changhong.gehua.widget.TwoWayAdapterView;
 import com.changhong.gehua.widget.TwoWayAdapterView.OnItemClickListener;
+import com.changhong.gehua.widget.TwoWayAdapterView.OnItemSelectedListener;
 import com.changhong.gehua.widget.TwoWayGridView;
 import com.changhong.ghlive.activity.MyApp;
 import com.changhong.ghlive.service.HttpService;
@@ -96,6 +97,8 @@ public class BannerDialog extends Dialog {
 	
 	int shiftcurindex;
 	ProgramInfo curshiftpro;
+	
+	
 	/*
 	 * 显示隐藏容器
 	 */
@@ -342,6 +345,8 @@ public class BannerDialog extends Dialog {
 		// }
 		// });
 	}
+	
+	
 
 	public void initView() {
 		Window window = this.getWindow();
@@ -500,6 +505,22 @@ public class BannerDialog extends Dialog {
 		player.initSeekbar();
 		
 		
+//		timeshiftProList.setOnItemSelectedListener(new OnItemSelectedListener() {
+//
+//			@Override
+//			public void onItemSelected(TwoWayAdapterView<?> parent, View view,
+//					int position, long id) {
+//				// TODO Auto-generated method stub
+////				programListAdapter.setSelectItem(position);
+//				timeshiftProList.setSelection(position);
+//			}
+//
+//			@Override
+//			public void onNothingSelected(TwoWayAdapterView<?> parent) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//		});
 	}
 
 	@Override

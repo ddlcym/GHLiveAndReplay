@@ -7,7 +7,9 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView.FindListener;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.changhong.gehua.common.ProgramInfo;
@@ -24,6 +26,7 @@ public class TimeShiftProgramAdapter extends BaseAdapter {
 
 	private LayoutInflater mInflater = null;
 	private List<ProgramInfo> myList = new ArrayList<ProgramInfo>();
+	
 
 	public TimeShiftProgramAdapter(Context context) {
 		// 根据context上下文加载布局，这里的是Activity本身，即this
@@ -34,6 +37,7 @@ public class TimeShiftProgramAdapter extends BaseAdapter {
 		myList = list;
 		notifyDataSetChanged();
 	}
+	
 
 	@Override
 	public int getCount() {
@@ -66,6 +70,8 @@ public class TimeShiftProgramAdapter extends BaseAdapter {
 					.findViewById(R.id.timeshift_program_time);
 			holder.programName = (TextView) convertView
 					.findViewById(R.id.timeshift_program_name);
+			holder.container=(LinearLayout)convertView.findViewById(R.id.timeshift_program_item);
+			
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -77,6 +83,7 @@ public class TimeShiftProgramAdapter extends BaseAdapter {
 			holder.programName.setText(program.getEventName());
 			
 		}
+		
 		return convertView;
 	}
 
@@ -85,5 +92,6 @@ public class TimeShiftProgramAdapter extends BaseAdapter {
 		// TextView channelIndex;
 		TextView programName;
 		// ImageView favView;
+		LinearLayout container;
 	}
 }

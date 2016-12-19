@@ -59,8 +59,8 @@ public class ProgramsAdapter extends BaseAdapter {
 		timeView.setText(getTimes(epgEvent));
 		TextView eventView = (TextView) convertView.findViewById(R.id.epg_event_Tview_info);
 		eventView.setText(epgEvent.getEventName());
-		ImageView replayView = (ImageView) convertView.findViewById(R.id.replay_image);
-		replayView.setBackgroundResource(R.drawable.tv_loolback_icon);
+//		ImageView replayView = (ImageView) convertView.findViewById(R.id.replay_image);
+//		replayView.setBackgroundResource(R.drawable.tv_loolback_icon);
 		
 		ColorStateList csl=(ColorStateList)context.getResources().getColorStateList(R.color.replay_channellist_text);
 		timeView.setTextColor(csl);

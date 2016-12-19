@@ -50,7 +50,7 @@ public class ReplayPlayActivity extends BaseActivity {
 	private String replayChannelId = null;
 	private ReplayEndDialog replayEndDialog;
 	private ReplayEndDialog replayEndlastDialog,firstreplayDialog,replayfirstDialog,backreplaydialog;
-	private ImageView pfbackImageView;
+	private ImageView pfbackImageView,replay_divide;
 	private PlayButton playbtn; 
 	//private LinearLayout replay_banner;
 
@@ -231,6 +231,7 @@ public class ReplayPlayActivity extends BaseActivity {
 		
 		
 		pfbackImageView = (ImageView) findViewById(R.id.PF_back);
+		replay_divide= (ImageView) findViewById(R.id.replay_divide);
 		
 		playbtn = (PlayButton) findViewById(R.id.replay_play_btn);
 		
@@ -640,7 +641,7 @@ public class ReplayPlayActivity extends BaseActivity {
 			nextLinearLayout.setVisibility(View.INVISIBLE);
 			pfbackImageView.setVisibility(View.INVISIBLE);
 			play_button_con.setVisibility(View.INVISIBLE);
-			
+			replay_divide.setVisibility(View.INVISIBLE);
 		}
 	};
 	
