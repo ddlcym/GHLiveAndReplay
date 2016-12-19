@@ -14,7 +14,7 @@
     <TextView
         android:id="@+id/epg_chan_Tview_chanindex"
         android:layout_width="60dip"
-        android:layout_height="50dip"
+        android:layout_height="51dip"
         android:gravity="center"
         android:textColor="@color/replay_channellist_text"
         android:textSize="24sp" />
@@ -22,7 +22,7 @@
     <TextView
         android:id="@+id/epg_chan_Tview_channame"
         android:layout_width="fill_parent"
-        android:layout_height="50dip"
+        android:layout_height="51dip"
         android:ellipsize="marquee"
        	
         android:gravity="left|center_vertical"
@@ -34,7 +34,7 @@
      <TextView
         android:id="@+id/channelId"
         android:layout_width="60dp"
-        android:layout_height="50dp"
+        android:layout_height="51dp"
         android:gravity="center_horizontal"
         android:textColor="@color/grey"
         android:textSize="24sp"
