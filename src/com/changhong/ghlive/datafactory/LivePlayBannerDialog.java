@@ -341,13 +341,13 @@ public class LivePlayBannerDialog extends Dialog {
 			return true;
 		}
 		
-		if(keyCode != Class_Constant.KEYCODE_BACK_KEY){
+//		if(keyCode != Class_Constant.KEYCODE_BACK_KEY){
 			Message msg = new Message();
 			msg.what = Class_Constant.DIALOG_ONKEY_DOWN;
 			msg.arg1 = keyCode;
 			parentHandler.sendMessage(msg);
-			return false;
-		}
+//			return false;
+//		}
 		
 		
 		return super.onKeyDown(keyCode, event);

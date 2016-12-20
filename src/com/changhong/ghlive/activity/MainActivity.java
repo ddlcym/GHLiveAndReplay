@@ -564,13 +564,19 @@ public class MainActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		if (Class_Constant.KEYCODE_BACK_KEY == keyCode) {
 
-			if (channelListLinear.isShown()) {
-				mhandler.post(runnable);
+			
+			if (livePlayBanner != null && livePlayBanner.isToastShow()||channelListLinear.isShown()) {
+				
+				if(livePlayBanner != null && livePlayBanner.isToastShow()){
+					mhandler.post(liveBannerInfoRunnable);
+				}
+				
+				if(channelListLinear.isShown()){
+					mhandler.post(runnable);
+				}
 				return false;
 			}
-			if (livePlayBanner != null && livePlayBanner.isToastShow()) {
-				mhandler.post(liveBannerInfoRunnable);
-			}
+			
 
 		}
 		if (keyCode == Class_Constant.KEYCODE_VOICE_UP || keyCode == Class_Constant.KEYCODE_VOICE_DOWN ) {
@@ -613,6 +619,19 @@ public class MainActivity extends BaseActivity {
 	private boolean dealOnKeyDown(int keyCode) {
 		Log.i("mmmm", "dealOnKeyDown-keyCode:"+keyCode);
 		switch (keyCode) {
+		
+		case Class_Constant.KEYCODE_BACK_KEY:
+			if (livePlayBanner != null && livePlayBanner.isToastShow()||channelListLinear.isShown()) {
+					
+				if(livePlayBanner != null && livePlayBanner.isToastShow()){
+					mhandler.post(liveBannerInfoRunnable);
+				}
+					
+				if(channelListLinear.isShown()){
+					mhandler.post(runnable);
+				}
+			}
+			break;
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
 			// if (ban != null && ban.isToastShow()) {
 			// ban.cancelBanner();
