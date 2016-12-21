@@ -432,7 +432,7 @@ public class BannerDialog extends Dialog {
 					PlayVideo.getInstance().playLiveBack(player, curChannel, program);
 					
 					
-					palyButton.setMyBG(PlayButton.Play);
+					palyButton.setMyBG(PlayButton.Pause);
 					if(programListInfo.size()!=0&&(list.size()-1)!=position){
 						programListInfo.remove(2);
 						programListInfo.add(2, list.get(position+1));
