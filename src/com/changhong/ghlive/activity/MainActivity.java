@@ -143,7 +143,7 @@ public class MainActivity extends BaseActivity {
 
 				curChannel = CacheData.getAllChannelMap().get(curChannelNO);
 				PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
-
+				mhandler.sendEmptyMessage(Class_Constant.BANNER_DELAY_DISMISS);//区别信息键长显banner，其他情况5秒退出
 				break;
 			case Class_Constant.TOAST_BANNER_PROGRAM_PASS:
 				int curIndex = -1;
@@ -171,7 +171,7 @@ public class MainActivity extends BaseActivity {
 					curProgram=null;
 				}
 				showToastBanner(CacheData.getCurChannel(),curtype);
-				mhandler.sendEmptyMessage(Class_Constant.BANNER_DELAY_DISMISS);
+//				mhandler.sendEmptyMessage(Class_Constant.BANNER_DELAY_DISMISS);
 				break;
 
 			case Class_Constant.MESSAGE_HANDLER_DIGITALKEY: 
@@ -591,17 +591,17 @@ public class MainActivity extends BaseActivity {
 		}
 		
 		if (keyCode == Class_Constant.KEYCODE_MUTE) {
-			curvolumn =  mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-			Log.i("test", "live KEYCODE_MUTE later curvolumn is"+curvolumn);
-			if (curvolumn == 0) {
-				mAudioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
-				Log.i("test", "setStreamMute false");
-				muteIconImage.setVisibility(View.GONE);
-			}else {
-				mAudioManager.setStreamMute(AudioManager.STREAM_MUSIC, true);
-				Log.i("test", "setStreamMute true");
-				muteIconImage.setVisibility(View.VISIBLE);
-			}
+//			curvolumn =  mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+//			Log.i("test", "live KEYCODE_MUTE later curvolumn is"+curvolumn);
+//			if (curvolumn == 0) {
+//				mAudioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
+//				Log.i("test", "setStreamMute false");
+//				muteIconImage.setVisibility(View.GONE);
+//			}else {
+//				mAudioManager.setStreamMute(AudioManager.STREAM_MUSIC, true);
+//				Log.i("test", "setStreamMute true");
+//				muteIconImage.setVisibility(View.VISIBLE);
+//			}
 			Message msg = new Message();
 			msg.what = Class_Constant.TOAST_BANNER_PROGRAM_PASS;
 			Bundle bundle = new Bundle();
@@ -609,7 +609,8 @@ public class MainActivity extends BaseActivity {
 			msg.setData(bundle);
 			mhandler.sendMessage(msg);
 			mhandler.sendEmptyMessage(Class_Constant.BANNER_DELAY_DISMISS);
-			return true;
+			Log.i("mmmm", "mainactivity-volumn-KEYCODE_MUTE");
+//			return false;
 		}
 		
 		dealOnKeyDown(keyCode);
@@ -745,6 +746,7 @@ public class MainActivity extends BaseActivity {
 						ChannelInfo curChannel = channelsAll.get(curListIndex);
 						CacheData.setCurChannel(curChannel);
 						PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
+						mhandler.sendEmptyMessage(Class_Constant.BANNER_DELAY_DISMISS);//区别信息键长显banner，其他情况5秒退出
 						keydownFlag = true;
 					}
 				}
@@ -924,6 +926,9 @@ public class MainActivity extends BaseActivity {
 				bundle.putInt("type", 0);
 				msg.setData(bundle);
 				mhandler.sendMessage(msg);
+//				if (liveBannerInfoRunnable != null) {//如果按下切换频道后，再按信息键需要取消隐藏banner条的延迟操作
+//					mhandler.removeCallbacks(liveBannerInfoRunnable);
+//			    }
 			}
 			break;
 
@@ -1244,7 +1249,7 @@ public class MainActivity extends BaseActivity {
 		// PlayVideo.getInstance().getProgramInfo(mhandler, curChannel);
 
 		CommonMethod.saveChannelLastTime(Integer.parseInt(curChannelNO), MyApp.getContext());
-
+//		mhandler.sendEmptyMessage(Class_Constant.BANNER_DELAY_DISMISS);
 		return curChannelNO;
 	}
 	
@@ -1373,12 +1378,12 @@ public class MainActivity extends BaseActivity {
 		
 		curvolumn =  mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 		Log.i("test", "enter live curvolumn is"+curvolumn);
-		if (curvolumn == 0) {
-			muteIconImage.setVisibility(View.VISIBLE);
-			Log.i("test", "muteIconImage muteIconImage");
-		}else {
-			muteIconImage.setVisibility(View.GONE);
-		}
+//		if (curvolumn == 0) {
+//			muteIconImage.setVisibility(View.VISIBLE);
+//			Log.i("test", "muteIconImage muteIconImage");
+//		}else {
+//			muteIconImage.setVisibility(View.GONE);
+//		}
 		super.onResume();
 	}
 

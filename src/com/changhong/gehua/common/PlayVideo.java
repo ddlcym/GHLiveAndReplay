@@ -154,6 +154,7 @@ public class PlayVideo {
 						msg.what = Class_Constant.TOAST_BANNER_PROGRAM_PASS;
 						jsonResolve.curJsonProToString(arg0);
 						handler.sendEmptyMessage(Class_Constant.TOAST_BANNER_PROGRAM_PASS);
+						
 					}
 				}, errorListener);
 		jsonObjectRequest.setTag("abc");// 设置tag,cancelAll的时候使用

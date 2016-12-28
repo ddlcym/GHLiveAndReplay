@@ -76,7 +76,7 @@ public class DayMonthAdapter extends BaseAdapter{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		Log.i(TAG, daystring.substring(5));
+//		Log.i(TAG, daystring.substring(5));
 		viewHolder.day.setText(daystring.substring(5));
 		try {
 			Date date=Utils.strToDate(day);

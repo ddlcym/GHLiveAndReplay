@@ -97,7 +97,7 @@ public class CacheData {
 	}
 
 	public static void setCurProgram(ProgramInfo curProgram) {
-		Log.i("mmmm","setCurProgram:"+Utils.millToLiveBackString(curProgram.getBeginTime().getTime()));
+//		Log.i("mmmm","setCurProgram:"+Utils.millToLiveBackString(curProgram.getBeginTime().getTime()));
 		CacheData.curProgram = curProgram;
 	}
 
@@ -109,7 +109,7 @@ public class CacheData {
 		CacheData.curPrograms = curPrograms;
 		if(curPrograms!=null&&curPrograms.size()>1){
 		setCurProgram(curPrograms.get(1));
-		Log.i("mmmm","setCurPrograms:");
+//		Log.i("mmmm","setCurPrograms:");
 		}
 	}
 

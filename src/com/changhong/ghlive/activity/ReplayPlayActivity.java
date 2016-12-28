@@ -320,12 +320,12 @@ public class ReplayPlayActivity extends BaseActivity {
 		mprogram = CacheData.getCurProgram();
 		playVideo(channel, mprogram);
 		
-		curvolumn =  mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-		Log.i("volumn", "enter replay curvolumn is"+curvolumn);
-		if (curvolumn == 0) {
-			revolumnback.setBackgroundResource(vols[curvolumn]);
-		}
-		
+//		curvolumn =  mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+//		Log.i("volumn", "enter replay curvolumn is"+curvolumn);
+//		if (curvolumn == 0) {
+//			revolumnback.setBackgroundResource(vols[curvolumn]);
+//		}
+//		
 	}
 
 	private void playVideo(ChannelInfo channel, ProgramInfo program) {
@@ -438,57 +438,57 @@ public class ReplayPlayActivity extends BaseActivity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
-		if (keyCode == Class_Constant.KEYCODE_VOICE_UP) {
-			mAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0);
-			curvolumn = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-			Log.i("volumn", "KEYCODE_VOICE_UP curvolumn is"+curvolumn);
-			revolumnback.setBackgroundResource(vols[curvolumn]);
-			revolumnback.setVisibility(View.VISIBLE);
-			if (curvolumn != 0) {
-				replayHandler.removeCallbacks(VolumnbackRunnable);
-				replayHandler.postDelayed(VolumnbackRunnable, 5000);
-			}else {
-				replayHandler.removeCallbacks(VolumnbackRunnable);
-			}
-			return true;
-		}
-		if (keyCode == Class_Constant.KEYCODE_VOICE_DOWN) {
-			mAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0);
-			curvolumn = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-			Log.i("volumn", "KEYCODE_VOICE_DOWN curvolumn is"+curvolumn);
-			revolumnback.setBackgroundResource(vols[curvolumn]);
-			revolumnback.setVisibility(View.VISIBLE);
-			if (curvolumn != 0) {
-				replayHandler.removeCallbacks(VolumnbackRunnable);
-				replayHandler.postDelayed(VolumnbackRunnable, 5000);
-			}else {
-				replayHandler.removeCallbacks(VolumnbackRunnable);
-			}
-			return true;
-		}
-		
-		if (keyCode == Class_Constant.KEYCODE_MUTE){
-			curvolumn = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-			if (curvolumn == 0) {
-				mAudioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
-				curvolumn = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-				Log.i("volumn", "huifu");
-				revolumnback.setBackgroundResource(vols[curvolumn]);
-				revolumnback.setVisibility(View.VISIBLE);
-				replayHandler.removeCallbacks(VolumnbackRunnable);
-				replayHandler.postDelayed(VolumnbackRunnable, 5000);
-			}else {
-				mAudioManager.setStreamMute(AudioManager.STREAM_MUSIC, true);
-				curvolumn = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-				Log.i("volumn", "set mute");
-				revolumnback.setBackgroundResource(vols[curvolumn]);
-				revolumnback.setVisibility(View.VISIBLE);
-				if (VolumnbackRunnable != null) {
-					replayHandler.removeCallbacks(VolumnbackRunnable);
-				}
-			}
-			return true;
-		}
+//		if (keyCode == Class_Constant.KEYCODE_VOICE_UP) {
+//			mAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0);
+//			curvolumn = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+//			Log.i("volumn", "KEYCODE_VOICE_UP curvolumn is"+curvolumn);
+//			revolumnback.setBackgroundResource(vols[curvolumn]);
+//			revolumnback.setVisibility(View.VISIBLE);
+//			if (curvolumn != 0) {
+//				replayHandler.removeCallbacks(VolumnbackRunnable);
+//				replayHandler.postDelayed(VolumnbackRunnable, 5000);
+//			}else {
+//				replayHandler.removeCallbacks(VolumnbackRunnable);
+//			}
+//			return true;
+//		}
+//		if (keyCode == Class_Constant.KEYCODE_VOICE_DOWN) {
+//			mAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0);
+//			curvolumn = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+//			Log.i("volumn", "KEYCODE_VOICE_DOWN curvolumn is"+curvolumn);
+//			revolumnback.setBackgroundResource(vols[curvolumn]);
+//			revolumnback.setVisibility(View.VISIBLE);
+//			if (curvolumn != 0) {
+//				replayHandler.removeCallbacks(VolumnbackRunnable);
+//				replayHandler.postDelayed(VolumnbackRunnable, 5000);
+//			}else {
+//				replayHandler.removeCallbacks(VolumnbackRunnable);
+//			}
+//			return true;
+//		}
+//		
+//		if (keyCode == Class_Constant.KEYCODE_MUTE){
+//			curvolumn = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+//			if (curvolumn == 0) {
+//				mAudioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
+//				curvolumn = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+//				Log.i("volumn", "huifu");
+//				revolumnback.setBackgroundResource(vols[curvolumn]);
+//				revolumnback.setVisibility(View.VISIBLE);
+//				replayHandler.removeCallbacks(VolumnbackRunnable);
+//				replayHandler.postDelayed(VolumnbackRunnable, 5000);
+//			}else {
+//				mAudioManager.setStreamMute(AudioManager.STREAM_MUSIC, true);
+//				curvolumn = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+//				Log.i("volumn", "set mute");
+//				revolumnback.setBackgroundResource(vols[curvolumn]);
+//				revolumnback.setVisibility(View.VISIBLE);
+//				if (VolumnbackRunnable != null) {
+//					replayHandler.removeCallbacks(VolumnbackRunnable);
+//				}
+//			}
+//			return true;
+//		}
 		
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:

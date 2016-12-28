@@ -14,10 +14,10 @@ import android.util.Log;
 public class ProcessData {
 
 	private MD5Encrypt MD5;
-//	private static final String serverAdress = "http://ott.yun.gehua.net.cn:8080/";
-//	private String chListTerminalType = "1";
-	private static final String serverAdress = "http://api.ott.yun.gehua.net.cn:8080/";
-	private String chListTerminalType = "101";
+	private static final String serverAdress = "http://ott.yun.gehua.net.cn:8080/";
+	private String chListTerminalType = "1";
+//	private static final String serverAdress = "http://api.ott.yun.gehua.net.cn:8080/";
+//	private String chListTerminalType = "101";
 	
 	
 	private String MD5Key = "aidufei";
@@ -164,8 +164,9 @@ public class ProcessData {
 		return strPOSTReturn(rawPlainStr, "msis/getPlayURL");
 	}
 	
+	//获取时移播放串
 	public String getLiveBackPlayUrl(ChannelInfo channel,int delay){
-		String rawPlainStr="http://ott.yun.gehua.net.cn:8080/msis/getPlayURL?version=V001&userCode=15914018212&userName=15914018212&resourceCode="+channel.getResourceCode()+"&resolution=1280*720&terminalType=7&playType=4&delay="+delay;
+		String rawPlainStr=serverAdress +"msis/getPlayURL?version=V001&userCode=15914018212&userName=15914018212&resourceCode="+channel.getResourceCode()+"&resolution=1280*720&terminalType=7&playType=4&delay="+delay;
 				
 		return strPOSTReturn(rawPlainStr, "msis/getPlayURL");
 	}

@@ -23,8 +23,8 @@
         android:id="@+id/replay_volumn_background"
         android:layout_width="300dip"
         android:layout_height="60dip"
-        android:layout_marginLeft="965dip"
-        android:layout_marginTop="80dip"
+        android:layout_marginLeft="852dip"
+        android:layout_marginTop="54dip"
         android:scaleType="fitCenter" />
 
     <ImageView

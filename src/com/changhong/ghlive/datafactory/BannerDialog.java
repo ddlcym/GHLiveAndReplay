@@ -84,7 +84,7 @@ public class BannerDialog extends Dialog {
 	private ImageView timeShiftIcon;
 	//private ImageView muteIconImage;
 	private HttpService mHttpService;
-	private List<ProgramInfo> list;
+	private List<ProgramInfo> list;//时移节目列表
 
 	private TwoWayGridView timeshiftProList;
 	private TimeShiftProgramAdapter programListAdapter;
@@ -452,10 +452,10 @@ public class BannerDialog extends Dialog {
 		
 		curvolumn =  mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 		Log.i("volumn", "enter shift curvolumn is"+curvolumn);
-		if (curvolumn == 0) {
-			revolumnback.setBackgroundResource(vols[curvolumn]);
-			revolumnback.setVisibility(View.VISIBLE);
-		}
+//		if (curvolumn == 0) {
+//			revolumnback.setBackgroundResource(vols[curvolumn]);
+//			revolumnback.setVisibility(View.VISIBLE);
+//		}
 
 	}
 
@@ -505,22 +505,30 @@ public class BannerDialog extends Dialog {
 		player.initSeekbar();
 		
 		
-//		timeshiftProList.setOnItemSelectedListener(new OnItemSelectedListener() {
-//
-//			@Override
-//			public void onItemSelected(TwoWayAdapterView<?> parent, View view,
-//					int position, long id) {
-//				// TODO Auto-generated method stub
-////				programListAdapter.setSelectItem(position);
-//				timeshiftProList.setSelection(position);
-//			}
-//
-//			@Override
-//			public void onNothingSelected(TwoWayAdapterView<?> parent) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//		});
+		timeshiftProList.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(TwoWayAdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				if(list!=null&&(list.size()-1)==position){
+					right_arrows.setVisibility(View.INVISIBLE);
+					left_arrows.setVisibility(View.VISIBLE);
+				}else if(list!=null&&position==0){
+					left_arrows.setVisibility(View.INVISIBLE);
+					right_arrows.setVisibility(View.VISIBLE);
+				}else{
+					right_arrows.setVisibility(View.VISIBLE);
+					left_arrows.setVisibility(View.VISIBLE);
+				}
+			}
+
+			@Override
+			public void onNothingSelected(TwoWayAdapterView<?> parent) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 
 	@Override
@@ -547,8 +555,8 @@ public class BannerDialog extends Dialog {
 			mAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0);
 			curvolumn = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 			Log.i("volumn", "KEYCODE_VOICE_UP curvolumn is"+curvolumn);
-			revolumnback.setBackgroundResource(vols[curvolumn]);
-			revolumnback.setVisibility(View.VISIBLE);
+//			revolumnback.setBackgroundResource(vols[curvolumn]);
+//			revolumnback.setVisibility(View.VISIBLE);
 			if (curvolumn != 0) {
 				parentHandler.removeCallbacks(VolumnbackRunnable);
 				parentHandler.postDelayed(VolumnbackRunnable, 5000);
@@ -561,8 +569,8 @@ public class BannerDialog extends Dialog {
 			mAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0);
 			curvolumn = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 			Log.i("volumn", "KEYCODE_VOICE_DOWN curvolumn is"+curvolumn);
-			revolumnback.setBackgroundResource(vols[curvolumn]);
-			revolumnback.setVisibility(View.VISIBLE);
+//			revolumnback.setBackgroundResource(vols[curvolumn]);
+//			revolumnback.setVisibility(View.VISIBLE);
 			if (curvolumn != 0) {
 				parentHandler.removeCallbacks(VolumnbackRunnable);
 				parentHandler.postDelayed(VolumnbackRunnable, 5000);
@@ -575,24 +583,24 @@ public class BannerDialog extends Dialog {
 		if (keyCode == Class_Constant.KEYCODE_MUTE){
 			curvolumn = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 			if (curvolumn == 0) {
-				mAudioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
+//				mAudioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
 				curvolumn = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-				Log.i("volumn", "huifu");
-				revolumnback.setBackgroundResource(vols[curvolumn]);
-				revolumnback.setVisibility(View.VISIBLE);
+				Log.i("mmmm", "bannerdialog-volumn-huifu");
+//				revolumnback.setBackgroundResource(vols[curvolumn]);
+//				revolumnback.setVisibility(View.VISIBLE);
 				parentHandler.removeCallbacks(VolumnbackRunnable);
 				parentHandler.postDelayed(VolumnbackRunnable, 5000);
 			}else {
-				mAudioManager.setStreamMute(AudioManager.STREAM_MUSIC, true);
+//				mAudioManager.setStreamMute(AudioManager.STREAM_MUSIC, true);
 				curvolumn = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-				Log.i("volumn", "set mute");
-				revolumnback.setBackgroundResource(vols[curvolumn]);
-				revolumnback.setVisibility(View.VISIBLE);
+				Log.i("mmmm", "bannerdialog-volumn-set mute");
+//				revolumnback.setBackgroundResource(vols[curvolumn]);
+//				revolumnback.setVisibility(View.VISIBLE);
 				if (VolumnbackRunnable != null) {
 					parentHandler.removeCallbacks(VolumnbackRunnable);
 				}
 			}
-			return true;
+//			return false;
 		}
 		
 		switch (keyCode) {
