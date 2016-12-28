@@ -14,10 +14,10 @@ import android.util.Log;
 public class ProcessData {
 
 	private MD5Encrypt MD5;
-	private static final String serverAdress = "http://ott.yun.gehua.net.cn:8080/";
-	private String chListTerminalType = "1";
-//	private static final String serverAdress = "http://api.ott.yun.gehua.net.cn:8080/";
-//	private String chListTerminalType = "101";
+//	private static final String serverAdress = "http://ott.yun.gehua.net.cn:8080/";
+//	private String chListTerminalType = "1";
+	private static final String serverAdress = "http://api.ott.yun.gehua.net.cn:8080/";
+	private String chListTerminalType = "101";
 	
 	
 	private String MD5Key = "aidufei";
