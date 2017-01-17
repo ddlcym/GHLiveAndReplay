@@ -60,7 +60,6 @@ public class MainActivity extends BaseActivity {
 	// view
 	private ImageView focusView; // foucus image
 	private TextView epgListTitleView;// chanellist title
-	private String[] TVtype;// all tv type
 	private SurfaceView surfaceView;
 	private LinearLayout channelListLinear;// channellist layout
 	
@@ -94,21 +93,22 @@ public class MainActivity extends BaseActivity {
 	private ProcessData processData;
 
 	//频道类型缓存
-	private List<ChannelType> channelTypes;
+	private List<ChannelType> channelTypes;// all tv type
 	
 	// kinds of channel list
 	private List<ChannelInfo> mCurChannels = new ArrayList<ChannelInfo>();// 当前频道列表清单
 	private List<ChannelInfo> channelsAll = new ArrayList<ChannelInfo>();
-	private List<ChannelInfo> CCTVList = new ArrayList<ChannelInfo>();
-	private List<ChannelInfo> weishiTvList = new ArrayList<ChannelInfo>();
+//	private List<ChannelInfo> CCTVList = new ArrayList<ChannelInfo>();
+//	private List<ChannelInfo> weishiTvList = new ArrayList<ChannelInfo>();
 	// private List<ChannelInfo> favTvList = new ArrayList<ChannelInfo>();
-	private List<ChannelInfo> localTvList = new ArrayList<ChannelInfo>();
-	private List<ChannelInfo> HDTvList = new ArrayList<ChannelInfo>();
-	private List<ChannelInfo> otherTvList = new ArrayList<ChannelInfo>();
+//	private List<ChannelInfo> localTvList = new ArrayList<ChannelInfo>();
+//	private List<ChannelInfo> HDTvList = new ArrayList<ChannelInfo>();
+//	private List<ChannelInfo> otherTvList = new ArrayList<ChannelInfo>();
 	
 	//将频道分类并创建集合
 	private List<List<ChannelInfo>> allCategeChanels=new ArrayList<List<ChannelInfo>>();//由于服务器下发数据有误（热门和高清rank都为0），暂无法使用本对象
-	private Map<String, List<ChannelInfo>> allChanelsMap=new HashMap<String, List<ChannelInfo>>();
+	private Map<String, ChannelType> allChanelsMap=new HashMap<String, ChannelType>();
+	private List<String> channelTypeKey=new ArrayList<String>();//频道类型的key，用来定位allChanelsMap里的对应频道列表
 
 	private List<ProgramInfo> curChannelPrograms = new ArrayList<ProgramInfo>();// 当前频道下的上一个节目，当前节目，下一个节目信息
 	private int curListIndex = 0;// 当前list下正在播放的当前节目的index
@@ -298,8 +298,8 @@ public class MainActivity extends BaseActivity {
 	protected void initView() {
 		// TODO Auto-generated method stub
 		setContentView(R.layout.channellist);
-
-		TVtype = getResources().getStringArray(R.array.tvtype);
+		
+//		TVtype = getResources().getStringArray(R.array.tvtype);
 		chListView = (ListView) findViewById(R.id.id_epg_chlist);
 		focusView = (ImageView) findViewById(R.id.set_focus_id);
 		lastCategory = (TextView) findViewById(R.id.last_category);
@@ -413,6 +413,7 @@ public class MainActivity extends BaseActivity {
 	
 	private void getChannelTypes(){
 		String URL = processData.getTypes();
+		Log.i("mmmm", "getChannelTypes:"+URL);
 		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null,
 				new Response.Listener<org.json.JSONObject>() {
 
@@ -423,15 +424,14 @@ public class MainActivity extends BaseActivity {
 						channelTypes=HandleLiveData.getInstance().dealChannelTypes(arg0);
 						if(channelTypes!=null){
 							for(int i=0;i<channelTypes.size();i++){
-								ChannelType type=channelTypes.get(i);
-								List<ChannelInfo> list=new ArrayList<ChannelInfo>();
-								allCategeChanels.add(list);
-								allChanelsMap.put(type.getPramKey(), list);
+									ChannelType type=channelTypes.get(i);
+									allChanelsMap.put(type.getPramKey(), type);
+									channelTypeKey.add(type.getPramKey());
 								}
 							}
 						}
 					}, errorListener);
-		jsonObjectRequest.setTag(MainActivity.class.getSimpleName());// 设置tag,cancelAll的时候使用
+		jsonObjectRequest.setTag("getChannelTypes");// 设置tag,cancelAll的时候使用
 		mReQueue.add(jsonObjectRequest);
 	}
 
@@ -492,37 +492,54 @@ public class MainActivity extends BaseActivity {
 		// fill all type tv
 
 		// clear all tv type;
-		channelsAll.clear();
-		CCTVList.clear();
-		weishiTvList.clear();
-		// favTvList.clear();
-		localTvList.clear();
-		HDTvList.clear();
-		otherTvList.clear();
+//		channelsAll.clear();
+//		CCTVList.clear();
+//		weishiTvList.clear();
+//		// favTvList.clear();
+//		localTvList.clear();
+//		HDTvList.clear();
+//		otherTvList.clear();
+		if(allChanelsMap==null||channelTypeKey==null){
+			return;
+		}
+		
+		for(String key:allChanelsMap.keySet()){
+			allChanelsMap.get(key).getChannelList().clear();
+		}
+		
 		List<ChannelInfo> channels = CacheData.allChannelInfo;
 		for (ChannelInfo dvbChannel : channels) {
-			channelsAll.add(dvbChannel);
-
+			
+			for(int i=0;i<channelTypeKey.size();i++){
+				String typeKey=channelTypeKey.get(i);
+				if(dvbChannel.getChannelTypes().contains(typeKey)){
+					allChanelsMap.get(typeKey).getChannelList().add(dvbChannel);
+				}
+			}
+			
+//			channelsAll.add(dvbChannel);
+//			//由于服务器协议改动，临时解决方案
+//			if(dvbChannel.getChannelTypes().contains("3003")){
+//				//央视频道
+//				CCTVList.add(dvbChannel);
+//			}
+//			if(dvbChannel.getChannelTypes().contains("3004")){
+//				//北京频道
+//				localTvList.add(dvbChannel);
+//			}
+//			if(dvbChannel.getChannelTypes().contains("3005")){
+//				//卫视频道
+//				weishiTvList.add(dvbChannel);
+//			}
+//			if(dvbChannel.getChannelTypes().contains("3002")){
+//				//高清频道
+//				HDTvList.add(dvbChannel);
+//			}
 			// 喜爱频道列表---------------待完成---------------
 			// if (dvbChannel.favorite == 1) {
 			// favTvList.add(dvbChannel);
 			// }
-			if(dvbChannel.getChannelTypes().contains("4")){
-				//央视频道
-				CCTVList.add(dvbChannel);
-			}
-			if(dvbChannel.getChannelTypes().contains("1007")){
-				//北京频道
-				localTvList.add(dvbChannel);
-			}
-			if(dvbChannel.getChannelTypes().contains("9")){
-				//卫视频道
-				weishiTvList.add(dvbChannel);
-			}
-			if(dvbChannel.getChannelTypes().contains("1002")){
-				//高清频道
-				HDTvList.add(dvbChannel);
-			}
+			
 		}
 	}
 
@@ -530,23 +547,34 @@ public class MainActivity extends BaseActivity {
 
 	private void showChannelList() {
 		// TODO show channellist
-		switch (curType) {
-		case 0:
-			mCurChannels = channelsAll;
-			break;
-		case 1:
-			mCurChannels = CCTVList;
-			break;
-		case 2:
-			mCurChannels = weishiTvList;
-			break;
-		case 3:
-			mCurChannels = localTvList;
-			break;
-		case 4:
-			mCurChannels = HDTvList;
-			break;
+//		switch (curType) {
+//		case 0:
+//			mCurChannels = channelsAll;
+//			break;
+//		case 1:
+//			mCurChannels =localTvList ;
+//			break;
+//		case 2:
+//			mCurChannels = CCTVList ;
+//			break;
+//		case 3:
+//			mCurChannels = weishiTvList;
+//			break;
+//		case 4:
+//			mCurChannels = HDTvList;
+//			break;
+//		}
+//		if(curType==0){
+//			mCurChannels = channelsAll;
+//		}else if(channelTypes!=null&&channelTypes.size()!=0&&curType<channelTypes.size()){
+//			mCurChannels=allChanelsMap.get(channelTypes.get(curType).getPramValue());
+//		}
+		if(channelTypeKey==null||curType>channelTypeKey.size()||allChanelsMap.isEmpty()){
+			return;
 		}
+		String typeKey=channelTypeKey.get(curType);
+		mCurChannels=allChanelsMap.get(typeKey).getChannelList();
+		
 		setCategoryTitle(curType);
 		curListIndex = mCurChannels.indexOf(CacheData.getCurChannel());
 		if (-1 == curListIndex) {
@@ -653,7 +681,7 @@ public class MainActivity extends BaseActivity {
 
 			// 切换频道类型，更新频道列表的数据
 			if (chListView.isShown()) {
-				if (curType == (TVtype.length - 1)) {
+				if (curType == (channelTypes.size() - 1)) {
 					curType = 0;
 				} else {
 					curType++;
@@ -670,7 +698,7 @@ public class MainActivity extends BaseActivity {
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
 			// 切换频道类型，更新频道列表的数据
 			if (curType == 0) {
-				curType = (TVtype.length - 1);
+				curType = (channelTypes.size() - 1);
 			} else {
 				curType--;
 			}
@@ -1448,11 +1476,21 @@ public class MainActivity extends BaseActivity {
 	/*
 	 * 设置频道分类标题
 	 */
+//	private  void setCategoryTitle(int index){
+//		int size=TVtype.length;
+//		int lastIndex=(index-1)>=0?(index-1):(size-1);
+//		lastCategory.setText(TVtype[lastIndex % size]);
+//		curCategory.setText(TVtype[index]);
+//		nextCategory.setText(TVtype[(index+1) % size]);
+//	}
 	private  void setCategoryTitle(int index){
-		int size=TVtype.length;
+		if(channelTypes==null){
+			return;
+		}
+		int size=channelTypes.size();
 		int lastIndex=(index-1)>=0?(index-1):(size-1);
-		lastCategory.setText(TVtype[lastIndex % size]);
-		curCategory.setText(TVtype[index]);
-		nextCategory.setText(TVtype[(index+1) % size]);
+		lastCategory.setText(channelTypes.get(lastIndex % size).getPramValue());
+		curCategory.setText(channelTypes.get(index).getPramValue());
+		nextCategory.setText(channelTypes.get((index+1) % size).getPramValue());
 	}
 }
