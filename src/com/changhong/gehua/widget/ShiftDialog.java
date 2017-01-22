@@ -32,6 +32,8 @@ public class ShiftDialog extends Dialog {
 		private DialogInterface.OnClickListener positiveButtonClickListener;
 		private DialogInterface.OnClickListener negativeButtonClickListener;
 
+		private ShiftDialog dialog;
+		
 		public Builder(Context context) {
 			this.context = context;
 		}
@@ -121,7 +123,9 @@ public class ShiftDialog extends Dialog {
 			LayoutInflater inflater = (LayoutInflater) context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			// instantiate the dialog with the custom Theme
-			final ShiftDialog dialog = new ShiftDialog(context,R.style.replayDialog);
+			if(null==dialog){
+				dialog = new ShiftDialog(context,R.style.replayDialog);
+			}
 			View layout = inflater.inflate(R.layout.shift_end_dia, null);
 			dialog.addContentView(layout, new LayoutParams(
 					LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));

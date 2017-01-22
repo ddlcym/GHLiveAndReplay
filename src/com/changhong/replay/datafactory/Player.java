@@ -650,7 +650,7 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 	}
 
 	// fastforward and fastbackward post delay
-	static Runnable fastOperationRunnable = new Runnable() {
+	public static Runnable fastOperationRunnable = new Runnable() {
 
 		@Override
 		public void run() {
@@ -686,9 +686,9 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 					playLiveBack(curChannel, delayTime);
 				}
 				//时移快进和快退到最开始和最后，暂停视频播放
-				if (desPositon == 0 || desPositon >= skbProgress.getMax()) {
-					mediaPlayer.pause();
-				}
+//				if (desPositon == 0 || desPositon >= skbProgress.getMax()) {
+//					mediaPlayer.pause();
+//				}
 				
 			}
 

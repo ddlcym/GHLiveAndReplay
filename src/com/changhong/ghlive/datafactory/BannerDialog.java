@@ -203,7 +203,7 @@ public class BannerDialog extends Dialog {
 								public void onClick(DialogInterface dialog, int which) {
 									dialog.dismiss();
 //									Log.i("mmmm", "PositiveButton"+list.get(shiftcurindex-1).getEventName());
-									
+									mHandler.removeCallbacks(Player.fastOperationRunnable);//快退后防止播、停、播的情况
 									PlayVideo.getInstance().playLiveBack(player,curChannel,list.get(shiftcurindex-1));
 									CacheData.setCurProgram(list.get(shiftcurindex-1));
 									
@@ -475,16 +475,6 @@ public class BannerDialog extends Dialog {
 				.getEndTime());
 		long length = programListInfo.get(1).getEndTime().getTime()
 				- programListInfo.get(1).getBeginTime().getTime();
-		// 设置频道号和频道名称
-		// channel_name.setText(channelInfo.getChannelName());
-		// channel_number.setText(channelInfo.getChannelNumber());
-		
-		/*currentProgramName.setText("当前节目       " + currentProgramBginTime + "-"
-				+ currentProgramEndTime + "       "
-				+ programListInfo.get(1).getEventName());*/
-		/*nextProgramName.setText("下一节目       " + nextProgramBeginTime + "-"
-				+ nextProgramEndTime + "       "
-				+ programListInfo.get(2).getEventName());*/
 		
 		currentProgramTime.setText(currentProgramBginTime + "-"+ currentProgramEndTime);
 		currentProgramName.setText(programListInfo.get(1).getEventName());
@@ -499,8 +489,9 @@ public class BannerDialog extends Dialog {
 		/*player = new Player(parentHandler, surView,
 				programPlayBar.getSeekBar(), programPlayBar.getCurText());		*/		
 		if(null==player){
-		player = new Player(mHandler, surView,
-				programPlayBar.getSeekBar(), programPlayBar.getCurText());}
+			player = new Player(mHandler, surView,
+				programPlayBar.getSeekBar(), programPlayBar.getCurText());
+		}
 		player.setLiveFlag(true);
 		player.initSeekbar();
 		
@@ -766,7 +757,7 @@ public class BannerDialog extends Dialog {
 		// TODO Auto-generated method stub
 
 		switch (keyCode) {
-		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
+		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY://onkeydown负责进度条，up负责播放串获取
 
 			if (!IsFocusList) {
 				Player.handleProgress
