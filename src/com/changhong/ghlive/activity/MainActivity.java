@@ -58,7 +58,6 @@ public class MainActivity extends BaseActivity {
 	private String TAG = "mmmm";
 
 	// view
-	private ImageView focusView; // foucus image
 	private TextView epgListTitleView;// chanellist title
 	private SurfaceView surfaceView;
 	private LinearLayout channelListLinear;// channellist layout
@@ -98,12 +97,6 @@ public class MainActivity extends BaseActivity {
 	// kinds of channel list
 	private List<ChannelInfo> mCurChannels = new ArrayList<ChannelInfo>();// 当前频道列表清单
 	private List<ChannelInfo> channelsAll = new ArrayList<ChannelInfo>();
-//	private List<ChannelInfo> CCTVList = new ArrayList<ChannelInfo>();
-//	private List<ChannelInfo> weishiTvList = new ArrayList<ChannelInfo>();
-	// private List<ChannelInfo> favTvList = new ArrayList<ChannelInfo>();
-//	private List<ChannelInfo> localTvList = new ArrayList<ChannelInfo>();
-//	private List<ChannelInfo> HDTvList = new ArrayList<ChannelInfo>();
-//	private List<ChannelInfo> otherTvList = new ArrayList<ChannelInfo>();
 	
 	//将频道分类并创建集合
 	private List<List<ChannelInfo>> allCategeChanels=new ArrayList<List<ChannelInfo>>();//由于服务器下发数据有误（热门和高清rank都为0），暂无法使用本对象
@@ -154,6 +147,7 @@ public class MainActivity extends BaseActivity {
 					Toast.makeText(MainActivity.this, "获取节目信息失败!", Toast.LENGTH_SHORT).show();
 					return;
 				}
+				//设置当前焦点为正在播放的频道
 				curChannel = channelsAll.get(curListIndex);
 				curIndex = mCurChannels.indexOf(curChannel);
 				if (curIndex >= 0 && chListView.isShown()) {
@@ -267,31 +261,7 @@ public class MainActivity extends BaseActivity {
 
 	@Override
 	protected void initData() {
-		volleyTool = VolleyTool.getInstance();
-		mReQueue = volleyTool.getRequestQueue();
-		if (null == processData) {
-			processData = new ProcessData();
-		}
-		getChannelTypes();
-		getChannelList();
 		
-		player = new Player(mhandler, surfaceView, liveSeekBar, null);
-		
-		
-//		Player.setFirstPlayInShift(false);
-		// chListView.setOnItemSelectedListener(myItemSelectLis);
-		chListView.setOnItemClickListener(myClickLis);
-
-		//audioMgr = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-		mAudioManager = (AudioManager) getApplicationContext().getSystemService(AUDIO_SERVICE);
-		
-		
-		// audioMgr.setStreamMute(AudioManager.STREAM_MUSIC, false);
-		// int max = audioMgr.getStreamMaxVolume( AudioManager.STREAM_VOICE_CALL
-		// );
-		// Log.d("VIOCE_CALL", “max : ” + max + ” current : ” + current);
-		// registerUser();
-		// getUserChannel();
 	}
 
 	@Override
@@ -301,7 +271,6 @@ public class MainActivity extends BaseActivity {
 		
 //		TVtype = getResources().getStringArray(R.array.tvtype);
 		chListView = (ListView) findViewById(R.id.id_epg_chlist);
-		focusView = (ImageView) findViewById(R.id.set_focus_id);
 		lastCategory = (TextView) findViewById(R.id.last_category);
 		curCategory = (TextView) findViewById(R.id.cur_category);
 		nextCategory = (TextView) findViewById(R.id.next_category);
@@ -334,7 +303,7 @@ public class MainActivity extends BaseActivity {
 				Intent intent=getIntent();
 				int startChannel=intent.getIntExtra("serviceId", -1);
 				if(startChannel!=-1){
-					curChannelNO="18";
+					curChannelNO="21";
 					CommonMethod.saveChannelLastTime(Integer.parseInt(curChannelNO), MainActivity.this);
 				}
 				
@@ -483,9 +452,9 @@ public class MainActivity extends BaseActivity {
 		focusItemParams.width = imgRect.width() + 16;
 		focusItemParams.height = imgRect.height() + 14;
 
-		focusView.setLayoutParams(focusItemParams);
-		focusView.setVisibility(View.VISIBLE);
-		focusView.bringToFront();
+//		focusView.setLayoutParams(focusItemParams);
+//		focusView.setVisibility(View.VISIBLE);
+//		focusView.bringToFront();
 	}
 
 	private void getAllTVtype() {
@@ -582,9 +551,6 @@ public class MainActivity extends BaseActivity {
 		}
 		chLstAdapter.setData(mCurChannels);
 		chListView.setVisibility(View.VISIBLE);
-		if (mCurChannels.size() <= 0) {
-			focusView.setVisibility(View.INVISIBLE);
-		}
 	}
 
 	@Override
@@ -670,10 +636,12 @@ public class MainActivity extends BaseActivity {
 			
 			//要求频道列表和banner同显
 			if (livePlayBanner != null ){
+				livePlayBanner.setType(0);
 				if(livePlayBanner.isToastShow()) {
 					if (liveBannerInfoRunnable != null) {
 						mhandler.removeCallbacks(liveBannerInfoRunnable);
 				    }
+					
 				}else{
 					livePlayBanner.show();
 				}
@@ -1331,7 +1299,6 @@ public class MainActivity extends BaseActivity {
 			mCurChannels = channelsAll;
 			channelListLinear.setVisibility(View.INVISIBLE);
 			fullscrBack.setVisibility(View.INVISIBLE);
-			focusView.setVisibility(View.INVISIBLE);
 			linear_vertical_line.setVisibility(View.INVISIBLE);
 			liveSeekBar.setVisibility(View.INVISIBLE);
 			chListView.setVisibility(View.INVISIBLE);
@@ -1401,7 +1368,35 @@ public class MainActivity extends BaseActivity {
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
+		//initdata移动过来的
 		// Log.i("zyt", "resume mute is " + whetherMute);
+		volleyTool = VolleyTool.getInstance();
+		mReQueue = volleyTool.getRequestQueue();
+		if (null == processData) {
+			processData = new ProcessData();
+		}
+		getChannelTypes();
+		getChannelList();
+		
+		player = new Player(mhandler, surfaceView, liveSeekBar, null);
+		
+		
+//		Player.setFirstPlayInShift(false);
+		// chListView.setOnItemSelectedListener(myItemSelectLis);
+		chListView.setOnItemClickListener(myClickLis);
+
+		//audioMgr = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+		mAudioManager = (AudioManager) getApplicationContext().getSystemService(AUDIO_SERVICE);
+		
+		
+		// audioMgr.setStreamMute(AudioManager.STREAM_MUSIC, false);
+		// int max = audioMgr.getStreamMaxVolume( AudioManager.STREAM_VOICE_CALL
+		// );
+		// Log.d("VIOCE_CALL", “max : ” + max + ” current : ” + current);
+		// registerUser();
+		// getUserChannel();
+		
+		//原有代码
 		curChannelNO = String.valueOf(CommonMethod.getChannelLastTime(MyApp.getContext()));
 		
 		curvolumn =  mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
@@ -1426,7 +1421,8 @@ public class MainActivity extends BaseActivity {
 		sendBroadcast(intent);
 		CommonMethod.saveMutesState((whetherMute + ""), MyApp.getContext());
 		// CommonMethod.saveChannelLastTime(Integer.parseInt(curChannelNO),
-		finish();
+//		finish();
+		player.stop();
 		super.onPause();
 	}
 
@@ -1467,8 +1463,9 @@ public class MainActivity extends BaseActivity {
 		public void run() {
 			// TODO Auto-generated method stub
 			if(livePlayBanner!=null)
-			/*livePlayBanner.getLivebannerLayout().setVisibility(View.INVISIBLE);
-			livePlayBanner.getBackImageView().setVisibility(View.INVISIBLE);*/
+//			livePlayBanner.getLivebannerLayout().setVisibility(View.INVISIBLE);
+//			livePlayBanner.getBackImageView().setVisibility(View.INVISIBLE);
+			livePlayBanner.setType(0);
 		    livePlayBanner.dismiss();	
 		}
 	};

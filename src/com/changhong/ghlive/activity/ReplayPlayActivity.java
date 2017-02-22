@@ -193,7 +193,10 @@ public class ReplayPlayActivity extends BaseActivity {
 					replayHandler.postDelayed(progressBarRunnable, 5000);
 					break;
 					
-				
+				case Class_Constant.REPLAY_38ERROR:
+					//解决黑屏的临时处理方式
+					finish();
+					break;
 			}
 		}
 	};
@@ -621,11 +624,13 @@ public class ReplayPlayActivity extends BaseActivity {
 		switch (keyCode) {
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:
 			playbtn.setMyBG(PlayButton.Pause);
-			player.handleProgress.sendEmptyMessage(Class_Constant.RE_FAST_FORWARD_UP);
+			player.handleProgress.removeMessages(Class_Constant.RE_FAST_FORWARD_UP);
+			player.handleProgress.sendEmptyMessageDelayed(Class_Constant.RE_FAST_FORWARD_UP,1500);
 			break;
 		case Class_Constant.KEYCODE_LEFT_ARROW_KEY:
 			playbtn.setMyBG(PlayButton.Pause);
-			player.handleProgress.sendEmptyMessage(Class_Constant.RE_FAST_REVERSE_UP);
+			player.handleProgress.removeMessages(Class_Constant.RE_FAST_REVERSE_UP);
+			player.handleProgress.sendEmptyMessageDelayed(Class_Constant.RE_FAST_REVERSE_UP,1500);
 			break;
 		}
 

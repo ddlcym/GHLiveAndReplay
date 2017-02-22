@@ -55,7 +55,7 @@ public class LivePlayBannerDialog extends Dialog {
 	private int mtype;
 	private int mvolumn;
 	//private ImageView backImageView;
-	private ImageView muteicon;
+	private ImageView muteicon,hdSign;
 	
 	
 	private ImageView volumnback;
@@ -185,7 +185,7 @@ public class LivePlayBannerDialog extends Dialog {
 		live_curTime = (TextView) findViewById(R.id.live_curtime);
 		programPlayBar = (SeekBar) findViewById(R.id.program_progress);
 		livePlayInfo = (LinearLayout) findViewById(R.id.id_dtv_banner);
-		
+		hdSign=(ImageView)findViewById(R.id.hd_sign);
 		
 		banner_volumn = (RelativeLayout)findViewById(R.id.banner_volumn);
 		banner_cur = (RelativeLayout)findViewById(R.id.banner_curproinfo);
@@ -210,6 +210,12 @@ public class LivePlayBannerDialog extends Dialog {
 		}
 		channel_name.setText(channelName);
 		channel_number.setText(channelNumber);
+		
+		if(1==channelInfo.getVideoType()){
+			hdSign.setVisibility(View.VISIBLE);
+		}else{
+			hdSign.setVisibility(View.GONE);
+		}
 		
 		if (programListInfo != null && programListInfo.size() == 3) {
 			currentProgramBginTime = Utils.hourAndMinute(programListInfo.get(1).getBeginTime());
@@ -246,7 +252,18 @@ public class LivePlayBannerDialog extends Dialog {
 		
 		programPlayBar.setFocusable(false);
 		Log.i("live", "mtype ="+mtype);
-		switch (mtype) {
+		setType (mtype);
+		showCurTime();
+		
+	}
+
+	public boolean isToastShow() {
+		return isShowing();
+	}
+	
+	public void setType(int type){
+		mtype=type;
+		switch (type) {
 		case 0:
 			banner_cur.setVisibility(View.VISIBLE);
 			banner_next.setVisibility(View.VISIBLE);
@@ -266,10 +283,6 @@ public class LivePlayBannerDialog extends Dialog {
 		default:
 			break;
 		}
-	}
-
-	public boolean isToastShow() {
-		return isShowing();
 	}
 
 	@Override

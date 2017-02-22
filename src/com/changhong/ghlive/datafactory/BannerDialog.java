@@ -554,7 +554,7 @@ public class BannerDialog extends Dialog {
 			}else {
 				parentHandler.removeCallbacks(VolumnbackRunnable);
 			}
-			return true;
+			return false;
 		}
 		if (keyCode == Class_Constant.KEYCODE_VOICE_DOWN) {
 			mAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0);
@@ -568,7 +568,7 @@ public class BannerDialog extends Dialog {
 			}else {
 				parentHandler.removeCallbacks(VolumnbackRunnable);
 			}
-			return true;
+			return false;
 		}
 		
 		if (keyCode == Class_Constant.KEYCODE_MUTE){
@@ -654,8 +654,6 @@ public class BannerDialog extends Dialog {
 				showViewVisibility(NEXT_PROGRAM);
 				IsFocusList = false;
 			}
-
-
 			break;
 
 		case Class_Constant.KEYCODE_RIGHT_ARROW_KEY:

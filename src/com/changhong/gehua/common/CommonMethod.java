@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +19,7 @@ public class CommonMethod {
 		Intent intent = new Intent("com.bestv.ott.action.settings");
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		outterContext.startActivity(intent);
+		
 	}
 
 	public static void excuteCmd(String cmd) throws Exception {

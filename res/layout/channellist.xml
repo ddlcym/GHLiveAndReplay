@@ -23,14 +23,6 @@
         android:background="@drawable/mute_icon"
         android:visibility="invisible" />
 
-    <ImageView
-        android:id="@+id/set_focus_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@null"
-        android:scaleType="fitXY"
-        android:src="@drawable/chanselect"
-        android:visibility="invisible" />
     
 	<ImageView
         android:id="@+id/prolistback"

@@ -7,6 +7,9 @@ import java.util.TimerTask;
 
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnErrorListener;
+import android.media.MediaPlayer.OnPreparedListener;
+import android.media.MediaPlayer.OnSeekCompleteListener;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -214,7 +217,9 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 				break;
 			case Class_Constant.RE_FAST_FORWARD_DOWN:
 				
-				mediaPlayer.pause();
+//				if (mediaPlayer.isPlaying()) {
+//					mediaPlayer.pause();
+//				}
 				keyFlag = true;
 				desPositon = Player.skbProgress.getProgress() + 30000;
 
@@ -235,9 +240,9 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 				if (!playingFlag) {
 					return;
 				}
-				if (mediaPlayer.isPlaying()) {
-					mediaPlayer.pause();
-				}
+//				if (mediaPlayer.isPlaying()) {
+//					mediaPlayer.pause();
+//				}
 				keyFlag = true;
 				desPositon = Player.skbProgress.getProgress() - 30000;
 
@@ -256,8 +261,13 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 				break;
 			case Class_Constant.RE_FAST_FORWARD_UP:
 			case Class_Constant.RE_FAST_REVERSE_UP:
-				parentHandler.removeCallbacks(fastOperationRunnable);
-				parentHandler.postDelayed(fastOperationRunnable, 1500);
+				
+				if (liveFlag) {
+					parentHandler.removeCallbacks(fastOperationRunnable);
+					parentHandler.postDelayed(fastOperationRunnable, 2000);
+				}else{
+					dealReFastOperation();
+				}
 				break;
 			case Class_Constant.RE_PLAY:
 
@@ -272,8 +282,9 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 				}
 				if (liveFlag) {
 					int curmedPos = mediaPlayer.getCurrentPosition();
-//					Log.i("mmmm", "curmedPos:"+curmedPos+"curmedPos:"+curmedPos+"delayTime:"+delayTime);
+					
 					desPositon = curmedPos + curBeginTime - delayTime * 1000;
+//					Log.i("mmmm", "curmedPos:"+curmedPos+"desPositon:"+desPositon+"curBeginTime:"+curBeginTime+"delayTime:"+delayTime);
 					if (desPositon >= curProlength) {
 						// 通知更新banner条
 						// parentHandler.sendEmptyMessage(Class_Constant.LIVE_BACK_PROGRAM_OVER);
@@ -305,6 +316,7 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 				desPositon = Player.skbProgress.getProgress() + 30000;
 				if (IsOutOfTimes(desPositon)) {
 					if (handlerFlag) {
+						handlerFlag=false;
 						parentHandler
 								.sendEmptyMessage(Class_Constant.BACK_TO_LIVE);
 					}
@@ -357,11 +369,14 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 			// mediaPlayer.stop();
 			mediaPlayer.reset();
 			mediaPlayer.setDataSource(videoUrl);
-			mediaPlayer.prepare();// prepare֮���Զ�����
+//			mediaPlayer.prepare();// prepare֮���Զ�����
 
 			if (liveFlag) {
+				mediaPlayer.prepare();// prepare֮���Զ�����
 				curBeginTime = getStartTime();
-			} 
+			} else{
+				mediaPlayer.prepareAsync();
+			}
 			// mediaPlayer.start();
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
@@ -408,6 +423,8 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 			mediaPlayer = null;
 			if (parentHandler != null) {
 				parentHandler.removeCallbacks(fastOperationRunnable);
+				handleProgress.removeMessages(Class_Constant.RE_FAST_FORWARD_UP);
+				handleProgress.removeMessages(Class_Constant.RE_FAST_REVERSE_UP);
 			}
 		}
 		if (mTimer != null) {
@@ -443,6 +460,21 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 			mediaPlayer.setOnBufferingUpdateListener(this);
 			mediaPlayer.setOnPreparedListener(this);
 			mediaPlayer.setOnCompletionListener(this);
+			mediaPlayer.setOnErrorListener(new OnErrorListener() {
+				
+				@Override
+				public boolean onError(MediaPlayer mp, int what, int extra) {
+					// TODO Auto-generated method stub
+					Log.i("mmmm", "mediaplaer error :what"+what+"extra"+extra);
+					switch (what){
+					case -38:
+						parentHandler.sendEmptyMessage(Class_Constant.REPLAY_38ERROR);
+						
+						break;
+					}
+					return false;
+				}
+			});
 		} catch (Exception e) {
 			Log.e("mmmm", "error" + e);
 		}
@@ -466,7 +498,7 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 		} else {
 			Toast.makeText(MyApp.getContext(), "视频无效", Toast.LENGTH_SHORT)
 					.show();
-			Log.i("mm", "videoWidth or videoHeight =0");
+			Log.i("debug", "videoWidth or videoHeight =0");
 		}
 		if (liveFlag) {
 			handleProgress.sendEmptyMessage(Class_Constant.RE_UPDATE_PROGRESS);
@@ -486,6 +518,7 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 			Player.skbProgress.setMax(duration);
 			Log.i("debug", "set ---playingFlag true");
 			playingFlag = true;
+			arg0.start();
 		}
 	}
 
@@ -649,7 +682,7 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 		return (int) time;
 	}
 
-	// fastforward and fastbackward post delay
+	// fastforward and fastbackward post delay //fortimeshift
 	public static Runnable fastOperationRunnable = new Runnable() {
 
 		@Override
@@ -658,25 +691,7 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 			// Player.skbProgress.setProgress(desPositon);
 			if (null == mediaPlayer)
 				return;
-			if (!liveFlag) {
-				Log.i("mmmm", "huikan"+liveFlag);
-				Log.i("mmmm", "huikan desPositon:"+desPositon);
-				if (desPositon < 0) {
-					mediaPlayer.pause();
-					if (handlerFlag) {
-						handlerFlag = false;
-						parentHandler
-								.sendEmptyMessage(Class_Constant.RE_LAST_PROGRAM);// 回退到最开始
-						Log.i("xb", "Player*********");
-					}
-					desPositon = 0;
-				}else {
-					mediaPlayer.seekTo(desPositon);
-					mediaPlayer.start();
-				}
-					
-				
-			} else {
+			if (liveFlag) {
 				Log.i("mmmm", "shiyi");
 				Log.i("mmmm", "shiyi desPositon:"+desPositon);
 				Log.i("mmmm", "shiyi skbProgress.getMax():"+skbProgress.getMax());
@@ -696,6 +711,41 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 		}
 	};
 	
+	private static void dealReFastOperation(){
+		Log.i("mmmm", "huikan"+liveFlag);
+		Log.i("mmmm", "huikan desPositon:"+desPositon);
+		if (null == mediaPlayer)
+			return;
+		if (desPositon < 0) {
+			mediaPlayer.pause();
+			if (handlerFlag) {
+				handlerFlag = false;
+				parentHandler
+						.sendEmptyMessage(Class_Constant.RE_LAST_PROGRAM);// 回退到最开始
+				Log.i("xb", "Player*********");
+			}
+			desPositon = 0;
+		}else {
+			
+			try{
+				mediaPlayer.seekTo(desPositon);
+				
+//				try {
+//					mediaPlayer.prepare();
+//				} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//				mediaPlayer.start();
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+				
+			}
+		}
+		
+		keyFlag = false;
+	}
+	
 	public static boolean isPlayingFlag() {
 		return playingFlag;
 	}
@@ -709,4 +759,6 @@ public class Player implements MediaPlayer.OnBufferingUpdateListener,
 		desPositon=0;
 	}
 
+	
+	 
 }

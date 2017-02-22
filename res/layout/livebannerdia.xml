@@ -39,12 +39,13 @@
             android:layout_weight="5"
             android:orientation="vertical" >
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
                 android:layout_marginTop="15dip"
-                android:orientation="horizontal" >
+                 >
 
                 <TextView
                     android:id="@+id/banner_service_id"
@@ -57,6 +58,7 @@
                     android:id="@+id/banner_channel_name_id"
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/banner_service_id"
                     android:ellipsize="marquee"
                     android:focusable="true"
                     android:gravity="center_vertical"
@@ -66,15 +68,30 @@
                     android:scrollHorizontally="true"
                     android:singleLine="true"
                     android:textSize="36sp" />
+                
+                
+                
                 <TextView 
                     android:id="@+id/live_curtime"
-                    android:layout_width="fill_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
                     android:textColor="@color/live_next_program"
                     android:textSize="36sp" 
+                    android:layout_gravity="end|center_vertical"
                     android:gravity="end|center_vertical"
                     />
-            </LinearLayout>
+                <ImageView 
+                    android:id="@+id/hd_sign" 
+                    android:layout_width="70dp"
+                    android:layout_height="35dp"
+                    android:layout_toLeftOf="@id/live_curtime"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="100dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/hd_sign"
+                    />
+            </RelativeLayout>
 
             <SeekBar
                 android:id="@+id/program_progress"
@@ -217,7 +234,7 @@
                    android:gravity="center_vertical"
                    android:layout_toLeftOf="@id/live_banner_exit"
                    android:layout_marginRight="10dp"
-                   android:layout_marginTop="5dp"
+                   android:layout_marginTop="8dp"
                    android:src="@drawable/banner_exit_icon" />
            </RelativeLayout>
 		           
