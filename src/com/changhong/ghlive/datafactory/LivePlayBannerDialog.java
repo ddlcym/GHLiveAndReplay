@@ -95,7 +95,7 @@ public class LivePlayBannerDialog extends Dialog {
 //			int position=getPosition();
 //			if(position>=timeLength){
 //				//通知更新直播banner条
-////				PlayVideo.getInstance().getProgramInfo(mHandler, CacheData.getCurChannel());
+////			PlayVideo.getInstance().getProgramInfo(mHandler, CacheData.getCurChannel());
 //				PlayVideo.getInstance().getProgramInfo(mhanlder, channelInfo);
 //				Log.i("mmmm", "LivePlayBannerDialog--mTimerTask"+"-position:"+position+"-timeLength:"+timeLength);
 //			}else{
@@ -117,7 +117,7 @@ public class LivePlayBannerDialog extends Dialog {
 				PlayVideo.getInstance().getProgramInfo(mhanlder, channelInfo);
 //				Log.i("mmmm", "LivePlayBannerDialog--mTimerTask-position>=timeLength");
 			}else{
-					programPlayBar.setProgress(position);
+				programPlayBar.setProgress(position);
 			}
 //			Log.i("mmmm", "LivePlayBannerDialog--mTimerTask");
 			mhanlder.sendEmptyMessage(Class_Constant.LIVE_BANNER_CURTIME);
@@ -248,6 +248,9 @@ public class LivePlayBannerDialog extends Dialog {
 		}else {
 			volumnicon.setBackgroundResource(R.drawable.notmuteicon);
 		}
+		if(mvolumn>15){
+			mvolumn=15;
+		}
 		volumnback.setBackgroundResource(volres[mvolumn]);
 		
 		programPlayBar.setFocusable(false);
@@ -291,6 +294,10 @@ public class LivePlayBannerDialog extends Dialog {
 		if (keyCode == Class_Constant.KEYCODE_VOICE_UP) {
 			mAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0);
 			curvolumn = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+			
+			if(curvolumn>15){
+				curvolumn=15;
+			}
 			volumnback.setBackgroundResource(volres[curvolumn]);
 			
 			muteicon.setVisibility(View.GONE);
@@ -311,6 +318,10 @@ public class LivePlayBannerDialog extends Dialog {
 		if (keyCode == Class_Constant.KEYCODE_VOICE_DOWN) {
 			mAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0);
 			curvolumn = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+			
+			if(curvolumn>15){
+				curvolumn=15;
+			}
 			volumnback.setBackgroundResource(volres[curvolumn]);
 			
 			muteicon.setVisibility(View.GONE);
@@ -337,6 +348,10 @@ public class LivePlayBannerDialog extends Dialog {
 				sysvolumn = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 				Log.i("mmmm", "liveplaybanner-setStreamMute false");
 				muteicon.setVisibility(View.GONE);
+				
+				if(sysvolumn>15){
+					sysvolumn=15;
+				}
 				volumnback.setBackgroundResource(volres[sysvolumn]);
 				volumnicon.setBackgroundResource(R.drawable.notmuteicon);
 				
@@ -348,6 +363,9 @@ public class LivePlayBannerDialog extends Dialog {
 				sysvolumn = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 				Log.i("mmmm", "liveplaybanner-setStreamMute true");
 				muteicon.setVisibility(View.VISIBLE);
+				if(sysvolumn>15){
+					sysvolumn=15;
+				}
 				volumnback.setBackgroundResource(volres[sysvolumn]);
 				volumnicon.setBackgroundResource(R.drawable.ismuteicon);
 				

@@ -119,6 +119,8 @@ public class MainActivity extends BaseActivity {
 	private HttpService mHttpService;
 	
 	private int curvolumn;
+	
+	private boolean backToLive=false;//用来判断是否是从其他activity退回到直播，方便调用播放直播的方法
 
 	private Handler mhandler = new Handler() {
 		ChannelInfo curChannel;
@@ -261,7 +263,33 @@ public class MainActivity extends BaseActivity {
 
 	@Override
 	protected void initData() {
-		
+		//initdata移动过来的
+				// Log.i("zyt", "resume mute is " + whetherMute);
+				volleyTool = VolleyTool.getInstance();
+				mReQueue = volleyTool.getRequestQueue();
+				if (null == processData) {
+					processData = new ProcessData();
+				}
+				getChannelTypes();
+				getChannelList();
+				
+				player = new Player(mhandler, surfaceView, liveSeekBar, null);
+				
+				
+//				Player.setFirstPlayInShift(false);
+				// chListView.setOnItemSelectedListener(myItemSelectLis);
+				chListView.setOnItemClickListener(myClickLis);
+
+				//audioMgr = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+				mAudioManager = (AudioManager) getApplicationContext().getSystemService(AUDIO_SERVICE);
+				
+				
+				// audioMgr.setStreamMute(AudioManager.STREAM_MUSIC, false);
+				// int max = audioMgr.getStreamMaxVolume( AudioManager.STREAM_VOICE_CALL
+				// );
+				// Log.d("VIOCE_CALL", “max : ” + max + ” current : ” + current);
+				// registerUser();
+				// getUserChannel();
 	}
 
 	@Override
@@ -611,7 +639,7 @@ public class MainActivity extends BaseActivity {
 		return super.onKeyDown(keyCode, event);
 	}
 
-	private boolean dealOnKeyDown(int keyCode) {
+	private void dealOnKeyDown(int keyCode) {
 		Log.i("mmmm", "dealOnKeyDown-keyCode:"+keyCode);
 		switch (keyCode) {
 		
@@ -866,13 +894,7 @@ public class MainActivity extends BaseActivity {
 			break;
 		case Class_Constant.KEYCODE_DOWN_ARROW_KEY:
 			if (chListView.isShown()) {
-				chListView.setFocusable(true);
-				chListView.requestFocus();
-				if ((chLstAdapter.getCount() - 1) == chListView.getSelectedItemPosition()) {
-					chListView.setSelection(0);
-				}else{
-					chListView.setSelection(chListView.getSelectedItemPosition() + 1);
-				}
+				dealKeyDown();
 			} else {
 				// 播放之前一个频道
 				curListIndex = channelsAll.indexOf(CacheData.getCurChannel());
@@ -930,6 +952,7 @@ public class MainActivity extends BaseActivity {
 
 		case Class_Constant.KEYCODE_MENU_KEY:
 			// Log.i("zyt", "onkeydown menukey is pressed " + keyCode);
+			backToLive=true;
 			CommonMethod.startSettingPage(MyApp.getContext());
 			break;
 
@@ -965,7 +988,6 @@ public class MainActivity extends BaseActivity {
 			break;
 		// next key down call
 		}
-		return true;
 	}
 
 	private void dealOnKeyUp(int keyCode) {
@@ -1082,6 +1104,16 @@ public class MainActivity extends BaseActivity {
 		}
 		return b_Result;
 	}
+	
+	private void dealKeyDown(){
+		chListView.setFocusable(true);
+		chListView.requestFocus();
+		if ((chLstAdapter.getCount() - 1) == chListView.getSelectedItemPosition()) {
+			chListView.setSelection(0);
+		}else{
+			chListView.setSelection(chListView.getSelectedItemPosition() + 1);
+		}
+	} 
 
 	private void showChannelListView() {
 		channelListLinear.setVisibility(View.VISIBLE);
@@ -1368,37 +1400,14 @@ public class MainActivity extends BaseActivity {
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
-		//initdata移动过来的
-		// Log.i("zyt", "resume mute is " + whetherMute);
-		volleyTool = VolleyTool.getInstance();
-		mReQueue = volleyTool.getRequestQueue();
-		if (null == processData) {
-			processData = new ProcessData();
-		}
-		getChannelTypes();
-		getChannelList();
 		
-		player = new Player(mhandler, surfaceView, liveSeekBar, null);
-		
-		
-//		Player.setFirstPlayInShift(false);
-		// chListView.setOnItemSelectedListener(myItemSelectLis);
-		chListView.setOnItemClickListener(myClickLis);
-
-		//audioMgr = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-		mAudioManager = (AudioManager) getApplicationContext().getSystemService(AUDIO_SERVICE);
-		
-		
-		// audioMgr.setStreamMute(AudioManager.STREAM_MUSIC, false);
-		// int max = audioMgr.getStreamMaxVolume( AudioManager.STREAM_VOICE_CALL
-		// );
-		// Log.d("VIOCE_CALL", “max : ” + max + ” current : ” + current);
-		// registerUser();
-		// getUserChannel();
 		
 		//原有代码
 		curChannelNO = String.valueOf(CommonMethod.getChannelLastTime(MyApp.getContext()));
-		
+		if(backToLive){
+			playChannel(curChannelNO, false);
+			backToLive=false;
+		}
 		curvolumn =  mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 		Log.i("test", "enter live curvolumn is"+curvolumn);
 //		if (curvolumn == 0) {
