@@ -43,6 +43,7 @@ import com.changhong.gehua.common.PlayVideo;
 import com.changhong.gehua.common.ProcessData;
 import com.changhong.gehua.common.ProgramInfo;
 import com.changhong.gehua.common.VolleyTool;
+import com.changhong.gehua.sqlite.DBManager;
 import com.changhong.gehua.update.StringUtils;
 import com.changhong.gehua.widget.DigitalRoot;
 import com.changhong.ghlive.datafactory.BannerDialog;
@@ -122,6 +123,11 @@ public class MainActivity extends BaseActivity {
 	
 	private boolean backToLive=false;//用来判断是否是从其他activity退回到直播，方便调用播放直播的方法
 
+	/*
+	 * SQLITE
+	 */
+	private DBManager dbManager;
+	
 	private Handler mhandler = new Handler() {
 		ChannelInfo curChannel;
 
@@ -328,15 +334,16 @@ public class MainActivity extends BaseActivity {
 		}*/
 		
 		//当启动界面的intent里带有需要播放频道的参数时，播放指定频道
-				Intent intent=getIntent();
-				int startChannel=intent.getIntExtra("serviceId", -1);
-				if(startChannel!=-1){
-					curChannelNO="21";
-					CommonMethod.saveChannelLastTime(Integer.parseInt(curChannelNO), MainActivity.this);
-				}
+		curChannelNO = String.valueOf(CommonMethod.getChannelLastTime(MyApp.getContext()));
+		Intent intent=getIntent();
+		int startChannel=intent.getIntExtra("serviceId", -1);
+		if(startChannel!=-1){
+			curChannelNO="21";
+			CommonMethod.saveChannelLastTime(Integer.parseInt(curChannelNO), MainActivity.this);
+		}
 				
 				
-				Log.i("zyt", "current channel number is " + curChannelNO);
+		Log.i("zyt", "current channel number is " + curChannelNO);
 	}
 
 	private void startHttpSer() {
@@ -409,58 +416,92 @@ public class MainActivity extends BaseActivity {
 	};
 	
 	private void getChannelTypes(){
-		String URL = processData.getTypes();
-		Log.i("mmmm", "getChannelTypes:"+URL);
-		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null,
-				new Response.Listener<org.json.JSONObject>() {
-
-					@Override
-					public void onResponse(org.json.JSONObject arg0) {
-						// TODO Auto-generated method stub
-//						Log.i("mmmm", "MainActivity***getChannelTypes:" + arg0);
-						channelTypes=HandleLiveData.getInstance().dealChannelTypes(arg0);
-						if(channelTypes!=null){
-							for(int i=0;i<channelTypes.size();i++){
-									ChannelType type=channelTypes.get(i);
-									allChanelsMap.put(type.getPramKey(), type);
-									channelTypeKey.add(type.getPramKey());
-								}
+		dbManager=DBManager.getInstance(MainActivity.this);
+		channelTypes=dbManager.queryChannelType();
+		if(!channelTypes.isEmpty()){
+			dealChannelTypes();
+		}else{
+			String URL = processData.getTypes();
+			Log.i("mmmm", "getChannelTypes:"+URL);
+			JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null,
+					new Response.Listener<org.json.JSONObject>() {
+	
+						@Override
+						public void onResponse(org.json.JSONObject arg0) {
+							// TODO Auto-generated method stub
+	//						Log.i("mmmm", "MainActivity***getChannelTypes:" + arg0);
+							channelTypes=HandleLiveData.getInstance().dealChannelTypes(arg0);
+							if(channelTypes!=null&&!channelTypes.isEmpty()){
+								dbManager.insertChannelType(channelTypes);
 							}
-						}
-					}, errorListener);
-		jsonObjectRequest.setTag("getChannelTypes");// 设置tag,cancelAll的时候使用
-		mReQueue.add(jsonObjectRequest);
+							dealChannelTypes();
+							}
+						}, errorListener);
+			jsonObjectRequest.setTag("getChannelTypes");// 设置tag,cancelAll的时候使用
+			mReQueue.add(jsonObjectRequest);
+		}
+	}
+	
+	private void dealChannelTypes(){
+		if(channelTypes!=null){
+			for(int i=0;i<channelTypes.size();i++){
+					ChannelType type=channelTypes.get(i);
+					allChanelsMap.put(type.getPramKey(), type);
+					channelTypeKey.add(type.getPramKey());
+				}
+			}
 	}
 
 	private void getChannelList() {
-		// 传入URL请求链接
-		String URL = processData.getChannelList();
-		Log.i("mmmm", "MainActivity_getChannelList_url:"+URL);
-		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null,
-				new Response.Listener<org.json.JSONObject>() {
-
-					@Override
-					public void onResponse(org.json.JSONObject arg0) {
-						// TODO Auto-generated method stub
-						// 相应成功
-						Log.i("mmmm", "MainActivity**getChannelList*" + arg0);
-						channelsAll = HandleLiveData.getInstance().dealChannelJson(arg0);
-						Log.i("mmmm", "getChannelList-chLstAdapter"+channelsAll.size()+"curchannelNo"+curChannelNO);
-						// first set adapter
-						curType = 0;
-						getAllTVtype();
-						showChannelList();
-						playChannel(curChannelNO, false);
-						// Log.i(TAG,
-						// "HttpService=channelsAll:" + channelsAll.size());
-						if (channelsAll.size() <= 0) {
-							channelListLinear.setVisibility(View.INVISIBLE);
-							fullscrBack.setVisibility(View.INVISIBLE);
+		dbManager=DBManager.getInstance(MainActivity.this);
+		channelsAll=dbManager.queryChannelList();
+		if(channelsAll!=null&&!channelsAll.isEmpty()){
+			dealChannelList();
+		}else{
+			// 传入URL请求链接
+			String URL = processData.getChannelList();
+			Log.i("mmmm", "MainActivity_getChannelList_url:"+URL);
+			JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null,
+					new Response.Listener<org.json.JSONObject>() {
+	
+						@Override
+						public void onResponse(org.json.JSONObject arg0) {
+							// TODO Auto-generated method stub
+							// 相应成功
+							Log.i("mmmm", "MainActivity**getChannelList*" + arg0);
+							channelsAll = HandleLiveData.getInstance().dealChannelJson(arg0);
+							Log.i("mmmm", "getChannelList-chLstAdapter"+channelsAll.size()+"curchannelNo"+curChannelNO);
+							if(channelsAll!=null&&!channelsAll.isEmpty()){
+								dbManager.insertChannelList(channelsAll);
+								dealChannelList();
+							}
+							
 						}
-					}
-				}, errorListener);
-		jsonObjectRequest.setTag(MainActivity.class.getSimpleName());// 设置tag,cancelAll的时候使用
-		mReQueue.add(jsonObjectRequest);
+					}, errorListener);
+			jsonObjectRequest.setTag(MainActivity.class.getSimpleName());// 设置tag,cancelAll的时候使用
+			mReQueue.add(jsonObjectRequest);
+		}
+	}
+	
+	private void dealChannelList(){
+		// first set adapter
+		curType = 0;
+		//按键值对存好，方便读取
+		CacheData.allChannelInfo.clear();
+		for (ChannelInfo channel : channelsAll) {
+			CacheData.allChannelMap.put(channel.getChannelNumber(), channel);
+			CacheData.allChannelInfo.add(channel);
+		}
+		
+		getAllTVtype();
+		showChannelList();
+		playChannel(curChannelNO, false);
+		// Log.i(TAG,
+		// "HttpService=channelsAll:" + channelsAll.size());
+		if (channelsAll.size() <= 0) {
+			channelListLinear.setVisibility(View.INVISIBLE);
+			fullscrBack.setVisibility(View.INVISIBLE);
+		}
 	}
 
 	private Response.ErrorListener errorListener = new Response.ErrorListener() {
@@ -514,24 +555,6 @@ public class MainActivity extends BaseActivity {
 				}
 			}
 			
-//			channelsAll.add(dvbChannel);
-//			//由于服务器协议改动，临时解决方案
-//			if(dvbChannel.getChannelTypes().contains("3003")){
-//				//央视频道
-//				CCTVList.add(dvbChannel);
-//			}
-//			if(dvbChannel.getChannelTypes().contains("3004")){
-//				//北京频道
-//				localTvList.add(dvbChannel);
-//			}
-//			if(dvbChannel.getChannelTypes().contains("3005")){
-//				//卫视频道
-//				weishiTvList.add(dvbChannel);
-//			}
-//			if(dvbChannel.getChannelTypes().contains("3002")){
-//				//高清频道
-//				HDTvList.add(dvbChannel);
-//			}
 			// 喜爱频道列表---------------待完成---------------
 			// if (dvbChannel.favorite == 1) {
 			// favTvList.add(dvbChannel);
@@ -1247,6 +1270,9 @@ public class MainActivity extends BaseActivity {
 	 * 
 	 */
 	public String playChannel(String channelno, boolean isCheckPlaying) {
+		
+		if(null==channelno)
+			return null;
 
 		if (channelno.equals(curChannelNO) && isCheckPlaying) {
 			return channelno;

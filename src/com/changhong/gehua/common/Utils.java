@@ -4,8 +4,13 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+
 
 public class Utils {
 	
@@ -28,9 +33,33 @@ public class Utils {
 		}
 	 
 	 
+	 public static String dateToFullStr(Date date) {
+		DateFormat df =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String str = df.format(date);
+		return str;
+	 }
+	 
+	 public static Date strToFullDate(String strDate) throws Exception {
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			return df.parse(strDate);
+		}
+	 
+	 /*
+	  * yyyy年MM月dd日
+	  */
 	public static String dateToString(Date date) {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		df = DateFormat.getDateInstance(DateFormat.MEDIUM);
+		// df.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+		String str = df.format(date);
+		return str;
+	}
+	
+	/*
+	 * yyyy-MM-dd
+	 */
+	public static String dateToStringSQL(Date date) {
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		// df.setTimeZone(TimeZone.getTimeZone("GMT+8"));
 		String str = df.format(date);
 		return str;
@@ -112,5 +141,29 @@ public class Utils {
 	public static String truncateDaateString(String dateStr, int start, int end) {
 
 		return dateStr.substring(start, end);
+	}
+	
+	/*
+	 * 
+	 * list和json的互转
+	 */
+	
+	public static String listToString(List<String> list){
+		String str=null;
+		str=JSONArray.toJSONString(list);
+		return str;
+	}
+	
+	public static List<String> stringToList(String str){
+		List<String> list=JSON.parseArray(str, String.class);
+		return list;
+	}
+	
+	public static boolean isOutOfDate(ProgramInfo program){
+		boolean flag=false;
+		Date date=new Date();
+		flag=date.after(program.getEndTime());
+		
+		return flag;
 	}
 }

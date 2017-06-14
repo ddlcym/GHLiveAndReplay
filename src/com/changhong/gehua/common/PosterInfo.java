@@ -1,12 +1,13 @@
 package com.changhong.gehua.common;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 /**
  * @author OscarChang
  *
  */
-public class PosterInfo {
+public class PosterInfo implements Serializable {
 	private int PosterID;
 	private String OwnerCode;
 	private int PosterType;

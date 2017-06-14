@@ -1,6 +1,5 @@
 package com.changhong.gehua.common;
 
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,9 +13,9 @@ import android.util.Log;
 public class ProcessData {
 
 	private MD5Encrypt MD5;
-//	private static final String serverAdress = "http://ott.yun.gehua.net.cn:8080/";//测试网
+	private static final String serverAdress = "http://ott.yun.gehua.net.cn:8080/";//测试网
 	private String chListTerminalType = "1";
-	private static final String serverAdress = "http://api.ott.yun.gehua.net.cn:8080/";//正式网
+//	private static final String serverAdress = "http://api.ott.yun.gehua.net.cn:8080/";//正式网
 	
 	
 	private String MD5Key = "aidufei";
@@ -250,7 +249,7 @@ public class ProcessData {
 		return seconds;
 	}
 
-	/* get Date seven days ago */
+	/* get Date seven days ago,till curdate 23:59:59 */
 	public static String[] getSevenDayAgo() {
 		String twoDates[] = { "", "" };
 		SimpleDateFormat sdfNew = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

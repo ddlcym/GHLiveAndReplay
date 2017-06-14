@@ -2,7 +2,10 @@ package com.changhong.ghlive.activity;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONObject;
 
@@ -17,11 +20,13 @@ import com.changhong.gehua.common.ProcessData;
 import com.changhong.gehua.common.ProgramInfo;
 import com.changhong.gehua.common.Utils;
 import com.changhong.gehua.common.VolleyTool;
+import com.changhong.gehua.sqlite.DBManager;
 import com.changhong.ghlive.datafactory.HandleLiveData;
 import com.changhong.ghlive.service.HttpService;
 import com.changhong.ghliveandreplay.R;
 import com.changhong.replay.datafactory.ChannelRepListAdapter;
 import com.changhong.replay.datafactory.DayMonthAdapter;
+import com.changhong.replay.datafactory.DealViewData;
 import com.changhong.replay.datafactory.EpgListview;
 import com.changhong.replay.datafactory.ProgramsAdapter;
 import com.changhong.replay.datafactory.ResolveEPGInfoThread;
@@ -113,7 +118,16 @@ public class EPGActivity extends BaseActivity {
 	List<ChannelInfo> otherTvList = new ArrayList<ChannelInfo>();
 
 	List<ChannelInfo> curChannelList = new ArrayList<ChannelInfo>();
-	List<ProgramInfo> curProgramList = new ArrayList<ProgramInfo>();
+	List<ProgramInfo> curDayProgramList = new ArrayList<ProgramInfo>();
+	List<ProgramInfo> curChannelProgramList = new ArrayList<ProgramInfo>();
+	
+	
+	
+	/*
+	 * SQLITE
+	 */
+	private DBManager dbManager;
+	
 	private Handler uiHandler = new Handler() {
 
 		@Override
@@ -146,7 +160,11 @@ public class EPGActivity extends BaseActivity {
 				EpgEventListRefresh(curDay);
 				break;
 			case MSG_SHOW_WEEKDAY:
-
+				String recChannelID=(String) msg.obj;
+				String curChannelID=curChannel.getChannelID();
+				if(null!=recChannelID&&null!=curChannelID&&!recChannelID.equals(curChannelID)){
+					return;
+				}
 				List<String> dayMonths=CacheData.getDayMonths();
 				if(null==dayMonths||dayMonths.size()==0){
 					return;
@@ -247,7 +265,7 @@ public class EPGActivity extends BaseActivity {
 		if (null == processData) {
 			processData = new ProcessData();
 		}
-		channelCount = CacheData.getAllChannelInfo().size();
+		channelCount = allTvList.size();
 		if (channelCount <= 0) {
 			Log.i("mmmm", "无节目！");
 			// 无节目时的处理----------------------------------待完成-----------------------------
@@ -405,7 +423,8 @@ public class EPGActivity extends BaseActivity {
 			lastCLSelectName.setTextColor(csl);
 			
 			//获取指定频道的节目信息
-			getPointProList(curChannel);
+//			getPointProList(curChannel);
+			DealViewData.getInstance().getPointProList(uiHandler, curChannel);
 
 			channelCurSelect = (LinearLayout) arg1.findViewById(R.id.epg_chan_itemlayout);
 			if (channelListFoucus == false) {
@@ -554,13 +573,12 @@ public class EPGActivity extends BaseActivity {
 		firstInPro=true;
 				
 		// 根据当前保存的数据刷新EventList
-		curProgramList = (List<ProgramInfo>) CacheData.getAllProgramMap().get(curday);
-		programsAdapter.setData(curProgramList);
+		curDayProgramList = (List<ProgramInfo>) CacheData.getAllProgramMap().get(curday);
+		programsAdapter.setData(curDayProgramList);
 		// 记住上次的位置，如果是第一个日期则记住，其他日期否则都不记住
 		View v = epgEventListview.getChildAt(0);
 		int top = (v == null) ? 0 : v.getTop();
 		epgEventListview.setSelectionFromTop(0, top);
-		
 		
 
 	}
@@ -805,7 +823,7 @@ public class EPGActivity extends BaseActivity {
 
 	public void playChannel(int position) {
 
-		ProgramInfo program = curProgramList.get(position);
+		ProgramInfo program = curDayProgramList.get(position);
 		Intent mIntent = new Intent(EPGActivity.this, ReplayPlayActivity.class);
 
 		CacheData.setCurProgram(program);
@@ -815,6 +833,12 @@ public class EPGActivity extends BaseActivity {
 	}
 
 	private void getChannelList() {
+		dbManager=DBManager.getInstance(EPGActivity.this);
+		allTvList=dbManager.queryChannelList();
+		
+		if(allTvList!=null&&!allTvList.isEmpty()){
+			dealChannelList();
+		}else{
 		// 传入URL请求链接
 		String URL = processData.getChannelList();
 		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null,
@@ -825,50 +849,88 @@ public class EPGActivity extends BaseActivity {
 						// TODO Auto-generated method stub
 						// 相应成功
 						// Log.i(TAG, "HttpService=channle:" + arg0);
-						for (ChannelInfo channel : HandleLiveData.getInstance().dealChannelJson(arg0)) {
-							
-							allTvList.add(channel);
-						}
-
-						// first set adapter
-						curType = 0;
-						curChannel = CacheData.getAllChannelInfo().get(0);
-						getAllTVtype();
-						showChannelList();
-						uiHandler.sendEmptyMessage(MSG_CHANNEL_CHANGE);
-						// Log.i(TAG,
-						// "HttpService=channelsAll:" + channelsAll.size());
-						// if (allTvList.size() <= 0) {
-						// channelListLinear.setVisibility(View.INVISIBLE);
-						// }
+						allTvList= HandleLiveData.getInstance().dealChannelJson(arg0);
+//						for (ChannelInfo channel : HandleLiveData.getInstance().dealChannelJson(arg0)) {
+//							
+//							allTvList.add(channel);
+//						}
+						dbManager.insertChannelList(allTvList);
+						dealChannelList();
+						
 					}
 				}, null);
 		jsonObjectRequest.setTag(EPGActivity.class.getSimpleName());// 设置tag,cancelAll的时候使用
 		mReQueue.add(jsonObjectRequest);
+		}
+	}
+	
+	private void dealChannelList(){
+		//按键值对存好，方便读取
+		CacheData.allChannelInfo.clear();
+		for (ChannelInfo channel : allTvList) {
+			CacheData.allChannelMap.put(channel.getChannelNumber(), channel);
+			CacheData.allChannelInfo.add(channel);
+		}
+
+		// first set adapter
+		curType = 0;
+		curChannel = CacheData.getAllChannelInfo().get(0);
+		getAllTVtype();
+		showChannelList();
+		uiHandler.sendEmptyMessage(MSG_CHANNEL_CHANGE);
 	}
 
 	// get programs in the channel
-	private void getPointProList(ChannelInfo channel) {
-		mReQueue.cancelAll("program");
-		String realurl = processData.getChannelProgramList(channel);
-
-		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, realurl, null,
-				new Response.Listener<org.json.JSONObject>() {
-
-					@Override
-					public void onResponse(org.json.JSONObject arg0) {
-						// TODO Auto-generated method stub
-						// 相应成功
-						// Log.i(TAG, "getPointProList:" + arg0);
-						resolveProJsonThread = ResolveEPGInfoThread.getInstance();
-						resolveProJsonThread.addData(uiHandler, arg0);
-						resolveProJsonThread.startRes();
-
-					}
-				}, null);
-		jsonObjectRequest.setTag("program");// 设置tag,cancelAll的时候使用
-		mReQueue.add(jsonObjectRequest);
-	}
+//	private void getPointProList(ChannelInfo channel) {
+//		dbManager=DBManager.getInstance(EPGActivity.this);
+//		if(dbManager.isNeedUpdateEPG(channel)){
+//			mReQueue.cancelAll("program");
+//			String realurl = processData.getChannelProgramList(channel);
+//			Log.i(TAG, "getPointProList-realurl:" + realurl);
+//			JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, realurl, null,
+//					new Response.Listener<org.json.JSONObject>() {
+//	
+//						@Override
+//						public void onResponse(org.json.JSONObject arg0) {
+//							// TODO Auto-generated method stub
+//							// 相应成功
+//							// Log.i(TAG, "getPointProList:" + arg0);
+//							resolveProJsonThread = ResolveEPGInfoThread.getInstance();
+//							resolveProJsonThread.addData(uiHandler, arg0);
+//							resolveProJsonThread.startRes();
+//	
+//						}
+//					}, null);
+//			jsonObjectRequest.setTag("program");// 设置tag,cancelAll的时候使用
+//			mReQueue.add(jsonObjectRequest);
+//		}else{
+//			curChannelProgramList=dbManager.queryEPGByChannelID(channel.getChannelID());
+//			if(curChannelProgramList!=null&&!curChannelProgramList.isEmpty()){
+//				dealPointProList();
+//			}
+//		}
+//	}
+//	
+//	private void dealPointProList(){
+//		Map<String, List<ProgramInfo>> proMaps = new HashMap<String, List<ProgramInfo>>();
+//		LinkedList<String> dayMonth = new LinkedList<String>();
+//		for(ProgramInfo pro:curChannelProgramList){
+//			Date dt = pro.getEventDate();
+//			String date = Utils.dateToString(dt);
+//			
+//			if (!dayMonth.contains(date)) {
+//				dayMonth.addFirst(date);
+//				proMaps.put(date, new ArrayList<ProgramInfo>());
+//
+//			}
+//			if(Utils.isOutOfDate(pro)){
+//				proMaps.get(date).add(pro);
+//			}
+//		}
+//		CacheData.setAllProgramMap(proMaps);
+//		CacheData.setDayMonths(dayMonth);
+//		uiHandler.sendEmptyMessage(MSG_SHOW_WEEKDAY);
+//	}
 
 	private void showChannelList() {
 		// TODO show channellist

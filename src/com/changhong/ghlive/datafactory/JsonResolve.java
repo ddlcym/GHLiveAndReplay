@@ -85,6 +85,9 @@ public class JsonResolve {
 	public  List<ChannelType> jsonToTypes(JSONObject json){
 		List<ChannelType> list=new ArrayList<ChannelType>();
 		JSONArray types = getJsonObjectArray(json, "datas");
+		if(null==types){
+			return null;
+		}
 		for (int i = 0; i < types.length(); i++) {
 			ChannelType type=null;
 			try {
@@ -169,34 +172,32 @@ public class JsonResolve {
 		ProgramInfo program = new ProgramInfo();
 
 		program.setProgramId(getJsonObjInt(json, "programId"));
-		program.setChannelID(getJsonObjInt(json, "channelID"));
+		program.setChannelID(getJsonObjectString(json, "channelID"));
 		program.setEventDate(getJsonData(json, "eventDate"));
 		program.setBeginTime(getJsonData(json, "beginTime"));
 		program.setEndTime(getJsonData(json, "endTime"));
 		program.setEventName(getJsonObjectString(json, "eventName"));
 		// program.setEventDesc(getJsonObjectString(json, "eventDesc"));
-		program.setKeyWord(getJsonObjectString(json, "keyWord"));
-		program.setIsBook(getJsonObjInt(json, "isBook"));
-		program.setIsRecommend(getJsonObjInt(json, "isRecommend"));
-		program.setPlayCount(getJsonObjInt(json, "playCount"));
+//		program.setKeyWord(getJsonObjectString(json, "keyWord"));
+//		program.setIsBook(getJsonObjInt(json, "isBook"));
+//		program.setIsRecommend(getJsonObjInt(json, "isRecommend"));
+//		program.setPlayCount(getJsonObjInt(json, "playCount"));
 		program.setAssetID(getJsonObjectString(json, "assetID"));
 		// program.setPoster(getJsonObjInt(json, "poster"));
 		// program.setPlaytime(getJsonObjInt(json, "playtime"));
-		program.setVolumeName(getJsonObjectString(json, "volumeName"));
+//		program.setVolumeName(getJsonObjectString(json, "volumeName"));
 		program.setChannelResourceCode(getJsonObjInt(json, "channelResourceCode"));
 		program.setVideoType(getJsonObjectString(json, "videoType"));
 		program.setProviderID(getJsonObjectString(json, "providerID"));
 		// program.setChannelName(getJsonObjectString(json, "channelName"));
-		program.setStatus(getJsonObjInt(json, "status"));
-		program.setViewLevel(getJsonObjectString(json, "viewLevel"));
+//		program.setStatus(getJsonObjInt(json, "status"));
+//		program.setViewLevel(getJsonObjectString(json, "viewLevel"));
 
 		return program;
 	}
 
-	public Map<String, List<ProgramInfo>> jsonToPrograms(JSONObject json) {
-		Map<String, List<ProgramInfo>> proMaps = new HashMap<String, List<ProgramInfo>>();
+	public  List<ProgramInfo> jsonToPrograms(JSONObject json) {
 		List<ProgramInfo> list = new ArrayList<ProgramInfo>();
-		LinkedList<String> dayMonth = new LinkedList<String>();
 		JSONArray programs = getJsonObjectArray(json, "program");
 		for (int i = 0; i < programs.length(); i++) {
 			ProgramInfo program = null;
@@ -209,23 +210,10 @@ public class JsonResolve {
 			}
 			if (program != null) {
 				list.add(program);
-				Date dt = program.getEventDate();
-				String date = Utils.dateToString(dt);
-				
-				if (!dayMonth.contains(date)) {
-					dayMonth.addFirst(date);
-					proMaps.put(date, new ArrayList<ProgramInfo>());
-
-				}
-				if(isOutOfDate(program)){
-				proMaps.get(date).add(program);}
 			}
 		}
 
-		// CacheData.curProgramsList=list;
-		CacheData.setDayMonths(dayMonth);
-		
-		return proMaps;
+		return list;
 	}
 	
 	public List<ProgramInfo> timeShiftPrograms(JSONObject json) {

@@ -8,27 +8,28 @@ import java.util.Date;
  *
  */
 public class ProgramInfo implements Serializable{
+	private int ID;//序号，主键
 	private int programId;
-	private int channelID;
+	private String channelID;
 	private Date eventDate;
 	private Date beginTime;
 	private Date endTime;
 	private String eventName;
 	private String eventDesc;
-	private String keyWord;
-	private int isBook;
-	private int isRecommend;
-	private int playCount;
+//	private String keyWord;
+//	private int isBook;
+//	private int isRecommend;
+//	private int playCount;
 	private String assetID;
-	private PosterInfo poster;
-	private int playtime;
-	private String volumeName;
+//	private PosterInfo poster;
+//	private int playtime;
+//	private String volumeName;
 	private int channelResourceCode;
 	private String videoType;
 	private String providerID;
 	private String channelName;
-	private int status;
-	private String viewLevel;
+//	private int status;
+//	private String viewLevel;
 
 	public int getProgramId() {
 		return programId;
@@ -38,11 +39,11 @@ public class ProgramInfo implements Serializable{
 		this.programId = programId;
 	}
 
-	public int getChannelID() {
+	public String getChannelID() {
 		return channelID;
 	}
 
-	public void setChannelID(int channelID) {
+	public void setChannelID(String channelID) {
 		this.channelID = channelID;
 	}
 
@@ -85,39 +86,7 @@ public class ProgramInfo implements Serializable{
 	public void setEventDesc(String eventDesc) {
 		this.eventDesc = eventDesc;
 	}
-
-	public String getKeyWord() {
-		return keyWord;
-	}
-
-	public void setKeyWord(String keyWord) {
-		this.keyWord = keyWord;
-	}
-
-	public int getIsBook() {
-		return isBook;
-	}
-
-	public void setIsBook(int isBook) {
-		this.isBook = isBook;
-	}
-
-	public int getIsRecommend() {
-		return isRecommend;
-	}
-
-	public void setIsRecommend(int isRecommend) {
-		this.isRecommend = isRecommend;
-	}
-
-	public int getPlayCount() {
-		return playCount;
-	}
-
-	public void setPlayCount(int playCount) {
-		this.playCount = playCount;
-	}
-
+	
 	public String getAssetID() {
 		return assetID;
 	}
@@ -125,31 +94,6 @@ public class ProgramInfo implements Serializable{
 	public void setAssetID(String assetID) {
 		this.assetID = assetID;
 	}
-
-	public PosterInfo getPoster() {
-		return poster;
-	}
-
-	public void setPoster(PosterInfo poster) {
-		this.poster = poster;
-	}
-
-	public int getPlaytime() {
-		return playtime;
-	}
-
-	public void setPlaytime(int playtime) {
-		this.playtime = playtime;
-	}
-
-	public String getVolumeName() {
-		return volumeName;
-	}
-
-	public void setVolumeName(String volumeName) {
-		this.volumeName = volumeName;
-	}
-
 	public int getChannelResourceCode() {
 		return channelResourceCode;
 	}
@@ -182,20 +126,88 @@ public class ProgramInfo implements Serializable{
 		this.channelName = channelName;
 	}
 
-	public int getStatus() {
-		return status;
+//	public String getKeyWord() {
+//		return keyWord;
+//	}
+//
+//	public void setKeyWord(String keyWord) {
+//		this.keyWord = keyWord;
+//	}
+//
+//	public int getIsBook() {
+//		return isBook;
+//	}
+//
+//	public void setIsBook(int isBook) {
+//		this.isBook = isBook;
+//	}
+//
+//	public int getIsRecommend() {
+//		return isRecommend;
+//	}
+//
+//	public void setIsRecommend(int isRecommend) {
+//		this.isRecommend = isRecommend;
+//	}
+//
+//	public int getPlayCount() {
+//		return playCount;
+//	}
+//
+//	public void setPlayCount(int playCount) {
+//		this.playCount = playCount;
+//	}
+//
+//	
+//
+//	public PosterInfo getPoster() {
+//		return poster;
+//	}
+//
+//	public void setPoster(PosterInfo poster) {
+//		this.poster = poster;
+//	}
+//
+//	public int getPlaytime() {
+//		return playtime;
+//	}
+//
+//	public void setPlaytime(int playtime) {
+//		this.playtime = playtime;
+//	}
+//
+//	public String getVolumeName() {
+//		return volumeName;
+//	}
+//
+//	public void setVolumeName(String volumeName) {
+//		this.volumeName = volumeName;
+//	}
+//
+//	
+//
+//	public int getStatus() {
+//		return status;
+//	}
+//
+//	public void setStatus(int status) {
+//		this.status = status;
+//	}
+//
+//	public String getViewLevel() {
+//		return viewLevel;
+//	}
+//
+//	public void setViewLevel(String viewLevel) {
+//		this.viewLevel = viewLevel;
+//	}
+
+	public int getID() {
+		return ID;
 	}
 
-	public void setStatus(int status) {
-		this.status = status;
-	}
-
-	public String getViewLevel() {
-		return viewLevel;
-	}
-
-	public void setViewLevel(String viewLevel) {
-		this.viewLevel = viewLevel;
+	public void setID(int iD) {
+		ID = iD;
 	}
 
 }

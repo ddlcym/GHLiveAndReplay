@@ -8,6 +8,7 @@ import java.util.List;
 public class ChannelInfo implements Serializable{
 
 	/* information about channels */
+	private int ID;//序号，主键
 	private String channelID;
 	private String channelName;
 	private String channelCode;
@@ -37,6 +38,16 @@ public class ChannelInfo implements Serializable{
 	private String channelLogo;
 	private String isTTV;
 	private String isBTV;
+	
+	
+
+	public int getID() {
+		return ID;
+	}
+
+	public void setID(int iD) {
+		ID = iD;
+	}
 
 	public String getChannelLogo() {
 		return channelLogo;

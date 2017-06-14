@@ -11,6 +11,7 @@ import java.util.List;
  */
 public class ChannelType {
 
+	private int ID=-1;
 	private String pramValue;//分类名称
 	private String pramKey;//分类ID
 	private int rank;//序列
@@ -39,6 +40,12 @@ public class ChannelType {
 	}
 	public void setChannelList(List<ChannelInfo> channelList) {
 		this.channelList = channelList;
+	}
+	public int getID() {
+		return ID;
+	}
+	public void setID(int iD) {
+		ID = iD;
 	}
 	
 	

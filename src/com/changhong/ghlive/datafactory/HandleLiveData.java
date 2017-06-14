@@ -48,23 +48,6 @@ public class HandleLiveData {
 
 	public List<ChannelInfo> dealChannelJson(JSONObject json) {
 		List<ChannelInfo> channels = JsonResolve.jsonToChannels(json);
-		CacheData.allChannelInfo.clear();
-		for (ChannelInfo channel : channels) {
-			CacheData.allChannelMap.put(channel.getChannelNumber(), channel);
-			CacheData.allChannelInfo.add(channel);
-		}
-
-		// sort
-//		Collections.sort(channels, new Comparator<ChannelInfo>() {
-//
-//			public int compare(ChannelInfo o1, ChannelInfo o2) {
-//				int result = Integer.parseInt(o1.getChannelNumber()) - Integer.parseInt(o2.getChannelNumber());
-//				if (result == 0) {
-//					result = o1.getChannelName().compareTo(o2.getChannelName());
-//				}
-//				return result;
-//			}
-//		});
 
 		return channels;
 	}
@@ -75,18 +58,21 @@ public class HandleLiveData {
 
 	
 	public List<ChannelType> sortChannels(List<ChannelType> outterList) {
+		if(outterList!=null){
+			Collections.sort(outterList, new Comparator<ChannelType>() {
+	
+				public int compare(ChannelType o1, ChannelType o2) {
+					int result = o1.getRank() - o2.getRank();
+	//				if (result == 0) {
+	//					result = o1.getChannelName().compareTo(o2.getChannelName());
+	//				}
+					return result;
+				}
+			});
 
-		Collections.sort(outterList, new Comparator<ChannelType>() {
-
-			public int compare(ChannelType o1, ChannelType o2) {
-				int result = o1.getRank() - o2.getRank();
-//				if (result == 0) {
-//					result = o1.getChannelName().compareTo(o2.getChannelName());
-//				}
-				return result;
-			}
-		});
-
-		return outterList;
+			return outterList;
+		}else{
+			return null;
+		}
 	}
 }
